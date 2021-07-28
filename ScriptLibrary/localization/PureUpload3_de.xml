@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.1">
+	<file original="incPU3Class.asp" datatype="asp" source-language="de">
+		<body>
+			<trans-unit id="001" resname="PU3_FL_ADD">
+				<source>Hinzuf&#252;gen</source>
+			</trans-unit>
+			<trans-unit id="002" resname="PU3_FL_REMOVE">
+				<source>Entfernen</source>
+			</trans-unit>
+			<trans-unit id="003" resname="PU3_FL_UPLOAD">
+				<source>Laden</source>
+			</trans-unit>
+			<trans-unit id="004" resname="PU3_ERR_VALUE">
+				<source>PureUpload.%1 unterst&#252;tzt den gew&#228;hlten Wert nicht.</source>
+			</trans-unit>
+			<trans-unit id="005" resname="PU3_ERR_COLLECTION">
+				<source>Objekt existiert nicht in der PureUpload.Fields collection.</source>
+			</trans-unit>
+			<trans-unit id="006" resname="PU3_ERR_FORMSIZE">
+				<source>Die Gr&#246;ße von %1 &#252;berschreitet die Begrenzung von %2.</source>
+			</trans-unit>
+			<trans-unit id="007" resname="PU3_ERR_FILESIZE">
+				<source>Datei '%1' &#252;berschreitet mit einer Gr&#246;ße von %2 die Begrenzung von %3.</source>
+			</trans-unit>
+			<trans-unit id="008" resname="PU3_ERR_DIMSMALL">
+				<source>Die Bild/Film-Gr&#246;ße %1x%2 ist zu klein, die Mindestgr&#246;ße ist %3x%4.</source>
+			</trans-unit>
+			<trans-unit id="009" resname="PU3_ERR_DIMLARGE">
+			    <source>Die Bild/Film-Gr&#246;ße %1x%2 ist zu groß, die Maximalgr&#246;ße ist %3x%4.</source>
+			</trans-unit>
+			<trans-unit id="010" resname="PU3_ERR_EXTENSION">
+				<source>Dateityp nicht erlaubt, nur %1 sind erlaubt.</source>
+			</trans-unit>
+			<trans-unit id="011" resname="PU3_ERR_ADO">
+				<source>PureUpload ben&#246;tigt mindestens ADO 2.5.</source>
+			</trans-unit>
+			<trans-unit id="012" resname="PU3_ERR_EXISTS">
+				<source>Datei '%1' existiert bereits auf dem Server.</source>
+			</trans-unit>
+			<trans-unit id="013" resname="PU3_ERR_CREATEFOLDER">
+				<source>Upload-Ordner %1 kann nicht erstellt werden. M&#246;glicherweise haben Sie nicht die ausreichenden Befugnisse.</source>
+			</trans-unit>
+			<trans-unit id="014" resname="PU3_ERR_UPDATERECORD">
+				<source>W&#228;hrend der Daten-Aktualisierung ist ein Fehler aufgetreten. Es sind keine Daten zu aktualisieren.</source>
+			</trans-unit>
+			<trans-unit id="015" resname="PU3_ERR_FOLDER">
+				<source>Upload-Ordner ist ung&#252;ltig. Upload-Ordner: '%1'.</source>
+			</trans-unit>
+			<trans-unit id="016" resname="PU3_ERR_VERSION">
+				<source>Sie haben die letzte Version von ScriptLibrary/incPU3Class.asp noch nicht auf den Server geladen.</source>
+			</trans-unit>
+			<trans-unit id="017" resname="PU3_ERR_ENCTYPE">
+				<source>Das Formular wurde ohne ENCTYPE="multipart/form-data" Attribut versendet.</source>
+			</trans-unit>
+			<trans-unit id="018" resname="PU3_ERR_SCRIPT">
+				<source>Objekt '%1' kann nicht erstellt werden, bitte installieren Sie die letzte Version von VBscript auf Ihrem Server. Download auf http://msdn.microsoft.com/scripting</source>
+			</trans-unit>
+			<trans-unit id="019" resname="PU3_ERR_BINARYREAD">
+				<source>Ihr Server ist nicht darauf eingestellt große Dateien zu laden. Siehe http://www.dmxzone.com/go?5424 f&#252;r weitere Informationen.</source>
+			</trans-unit>
+			<trans-unit id="020" resname="PU3_ERR_EMPTY">
+				<source>Ein Fehler ist w&#228;hrend des Speicherns von '%1' aufgetreten. Die Datei existiert nicht oder ist leer.</source>
+			</trans-unit>
+			<trans-unit id="021" resname="PU3_ERR_SAVE">
+				<source>Ein Fehler ist w&#228;hrend des Speicherns von '%1' in Ordner %2 aufgetreten. M&#246;glicherweise haben Sie nicht die ausreichenden Befugnisse.</source>
+			</trans-unit>
+			<trans-unit id="022" resname="PU3_ERR_HTTP">
+				<source>HTTP-Fehler %1 w&#228;hrend des Ladens von %2.</source>
+			</trans-unit>
+			<trans-unit id="023" resname="PU3_ERR_IO">
+				<source>Ein IO Fehler ist w&#228;hrend des Ladens von %1 aufgetreten.</source>
+			</trans-unit>
+			<trans-unit id="024" resname="PU3_ERR_TOTALLIMIT">
+				<source>Dateien wurden nicht hinzugef&#252;gt, die Gesamtgr&#246;ße &#252;berschreitet die Begrenzung von %1.</source>
+			</trans-unit>
+			<trans-unit id="025" resname="PU3_ERR_FILELIMIT">
+				<source>Datei %1 wurde nicht hinzugef&#252;gt, Dateigr&#246;ße &#252;berschreitet die Begrenzung von %2.</source>
+			</trans-unit>
+			<trans-unit id="026" resname="PU3_FL_REMOVEALL">
+				<source>Alle entfernen</source>
+			</trans-unit>
+			<trans-unit id="027" resname="PU3_OK">
+				<source>Ok</source>
+			</trans-unit>
+			<trans-unit id="028" resname="PU3_CANCEL">
+				<source>Abbrechen</source>
+			</trans-unit>
+			<trans-unit id="029" resname="PU3_HELP">
+				<source>Hilfe</source>
+			</trans-unit>
+			<trans-unit id="030" resname="PU3_FL_TIP_ADD">
+				<source>Dateien zur Liste hinzuf&#252;gen</source>
+			</trans-unit>
+			<trans-unit id="031" resname="PU3_FL_TIP_REMOVE">
+				<source>Datei aus der Liste entfernen</source>
+			</trans-unit>
+			<trans-unit id="032" resname="PU3_FL_TIP_REMOVEALL">
+				<source>Alle Dateien aus der Liste entfernen</source>
+			</trans-unit>
+			<trans-unit id="033" resname="PU3_FL_TIP_UPLOAD">
+				<source>Alle Dateien in der Liste laden</source>
+			</trans-unit>
+			<trans-unit id="034" resname="PU3_FL_DONE">
+				<source>Laden abgeschlossen</source>
+			</trans-unit>
+			<trans-unit id="035" resname="PU3_FL_UPLOADEDFILES">
+				<source>%1 Dateien geladen</source>
+			</trans-unit>
+			<trans-unit id="036" resname="PU3_FL_FAILEDFILES">
+				<source>Folgende Dateien fehlgeschlagen:</source>
+			</trans-unit>
+			<trans-unit id="037" resname="PU3_FL_TOTAL">
+				<source>Gesamt</source>
+			</trans-unit>
+			<trans-unit id="038" resname="PU3_FL_CURRENT">
+				<source>Aktuell</source>
+			</trans-unit>
+			<trans-unit id="039" resname="PU3_FL_LISTTOTAL">
+				<source>%1 Datei(en), %2</source>
+			</trans-unit>
+			<trans-unit id="040" resname="PU3_ERR_REQUIRED">
+				<source>Datei wird ben&#246;tigt!</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

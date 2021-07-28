@@ -1,0 +1,6 @@
+<SCRIPT LANGUAGE=VBScript RUNAT=Server>
+	'    Sub Session_OnStart
+	'		Set pp_caller = CreateObject("com.paypal.sdk.COMNetInterop.COMAdapter")
+	'		pp_caller.Init Request.ServerVariables("APPL_PHYSICAL_PATH")
+	'    End Sub
+</SCRIPT>

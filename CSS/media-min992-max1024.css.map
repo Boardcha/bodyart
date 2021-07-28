@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,MAAM,EAAE,SAAS,EAAE,KAAK,OAAO,SAAS,EAAE,MAAM;EAAK,6BAA6B;EAChF,AAAA,WAAW,CAAC,OAAO,CAAC;IAClB,KAAK,EAAE,eAAe;GAAG;EAE3B,AAAA,WAAW,CAAC,OAAO,CAAC;IAClB,KAAK,EAAE,eAAe;GAAG;EACzB,AAAA,iBAAiB,CAAC;IAChB,MAAM,EAAE,yBAAyB;GAAG",
+    "sources": [
+        "media-min992-max1024.scss"
+    ],
+    "names": [],
+    "file": "media-min992-max1024.css"
+}

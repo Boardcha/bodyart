@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAE,AAAA,WAAW,CAAC,OAAO,CAAC;EAClB,KAAK,EAAE,cAAc;CAAG;;AAE1B,AAAA,WAAW,CAAC,OAAO,CAAC;EAClB,KAAK,EAAE,cAAc;CAAG;;AAE1B,AAAA,UAAU,CAAC,GAAG,CAAC;EACb,KAAK,EAAE,GAAG;CAAG;;AAEf,AAAA,gBAAgB,CAAC;EACf,KAAK,EAAE,GAAG;CAAG;;AAEf,AAAA,cAAc,CAAC,cAAc,EAAE,cAAc,CAAC,gBAAgB,CAC9D;EAAC,KAAK,EAAC,GAAG;CAAE",
+    "sources": [
+        "media-min-1600.scss"
+    ],
+    "names": [],
+    "file": "media-min-1600.css"
+}

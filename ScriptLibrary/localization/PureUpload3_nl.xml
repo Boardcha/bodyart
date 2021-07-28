@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.1">
+	<file original="incPU3Class.asp" datatype="asp" source-language="nl">
+		<body>
+			<trans-unit id="001" resname="PU3_FL_ADD">
+				<source>Toevoegen</source>
+			</trans-unit>
+			<trans-unit id="002" resname="PU3_FL_REMOVE">
+				<source>Verwijderen</source>
+			</trans-unit>
+			<trans-unit id="003" resname="PU3_FL_UPLOAD">
+				<source>Upload</source>
+			</trans-unit>
+			<trans-unit id="004" resname="PU3_ERR_VALUE">
+				<source>PureUpload.%1 ondersteunt de gebruikte waarde niet.</source>
+			</trans-unit>
+			<trans-unit id="005" resname="PU3_ERR_COLLECTION">
+				<source>Object bestaat niet binnen de PureUpload.Velden collectie.</source>
+			</trans-unit>
+			<trans-unit id="006" resname="PU3_ERR_FORMSIZE">
+				<source>Upload formaat van %1 is groter dan het limiet van %2.</source>
+			</trans-unit>
+			<trans-unit id="007" resname="PU3_ERR_FILESIZE">
+				<source>Het bestand '%1' met een grootte van %2 is groter dan het limiet van %3.</source>
+			</trans-unit>
+			<trans-unit id="008" resname="PU3_ERR_DIMSMALL">
+				<source>Afmetingen van het Plaatje of de Film %1x%2 zijn te klein, de minimale grootte is %3x%4.</source>
+			</trans-unit>
+			<trans-unit id="009" resname="PU3_ERR_DIMLARGE">
+			  <source>Afmetingen van het Plaatje of de Film %1x%2 zijn te groot, de maximale grootte is %3x%4.</source>
+			</trans-unit>
+			<trans-unit id="010" resname="PU3_ERR_EXTENSION">
+				<source>Bestands type is niet toegestaan, enkel bestanden met de extensie(s) %1 zijn toegestaan.</source>
+			</trans-unit>
+			<trans-unit id="011" resname="PU3_ERR_ADO">
+				<source>PureUpload heeft ADO 2.5 of nieuwer nodig.</source>
+			</trans-unit>
+			<trans-unit id="012" resname="PU3_ERR_EXISTS">
+				<source>Bestand '%1' bestaat al op de server.</source>
+			</trans-unit>
+			<trans-unit id="013" resname="PU3_ERR_CREATEFOLDER">
+				<source>Kan upload map %1 niet maken. Controleert u alstublieft de toestemmingen op uw server.</source>
+			</trans-unit>
+			<trans-unit id="014" resname="PU3_ERR_UPDATERECORD">
+				<source>Er heeft een fout plaatsgevonden tijden het bijwerken van de record. Er zijn geen records om bij te werken.</source>
+			</trans-unit>
+			<trans-unit id="015" resname="PU3_ERR_FOLDER">
+				<source>Upload map is ongeldig. Upload Map: '%1'.</source>
+			</trans-unit>
+			<trans-unit id="016" resname="PU3_ERR_VERSION">
+				<source>U hebt niet de laatste versie van het bestand ScriptLibrary/incPU3Class.asp op uw server.</source>
+			</trans-unit>
+			<trans-unit id="017" resname="PU3_ERR_ENCTYPE">
+				<source>Het formulier bevat het benodigde attribuut ENCTYPE="multipart/form-data" niet.</source>
+			</trans-unit>
+			<trans-unit id="018" resname="PU3_ERR_SCRIPT">
+				<source>Kan het object '%1' niet maken, installeer de laatste version van VBscript op uw server. U kunt het downloaden van http://msdn.microsoft.com/scripting</source>
+			</trans-unit>
+			<trans-unit id="019" resname="PU3_ERR_BINARYREAD">
+				<source>Uw server is niet geconfigureerd voor het uploaden van grote bestanden. Zie http://www.dmxzone.com/go?5424 voor meer informatie.</source>
+			</trans-unit>
+			<trans-unit id="020" resname="PU3_ERR_EMPTY">
+				<source>Er is een fout ontstaan tijdens het opslaan van het bestand '%1'. Het bestand bestaat niet of is leeg.</source>
+			</trans-unit>
+			<trans-unit id="021" resname="PU3_ERR_SAVE">
+				<source>Er is een fout onstaant tijdens het opslaan van het bestand '%1' in map %2. Controleert u alstublieft de toestemmingen op uw server.</source>
+			</trans-unit>
+			<trans-unit id="022" resname="PU3_ERR_HTTP">
+				<source>HTTPfout %1 tijdens het uploaden %2.</source>
+			</trans-unit>
+			<trans-unit id="023" resname="PU3_ERR_IO">
+				<source>Een IO Error heeft plaatsgevonden tijdens het uploaden van %1.</source>
+			</trans-unit>
+			<trans-unit id="024" resname="PU3_ERR_TOTALLIMIT">
+				<source>Bestanden niet toegevoegd, de maximale grootte van %1 is overschreden.</source>
+			</trans-unit>
+			<trans-unit id="025" resname="PU3_ERR_FILELIMIT">
+				<source>Bestand %1 niet toegevoegd, bestandsgrootte is groter dan %2.</source>
+			</trans-unit>
+			<trans-unit id="026" resname="PU3_FL_REMOVEALL">
+				<source>Verwijder alles</source>
+			</trans-unit>
+			<trans-unit id="027" resname="PU3_OK">
+				<source>Ok</source>
+			</trans-unit>
+			<trans-unit id="028" resname="PU3_CANCEL">
+				<source>Annuleer</source>
+			</trans-unit>
+			<trans-unit id="029" resname="PU3_HELP">
+				<source>Help</source>
+			</trans-unit>
+			<trans-unit id="030" resname="PU3_FL_TIP_ADD">
+				<source>Voeg bestanden toe aan de lijst</source>
+			</trans-unit>
+			<trans-unit id="031" resname="PU3_FL_TIP_REMOVE">
+				<source>Verwijder bestand van de lijst</source>
+			</trans-unit>
+			<trans-unit id="032" resname="PU3_FL_TIP_REMOVEALL">
+				<source>Verwijder alle bestanden van de lijst</source>
+			</trans-unit>
+			<trans-unit id="033" resname="PU3_FL_TIP_UPLOAD">
+				<source>Upload alle bestanden in de lijst</source>
+			</trans-unit>
+			<trans-unit id="034" resname="PU3_FL_DONE">
+				<source>Upload klaar</source>
+			</trans-unit>
+			<trans-unit id="035" resname="PU3_FL_UPLOADEDFILES">
+				<source>%1 bestanden toegevoegd</source>
+			</trans-unit>
+			<trans-unit id="036" resname="PU3_FL_FAILEDFILES">
+				<source>De volgende bestanden zijn mislukt:</source>
+			</trans-unit>
+			<trans-unit id="037" resname="PU3_FL_TOTAL">
+				<source>Totaal</source>
+			</trans-unit>
+			<trans-unit id="038" resname="PU3_FL_CURRENT">
+				<source>Huidig</source>
+			</trans-unit>
+			<trans-unit id="039" resname="PU3_FL_LISTTOTAL">
+				<source>%1 bestand(en), %2</source>
+			</trans-unit>
+			<trans-unit id="040" resname="PU3_ERR_REQUIRED">
+				<source>Bestand is verplicht!</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

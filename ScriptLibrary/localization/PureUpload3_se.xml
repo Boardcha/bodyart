@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+- <xliff version="1.1">
+- <file original="incPU3Class.asp" datatype="asp" source-language="se">
+- <body>
+- <trans-unit id="001" resname="PU3_FL_ADD">
+  <source>L&#xE4;gg till</source> 
+  </trans-unit>
+- <trans-unit id="002" resname="PU3_FL_REMOVE">
+  <source>Radera</source> 
+  </trans-unit>
+- <trans-unit id="003" resname="PU3_FL_UPLOAD">
+  <source>Ladda upp</source> 
+  </trans-unit>
+- <trans-unit id="004" resname="PU3_ERR_VALUE">
+  <source>PureUpload.%1 st&#xF5;der inte v&#xE4;rdet.</source> 
+  </trans-unit>
+- <trans-unit id="005" resname="PU3_ERR_COLLECTION">
+  <source>Objektet finns inte i PureUpload.Fields samlingen.</source> 
+  </trans-unit>
+- <trans-unit id="006" resname="PU3_ERR_FORMSIZE">
+  <source>Storleken p&#xE5; %1 &#xF5;verskrider begr&#xE4;nsningen %2.</source> 
+  </trans-unit>
+- <trans-unit id="007" resname="PU3_ERR_FILESIZE">
+  <source>Filen '%1' med storleken %2 &#xF5;verskrider begr&#xE4;nsningen %3.</source> 
+  </trans-unit>
+- <trans-unit id="008" resname="PU3_ERR_DIMSMALL">
+  <source>Bild/Film dimensionen %1x%2 &#xE4;r f&#xF5;r liten, minimum &#xE4;r %3x%4.</source> 
+  </trans-unit>
+- <trans-unit id="009" resname="PU3_ERR_DIMLARGE">
+  <source>Bild/Film dimensionen %1x%2 &#xE4;r f&#xF5;r stor, maximum &#xE4;r %3x%4.</source> 
+  </trans-unit>
+- <trans-unit id="010" resname="PU3_ERR_EXTENSION">
+  <source>Otill&#xE5;ten filty&#xE5;, endast %1 &#xE4;r till&#xE5;tet.</source> 
+  </trans-unit>
+- <trans-unit id="011" resname="PU3_ERR_ADO">
+  <source>PureUpload kr&#xE4;ver ADO 2.5 eller senare.</source> 
+  </trans-unit>
+- <trans-unit id="012" resname="PU3_ERR_EXISTS">
+  <source>Filen '%1' finns redan p&#xE5; servern.</source> 
+  </trans-unit>
+- <trans-unit id="013" resname="PU3_ERR_CREATEFOLDER">
+  <source>Kan inte skapa mappen %1. du kanske inte har de r&#xE4;ttigheter som kr&#xE4;vs.</source> 
+  </trans-unit>
+- <trans-unit id="014" resname="PU3_ERR_UPDATERECORD">
+  <source>Ett fel uppstod vid uppdateringen. Det finns inget att uppdatera.</source> 
+  </trans-unit>
+- <trans-unit id="015" resname="PU3_ERR_FOLDER">
+  <source>Fel mapp. Mapp: '%1'.</source> 
+  </trans-unit>
+- <trans-unit id="016" resname="PU3_ERR_VERSION">
+  <source>Du har inte senaste versionen av ScriptLibrary/incPU3Class.asp uppladdat till servern.</source> 
+  </trans-unit>
+- <trans-unit id="017" resname="PU3_ERR_ENCTYPE">
+  <source>Formul&#xE4;ret var inte ifyllt med ENCTYPE="multipart/form-data" attributet.</source> 
+  </trans-unit>
+- <trans-unit id="018" resname="PU3_ERR_SCRIPT">
+  <source>Kan inte skapa objekt '%1', Installera senaste versionen av VBscript p&#xE5; servern. Kan h&#xE4;mtas p&#xE5; http://msdn.microsoft.com/scripting</source> 
+  </trans-unit>
+- <trans-unit id="019" resname="PU3_ERR_BINARYREAD">
+  <source>Din server till&#xE5;ter inte uppladdning av stora filer. Se http://www.dmxzone.com/go?5424 f&#xF5;r mer information.</source> 
+  </trans-unit>
+- <trans-unit id="020" resname="PU3_ERR_EMPTY">
+  <source>Ett fel uppstod vid sparandet av filen '%1'. Filen existerar inte eller &#xE4;r tom.</source> 
+  </trans-unit>
+- <trans-unit id="021" resname="PU3_ERR_SAVE">
+  <source>Ett fel uppstod vid sparandet av filen '%1' in folder %2. Du kanske inte har de r&#xE4;ttigheter som kr&#xE4;vs.</source> 
+  </trans-unit>
+- <trans-unit id="022" resname="PU3_ERR_HTTP">
+  <source>HTTPError %1 vid uppladdning %2.</source> 
+  </trans-unit>
+- <trans-unit id="023" resname="PU3_ERR_IO">
+  <source>Ett IO Fel uppstod vid f&#xF5;rs&#xF5;k att ladda upp %1.</source> 
+  </trans-unit>
+- <trans-unit id="024" resname="PU3_ERR_TOTALLIMIT">
+  <source>Filer lades ej till, maxstorleken &#xF5;verskrider begr&#xE4;nsningen %1.</source> 
+  </trans-unit>
+- <trans-unit id="025" resname="PU3_ERR_FILELIMIT">
+  <source>Filen %1 lades ej till, maxstorleken &#xF5;verskrider begr&#xE4;nsningen %2.</source> 
+  </trans-unit>
+- <trans-unit id="026" resname="PU3_FL_REMOVEALL">
+  <source>Radera allt</source> 
+  </trans-unit>
+- <trans-unit id="027" resname="PU3_OK">
+  <source>Ok</source> 
+  </trans-unit>
+- <trans-unit id="028" resname="PU3_CANCEL">
+  <source>Avbryt</source> 
+  </trans-unit>
+- <trans-unit id="029" resname="PU3_HELP">
+  <source>Hj&#xE4;lp</source> 
+  </trans-unit>
+- <trans-unit id="030" resname="PU3_FL_TIP_ADD">
+  <source>Addera filer till listan</source> 
+  </trans-unit>
+- <trans-unit id="031" resname="PU3_FL_TIP_REMOVE">
+  <source>Radera filer fr&#xE5;n listan</source> 
+  </trans-unit>
+- <trans-unit id="032" resname="PU3_FL_TIP_REMOVEALL">
+  <source>Radera alla filer fr&#xE5;n listan</source> 
+  </trans-unit>
+- <trans-unit id="033" resname="PU3_FL_TIP_UPLOAD">
+  <source>Ladda upp alla filer till listan</source> 
+  </trans-unit>
+- <trans-unit id="034" resname="PU3_FL_DONE">
+  <source>Uppladdningen klar</source> 
+  </trans-unit>
+- <trans-unit id="035" resname="PU3_FL_UPLOADEDFILES">
+  <source>Laddade upp %1 filer</source> 
+  </trans-unit>
+- <trans-unit id="036" resname="PU3_FL_FAILEDFILES">
+  <source>F&#xF5;ljande filer misslyckades:</source> 
+  </trans-unit>
+- <trans-unit id="037" resname="PU3_FL_TOTAL">
+  <source>Totalt</source> 
+  </trans-unit>
+- <trans-unit id="038" resname="PU3_FL_CURRENT">
+  <source>Nuvarande</source> 
+  </trans-unit>
+- <trans-unit id="039" resname="PU3_FL_LISTTOTAL">
+  <source>%1 fil(er), %2</source> 
+  </trans-unit>
+	<trans-unit id="040" resname="PU3_ERR_REQUIRED">
+  <source>En fil erfordras</source>
+	</trans-unit>  
+  </body>
+  </file>
+  </xliff>

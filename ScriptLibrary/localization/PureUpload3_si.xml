@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.1">
+	<file original="incPU3Class.asp" datatype="asp" source-language="si">
+		<body>
+			<trans-unit id="001" resname="PU3_FL_ADD">
+				<source>Dodaj</source>
+			</trans-unit>
+			<trans-unit id="002" resname="PU3_FL_REMOVE">
+				<source>Odstrani</source>
+			</trans-unit>
+			<trans-unit id="003" resname="PU3_FL_UPLOAD">
+				<source>Odpošlji</source>
+			</trans-unit>
+			<trans-unit id="004" resname="PU3_ERR_VALUE">
+				<source>PureUpload.%1 ne podpira uporabljne vrednosti.</source>
+			</trans-unit>
+			<trans-unit id="005" resname="PU3_ERR_COLLECTION">
+				<source>Objekt ne obstaja v zbirki PureUpload.Fields.</source>
+			</trans-unit>
+			<trans-unit id="006" resname="PU3_ERR_FORMSIZE">
+				<source>Dolžina datoteke %1 presega dovoljeno mejo %2.</source>
+			</trans-unit>
+			<trans-unit id="007" resname="PU3_ERR_FILESIZE">
+				<source>Datoteka '%1' z dolžino %2 presega dovoljeno mejo %3.</source>
+			</trans-unit>
+			<trans-unit id="008" resname="PU3_ERR_DIMSMALL">
+				<source>Dimenzije slike/filna %1x%2 so premajhne, najmanjša dovoljena dimenzija je %3x%4.</source>
+			</trans-unit>
+			<trans-unit id="009" resname="PU3_ERR_DIMLARGE">
+			  <source>Dimenzije slike/filna %1x%2 so prevelike, največja dovoljena dimenzija je %3x%4.</source>
+			</trans-unit>
+			<trans-unit id="010" resname="PU3_ERR_EXTENSION">
+				<source>Ta tip datoteke ni dovoljen, pošljete lahko le %1.</source>
+			</trans-unit>
+			<trans-unit id="011" resname="PU3_ERR_ADO">
+				<source>PureUpload potrebuje ADO 2.5 ali višjega.</source>
+			</trans-unit>
+			<trans-unit id="012" resname="PU3_ERR_EXISTS">
+				<source>Datoteka '%1' se že nahaja na strežniku.</source>
+			</trans-unit>
+			<trans-unit id="013" resname="PU3_ERR_CREATEFOLDER">
+				<source>Ne morem ustvariti mape %1. Morda nimate dovoljenja.</source>
+			</trans-unit>
+			<trans-unit id="014" resname="PU3_ERR_UPDATERECORD">
+				<source>Pri ažuriranju podatkov je prišlo do napake. Ne najdem podatkov za ažuriranje.</source>
+			</trans-unit>
+			<trans-unit id="015" resname="PU3_ERR_FOLDER">
+				<source>Mapa za shranjevanje je neveljavna. Mapa: '%1'.</source>
+			</trans-unit>
+			<trans-unit id="016" resname="PU3_ERR_VERSION">
+				<source>Na strežniku nimate zadnje različice ScriptLibrary/incPU3Class.asp.</source>
+			</trans-unit>
+			<trans-unit id="017" resname="PU3_ERR_ENCTYPE">
+				<source>Formular je bil odposlan brez ENCTYPE="multipart/form-data" attributa.</source>
+			</trans-unit>
+			<trans-unit id="018" resname="PU3_ERR_SCRIPT">
+				<source>Ne morem ustvariti objekta '%1', prosim namestite zadnjo različico VBscript na vaš strežnik. Dobite jo na http://msdn.microsoft.com/scripting</source>
+			</trans-unit>
+			<trans-unit id="019" resname="PU3_ERR_BINARYREAD">
+				<source>Vaš strežnik ne omogoča shranjevanje velikih datotek. Za več informacij glejte http://www.dmxzone.com/go?5424.</source>
+			</trans-unit>
+			<trans-unit id="020" resname="PU3_ERR_EMPTY">
+				<source>Pri shranjevanju datoteke '%1' je prišlo do napake. Datoteka ne obstaja ali pa je prazna.</source>
+			</trans-unit>
+			<trans-unit id="021" resname="PU3_ERR_SAVE">
+				<source>Pri shranjevanju daoteke '%1' v mapo %2 je prišlo do napake. Morda nimate ustreznih dovoljenj.</source>
+			</trans-unit>
+			<trans-unit id="022" resname="PU3_ERR_HTTP">
+				<source>HTTPError %1 pri shranjevanju datoteke %2.</source>
+			</trans-unit>
+			<trans-unit id="023" resname="PU3_ERR_IO">
+				<source>IO Error pri shranjevanju datoteke %1.</source>
+			</trans-unit>
+			<trans-unit id="024" resname="PU3_ERR_TOTALLIMIT">
+				<source>Datoteke niso dodane, skupna velikost presega mejo %1.</source>
+			</trans-unit>
+			<trans-unit id="025" resname="PU3_ERR_FILELIMIT">
+				<source>Datoteka %1 ni bila dodana, velikost datoteke presega mejo %2.</source>
+			</trans-unit>
+			<trans-unit id="026" resname="PU3_FL_REMOVEALL">
+				<source>Odstrani vse</source>
+			</trans-unit>
+			<trans-unit id="027" resname="PU3_OK">
+				<source>V redu</source>
+			</trans-unit>
+			<trans-unit id="028" resname="PU3_CANCEL">
+				<source>Prekliči</source>
+			</trans-unit>
+			<trans-unit id="029" resname="PU3_HELP">
+				<source>Pomoč</source>
+			</trans-unit>
+			<trans-unit id="030" resname="PU3_FL_TIP_ADD">
+				<source>Dodaj datoteke na seznam</source>
+			</trans-unit>
+			<trans-unit id="031" resname="PU3_FL_TIP_REMOVE">
+				<source>Odstrani datoteko s seznama</source>
+			</trans-unit>
+			<trans-unit id="032" resname="PU3_FL_TIP_REMOVEALL">
+				<source>Odstrani vse datoteke s seznama</source>
+			</trans-unit>
+			<trans-unit id="033" resname="PU3_FL_TIP_UPLOAD">
+				<source>Odpošlji vse datoteke v seznamu</source>
+			</trans-unit>
+			<trans-unit id="034" resname="PU3_FL_DONE">
+				<source>Shranjevanje je končano</source>
+			</trans-unit>
+			<trans-unit id="035" resname="PU3_FL_UPLOADEDFILES">
+				<source>Shranjenih %1 datotek</source>
+			</trans-unit>
+			<trans-unit id="036" resname="PU3_FL_FAILEDFILES">
+				<source>Te datoteke niso bile uspešno shranjene:</source>
+			</trans-unit>
+			<trans-unit id="037" resname="PU3_FL_TOTAL">
+				<source>Skupaj</source>
+			</trans-unit>
+			<trans-unit id="038" resname="PU3_FL_CURRENT">
+				<source>Current</source>
+			</trans-unit>
+			<trans-unit id="039" resname="PU3_FL_LISTTOTAL">
+				<source>%1 datotek(a), %2</source>
+			</trans-unit>
+			<trans-unit id="040" resname="PU3_ERR_REQUIRED">
+				<source>Potrebujem datoteko!</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

@@ -1,0 +1,21 @@
+  @media (min-width: 1025px) {
+    .cart-mini-load {
+      max-height:500px
+    } 
+    .top-navbar .dropdown-item:hover:after {
+      content: "\f000";
+      font-family: "BafBootstrap";
+      margin-left: .5em;
+      background-color: #2E2E2E; }
+      .slider-container {
+        margin: -1.5rem -1rem 1em -1.5rem; }
+
+#DetailID {
+  width:auto;
+  padding-right:3em
+}
+
+#filter-gauge {
+  width:auto
+}
+  }

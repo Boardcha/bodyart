@@ -1,0 +1,60 @@
+<html>
+<head>
+<title>Upload in Progress...</title>
+<script>
+function generateFlash() {
+  var session = "", varBeg, varName, varValue;
+  var progressUrl = "", uploadId = "";
+  var str = document.location.href;
+  var theleft = str.indexOf("?");
+  if (theleft != -1) {
+    var queryString = str.substring(theleft+1);
+    var vars = queryString.split("&");
+    for (var vi=0;vi < vars.length; vi++) {
+      varBeg = vars[vi].indexOf("=");
+      if (varBeg != -1) {
+        varName = vars[vi].substring(0,varBeg);
+        varValue = vars[vi].substring(varBeg+1,vars[vi].length);
+      }
+      if (varName) {
+        switch (varName.toLowerCase()) {
+          case "progressurl":
+            progressUrl = "ProgressUrl=" + escape(varValue) + "&" 
+            break;
+          case "uploadid":
+            uploadId = "UploadId=" + escape(varValue) + "&"         
+            break;          
+        }
+      }
+    }
+  } else {
+    window.close();
+  }
+
+  var protocol = "http";
+  var theUrl = document.location.href;
+  if (theUrl) {
+    theUrl = theUrl.toLowerCase();    
+    protocol = (theUrl.indexOf('https://') != -1 ? 'https' : 'http');
+  }    
+
+  var tag = '' + 
+  '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" codebase="' + protocol + '://download.macromedia.com/pub/shockwave/cabs/flash/swflash.cab#version=7,0,0,0" width="500" height="150">' +
+  '  <param name="movie" value="circle.swf">' +
+  '  <param name="FlashVars" value="' + progressUrl + uploadId + 'BackgroundColor=0x999999&DisplayColor=0xCCCCFF&CircleColor=0xCCCCFF&TitleColor=0x999999&DisplayTextColor=0x333333&TitleText=Upload%20Progress%20Bar&ShowTitleText=true&DisplayText=#status%20#file%0AStatus:%20#uploaded%20/%20#total%20(#percent%25)%0ASpeed:%20#speed&ShowDisplay=true&InitText=Initializing&UploadingText=Uploading&WritingText=Writing&CompletedText=Finished&TimeVarsText=second,seconds,minute,minutes,hour,hours" />' + 
+  '  <param name="menu" value="false" />' +
+  '  <param name="quality" value="high" />'+
+  '  <param name="wmode" value="transparent" />'+
+  '  <embed src="circle.swf"' + 
+  '    flashvars="' + progressUrl + uploadId + 'BackgroundColor=0x999999&DisplayColor=0xCCCCFF&CircleColor=0xCCCCFF&TitleColor=0x999999&DisplayTextColor=0x333333&TitleText=Upload%20Progress%20Bar&ShowTitleText=true&DisplayText=#status%20#file%0AStatus:%20#uploaded%20/%20#total%20(#percent%25)%0ASpeed:%20#speed&ShowDisplay=true&InitText=Initializing&UploadingText=Uploading&WritingText=Writing&CompletedText=Finished&TimeVarsText=second,seconds,minute,minutes,hour,hours' + 
+  '    quality="high" wmode="transparent" pluginspage="' + protocol + '://www.macromedia.com/shockwave/download/index.cgi?P1_Prod_Version=ShockwaveFlash" type="application/x-shockwave-flash" width="500" height="150">'+
+  '  </embed>'+
+  '</object>';
+  document.write(tag);
+}
+</script>
+</head>
+<body marginheight="0" topmargin="0" vspace="0" marginwidth="0" leftmargin="0" hspace="0" style="margin:0; padding:0">
+<script>if (document.location) generateFlash();</script>
+</body>
+</html>

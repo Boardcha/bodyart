@@ -1,0 +1,116 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* Begin global styles ----------------------------- */
+.no-display {display: none;}
+.submit-button{background-color: #4589A4; color: #fff; font-weight: bold; padding: 5px; border-radius: 5px; border: 2px solid #23637C;}
+
+::-webkit-input-placeholder {font-style: italic; font-size: .9em; color: #888888;}
+::-moz-placeholder {font-style: italic; font-size: .9em; color: #888888;}
+
+.ajax_input_success {background-color: #B2FF99; transition: all 1s ease; outline: 2px solid #399634;}
+.ajax_input_fail {background-color: #FF9673; transition: all 1s ease; outline: 4px solid #D90000;}
+.ajax_input_fadeout {background-color: #FFFFFF; transition: all 1s ease;}
+
+.page-notes {font-family: san-serif, verdana, arial; font-size: .8em; width: 90%; padding: 10px; margin: 50px 0 30px 0; border-radius: 10px;   box-shadow: 1px 2px 10px 5px rgba(0, 0, 0, 0.25);}
+.page-notes ul > li {padding: 3px;}
+
+.blue-bubble {font-size: .9em; font-weight: bold; color: #000; border-radius: 5px; background-color: #A9D0F5; padding: 3px; margin-left: 15px;}
+.notice-red {border-radius: 5px; background-color: #FF9999; padding: 5px; border: 2px solid #B40404; font-weight: bold; color: #B40404; margin-top: 5px;}
+.notice-blue {color: #000; border-radius: 5px; background-color: #A9E2F3; border: 2px solid #81BEF7; padding: 3px; margin: 5px 0;}
+.notice-darkblue {color: #182D64; font-size: 1.2em; font-weight: bold; border-radius: 5px; background-color: #9CADD8; border: 2px solid #354B83; padding: 3px; margin: 5px 0;}
+.notice-purple {color: #000; border-radius: 5px; background-color: #DFC7EB; border: 2px solid #8E6CA0; padding: 3px; margin: 5px 0;}
+.notice-grey {color: #000; border-radius: 5px; background-color: #D0D0D0; padding: 3px; margin: 5px 0;}
+.notice-green {color: #000; border-radius: 5px; background-color: #C9E8C6; border: 2px solid #83CA7B; padding: 3px;}
+
+.notice-order-update {border-radius: .3em; background-color: #FF9999; padding: .3em; border: 2px solid #B40404; font-weight: bold; color: #B40404; margin: .4em 0 1em 0; font-size: 3em;}
+.page-header {font-weight: bold;display:block;padding:0 0 1em 0}
+
+/* End global styles ------------------------------- */
+
+
+/* START Scan invoices ------------------------------- */
+
+.extra_notes {font-size: .7em;}
+.scan_invoices input[type="text"] {width: 75%; padding: 3px; font-size: 1em; box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3); border: 1px solid #999; margin-bottom: 5px;}
+.scan_invoices body {
+	-webkit-text-size-adjust:none;
+	font-family: Helvetica, Arial, Verdana, sans-serif;
+	font-size: 15px;
+	color: black;
+	}
+.scan_invoices table {width: 100%;}	
+.scan_invoices td {padding: 10px 0; border-bottom: 1px solid #BDBDBD; vertical-align: top;}
+
+.scan_invoices .details_table td {padding: 0; border-bottom: none;}
+.scan_invoices  .detail_img {margin-left: 50px; text-align: middle;}
+
+
+.scan_invoices .bo_title {font-weight: bold;}
+.scan_invoices .bo-link{text-align: right;  vertical-align: top;}
+.scan_invoices .qty {text-align: center; width: 10%; vertical-align: top;}
+.scan_invoices .qty-bubble {background-color: #C9E8C6; border-radius: 5px; padding: 2px 5px; font-weight: bold;}
+.scan_invoices .location {font-weight: bold; vertical-align: top; padding-right: 20px; padding-left: 20px; }
+.scan_invoices .description{width: 60%; vertical-align: top;}
+
+.scan_invoices .small_text{font-size: .8em; text-decoration: underline;}
+
+.scan_invoices #product_details {
+	background-color: #D8D8D8;
+	border-radius: 5px;
+	padding: 5px;
+	margin: 5px 0; }
+
+.scan_invoices  .orig_qty {
+	font-weight: bold;
+	font-size: .9em;
+	margin-top: 10px;
+	
+}
+
+.scan_invoices  .order_complete {
+	color: #0B6121; font-weight: bold; font-size: 2em; border-radius: 5px; background-color: #C9E8C6; border: 2px solid #0B6121; padding: 3px; margin-bottom: 75px;	
+}
+ 
+.notes {
+	color: blue;
+	font-size: 15px;
+	font-weight: bold;
+	}	
+	   
+
+/* END scan invoices --------------------------------- */
+
+/* -----------  START REGULAR INVENTORY CHECKING ------------------  */
+.inventory-count-regular .highlight {background-color: #A6FF4C;}
+.inventory-count-regular .recently-sold {background-color: #FF7373;}
+.inventory-count-regular  .success-text {font-weight: bold; color: #00468C;}
+.inventory-count-regular  .failed-text {font-weight: bold; color: #B30000;}
+.inventory-count-regular  {font-family: san-serif, verdana, arial; font-size: 1.2em;}
+.inventory-count-regular  a {text-decoration: none; color: #000;}
+.inventory-count-regular  a:hover {font-weight: bold;}
+.inventory-count-regular .box {border-radius: 10px; padding: 10px; background-color: #CCCCCC; width: 90%;}
+.inventory-count-qty {font-size: 1.5em; font-weight: bold;}
+
+.inventory-count-regular input {padding: 5px; font-size: 1.2em;}
+
+
+/* -----------  END REGULAR BIN INVENTORY CHECKING ------------------  */
+
+
+
+/* -----------  BEGIN ASSIGN DISCONTINUED PAGE ------------------  */
+.discontinued {font-size: 1em; font-family: arial, sans-serif}
+.discontinued input {
+        width: 100%;
+        padding: .6em;
+		display: block;
+		margin: .5em 0;
+        font-size: 16px
+    }
+	
+	
+.discontinued input:focus {
+    border: 2px solid #045FB4
+}
+/* ------------  END ASSIGN DISCONTINUED PAGE -------------------  */

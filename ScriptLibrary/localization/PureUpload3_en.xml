@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.1">
+	<file original="incPU3Class.asp" datatype="asp" source-language="en">
+		<body>
+			<trans-unit id="001" resname="PU3_FL_ADD">
+				<source>Add</source>
+			</trans-unit>
+			<trans-unit id="002" resname="PU3_FL_REMOVE">
+				<source>Remove</source>
+			</trans-unit>
+			<trans-unit id="003" resname="PU3_FL_UPLOAD">
+				<source>Upload</source>
+			</trans-unit>
+			<trans-unit id="004" resname="PU3_ERR_VALUE">
+				<source>PureUpload.%1 does not support the used value.</source>
+			</trans-unit>
+			<trans-unit id="005" resname="PU3_ERR_COLLECTION">
+				<source>Object does not exist within the PureUpload.Fields collection.</source>
+			</trans-unit>
+			<trans-unit id="006" resname="PU3_ERR_FORMSIZE">
+				<source>Upload size of %1 exceeds the limit of %2.</source>
+			</trans-unit>
+			<trans-unit id="007" resname="PU3_ERR_FILESIZE">
+				<source>The file '%1' with a size of %2 exceeds the limit of %3.</source>
+			</trans-unit>
+			<trans-unit id="008" resname="PU3_ERR_DIMSMALL">
+				<source>Image/Movie dimension %1x%2 is too small, minimum dimension is %3x%4.</source>
+			</trans-unit>
+			<trans-unit id="009" resname="PU3_ERR_DIMLARGE">
+			  <source>Image/Movie dimension %1x%2 is too large, maximum dimension is %3x%4.</source>
+			</trans-unit>
+			<trans-unit id="010" resname="PU3_ERR_EXTENSION">
+				<source>Filetype is not allowed, only %1 are allowed.</source>
+			</trans-unit>
+			<trans-unit id="011" resname="PU3_ERR_ADO">
+				<source>PureUpload requires ADO 2.5 or greater.</source>
+			</trans-unit>
+			<trans-unit id="012" resname="PU3_ERR_EXISTS">
+				<source>File '%1' already exists on the server.</source>
+			</trans-unit>
+			<trans-unit id="013" resname="PU3_ERR_CREATEFOLDER">
+				<source>Can not create upload folder %1. Maybe you don't have the proper permissions.</source>
+			</trans-unit>
+			<trans-unit id="014" resname="PU3_ERR_UPDATERECORD">
+				<source>An error has occurred during record update. There are no records to update.</source>
+			</trans-unit>
+			<trans-unit id="015" resname="PU3_ERR_FOLDER">
+				<source>Upload folder is invalid. Upload Folder: '%1'.</source>
+			</trans-unit>
+			<trans-unit id="016" resname="PU3_ERR_VERSION">
+				<source>You don't have latest version of ScriptLibrary/incPU3Class.asp uploaded on the server.</source>
+			</trans-unit>
+			<trans-unit id="017" resname="PU3_ERR_ENCTYPE">
+				<source>Form was submitted with no ENCTYPE="multipart/form-data" attribute on it.</source>
+			</trans-unit>
+			<trans-unit id="018" resname="PU3_ERR_SCRIPT">
+				<source>Cannot create object '%1', please install the latest version of VBscript on your server. Get it from http://msdn.microsoft.com/scripting</source>
+			</trans-unit>
+			<trans-unit id="019" resname="PU3_ERR_BINARYREAD">
+				<source>Your server is not configured to allow large files upload. See http://www.dmxzone.com/go?5424 for more information.</source>
+			</trans-unit>
+			<trans-unit id="020" resname="PU3_ERR_EMPTY">
+				<source>An error has occurred while saving the file '%1'. The file does not exist or is empty.</source>
+			</trans-unit>
+			<trans-unit id="021" resname="PU3_ERR_SAVE">
+				<source>An error has occurred while saving the file '%1' in folder %2. Maybe you don't have the proper permissions.</source>
+			</trans-unit>
+			<trans-unit id="022" resname="PU3_ERR_HTTP">
+				<source>HTTPError %1 while trying to upload %2.</source>
+			</trans-unit>
+			<trans-unit id="023" resname="PU3_ERR_IO">
+				<source>An IO Error occured while trying to upload %1.</source>
+			</trans-unit>
+			<trans-unit id="024" resname="PU3_ERR_TOTALLIMIT">
+				<source>Files not added, total size exceeds limit of %1.</source>
+			</trans-unit>
+			<trans-unit id="025" resname="PU3_ERR_FILELIMIT">
+				<source>File %1 not added, filesize exceeds the limit of %2.</source>
+			</trans-unit>
+			<trans-unit id="026" resname="PU3_FL_REMOVEALL">
+				<source>Remove All</source>
+			</trans-unit>
+			<trans-unit id="027" resname="PU3_OK">
+				<source>Ok</source>
+			</trans-unit>
+			<trans-unit id="028" resname="PU3_CANCEL">
+				<source>Cancel</source>
+			</trans-unit>
+			<trans-unit id="029" resname="PU3_HELP">
+				<source>Help</source>
+			</trans-unit>
+			<trans-unit id="030" resname="PU3_FL_TIP_ADD">
+				<source>Add files to the list</source>
+			</trans-unit>
+			<trans-unit id="031" resname="PU3_FL_TIP_REMOVE">
+				<source>Remove file from the list</source>
+			</trans-unit>
+			<trans-unit id="032" resname="PU3_FL_TIP_REMOVEALL">
+				<source>Remove all files from the list</source>
+			</trans-unit>
+			<trans-unit id="033" resname="PU3_FL_TIP_UPLOAD">
+				<source>Upload all files in the list</source>
+			</trans-unit>
+			<trans-unit id="034" resname="PU3_FL_DONE">
+				<source>Upload completed</source>
+			</trans-unit>
+			<trans-unit id="035" resname="PU3_FL_UPLOADEDFILES">
+				<source>Uploaded %1 files</source>
+			</trans-unit>
+			<trans-unit id="036" resname="PU3_FL_FAILEDFILES">
+				<source>Following files failed:</source>
+			</trans-unit>
+			<trans-unit id="037" resname="PU3_FL_TOTAL">
+				<source>Total</source>
+			</trans-unit>
+			<trans-unit id="038" resname="PU3_FL_CURRENT">
+				<source>Current</source>
+			</trans-unit>
+			<trans-unit id="039" resname="PU3_FL_LISTTOTAL">
+				<source>%1 file(s), %2</source>
+			</trans-unit>
+			<trans-unit id="040" resname="PU3_ERR_REQUIRED">
+				<source>File is required!</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

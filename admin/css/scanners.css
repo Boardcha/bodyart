@@ -1,0 +1,44 @@
+@charset "utf-8";
+/* CSS Document */
+
+/* Begin global styles ----------------------------- */
+::-webkit-input-placeholder {font-style: italic; font-size: .9em; color: #888888;}
+::-moz-placeholder {font-style: italic; font-size: .9em; color: #888888;}
+
+.ajax_input_success {background-color: #B2FF99; transition: all 1s ease; outline: 2px solid #399634;}
+.ajax_input_fail {background-color: #FF9673; transition: all 1s ease; outline: 4px solid #D90000;}
+.ajax_input_fadeout {background-color: #FFFFFF; transition: all 1s ease;}
+
+.page-notes {font-family: san-serif, verdana, arial; font-size: .8em; width: 90%; padding: 10px; margin: 50px 0 30px 0; border-radius: 10px;   box-shadow: 1px 2px 10px 5px rgba(0, 0, 0, 0.25);}
+.page-notes ul > li {padding: 3px;}
+
+/* End global styles ------------------------------- */
+
+
+
+/* -----------  START LIMITED BIN INVENTORY CHECKING ------------------  */
+.inventory-count-bin .highlight {background-color: #A6FF4C;}
+.inventory-count-bin .recently-sold {background-color: #FF7373;}
+.inventory-count-bin  .success-text {font-weight: bold; color: #00468C;}
+.inventory-count-bin  .failed-text {font-weight: bold; color: #B30000;}
+.inventory-count-bin  {font-family: san-serif, verdana, arial; font-size: .8em;}
+.inventory-count-bin  a {text-decoration: none; color: #000;}
+.inventory-count-bin  a:hover {font-weight: bold;}
+.inventory-count-bin .box {border-radius: 10px; padding: 10px; background-color: #CCCCCC; width: 90%;}
+
+.inventory-count-bin input {padding: 5px;}
+.inventory-count-bin input[type=text] {border: 1px solid #999; box-shadow: 0px 0px 8px rgba(0, 0, 0, 0.3);}
+.inventory-count-bin input[name=qty] {width: 20px; font-weight: bold; font-size: 1.1em;}
+
+.scanner-table table, .scanner-table tr, .scanner-table td {margin: 0; padding: 0; border: none;}
+.scanner-table td, th {padding: 5px; text-align: left; margin: 0; border: none;}
+.scanner-table tbody {border-bottom: solid thin #666666;}
+
+
+
+
+
+
+
+
+/* -----------  END LIMITED BIN INVENTORY CHECKING ------------------  */

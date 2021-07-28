@@ -1,0 +1,203 @@
+<html>
+<head>
+<title>Etsy stock</title>
+<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+<link rel="stylesheet" type="text/css" href="../CSS/Admin.css" />
+<link href="/CSS/embedded-woff_v825_1.css" rel="stylesheet" type="text/css" />
+<style>
+	body {font-size: 1em; background-color: #fff; color: #000;}
+	img {width: 120px; max-height: 120px}
+	.page-header {padding: 0 0 1em .25em}
+</style>
+</head>
+<body>
+
+<div class="admin-content">
+
+<div class="paging">
+	<div class="page-header">
+	<span class="count"></span> listings
+	</div>
+	<a href="etsy-inventory.html?offset=0" class="paging-style1 first"><i class="fa fa-angle-double-left fa-lg"></i></a>
+	<a href="" class="paging-style1 prev" ><i class="fa fa-angle-left fa-lg"></i></a>
+	<span class="paging-style1 page" ></span>
+	<a href="" class="paging-style1 next" ><i class="fa fa-angle-right fa-lg"></i></a>
+	<a href="" class="paging-style1 last" ><i class="fa fa-angle-double-right fa-lg"></i></a>
+</div>
+
+<table class="admin-table">
+	<thead>
+		<tr>
+		<th>Qty</th>
+		<th>Size</th>
+		<th>Item</th>
+		</tr>
+	</thead>
+	<tbody id="listings">
+	</tbody>
+</table>
+<div class="paging">
+
+	<a href="etsy-inventory.html?offset=0" class="paging-style1 first"><i class="fa fa-angle-double-left fa-lg"></i></a>
+	<a href="" class="paging-style1 prev" ><i class="fa fa-angle-left fa-lg"></i></a>
+	<span class="paging-style1 page" ></span>
+	<a href="" class="paging-style1 next" ><i class="fa fa-angle-right fa-lg"></i></a>
+	<a href="" class="paging-style1 last" ><i class="fa fa-angle-double-right fa-lg"></i></a>
+</div>
+</div>
+</body>
+
+
+<script type="text/javascript">
+// Get URL parameters
+$.urlParam = function(name){
+	var results = new RegExp('[\?&]' + name + '=([^&#]*)').exec(window.location.href);
+	return results[1] || 0;
+}
+
+// Build out paging
+	var offset = parseInt($.urlParam('offset'));
+
+	$('.prev').attr('href','etsy-inventory.html?offset=' + (offset - 10));
+	$('.next').attr('href','etsy-inventory.html?offset=' + (offset + 10));
+
+// End paging
+
+$("first").click(function(){
+    offset = 0
+});
+
+$("next").click(function(){
+    offset = offset + 10
+});
+
+$("prev").click(function(){
+    offset = offset - 10
+});
+
+$("last").click(function(){
+//    offset = offset
+});
+
+/* Test link that shows all listings in JSON in the browser
+https://openapi.etsy.com/v2/shops/bodyartforms/listings/active.js?includes=MainImage&api_key=8relmxk38n9nzycnjdxqwhc8
+*/
+
+var key = "8relmxk38n9nzycnjdxqwhc8",
+	url = "https://openapi.etsy.com/v2/shops/bodyartforms/listings/active.js?includes=MainImage",
+	set,
+	page,
+	prev,
+	next,
+	limit = 10;
+
+$.ajax({
+	url: url,
+	data: {
+		api_key: key,
+		limit: limit,
+		offset: offset
+	},
+	dataType: 'jsonp',
+	success: function (data) {
+	console.log(data);	
+	
+	$('.count').html(data.count);
+	$('.page').html(data.pagination.effective_page);
+	
+	if (data.pagination.effective_offset === 0) {
+		$('.prev, .first').hide();
+	}
+	
+	if (data.pagination.effective_offset > data.count - 10) {
+		$('.next, .last').hide();
+	}
+	
+	// for each listing... *
+	for (var i = 0; i < data.results.length; i++) {
+		// * assign listing variables
+		var item = data.results[i];
+		var url = item.url;
+		var image = item.MainImage.url_570xN; // 75x75, 170x135, 570xN, fullxfull
+		var title = item.title;
+		var price = item.price;
+		var quantity = item.quantity;
+		var listing_id = item.listing_id;
+		var size;
+		var qty;
+		var sku;
+		var variation_id;	
+
+		/* Test URL to see formatted output for a single listing
+		https://openapi.etsy.com/v2/listings/502052767/inventory.js?api_key=ilr3mp5uqp4x9upbv7haxo65
+		
+		*/
+		
+		// Try and retrieve variation details
+		$.ajax({
+			url: "https://openapi.etsy.com/v2/listings/" + listing_id  + "/inventory.js?",
+			data: {
+				api_key: key,
+				listing_id: listing_id
+			},
+			extradata: {
+				listing_title: title
+			},
+			dataType: 'jsonp',
+			success: function (data) {
+			//	console.log(data);
+				
+			// console.log(data.results.products.length + " variations found");
+
+				for (var h = 0; h < data.results.products.length; h++) {	
+					
+					var variation_item = data.results.products[h];
+					
+					variation_id = variation_item.product_id
+					
+				//	console.log(variation_item);
+					
+					size = variation_item.property_values[0].values[0];
+					
+					qty = variation_item.offerings[0].quantity;
+					
+				//	sku = variation_item.sku;
+					
+					var qty_class = ""
+					if (qty === 0) {
+						qty_class = "notice-red"
+					}
+					if (qty > 0 && qty <= 3) {
+						qty_class = "notice-orange"
+					}
+				
+			//	console.log("Listing #" + listing_id);
+			//	console.log(this.extradata.listing_title);
+			//	console.log("size: " + size);
+			//	console.log("Qty: " + qty);
+			//	console.log("Product ID " + variation_id);
+					
+	// * build html structure for each listing
+		var listing_result = $('<tr><td><span class="' + qty_class + '">' + qty + '</span></td><td>' + size + '</td><td>' +this.extradata.listing_title + '</td></tr>');
+
+		// * append listings
+		$('#listings').append(listing_result);
+				
+				} // end variation loop	
+					
+			} // end success for variations call
+			
+			
+		});
+				
+										
+	
+		
+		} // end main for loop
+	} // end success for main listing
+});
+
+
+
+</script>
+</html>

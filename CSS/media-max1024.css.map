@@ -1,0 +1,9 @@
+{
+    "version": 3,
+    "mappings": "AAAA,MAAM,EAAE,SAAS,EAAE,MAAM;EACvB,AAAA,gBAAgB,CAAC,CAAC,CAAC;IACjB,MAAM,EAAC,IAAI,CAAA,UAAU;IACrB,SAAS,EAAE,KACb;GAAC",
+    "sources": [
+        "media-max1024.scss"
+    ],
+    "names": [],
+    "file": "media-max1024.css"
+}

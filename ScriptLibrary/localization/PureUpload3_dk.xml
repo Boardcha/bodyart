@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xliff version="1.1">
+	<file original="incPU3Class.asp" datatype="asp" source-language="dk">
+		<body>
+			<trans-unit id="001" resname="PU3_FL_ADD">
+				<source>Tilf&#248;j</source>
+			</trans-unit>
+			<trans-unit id="002" resname="PU3_FL_REMOVE">
+				<source>Fjern</source>
+			</trans-unit>
+			<trans-unit id="003" resname="PU3_FL_UPLOAD">
+				<source>Upload</source>
+			</trans-unit>
+			<trans-unit id="004" resname="PU3_ERR_VALUE">
+				<source>PureUpload.%1 underst&#248;tter ikke den valgte v&#230;rdi.</source>
+			</trans-unit>
+			<trans-unit id="005" resname="PU3_ERR_COLLECTION">
+				<source>Objektet eksistere ikke i PureUpload.Fields liste.</source>
+			</trans-unit>
+			<trans-unit id="006" resname="PU3_ERR_FORMSIZE">
+				<source>Upload st&#248;rrelse p&#229; %1 overskrider gr&#230;nsen p&#229; %2.</source>
+			</trans-unit>
+			<trans-unit id="007" resname="PU3_ERR_FILESIZE">
+				<source>Filen '%1' med st&#248;rrelsen %2 overskrider st&#248;rrelsen p&#229; %3.</source>
+			</trans-unit>
+			<trans-unit id="008" resname="PU3_ERR_DIMSMALL">
+				<source>Billede/Film st&#248;rrelsen %1x%2 er for lille, minimum st&#248;rrelsen er %3x%4.</source>
+			</trans-unit>
+			<trans-unit id="009" resname="PU3_ERR_DIMLARGE">
+			  <source>Billede/Film st&#248;rrelsen %1x%2 er for stor, maximum st&#248;rrelsen er %3x%4.</source>
+			</trans-unit>
+			<trans-unit id="010" resname="PU3_ERR_EXTENSION">
+				<source>Filtypen er ikke gyldig, kun %1 er gyldige.</source>
+			</trans-unit>
+			<trans-unit id="011" resname="PU3_ERR_ADO">
+				<source>PureUpload kr&#230;ver ADO 2.5 eller nyere.</source>
+			</trans-unit>
+			<trans-unit id="012" resname="PU3_ERR_EXISTS">
+				<source>Filen '%1' eksistere allerede p&#229; serveren.</source>
+			</trans-unit>
+			<trans-unit id="013" resname="PU3_ERR_CREATEFOLDER">
+				<source>Kan ikke oprette upload mappen %1. Du har m&#229;ske ikke de rigtige rettigheder.</source>
+			</trans-unit>
+			<trans-unit id="014" resname="PU3_ERR_UPDATERECORD">
+				<source>Der opstod en fejl ved opdatering af posten. Der var ikke nogen post der kunne opdateres.</source>
+			</trans-unit>
+			<trans-unit id="015" resname="PU3_ERR_FOLDER">
+				<source>Upload mappen er ugyldig. Upload Mappe: '%1'.</source>
+			</trans-unit>
+			<trans-unit id="016" resname="PU3_ERR_VERSION">
+				<source>Du har ikke den nyeste version af ScriptLibrary/incPU3Class.asp uploaded p&#229; serveren.</source>
+			</trans-unit>
+			<trans-unit id="017" resname="PU3_ERR_ENCTYPE">
+				<source>Formularen blev submitted uden at encodetype var sat til: ENCTYPE="multipart/form-data".</source>
+			</trans-unit>
+			<trans-unit id="018" resname="PU3_ERR_SCRIPT">
+				<source>Kan ikke oprette objektet '%1', installer venligst den nyeste version af VBscript p&#229; serveren. Den kan hentes her: http://msdn.microsoft.com/scripting</source>
+			</trans-unit>
+			<trans-unit id="019" resname="PU3_ERR_BINARYREAD">
+				<source>Din server er ikke konfigureret til at tillade upload af store filer. Se http://www.dmxzone.com/go?5424 for mere information.</source>
+			</trans-unit>
+			<trans-unit id="020" resname="PU3_ERR_EMPTY">
+				<source>Der opstod en fejl da filen '%1' blev gemt. Filen eksistere ikke eller ogs&#229; er den tom.</source>
+			</trans-unit>
+			<trans-unit id="021" resname="PU3_ERR_SAVE">
+				<source>Der opstod en fejl da filen '%1' blev gemt i mappen: %2. Du har m&#229;ske ikke de rigtige rettigheder.</source>
+			</trans-unit>
+			<trans-unit id="022" resname="PU3_ERR_HTTP">
+				<source>HTTP fejl: %1 opstod ved upload af %2.</source>
+			</trans-unit>
+			<trans-unit id="023" resname="PU3_ERR_IO">
+				<source>Under fors&#248;get på at uploade %1, opstod er en IO Fejl.</source>
+			</trans-unit>
+			<trans-unit id="024" resname="PU3_ERR_TOTALLIMIT">
+				<source>Filerne blev ikke tilf&#248;jet, den totale st&#248;rrelse overskrider gr&#230;nsen p&#229; %1.</source>
+			</trans-unit>
+			<trans-unit id="025" resname="PU3_ERR_FILELIMIT">
+				<source>Filen %1 blev ikke tilf&#248;jet, st&#248;rrelsen p&#229; filen overskrider gr&#230;nsen p&#229; %2.</source>
+			</trans-unit>
+			<trans-unit id="026" resname="PU3_FL_REMOVEALL">
+				<source>Fjern alle</source>
+			</trans-unit>
+			<trans-unit id="027" resname="PU3_OK">
+				<source>Ok</source>
+			</trans-unit>
+			<trans-unit id="028" resname="PU3_CANCEL">
+				<source>Annuller</source>
+			</trans-unit>
+			<trans-unit id="029" resname="PU3_HELP">
+				<source>Hj&#230;lp</source>
+			</trans-unit>
+			<trans-unit id="030" resname="PU3_FL_TIP_ADD">
+				<source>Tilf&#248;j filer til listen</source>
+			</trans-unit>
+			<trans-unit id="031" resname="PU3_FL_TIP_REMOVE">
+				<source>Fjern fil fra listen</source>
+			</trans-unit>
+			<trans-unit id="032" resname="PU3_FL_TIP_REMOVEALL">
+				<source>Fjern alle filer fra listen</source>
+			</trans-unit>
+			<trans-unit id="033" resname="PU3_FL_TIP_UPLOAD">
+				<source>Upload alle filerne i listen</source>
+			</trans-unit>
+			<trans-unit id="034" resname="PU3_FL_DONE">
+				<source>Upload f&#230;dig</source>
+			</trans-unit>
+			<trans-unit id="035" resname="PU3_FL_UPLOADEDFILES">
+				<source>Uploaded %1 filer</source>
+			</trans-unit>
+			<trans-unit id="036" resname="PU3_FL_FAILEDFILES">
+				<source>F&#248;lgende filer fejlede:</source>
+			</trans-unit>
+			<trans-unit id="037" resname="PU3_FL_TOTAL">
+				<source>Total</source>
+			</trans-unit>
+			<trans-unit id="038" resname="PU3_FL_CURRENT">
+				<source>Aktuel</source>
+			</trans-unit>
+			<trans-unit id="039" resname="PU3_FL_LISTTOTAL">
+				<source>%1 fil(er), %2</source>
+			</trans-unit>
+			<trans-unit id="040" resname="PU3_ERR_REQUIRED">
+				<source>Der skal v&#230lges en fil!</source>
+			</trans-unit>			
+		</body>
+	</file>
+</xliff>
