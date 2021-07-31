@@ -485,6 +485,34 @@ footer, #mobilesearch, #accountmenu {
 }
 
 
+.video-thumbnail, .image-thumbnail {
+    display: inline-block;
+    position: relative;
+}
+
+.video-thumbnail .img-thumb{
+	width: 100%
+}
+
+.play-icon-sm{ 
+	width : 20px;
+	position: absolute;
+    top: 12px;
+    left: 5px;
+}
+
+.play-icon{ 
+	width: 30px;
+    position: absolute;
+    top: calc(50% - 10px);
+    left: calc(50% - 15px);
+}
+	
+.video-player{
+	max-height:550px;
+	width:100%;
+}
+
 @media (max-width: 320px) {
   #instafeed img {
     width: 50%; } 
