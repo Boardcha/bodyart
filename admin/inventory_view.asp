@@ -116,7 +116,7 @@ elseif request.cookies("po-filter-autoclave") = "tag" then
 	' if we need to mass tag autoclave items then don't pull in all the details
 	objCmd.CommandText = "SELECT * FROM jewelry WHERE " + var_brand + " " + po_filter_title + " " + po_filter_details + " AND autoclavable = 0 ORDER BY title ASC"
 else
-	objCmd.CommandText = "SELECT *, (restock_threshold - qty) * -1 as thresh_level,(SELECT TOP(1) po_confirmed FROM tbl_po_details WHERE  (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_confirmed ,(SELECT TOP(1) po_manual_adjust FROM tbl_po_details WHERE  (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_manual_adjust,(SELECT TOP(1) po_qty FROM tbl_po_details WHERE (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_qty, amt_waiting, inventory.location,  inventory.autoclavable, TBL_Barcodes_SortOrder.ID_Description FROM inventory INNER JOIN TBL_Barcodes_SortOrder ON inventory.DetailCode = TBL_Barcodes_SortOrder.ID_Number LEFT OUTER JOIN vw_po_waiting ON inventory.ProductDetailID = vw_po_waiting.DetailID WHERE " + var_brand + " " + po_filter_title + " " + po_filter_details + " AND customorder <> 'yes' " + po_filter_active + " " + po_filter_status + " " + po_filter_qty + " ORDER BY " + var_1st_filter + " title ASC, GaugeOrder ASC, ProductID ASC, item_order ASC"
+	objCmd.CommandText = "SELECT *, (restock_threshold - qty) * -1 as thresh_level,(SELECT TOP(1) po_confirmed FROM tbl_po_details WHERE  (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_confirmed ,(SELECT TOP(1) po_manual_adjust FROM tbl_po_details WHERE  (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_manual_adjust,(SELECT TOP(1) po_qty FROM tbl_po_details WHERE (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_qty, (SELECT TOP(1) po_qty_vendor FROM tbl_po_details WHERE (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_qty_vendor, amt_waiting, inventory.location,  inventory.autoclavable, TBL_Barcodes_SortOrder.ID_Description FROM inventory INNER JOIN TBL_Barcodes_SortOrder ON inventory.DetailCode = TBL_Barcodes_SortOrder.ID_Number LEFT OUTER JOIN vw_po_waiting ON inventory.ProductDetailID = vw_po_waiting.DetailID WHERE " + var_brand + " " + po_filter_title + " " + po_filter_details + " AND customorder <> 'yes' " + po_filter_active + " " + po_filter_status + " " + po_filter_qty + " ORDER BY " + var_1st_filter + " title ASC, GaugeOrder ASC, ProductID ASC, item_order ASC"
 end if
 
 
@@ -241,6 +241,8 @@ ORDER CREATED
 <thead class="thead-dark">
   <tr class="text-nowrap">
     <th class="sticky-top"><a href="?brand=<%=Request.QueryString("brand")%>&amp;resume=<%=Request.QueryString("resume")%>"><i class="fa fa-sort fa-lg sort-icon mr-2"></i></a>Re-order</th>
+	<th class="sticky-top">Sold in pairs</th>
+	<th class="sticky-top">Vendor qty</th>
 	<th class="sticky-top">Line total</th>
 	<th class="sticky-top"><a href="?brand=<%=Request.QueryString("brand")%>&amp;resume=<%=Request.QueryString("resume")%>&amp;1stfilter=qty"><i class="fa fa-sort fa-lg sort-icon mr-2"></i></a>On hand</th>
     <th class="sticky-top"><a href="?brand=<%=Request.QueryString("brand")%>&amp;resume=<%=Request.QueryString("resume")%>&amp;1stfilter=max"><i class="fa fa-sort fa-lg sort-icon mr-2"></i></a>Max qty</th>
@@ -278,7 +280,7 @@ if var_productid <> rsGetDetail.Fields.Item("ProductID").Value then
 %>
 <tbody class="tbody_header <%= rsGetDetail.Fields.Item("type").Value %> <%= var_class_qty %>">
 	<tr>
-		<td colspan="11" class="bg-secondary">
+		<td colspan="13" class="bg-secondary">
 		<a href="../productdetails.asp?ProductID=<%=(rsGetDetail.Fields.Item("ProductID").Value)%>" target="_blank"><img src="https://bafthumbs-400.bodyartforms.com/<%=(rsGetDetail.Fields.Item("picture").Value)%>" class="rounded float-left mr-2" style="height:50px;width:50px" <%= var_img_enlarge %>></a>
 		
 		<a class="text-light h5" href="product-edit.asp?ProductID=<%=(rsGetDetail.Fields.Item("ProductID").Value)%>" target="_blank"><%= rsGetDetail.Fields.Item("title").Value %><% if rsGetDetail.Fields.Item("type").Value <> "None" then %> - <%= rsGetDetail.Fields.Item("type").Value %><% end if %> (<%=(rsGetDetail.Fields.Item("ProductID").Value)%>)</a>
@@ -335,9 +337,9 @@ else
 end if
 
 ' overwrite calculated qty restock amount if we've already saved our own value in the database
-	if rsGetDetail.Fields.Item("po_qty").Value <> 0 then
-		var_restock = rsGetDetail.Fields.Item("po_qty").Value
-	end if
+if rsGetDetail.Fields.Item("po_qty").Value <> 0 then
+	var_restock = rsGetDetail.Fields.Item("po_qty").Value
+end if
 
 if show_check = "no" then
 	var_reorder = ""
@@ -375,9 +377,29 @@ end if %>
         <span class="mx-1">*</span> 
 		<span class="wlsl_price" data-price="<%=FormatNumber((rsGetDetail.Fields.Item("wlsl_price").Value), -1, -2, -0, -2)%>"><%=FormatCurrency((rsGetDetail.Fields.Item("wlsl_price").Value), -1, -2, -0, -2)%></span>     
 	</td>
+	<td class="text-center align-middle">
+		<input type="checkbox" name="pair_<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" data-id="<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>">	
+	</td>
+	<td>
+	<%
+		if rsGetDetail.Fields.Item("po_qty_vendor").Value>0 Then 
+			qty_vendor = rsGetDetail.Fields.Item("po_qty_vendor").Value
+		Else
+			qty_vendor = 0
+		End If	
+	%>
+		<input type="text" name="qty_vendor_<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" class="form-control form-control-sm" style="width:50px" value="<%=qty_vendor%>" data-column="po_qty_vendor" data-id="<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>">
+	</td>
 <% ' LEAVE THIS LINE BELOW ALL CONNECTED SO THAT THE JAVASCRIPT WORKS RIGHT TO CREATE THE TOTAL WITH NULL VALUES
 %>
-	<td class="<%= var_reorder %> <%= var_reorder_class %>" id="line_total_<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" data-line_total="<% if var_restock > 0 then %><%= FormatNumber(var_restock * rsGetDetail.Fields.Item("wlsl_price").Value, -1, -2, -0, -2) %><% else %>0<% end if %>" data-detailid="<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>"><% if var_restock > 0 then %><%= FormatCurrency(var_restock * rsGetDetail.Fields.Item("wlsl_price").Value, -1, -2, -0, -2) %><%else %>&nbsp;<% end if %>
+<%
+if var_restock > 0 then 
+	line_total = FormatNumber(var_restock * rsGetDetail.Fields.Item("wlsl_price").Value, -1, -2, -0, -2) 
+else 
+	line_total = 0
+end if 
+%>
+	<td class="<%= var_reorder %> <%= var_reorder_class %>" id="line_total_<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" data-line_total="<%=line_total%>" data-detailid="<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>"><% if var_restock > 0 then %><%= line_total%><%else %>&nbsp;<% end if %>
 	</td>
     <td style="text-align:center">
 		<% if rsGetDetail.Fields.Item("qty").Value <= 0 then
@@ -516,11 +538,20 @@ $(document).ready(function(){
 	}); // END last sold date expand and load ----------------------------------------
 	
 	// Highlight row if qty field changes
-	$(".orderqty").change(function(){
+	var handlingInProgress = false;
+	$(".orderqty").change(function(e){
+		if (handlingInProgress) return;
+		handlingInProgress=true;
 		var id = $(this).attr("data-id");
-		var qty_value = $(this).parent().find('.orderqty').val();
-		var wlsl_price = $(this).parent().find('.wlsl_price').attr("data-price");
+		var qty_value = $(this).parent().parent().find('.orderqty').val();
+		var wlsl_price = $(this).parent().parent().find('.wlsl_price').attr("data-price");
 		var new_price = Math.round(qty_value * wlsl_price);
+		var chk_pair = $(this).parent().parent().find("[name^='pair']").is(':checked');
+		
+		if(chk_pair){
+			$(this).parent().parent().find("[name^='qty_vendor']").val(Math.round(qty_value/2));
+			$(this).parent().parent().find("[name^='qty_vendor']").change();
+		}	
 		
 		// Write new caculations into the data- attribute
 		$('#line_total_' + id).html('$' + new_price);
@@ -533,11 +564,46 @@ $(document).ready(function(){
 		$('#check' + id).hide();
 		$('#checkgap' + id).addClass("empty_check_gap").show();
 		// Call calculation function
-		$(calculateSum)
+		$(calculateSum);
+		handlingInProgress=false;
 	});
+	
+	// Highlight row if qty_vendor field changes
+	$("input[name^='qty_vendor']").change(function(e){
+		if (handlingInProgress) return;
+		handlingInProgress=true;
+		var id = $(this).attr("data-id");
+		$(this).parent().parent().find(".orderqty").change();
+		$(this).closest("tr").removeClass("css_inactive");
+		$(this).closest("tr").addClass("table-info");
+		$('#reorder_all').hide();
+		$('#check' + id).hide();
+		$('#checkgap' + id).addClass("empty_check_gap").show();
+		// Call calculation function
+		$(calculateSum);
+		handlingInProgress=false;
+	});	
 
+	$("input[name^='pair']").change(function(e){
+		if (handlingInProgress) return;
+		handlingInProgress=true;
+		var id = $(this).attr("data-id");
+		var qty_value = $(this).parent().parent().find('.orderqty').val();
+		var chk_pair = $(this).is(':checked');
+		if(chk_pair){
+			$(this).parent().parent().find("[name^='qty_vendor']").val(Math.round(qty_value/2));
+			$(this).parent().parent().find("[name^='qty_vendor']").change();
+			$('#check' + id).hide();
+		}else{
+			$(this).parent().parent().find("[name^='qty_vendor']").val("0");
+			$(this).parent().parent().find("[name^='qty_vendor']").change();
+		}	
+		$(this).parent().parent().find('.orderqty').change();
+		handlingInProgress=false;
+	});
+	
 	// Clicking checkmark
-	$(".disabled_check").click(function(){		
+	$(".disabled_check").click(function(){
 		$(this).removeClass("text-secondary");
 		$(this).addClass("text-success");
 		
