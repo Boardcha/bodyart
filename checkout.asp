@@ -1039,8 +1039,7 @@ end if
 							<div class="alert alert-danger submit_disabled" style="display:none"></div><!-- alert for that displays if a shipping type has not been selected -->
 							<% end if %>
 					<% if request.querystring("type") = "card" then %>
-						<!--<button class="btn btn-lg btn-primary btn-block checkout_button place_order" style="display: none" type="submit" form="checkout_form" name="place_order">PLACE ORDER</button>-->
-						<div class="alert alert-danger">Our payment processor is currently DOWN. They are actively working on it. Please check back in a bit. Sorry for the trouble!</div>
+						<button class="btn btn-lg btn-primary btn-block checkout_button place_order" style="display: none" type="submit" form="checkout_form" name="place_order">PLACE ORDER</button>
 					<% end if %>
 					<% if request.querystring("type") = "paypal" then %>
 						<button class="btn btn-lg btn-primary btn-block checkout_button place_order checkout_paypal" style="display:none" type="submit" form="checkout_form" name="place_order">CONTINUE TO PAYPAL</button>
