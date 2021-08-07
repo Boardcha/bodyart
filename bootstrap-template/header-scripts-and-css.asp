@@ -38,9 +38,9 @@
         <meta name="msapplication-TileColor" content="#2b5797">
         <meta name="theme-color" content="#ffffff">
         <% if request.cookies("darkmode") <> "on" then %> 
-        <link href="/CSS/baf.min.css?v=040220" id="lightmode" rel="stylesheet" type="text/css" />
+        <link href="/CSS/baf.min.css?v=080221" id="lightmode" rel="stylesheet" type="text/css" />
         <% else %>
-        <link href="/CSS/baf-dark.min.css?v=050820" id="darkmode" rel="stylesheet" type="text/css" />
+        <link href="/CSS/baf-dark.min.css?v=080221" id="darkmode" rel="stylesheet" type="text/css" />
         <% end if %>
         <link href="/CSS/ion.rangeslider.min.css?v=061121" rel="stylesheet" type="text/css" />
         <link href="/CSS/media-max768.min.css" media="screen and (max-width: 768px)" rel="stylesheet" type="text/css" />

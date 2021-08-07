@@ -1734,7 +1734,7 @@ end if
 <script type="text/javascript" src="/js/redactor-plugin-source.js"></script>
 <script type="text/javascript" src="/js/chosen/chosen.jquery.js"></script>
 <script type="text/javascript" src="scripts/dropzone.js"></script>
-<script type="text/javascript" src="scripts/product-edit-version2.js?v=052524"></script>
+<script type="text/javascript" src="scripts/product-edit-version2.js?v=080221"></script>
 </html>
 <%
 Set rs_getuser = Nothing
