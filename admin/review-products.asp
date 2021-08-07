@@ -21,41 +21,41 @@
 		</tr>
 	</thead>	
 <%
-		While NOT rsGetProducts.EOF
+		While NOT rsGetProductsToReview.EOF
 %>
 		<tr>
 			<td>
-                <a href="product-edit.asp?ProductID=<%= rsGetProducts("ProductID") %>" target="_blank">
-				<img class="mr-3" src="http://bodyartforms-products.bodyartforms.com/<%= rsGetProducts("picture") %>" width="90" height="90">
-                <%= rsGetProducts("title") %>
+                <a href="product-edit.asp?ProductID=<%= rsGetProductsToReview("ProductID") %>" target="_blank">
+				<img class="mr-3" src="http://bodyartforms-products.bodyartforms.com/<%= rsGetProductsToReview("picture") %>" width="90" height="90">
+                <%= rsGetProductsToReview("title") %>
                 </a>
 			</td>
             <td class="align-middle">
-                <% if rsGetProducts("active") = 1 then %>
+                <% if rsGetProductsToReview("active") = 1 then %>
                     <span class="alert alert-success font-weight-bold">Active</span>
                 <% else %>
                     <span class="alert alert-danger font-weight-bold">Inactive</span>
                 <% end if %>
             </td>
 			<td class="align-middle">
-				<%= rsGetProducts("date_added") %>
+				<%= rsGetProductsToReview("date_added") %>
 			</td>
 			<td class="align-middle">
-				Added by <%= rsGetProducts("added_by") %>
-				<% if rsGetProducts("reviewed_by_1") <> "" then %>
+				Added by <%= rsGetProductsToReview("added_by") %>
+				<% if rsGetProductsToReview("reviewed_by_1") <> "" then %>
 				<div>
-				Reviewed by <%= rsGetProducts("reviewed_by_1") %><span class="ml-2"><%= rsGetProducts("review_date_1") %></span>
+				Reviewed by <%= rsGetProductsToReview("reviewed_by_1") %><span class="ml-2"><%= rsGetProductsToReview("review_date_1") %></span>
 				</div>
 			<% end if %>
-			<% if rsGetProducts("reviewed_by_2") <> "" then %>
+			<% if rsGetProductsToReview("reviewed_by_2") <> "" then %>
 				<div>
-				Reviewed by <%= rsGetProducts("reviewed_by_2") %><span class="ml-2"><%= rsGetProducts("review_date_2") %></span>
+				Reviewed by <%= rsGetProductsToReview("reviewed_by_2") %><span class="ml-2"><%= rsGetProductsToReview("review_date_2") %></span>
 				</div>
 			<% end if %>
 			</td>
 		</tr>
 <% 
-	rsGetProducts.MoveNext()
+	rsGetProductsToReview.MoveNext()
 	Wend
 %>
 </table>

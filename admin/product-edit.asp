@@ -185,7 +185,6 @@ end select
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "SELECT country FROM TBL_Countries WHERE origin_toggle = 1 ORDER BY country ASC"
 	Set rs_getOriginCountries = objCmd.Execute()
-
 end if 'if Request.QueryString("ProductID") <> ""
 
 if rs_getproduct.Fields.Item("new_page_date").Value >= now()-45 then
@@ -277,22 +276,24 @@ $(document).ready(function(){
 							<% if ISNULL(rs_getproduct("reviewed_by_1")) OR ISNULL(rs_getproduct("reviewed_by_2"))  then %>
 							<button class="btn btn-sm btn-info py-0 mb-1" id="reviewed">Reviewed</button>
 							<span id="reviewed-msg"></span>
-						<% end if %>
+							<% end if %>
 						</div>
 					</div>
                 </div>
 				</div>				
-					<button class="btn btn-sm <%= new_active %>" id="new-toggle" type="button" data-id="<%=(rs_getproduct.Fields.Item("ProductID").Value)%>"><%= new_text %></button>
 
-					<button id="duplicate" class="btn btn-sm btn-secondary" type="button">
-					Duplicate</button>
+				
+				<button class="btn btn-sm <%= new_active %>" id="new-toggle" type="button" data-id="<%=(rs_getproduct.Fields.Item("ProductID").Value)%>"><%= new_text %></button>
 
-					<button class="btn btn-sm btn-secondary" type="button" id="show_combine" data-toggle="modal" data-target="#modal-combine">Combine</button>
+				<button id="duplicate" class="btn btn-sm btn-secondary" type="button">
+				Duplicate</button>
 
-					<div class="mt-3" style="display:none" id="duplicate-show-buttons">
-						<button id="duplicate-product" class="btn btn-sm btn-outline-secondary d-inline-block" type="button" data-id="<%=(rs_getproduct.Fields.Item("ProductID").Value)%>">Product only</button>
-						<button id="duplicate-all"  class="btn btn-sm btn-outline-secondary d-inline-block" type="button" data-id="<%=(rs_getproduct.Fields.Item("ProductID").Value)%>">Product + details</button>
-					</div>
+				<button class="btn btn-sm btn-secondary" type="button" id="show_combine" data-toggle="modal" data-target="#modal-combine">Combine</button>
+
+				<div class="mt-3" style="display:none" id="duplicate-show-buttons">
+					<button id="duplicate-product" class="btn btn-sm btn-outline-secondary d-inline-block" type="button" data-id="<%=(rs_getproduct.Fields.Item("ProductID").Value)%>">Product only</button>
+					<button id="duplicate-all"  class="btn btn-sm btn-outline-secondary d-inline-block" type="button" data-id="<%=(rs_getproduct.Fields.Item("ProductID").Value)%>">Product + details</button>
+				</div>
 
 				<input class="form-control form-control-sm" name="product-id" id="productid" type="hidden" value="<%= rs_getproduct.Fields.Item("ProductID").Value %>">
 				
@@ -530,14 +531,14 @@ end if
             <option value="bracelet">Bracelet</option>
             <option value="captive">Captive (ALL)</option>
             <option value="captive-cbr">Captive - CBR only</option>
-			<option value="captive-seamless">Captive - Seamless</option>
+			<option value="captive-seamless">Captive - Seamless</option>																						  
             <option value="chains-short">Chains - Short</option>
             <option value="chains-necklace">Chains - Necklace</option>
             <option value="circular">Circular Barbell</option>
             <option value="clicker">Clicker</option>
             <option value="gear">Clothing - BAF gear (ALL)</option>
             <option value="stickers">Clothing - Sticker/Button</option>
-			<option value="coils">Coils</option>
+			<option value="coils">Coils</option>						   
             <option value="curved">Curved</option>
             <option value="hanging">Hanging styles</option>
             <option value="hoop">Hoop</option>
@@ -739,7 +740,6 @@ end if
 
 					' break full text stored values out into an array to have an <option> selected for each entry
 					material_main_array = getUniqueItems(split(rs_getproduct.Fields.Item("material").Value,","))
-					
 					for each x in materials_array %>
 					
 					<option <%=IIF(isItemInArray(material_main_array, x), "selected ","")%> <%=IIF(Instr(x, "__") > 0, " disabled", "")%> value="<%= Trim(x) %>"><%= Trim(x) %></option>
@@ -878,8 +878,7 @@ end if
                 %>                
                 <option value="">None</option>
             </select>
-        </div>
-
+        </div>						  
 		<div class="custom-control custom-checkbox">
 			<input class="custom-control-input" name="autoclavable" id="autoclavable" type="checkbox" value="1" <% if rs_getproduct.Fields.Item("autoclavable").Value = 1 then %>checked<% end if %> data-unchecked="0" data-column="autoclavable" data-friendly="Autoclavable">
 			<label class="custom-control-label" for="autoclavable">Autoclavable?</label>
@@ -919,31 +918,37 @@ end if
 					<div id="img_remove"></div>
 					<div class="form-group">
 						<div class="form-check form-check-inline">
-						  <input class="form-check-input" type="radio" name="phototype" id="mainimage" value="mainimage" checked>
-						  <label class="form-check-label" for="mainimage">Main Image</label>
+						  <input class="form-check-input" type="radio" name="phototype" id="opt-main-image" value="opt-main-image" checked>
+						  <label class="form-check-label" for="opt-main-image">Main Image</label>
 						</div>
 						<div class="form-check form-check-inline">
-						  <input class="form-check-input" type="radio" name="phototype" id="additionalimage" value="additionalimage">
-						  <label class="form-check-label" for="additionalimage">Additional Image</label>
+						  <input class="form-check-input" type="radio" name="phototype" id="opt-additional-image" value="opt-additional-image">
+						  <label class="form-check-label" for="opt-additional-image">Additional Image</label>
 						</div>	
+						<div class="form-check form-check-inline">
+						  <input class="form-check-input" type="radio" name="phototype" id="opt-video" value="video">
+						  <label class="form-check-label" for="opt-video">Video</label>
+						</div>							
 					</div>
 										
 					<div class="form-group">
-						<div id="dropzone1"><form action="#" class="dropzone needsclick dz-clickable" id="frmUpload">
+						<div id="dropzone-area">
+						<form action="#" class="dropzone needsclick dz-clickable" id="frmUpload">
 						  <div class="dz-message needsclick">
 							<button type="button" class="dz-button">Drop <span>MAIN</span> images here or click to upload.</button><br>
 							<span class="note needsclick">Upload all 3 image sizes together<br>
 								1000 x 1000, 400 x 400, and 90 x 90</span>
 						  </div>
 
-						</form></div>						
+						</form>
+						</div>						
 					</div>
 					<div id="img_description" class="form-group d-none">
 					   <input class="form-control form-control-sm" type="text" name="add_img_description" id="add_img_description" placeholder="Color / Description" maxlength="50">
 					</div>
 					<div class="d-inline-flex w-100 justify-content-between">
 						<button class="btn btn-sm btn-secondary" type="button" id="clear_dropzone"> Clear </button>	
-						<button class="btn btn-sm btn-secondary w-100 ml-2" type="button" id="add_new_image" data-productid="<%= rs_getproduct.Fields.Item("ProductID").Value %>"> Upload Images</button>
+						<button class="btn btn-sm btn-secondary w-100 ml-2" type="button" id="btn-upload" data-productid="<%= rs_getproduct.Fields.Item("ProductID").Value %>"> Upload Images</button>
 					</div>   
 				</div>
 				
@@ -963,7 +968,7 @@ end if
 				</div>  
 
                <div class="form-group">
-				<label class="font-weight-bold" for="discount">On sale / Discount</label>
+                <label class="font-weight-bold" for="discount">On sale / Discount</label>
                 <select class="form-control form-control-sm" name="discount" data-column="SaleDiscount" data-friendly="Discount amount" >
                     <option value="<%= (rs_getproduct.Fields.Item("SaleDiscount").Value) %>" selected><% if rs_getproduct.Fields.Item("SaleDiscount").Value = 0 then %>None<%else%><%= (rs_getproduct.Fields.Item("SaleDiscount").Value) %><% end if %></option>
                     <option value="0">None</option>
@@ -988,7 +993,7 @@ end if
                     <option value="95">95%</option>
 				</select>
 			</div>
-<%
+ <%
 '====== CONFIGURE DATE TO SHOW CORRECTLY IN Field
 if rs_getproduct.Fields.Item("sale_expiration").Value <> "" then
 var_sale_expiration = rs_getproduct.Fields.Item("sale_expiration").Value
@@ -998,12 +1003,17 @@ var_sale_expiration = rs_getproduct.Fields.Item("sale_expiration").Value
 end if
 
 '======== SALE DISCOUNTS ARE SET BACK TO 0 VIA A DAILY JOB IN THE DATABASE THAT CHECKS THE CURRENT EXPIRATION ON ALL PRODUCTS
+						  
+	  
+				   
+		
 %>
+  
 			<div class="form-group">
                 <label class="font-weight-bold" for="sale-expiration">Sale expiration date</label>
                 <input class="form-control form-control-sm" name="sale-expiration" type="date" id="sale-expiration" value="<%= var_sale_expiration %>" data-column="sale_expiration">
+																								 
             </div>
-
 
                 <% 	if (rs_getproduct.Fields.Item("SaleExempt").Value) = 1 then
                     var_checked = "checked"
@@ -1552,8 +1562,7 @@ end if
 							<% if rs_getdetails.Fields.Item("detail_materials").Value <> "" and Instr(rs_getdetails.Fields.Item("detail_materials").Value, "null") = 0 then
 								' break full text stored values out into an array to have an <option> selected for each entry
 								detail_materials_array = getUniqueItems(split(rs_getdetails.Fields.Item("detail_materials").Value,","))
-
-								for each x in materials_array %>
+							for each x in materials_array %>
 								<option <%=IIF(isItemInArray(detail_materials_array, x), "selected ","")%> <%=IIF(Instr(x, "__") > 0, " disabled", "")%> value="<%= Trim(x) %>"><%= Trim(x) %></option>
 								<% next
 							else %>
@@ -1563,13 +1572,21 @@ end if
 								<% next %>
 							<% end if ' if materials is not null
 							%>	
+																		
+										  
+																																																																																								   
+				 
 						</select>
-					</td>
+					</td>															
 					<td style="width:300px">
 						<select class="variant-colors" name="colors_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" id="colors_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" data-column="colors" data-friendly="Colors" data-detailid="<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>"  class="select-colors "  multiple>
 							<% if rs_getdetails.Fields.Item("colors").Value <> "" and Instr(rs_getdetails.Fields.Item("colors").Value, "null") = 0  then
 							    ' break full text stored values out into an array to have an <option> selected for each entry
 								jewelry_array = getUniqueItems(split(rs_getdetails.Fields.Item("colors").Value," "))
+									  
+		  
+	   
+																   
 								for each x in color_array %>
 								<option <%=IIF(isItemInArray(jewelry_array, x), "selected ","")%> value="<%= Trim(x) %>"><%= Trim(x) %></option>
 							<% next	%>	
@@ -1579,7 +1596,6 @@ end if
 									<option value="<%= x %>"><%= x %></option>
 								<% next %>
 						<% end if ' if color is not null %>
-						</select>
 					</td>
 				</tr>
 			</table>
@@ -1718,8 +1734,7 @@ end if
 <script type="text/javascript" src="/js/redactor-plugin-source.js"></script>
 <script type="text/javascript" src="/js/chosen/chosen.jquery.js"></script>
 <script type="text/javascript" src="scripts/dropzone.js"></script>
-<script type="text/javascript" src="scripts/product-edit-version2.js?v=072721"></script>
-
+<script type="text/javascript" src="scripts/product-edit-version2.js?v=080221"></script>
 </html>
 <%
 Set rs_getuser = Nothing
