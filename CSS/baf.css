@@ -15822,7 +15822,20 @@ footer, #mobilesearch, #accountmenu {
 	
 .video-player{
 	max-height:550px;
-	width:100%;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+}
+
+.video-container{
+	position: relative;
+	width: 100%;
+	padding-bottom: 100%;
+	max-width: 550px;
+}
+
+.fancybox-content .video-player{
+	max-height: 100%;
 }
 
 @media (max-width: 320px) {
