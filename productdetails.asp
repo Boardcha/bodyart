@@ -735,8 +735,10 @@ window.dataLayer.push({
 								end if
 								%>
 								<%if rs_getImages.Fields.Item("is_video").Value = 1 then%>
-								<a class="position-relative pointer" data-fancybox="product-images" data-caption="<%= var_img_title %>" href="https://videos.bodyartforms.com/<%=(rs_getImages.Fields.Item("img_full").Value)%>" id="img_id_<%=rs_getImages.Fields.Item("img_id").Value %>">
-									<video class="video-player" controls disablepictureinpicture controlslist="nodownload"><source src="https://videos.bodyartforms.com/<%=rs_getImages.Fields.Item("img_full").Value%>" type="video/mp4"></video>
+								<a class="position-relative pointer" data-fancybox="product-images" data-caption="<%= var_img_title %>" href="#video_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_id_<%=rs_getImages.Fields.Item("img_id").Value %>">
+									<div class="video-container">
+										<video preload="metadata" id="video_<%=rs_getImages.Fields.Item("img_id").Value %>" class="video-player" controls disablepictureinpicture controlslist="nodownload"><source src="https://videos.bodyartforms.com/<%=rs_getImages.Fields.Item("img_full").Value%>#t=0.1" type="video/mp4"></video>
+									</div>
 								</a>	
 								<%else%>
 									<a class="position-relative pointer" data-fancybox="product-images" data-caption="<%= var_img_title %>" href="https://bodyartforms-products.bodyartforms.com/<%=(rs_getImages.Fields.Item("img_full").Value)%>" id="img_id_<%=rs_getImages.Fields.Item("img_id").Value %>">
