@@ -8,8 +8,6 @@ if request("po_id") = "" then
 	objCmd.CommandText = "SELECT * FROM TBL_PurchaseOrders ORDER BY PurchaseOrderID DESC" 
 	objCmd.Prepared = true
 	Set rsGetPO_ID = objCmd.Execute()
-	
-
 
 else
 	' If downloading from the purchase orders main page
@@ -27,9 +25,10 @@ var_po_id = rsGetPO_ID.Fields.Item("PurchaseOrderID").Value
 ' Get most recent purchase order id #
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT (jewelry.title + ' ' + ISNULL(ProductDetails.Gauge, '') + ' ' + ISNULL(ProductDetails.Length, '') + ' ' + ISNULL(ProductDetails.ProductDetail1, '')) as description, tbl_po_details.po_qty, ProductDetails.detail_code FROM jewelry  INNER JOIN ProductDetails ON jewelry.ProductID = ProductDetails.ProductID INNER JOIN tbl_po_details ON ProductDetails.ProductDetailID = tbl_po_details.po_detailid WHERE tbl_po_details.po_orderid = ? AND tbl_po_details.po_qty > 0"
+objCmd.CommandText = "SELECT (jewelry.title + ' ' + ISNULL(ProductDetails.Gauge, '') + ' ' + ISNULL(ProductDetails.Length, '') + ' ' + ISNULL(ProductDetails.ProductDetail1, '')) as description, IIF(po_qty_vendor > 0, po_qty_vendor, po_qty) as po_qty, tbl_po_details.po_qty_vendor, ProductDetails.detail_code FROM jewelry  INNER JOIN ProductDetails ON jewelry.ProductID = ProductDetails.ProductID INNER JOIN tbl_po_details ON ProductDetails.ProductDetailID = tbl_po_details.po_detailid WHERE tbl_po_details.po_orderid = ? AND tbl_po_details.po_qty > 0"
 objCmd.Parameters.Append(objCmd.CreateParameter("po_new_id",3,1,10,var_po_id))
 set rsGetItems = objCmd.Execute()
+
 %>
 <%
 '***********************
