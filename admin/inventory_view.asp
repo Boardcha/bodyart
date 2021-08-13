@@ -251,7 +251,9 @@ ORDER CREATED
 <thead class="thead-dark">
   <tr class="text-nowrap">
     <th class="sticky-top"><a href="?brand=<%=Request.QueryString("brand")%>&amp;resume=<%=Request.QueryString("resume")%>"><i class="fa fa-sort fa-lg sort-icon mr-2"></i></a>Re-order</th>
+
 	<th class="sticky-top">Bought in pairs</th>
+
 	<th class="sticky-top">Vendor qty</th>
 	<th class="sticky-top">Line total</th>
 	<th class="sticky-top"><a href="?brand=<%=Request.QueryString("brand")%>&amp;resume=<%=Request.QueryString("resume")%>&amp;1stfilter=qty"><i class="fa fa-sort fa-lg sort-icon mr-2"></i></a>On hand</th>

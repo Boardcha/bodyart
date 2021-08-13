@@ -44,6 +44,7 @@ rsGetCategories.Open()
 		<th>Database search tag</th>
 	</tr>
 	</thead>
+
 <% While (NOT rsGetCategories.EOF) %>
     <tr>
       <td>
