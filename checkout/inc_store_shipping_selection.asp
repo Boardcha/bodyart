@@ -66,4 +66,9 @@ end if
 	
 end if ' being sent via form
 
+'==== MANUALLY ASSIGN BASIC SHIPPING ON RARE SITE GLITCH THAT NO SHIPPING OPTION IS SAVED
+if shipping_option = "" then
+	shipping_option = "DHL Basic mail"
+end if
+
 %>

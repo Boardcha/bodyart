@@ -15,11 +15,28 @@ if var_brand = "Etsy" then
 else
 	var_brand = "brandname = '" + var_brand + "'"
 end if
+
+' Retrieve the newest temp PO # to use for saving order details
+Set objCmd = Server.CreateObject ("ADODB.Command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "SELECT  TOP (1) po_temp_id FROM tbl_po_temp_ids ORDER BY po_temp_id DESC" 
+objCmd.Parameters.Append(objCmd.CreateParameter("value",200,1,100, var_brand))
+Set rsGetTempPONum = objCmd.Execute()
 	
 ' Create a new purchase order on page load if it's not resuming the last one
 if request.querystring("resume") = "yes" and request.cookies(var_brand) <> "" then
 	' Continue to use what was originally assigned to cookie below if it's not a new order
 	tempid = request.cookies(var_brand)
+
+	if NOT rsGetTempPONum.EOF then
+		' Update last PO date_started date
+		set objCmd = Server.CreateObject("ADODB.command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "UPDATE tbl_po_temp_ids SET po_time_started = ? WHERE po_temp_id = ?"
+		objCmd.Parameters.Append(objCmd.CreateParameter("po_time_started",200,1,30, now() ))
+		objCmd.Parameters.Append(objCmd.CreateParameter("po_temp_id",3,1,12, rsGetTempPONum("po_temp_id") ))
+		objCmd.Execute()
+	end if
 else
 	' Insert a new temp PO id # to use while paging through and creating order since it will need to be saved into database
 	set objCmd = Server.CreateObject("ADODB.command")
@@ -27,13 +44,6 @@ else
 	objCmd.CommandText = "INSERT INTO tbl_po_temp_ids DEFAULT VALUES"
 	objCmd.Execute()
 	
-	' Retrieve the newest temp PO # to use for saving order details
-	Set objCmd = Server.CreateObject ("ADODB.Command")
-	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT  TOP (1) po_temp_id FROM tbl_po_temp_ids ORDER BY po_temp_id DESC" 
-	objCmd.Parameters.Append(objCmd.CreateParameter("value",200,1,100, var_brand))
-	Set rsGetTempPONum = objCmd.Execute()
-
 	' Set cookie for brand to newest temp #
 	response.cookies(var_brand) = rsGetTempPONum.Fields.Item("po_temp_id").Value
 	tempid = request.cookies(var_brand)
@@ -159,7 +169,7 @@ Set rsGetCompanyInfo = rsGetCompanyInfo_cmd.Execute
 <!--#include file="includes/inc_scripts.asp"-->
 <script type="text/javascript" src="/js/popper.min.js"></script>
 <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="scripts/generic_auto_update_fields.js"></script>
+<script type="text/javascript" src="scripts/generic_auto_update_fields.js?v=081221"></script>
 <script type="text/javascript">
 
 	//url to to do auto updating
@@ -241,7 +251,9 @@ ORDER CREATED
 <thead class="thead-dark">
   <tr class="text-nowrap">
     <th class="sticky-top"><a href="?brand=<%=Request.QueryString("brand")%>&amp;resume=<%=Request.QueryString("resume")%>"><i class="fa fa-sort fa-lg sort-icon mr-2"></i></a>Re-order</th>
-	<th class="sticky-top">Sold in pairs</th>
+
+	<th class="sticky-top">Bought in pairs</th>
+
 	<th class="sticky-top">Vendor qty</th>
 	<th class="sticky-top">Line total</th>
 	<th class="sticky-top"><a href="?brand=<%=Request.QueryString("brand")%>&amp;resume=<%=Request.QueryString("resume")%>&amp;1stfilter=qty"><i class="fa fa-sort fa-lg sort-icon mr-2"></i></a>On hand</th>

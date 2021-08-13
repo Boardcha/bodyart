@@ -1140,7 +1140,6 @@ $(document).on("click", '#add_new_tag', function(event) {
 		$("#select-tags").trigger("chosen:updated");
 	});
 });		
-
 // Delete category
 $(document).on("click", '.delete-category', function(event) { 
 	$.ajax({
@@ -1233,7 +1232,6 @@ $(document).on("click", '.delete-material', function(event) {
 	});	
 });		
 
-
 // Add new material
 $(document).on("click", '#add_new_material', function(event) { 
 	var wearable;
@@ -1269,4 +1267,70 @@ $(document).on("click", '#add_new_material', function(event) {
 		console.log(error);
 	});
 });
+
+	// Button press to clear variant fields
+	$(".btn-clear-fields").click(function () {
+		update_field = $(this).attr("id");
+
+		if (update_field == 'clear-variant-materials') {
+			$('#materials_main').val('').trigger('chosen:updated');
+			$('#materials_main').val('').change();
+			$(".variant-materials").val('').trigger("chosen:updated");
+			$(".variant-materials").val('').change();
+		}
+		if (update_field == 'clear-variant-wearable') {
+			$('#wearable_main').val('').trigger('chosen:updated');
+			$('#wearable_main').val('').change();
+			$(".variant-wearable").val('').trigger("chosen:updated");
+			$(".variant-wearable").val('').change();
+		}
+		if (update_field == 'clear-variant-colors') {
+			$('#colors_main').val('').trigger('chosen:updated');
+			$('#colors_main').val('').change();
+			$(".variant-colors").val('').trigger("chosen:updated");
+			$(".variant-colors").val('').change();
+		}
+	});
+
+	// Review button
+$(document).on("click", '#reviewed', function() { 
+    var productid = $("#productid").val();
+
+
+// Add new material
+$(document).on("click", '#add_new_material', function(event) { 
+	var wearable;
+	if($('#iswearable').is(":checked")) wearable = 1; else wearable = 0;
+	$.ajax({
+		method: "GET",
+		dataType: "json",
+		url: "products/ajax_manage_materials.asp",
+		data: {material: $("#material").val(), iswearable: wearable, addMaterial:"yes"}
+	})
+	.done(function( json, msg ) {
+		$("#show-materials").load("products/manage_materials.asp");
+		// Preserve materials already selected and retrieve updated items from the table TBL_Materials
+		$("#materials_main").find('option').not(':selected').remove();
+		$("#materials_main").append(json.materials);
+		$("#materials_main").trigger("chosen:updated");
+		// Update all details
+		$('select.select-detail-materials').each(function(i, obj) {
+			$(obj).find('option').not(':selected').remove();
+			$(obj).append(json.materials);
+			$(obj).trigger("chosen:updated");			
+		});
+		$('select.select-detail-wearable-materials').each(function(i, obj) {
+			$(obj).find('option').not(':selected').remove();
+			$(obj).append(json.wearable_materials);
+			$(obj).trigger("chosen:updated");			
+		});		
+		$("#wearable_main").find('option').not(':selected').remove();
+		$("#wearable_main").append(json.wearable_materials);
+		$("#wearable_main").trigger("chosen:updated");		
+	})
+	.fail(function(xhr, status, error) {
+		console.log(error);
+	});
+});	
+
 

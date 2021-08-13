@@ -184,6 +184,11 @@ end select
 	objCmd.CommandText = "SELECT ID, GaugeShow FROM TBL_GaugeOrder WHERE ID <> 91 ORDER BY GaugeOrder ASC" 
 	Set rsGetGauges = objCmd.Execute()
 
+	set objCmd = Server.CreateObject("ADODB.command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "SELECT country FROM TBL_Countries WHERE origin_toggle = 1 ORDER BY country ASC"
+	Set rs_getOriginCountries = objCmd.Execute()
+
 
 	Set objCmd = Server.CreateObject ("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
@@ -530,12 +535,10 @@ end if
                     %>	
 					
 				<% While NOT rs_getCategories.EOF %>
-					<option <%=IIF(isItemInArray(selected_array, rs_getCategories("category_tag")), "selected ","")%> <%=IIF(Instr(rs_getCategories("category_name"), "__") > 0, " disabled", "")%> value="<%= Trim(rs_getCategories("category_tag")) %>"><%= Trim(rs_getCategories("category_name")) %></option>
+
+					<option <% if rs_getproduct("jewelry") <> "" then %><%=IIF(isItemInArray(selected_array, rs_getCategories("category_tag")), "selected ","")%><% end if %> <%=IIF(Instr(rs_getCategories("category_name"), "__") > 0, " disabled", "")%> value="<%= Trim(rs_getCategories("category_tag")) %>"><%= Trim(rs_getCategories("category_name")) %></option>
 					<%rs_getCategories.MoveNext()%>
 				<% Wend %>	
-				
-            </select>			
-
 			<div class="custom-control custom-checkbox">
 				<input type="checkbox" class="custom-control-input" name="pair" id="pair" value="yes"  <% if (rs_getproduct.Fields.Item("pair").Value) = "yes" then %>checked<% end if %> data-unchecked="no" data-column="pair">
 				<label class="custom-control-label" for="pair">Pair</label>
@@ -668,10 +671,12 @@ end if
 			<div class="container p-0">
 				<div class="row">
 				  <div class="col-auto">
-					<label class="font-weight-bold align-bottom" for="materials_main">Material(s)</label>
+					<label class="font-weight-bold align-bottom" for="materials_main">Materials</label>
 				  </div>
 				  <div class="col text-right">
-					<button class="btn btn-sm btn-secondary py-0 mb-1" id="apply_all_material">Apply materials to all details</button>
+
+					<button class="btn btn-sm btn-secondary py-0 mb-1 mr-1 btn-clear-fields" id="clear-variant-materials">Clear all</button>
+					<button class="btn btn-sm btn-secondary py-0 mb-1" id="apply_all_material">Copy materials to variants</button>
 					<button class="btn btn-sm btn-secondary py-0 mb-1" id="manage_materials" data-toggle="modal" data-target="#modal-show-materials">Manage materials</button>
 				  </div>
 				</div>
@@ -680,11 +685,14 @@ end if
             <select class="" name="materials_main" id="materials_main" data-column="material" data-friendly="Materials"  multiple>
                 <% if rs_getproduct.Fields.Item("material").Value <> "" then
 					' break full text stored values out into an array to have an <option> selected for each entry
+
 					selected_materials_array = getUniqueItems(split(rs_getproduct.Fields.Item("material").Value,","))
                 end if 
+
                 %>	
 				<% While NOT rs_getMaterials.EOF %>
-					<option <%=IIF(isItemInArray(selected_materials_array, rs_getMaterials("material_name")), "selected ","")%> <%=IIF(Instr(rs_getMaterials("material_name"), "__") > 0, " disabled", "")%> value="<%= Trim(rs_getMaterials("material_name")) %>"><%= Trim(rs_getMaterials("material_name")) %></option>
+					<option <% if rs_getproduct("material") <> "" then %><%=IIF(isItemInArray(selected_materials_array, rs_getMaterials("material_name")), "selected ","")%><% end if %> <%=IIF(Instr(rs_getMaterials("material_name"), "__") > 0, " disabled", "")%> value="<%= Trim(rs_getMaterials("material_name")) %>"><%= Trim(rs_getMaterials("material_name")) %></option>
+
 					<%rs_getMaterials.MoveNext()%>
 				<% Wend %>			
             
@@ -698,7 +706,8 @@ end if
 					<label class="font-weight-bold" for="wearable_main">Wearable</label>
 				  </div>
 				  <div class="col text-right">
-					<button class="btn btn-sm btn-secondary py-0 mb-1" id="apply_all_wearable_materials">Apply wearable to all details</button>
+					<button class="btn btn-sm btn-secondary py-0 mb-1 mr-1 btn-clear-fields" id="clear-variant-wearable">Clear all</button>
+					<button class="btn btn-sm btn-secondary py-0 mb-1" id="apply_all_wearable_materials">Copy wearable to variants</button>
 					<button class="btn btn-sm btn-secondary py-0 mb-1" id="manage_wearable" data-toggle="modal" data-target="#modal-show-materials">Manage materials</button>
 				  </div>
 				</div>
@@ -722,7 +731,8 @@ end if
 					<label class="font-weight-bold" for="colors_main">Colors</label>
 				  </div>
 				  <div class="col text-right">
-					<button class="btn btn-sm btn-secondary py-0 mb-1" id="apply_all_colors">Apply colors to all details</button>
+					<button class="btn btn-sm btn-secondary py-0 mb-1 mr-1 btn-clear-fields" id="clear-variant-colors">Clear all</button>
+					<button class="btn btn-sm btn-secondary py-0 mb-1" id="apply_all_colors">Copy colors to variants</button>
 				  </div>
 				</div>
 			  </div>
@@ -893,7 +903,7 @@ end if
 				</div>  
 
                <div class="form-group">
-                Discount
+                <label class="font-weight-bold" for="discount">Discount</label>
                 <select class="form-control form-control-sm" name="discount" data-column="SaleDiscount" data-friendly="Discount amount" >
                     <option value="<%= (rs_getproduct.Fields.Item("SaleDiscount").Value) %>" selected><% if rs_getproduct.Fields.Item("SaleDiscount").Value = 0 then %>None<%else%><%= (rs_getproduct.Fields.Item("SaleDiscount").Value) %><% end if %></option>
                     <option value="0">None</option>
@@ -919,13 +929,17 @@ end if
 				</select>
 			</div>
 
-			<% 	if (rs_getproduct.Fields.Item("OnSale").Value) = "Y" then
-			var_checked = "checked"
-		else
-			var_checked = ""
-		end if
-		%>
-		
+			<%
+
+'====== CONFIGURE DATE TO SHOW CORRECTLY IN Field
+if rs_getproduct.Fields.Item("sale_expiration").Value <> "" then
+var_sale_expiration = rs_getproduct.Fields.Item("sale_expiration").Value
+	var_sale_expiration = DatePart("yyyy",var_sale_expiration) _
+	& "-" & Right("0" & DatePart("m",var_sale_expiration), 2) _
+	& "-" & Right("0" & DatePart("d",var_sale_expiration), 2)
+end if
+'======== SALE DISCOUNTS ARE SET BACK TO 0 VIA A DAILY JOB IN THE DATABASE THAT CHECKS THE CURRENT EXPIRATION ON ALL PRODUCTS
+
 		<div class="custom-control custom-checkbox">
 			<input class="custom-control-input" name="sale" id="sale" type="checkbox" value="Y" <%= var_checked %> data-unchecked="N" data-column="OnSale" data-friendly="On sale">
 			<label class="custom-control-label" for="sale">On sale</label>
@@ -1145,7 +1159,7 @@ end if
 				<select name="materials_add" id="materials_add" class="select-detail-materials " multiple>
 				<%rs_getMaterials.MoveFirst()%>
 				<% While NOT rs_getMaterials.EOF %>
-					<option <%=IIF(isItemInArray(selected_materials_array, rs_getMaterials("material_name")), "selected ","")%> <%=IIF(Instr(rs_getMaterials("material_name"), "__") > 0, " disabled", "")%> value="<%= Trim(rs_getMaterials("material_name")) %>"><%= Trim(rs_getMaterials("material_name")) %></option>
+					<option <%=IIF(Instr(rs_getMaterials("material_name"), "__") > 0, " disabled", "")%> value="<%= Trim(rs_getMaterials("material_name")) %>"><%= Trim(rs_getMaterials("material_name")) %></option>
 					<%rs_getMaterials.MoveNext()%>
 				<% Wend %>					
 				</select>
@@ -1470,7 +1484,7 @@ end if
 						<input class="form-control form-control-sm" style="width:50px" name="weight_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" type="text" <% if rs_getdetails.fields.item("weight").value <> "" then %>value="<%=(rs_getdetails.Fields.Item("weight").Value)%>"<% else %>value=" "<% end if %> data-column="weight" data-detailid="<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" data-friendly="Weight">
 					</td>
 					<td>
-						<select class="form-control form-control-sm w-auto select-detail-wearable-materials" name="wearable_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" id="wearable_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" data-column="wearable_material" data-friendly="Wearable" data-detailid="<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>">
+						<select class="form-control form-control-sm w-auto select-detail-wearable-materials variant-wearable" name="wearable_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" id="wearable_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" data-column="wearable_material" data-friendly="Wearable" data-detailid="<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>">
 							<% if rs_getdetails.Fields.Item("wearable_material").Value <> "" then %>
 								<option value="<%= rs_getdetails.Fields.Item("wearable_material").Value %>" selected><%= rs_getdetails.Fields.Item("wearable_material").Value %></option>  
 	
@@ -1480,7 +1494,7 @@ end if
 							<option>Select wearable material...</option>					
 							<%rs_getWearableMaterials.MoveFirst()%>
 							<% While NOT rs_getWearableMaterials.EOF %>
-							<option <%=IIF(Instr(rs_getWearableMaterials("material_name"), "__") > 0, " disabled", "")%> value="<%= Trim(rs_getWearableMaterials("material_name")) %>"><%= Trim(rs_getWearableMaterials("material_name")) %></option>
+							<option <% if rs_getdetails("wearable_material") <> "" then %><%=IIF(Instr(rs_getWearableMaterials("material_name"), "__") > 0, " disabled", "")%><% end if %> value="<%= Trim(rs_getWearableMaterials("material_name")) %>"><%= Trim(rs_getWearableMaterials("material_name")) %></option>
 							<% 
 								rs_getWearableMaterials.MoveNext()
 								Wend
@@ -1488,7 +1502,7 @@ end if
 						</select>
 					</td>
 					<td style="width:300px">
-						<select name="materials_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" id="materials_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" data-column="detail_materials" data-friendly="Materials" data-detailid="<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>"  class="select-detail-materials "  multiple>
+						<select  class="select-detail-materials variant-materials" name="materials_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" id="materials_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" data-column="detail_materials" data-friendly="Materials" data-detailid="<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>"  multiple>
 							<% if rs_getdetails.Fields.Item("detail_materials").Value <> "" and Instr(rs_getdetails.Fields.Item("detail_materials").Value, "null") = 0 then
 								' break full text stored values out into an array to have an <option> selected for each entry
 								selected_materials_array = getUniqueItems(split(rs_getdetails.Fields.Item("detail_materials").Value,","))
@@ -1497,13 +1511,13 @@ end if
 							<option>Select materials...</option>					
 							<%rs_getMaterials.MoveFirst()%>
 							<% While NOT rs_getMaterials.EOF %>
-								<option <%=IIF(isItemInArray(selected_materials_array, rs_getMaterials("material_name")), "selected ","")%> <%=IIF(Instr(rs_getMaterials("material_name"), "__") > 0, " disabled", "")%> value="<%= Trim(rs_getMaterials("material_name")) %>"><%= Trim(rs_getMaterials("material_name")) %></option>
+								<option <% if rs_getdetails("detail_materials") <> "" then %><%=IIF(isItemInArray(selected_materials_array, rs_getMaterials("material_name")), "selected ","")%><% end if %> <%=IIF(Instr(rs_getMaterials("material_name"), "__") > 0, " disabled", "")%> value="<%= Trim(rs_getMaterials("material_name")) %>"><%= Trim(rs_getMaterials("material_name")) %></option>
 								<%rs_getMaterials.MoveNext()%>
 							<% Wend %>					
 						</select>
 					</td>
 					<td style="width:300px">
-						<select class="" name="colors_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" id="colors_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" data-column="colors" data-friendly="Colors" data-detailid="<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>"  class="select-colors "  multiple>
+						<select class="variant-colors select-colors" name="colors_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" id="colors_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" data-column="colors" data-friendly="Colors" data-detailid="<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>"  multiple>
 							<% if rs_getdetails.Fields.Item("colors").Value <> "" and Instr(rs_getdetails.Fields.Item("colors").Value, "null") = 0  then
 							    ' break full text stored values out into an array to have an <option> selected for each entry
 								jewelry_array = getUniqueItems(split(rs_getdetails.Fields.Item("colors").Value," "))
@@ -1512,7 +1526,7 @@ end if
 							
 							<option>Select colors...</option>					
 						<% for each x in color_array %>
-							<option <%=IIF(isItemInArray(jewelry_array, x), "selected ","")%> value="<%= Trim(x) %>"><%= Trim(x) %></option>
+							<option <% if rs_getdetails("colors") <> "" then %><%=IIF(isItemInArray(jewelry_array, x), "selected ","")%><% end if %> value="<%= Trim(x) %>"><%= Trim(x) %></option>
 						<% next %>
 						</select>
 					</td>
@@ -1690,7 +1704,7 @@ end if
 <script type="text/javascript" src="/js/chosen/chosen.jquery.js"></script>
 <script type="text/javascript" src="scripts/dropzone.js"></script>
 <script type="text/javascript" src="scripts/jquery.validate.min.js"></script>
-<script type="text/javascript" src="scripts/product-edit-version2.js?v=052524"></script>
+<script type="text/javascript" src="scripts/product-edit-version2.js?v=080921"></script>
 </html>
 <%
 Set rs_getuser = Nothing

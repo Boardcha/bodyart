@@ -23,11 +23,11 @@ rsGetCategories.Open()
 	<h5>Add a New Category</h5>
 	<table class="table table-sm table-borderless w-50">
 		<tr> 
-		  <td>Category name</td>
+		  <td>Admin friendly name</td>
 		  <td> <input name="category_name" type="text" maxlength ="100" class="form-control form-control-sm" id="category_name"></td>
 		</tr>
 		<tr> 
-		  <td>Category tag</td>
+		  <td>Database search tag (no spaces)</td>
 		  <td> <input name="category_tag" type="text" maxlength ="50" class="form-control form-control-sm" id="category_tag"></td>
 		</tr>		
 		<tr>
@@ -37,13 +37,23 @@ rsGetCategories.Open()
 	</table>
 </form>
 <h4>Categories</h4>
-<table class="table table-striped table-borderless table-hover w-50">
+<table class="table table-striped table-borderless table-hover w-75">
+	<thead class="thead-dark">
+		<tr>
+		<th>Admin friendly name</th>
+		<th>Database search tag</th>
+	</tr>
+	</thead>
+
 <% While (NOT rsGetCategories.EOF) %>
     <tr>
       <td>
           <a class="btn btn-sm btn-danger mr-4 delete-category" data-category-id="<%=(rsGetCategories.Fields.Item("category_id").Value)%>"><i class="fa fa-trash-alt text-white"></i></a>
           <%=(rsGetCategories.Fields.Item("category_name").Value)%>
 	  </td>
+	  <td>
+		<%=(rsGetCategories.Fields.Item("category_tag").Value)%>
+	</td>
     </tr>
 <% 
 rsGetCategories.MoveNext()
