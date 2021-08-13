@@ -182,6 +182,7 @@ While NOT rsGetOrder.EOF
 		'shipmentType="international"
 	end if
 
+	ShipToCompany = ""
 	if Not IsNull(rsGetOrder.Fields.Item("ShipToCompany").Value) AND rsGetOrder.Fields.Item("ShipToCompany").Value<>"" then 
 		ShipToCompany = "<ToCompany>" & rsGetOrder.Fields.Item("ShipToCompany").Value & "</ToCompany>"
 	end if	
@@ -195,6 +196,13 @@ While NOT rsGetOrder.EOF
 	var_address2 = ""
 	if rsGetOrder.Fields.Item("ShipToAddress2").Value <> "" then
 		var_address2 = "<ToAddress2>" & rsGetOrder.Fields.Item("ShipToAddress2").Value & "</ToAddress2>"
+	end if
+
+	var_cleaned_zip = ""
+	if rsGetOrder.Fields.Item("ShipToZip").Value <> "" then
+		var_cleaned_zip = rsGetOrder.Fields.Item("ShipToZip").Value
+		zip_str = Instr(var_cleaned_zip,"-")
+		If zip_str Then var_cleaned_zip = Left(var_cleaned_zip, zip_str -1)
 	end if
 
 	XML="<?xml version=""1.0"" encoding=""utf-8""?>" & _
@@ -219,7 +227,7 @@ While NOT rsGetOrder.EOF
 				  var_address2 & _
 				  "<ToCity>" & rsGetOrder.Fields.Item("ShipToCity").Value & "</ToCity>" & _
 				  "<ToState>" & rsGetOrder.Fields.Item("ShipToState").Value & "</ToState>" & _
-				  "<ToPostalCode>" & rsGetOrder.Fields.Item("ShipToZip").Value & "</ToPostalCode>" & _
+				  "<ToPostalCode>" & var_cleaned_zip & "</ToPostalCode>" & _
 				  "<FromCompany>Bodyartforms</FromCompany>" & _
 				  "<FromName>Bodyartforms</FromName>" & _
 				  "<ReturnAddress1>1966 S Austin Ave</ReturnAddress1>" & _

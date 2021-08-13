@@ -488,10 +488,6 @@ rsGetGauges.ReQuery() %>
                     <input class="form-check-input cat-select" type="checkbox" name="brand" value="Premium Companies" data-name="premium" id="filter-premiumbrands" data-friendly="Premium metal companies">
                     <label class="form-check-label d-block" for="filter-premiumbrands">Premium Metals</label>
                   </div>
-<div class="form-check ml-4">
-                    <input class="form-check-input sub-premium" type="checkbox" name="brand" value="anatometal" id="filter-anatometal" data-friendly="Anatometal">
-                    <label class="form-check-label d-block" for="filter-anatometal">Anatometal</label>
-                  </div>
                   <div class="form-check ml-4">
                     <input class="form-check-input sub-premium" type="checkbox" name="brand" value="body circle" id="filter-bcd" data-friendly="Body Circle Designs">
                     <label class="form-check-label d-block" for="filter-bcd">Body Circle Designs</label>
@@ -499,10 +495,6 @@ rsGetGauges.ReQuery() %>
                   <div class="form-check ml-4">
                     <input class="form-check-input sub-premium" type="checkbox" name="brand" value="element" id="filter-element" data-friendly="Element">
                     <label class="form-check-label d-block" for="filter-element">Element</label>
-                  </div>
-                  <div class="form-check ml-4">
-                    <input class="form-check-input sub-premium" type="checkbox" name="brand" value="intrinsic" id="filter-intrinsic" data-friendly="Intrinsic">
-                    <label class="form-check-label d-block" for="filter-intrinsic">Intrinsic</label>
                   </div>
                   <div class="form-check ml-4">
                       <input class="form-check-input sub-premium" type="checkbox" name="brand" value="invictus" id="filter-invictus" data-friendly="Invictus">
@@ -565,10 +557,6 @@ rsGetGauges.ReQuery() %>
                     <label class="form-check-label d-block" for="filter-goldcompanies">Gold Brands</label>
                   </div>
                   <div class="form-check ml-4">
-                    <input class="form-check-input sub-goldbrands two-filters" data-filter2="material" data-filter2-value="Precious metals" type="checkbox" name="brand" value="anatometal" id="filter-anatometal-gold" data-friendly="Anatometal">
-                    <label class="form-check-label d-block" for="filter-anatometal-gold">Anatometal</label>
-                  </div>
-                  <div class="form-check ml-4">
                     <input class="form-check-input sub-goldbrands" type="checkbox" name="brand" value="alchemy adornment" id="filter-alchemyadornment" data-friendly="Alchemy Adornment">
                     <label class="form-check-label d-block" for="filter-alchemyadornment">Alchemy Adornment</label>
                   </div>
@@ -617,24 +605,8 @@ rsGetGauges.ReQuery() %>
                     <label class="form-check-label d-block" for="filter-diablo">Diablo Organics</label>
                   </div>
                   <div class="form-check ml-4">
-                    <input class="form-check-input sub-organicbrands" type="checkbox" name="brand" value="little7" id="filter-little7" data-friendly="Little 7">
-                    <label class="form-check-label d-block" for="filter-little7">Little 7</label>
-                  </div>
-                  <div class="form-check ml-4">
                     <input class="form-check-input sub-organicbrands" type="checkbox" name="brand" value="maya organic" id="filter-maya" data-friendly="Maya Jewelry">
                     <label class="form-check-label d-block" for="filter-maya">Maya Jewelry</label>
-                  </div>
-                  <div class="form-check ml-4">
-                    <input class="form-check-input sub-organicbrands" type="checkbox" name="brand" value="modifika" id="filter-modifika" data-friendly="Modifika">
-                    <label class="form-check-label d-block" for="filter-modifika">Modifika</label>
-                  </div>
-                  <div class="form-check ml-4">
-                    <input class="form-check-input sub-organicbrands" type="checkbox" name="brand" value="morning star" id="filter-morning" data-friendly="Morning Star">
-                    <label class="form-check-label d-block" for="filter-morning">Morning Star</label>
-                  </div>
-                  <div class="form-check ml-4">
-                    <input class="form-check-input sub-organicbrands" type="checkbox" name="brand" value="omerica" id="filter-omerica" data-friendly="Omerica">
-                    <label class="form-check-label d-block" for="filter-omerica">Omerica</label>
                   </div>
                   <div class="form-check ml-4">
                     <input class="form-check-input sub-organicbrands" type="checkbox" name="brand" value="oracle" id="filter-oracle" data-friendly="Oracle">
@@ -647,10 +619,6 @@ rsGetGauges.ReQuery() %>
                   <div class="form-check ml-4">
                     <input class="form-check-input sub-organicbrands" type="checkbox" name="brand" value="tawapa" id="filter-tawapa" data-friendly="Tawapa">
                     <label class="form-check-label d-block" for="filter-tawapa">Tawapa</label>
-                  </div>
-                   <div class="form-check ml-4">
-                    <input class="form-check-input sub-organicbrands" type="checkbox" name="brand" value="tether" id="filter-tether" data-friendly="Tether">
-                    <label class="form-check-label d-block" for="filter-tether">Tether</label>
                   </div>
                    <div class="form-check ml-4">
                     <input class="form-check-input sub-organicbrands" type="checkbox" name="brand" value="urban star" id="filter-urbanstar" data-friendly="Urban Star">

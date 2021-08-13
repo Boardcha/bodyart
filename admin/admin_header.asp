@@ -12,9 +12,9 @@ End If
 'var_access_level = "Packaging"
 %>
 	<% if request.cookies("admindarkmode") <> "on" then %> 
-		<link href="/CSS/baf.min.css?v=040220" id="lightmode" rel="stylesheet" type="text/css" />
+		<link href="/CSS/baf.min.css?v=080221" id="lightmode" rel="stylesheet" type="text/css" />
 	<% else %>
-		<link href="/CSS/baf-dark.min.css?v=050820" id="darkmode" rel="stylesheet" type="text/css" />
+		<link href="/CSS/baf-dark.min.css?v=080221" id="darkmode" rel="stylesheet" type="text/css" />
 	<% end if %>
 	<script src="https://use.fortawesome.com/dc98f184.js"></script>
 
@@ -486,10 +486,10 @@ set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
 objCmd.CommandText = "SELECT title, date_added, added_by, picture, ProductID, active, reviewed_by_1, reviewed_by_2, review_date_1, review_date_2 FROM jewelry WHERE reviewed_by_2 IS NULL ORDER BY active DESC, date_added ASC"
 
-set rsGetProducts = Server.CreateObject("ADODB.Recordset")
-rsGetProducts.CursorLocation = 3 'adUseClient
-rsGetProducts.Open objCmd
-total_products_to_review = rsGetProducts.RecordCount
+set rsGetProductsToReview = Server.CreateObject("ADODB.Recordset")
+rsGetProductsToReview.CursorLocation = 3 'adUseClient
+rsGetProductsToReview.Open objCmd
+total_products_to_review = rsGetProductsToReview.RecordCount
 
 if total_products_to_review > 0 then
 %>

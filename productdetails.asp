@@ -141,7 +141,7 @@ if not rsProduct.eof then
 
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT DISTINCT i.img_id, i.product_id, i.img_full, i.img_thumb, i.img_description, i.img_sort, CASE WHEN p.active IS NULL THEN '1' WHEN p.active = 0 THEN '0' ELSE '1' END AS active, CASE WHEN p.img_id IS NULL THEN '0' ELSE '1' END AS detail_img_id FROM tbl_images AS i LEFT OUTER JOIN ProductDetails AS p ON i.img_id = p.img_id WHERE i.product_id = ? ORDER BY i.img_sort"
+	objCmd.CommandText = "SELECT DISTINCT i.img_id, i.product_id, i.img_full, i.img_thumb, i.img_description, i.img_sort, i.is_video, CASE WHEN p.active IS NULL THEN '1' WHEN p.active = 0 THEN '0' ELSE '1' END AS active, CASE WHEN p.img_id IS NULL THEN '0' ELSE '1' END AS detail_img_id FROM tbl_images AS i LEFT OUTER JOIN ProductDetails AS p ON i.img_id = p.img_id WHERE i.product_id = ? ORDER BY i.img_sort"
 	objCmd.Parameters.Append(objCmd.CreateParameter("ProductID",3,1,10,ProductID))
 	Set rs_getImages = objCmd.Execute()
 
@@ -542,9 +542,8 @@ end if ' var_worn_in_cleaned <> ""
 			var_brand_logo = "<li>Brand:</li><li style=""list-style-type: none""><a href=""products.asp?brand=" & rsProduct.Fields.Item("brandname").Value & """><img src=""images/" &  brand_logo  & """ alt=""View more products by this brand"" title=""View more products by this brand"" class=""img-fluid details-brand-logo"" /></a></li>"
 		end if
 	end if
-
 	if rsProduct("country_origin") <> "" then
-		origin_country = "<li>Made in " & rsProduct("country_origin") & "</li>"
+		origin_country = ""
 	end if
 		
 		var_regular_stock = "yes"
@@ -688,10 +687,15 @@ window.dataLayer.push({
 							if rs_getImages.Fields.Item("img_description").Value <> "" then
 								var_img_thumb_alt = rs_getImages.Fields.Item("img_description").Value
 							end if
-							%>			
+							%>	
+							<%if rs_getImages.Fields.Item("is_video").Value = 1 then%>
+							<div class="video-thumbnail">
 								<img class="img-fluid img-thumb lazyload <%= var_qty0 %>" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=rs_getImages.Fields.Item("img_thumb").Value %>" alt="Thumbnail" title="<%= var_img_thumb_alt %>"  data-imgname="<%=(rs_getImages.Fields.Item("img_full").Value)%>" <% if img_assigned = "yes" then %> data-imgid="thumb_img_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_thumb_<%=rs_getImages.Fields.Item("img_id").Value %>" data-id="<%=rs_getImages.Fields.Item("img_id").Value %>" data-unassigned="no" <% else %> data-unassigned="yes" <% end if %> data-color-chart="no" />
-
-			
+								<img src="/images/play-icon.png" class="play-icon" />
+							</div>	
+							<%else%>							
+								<img class="img-fluid img-thumb lazyload <%= var_qty0 %>" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=rs_getImages.Fields.Item("img_thumb").Value %>" alt="Thumbnail" title="<%= var_img_thumb_alt %>"  data-imgname="<%=(rs_getImages.Fields.Item("img_full").Value)%>" <% if img_assigned = "yes" then %> data-imgid="thumb_img_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_thumb_<%=rs_getImages.Fields.Item("img_id").Value %>" data-id="<%=rs_getImages.Fields.Item("img_id").Value %>" data-unassigned="no" <% else %> data-unassigned="yes" <% end if %> data-color-chart="no" />
+							<%end if%>
 							<%
 							end if ' only show if item is active
 							rs_getImages.MoveNext()
@@ -730,11 +734,19 @@ window.dataLayer.push({
 									var_img_title = rs_getImages.Fields.Item("img_description").Value
 								end if
 								%>
+								<%if rs_getImages.Fields.Item("is_video").Value = 1 then%>
+								<a class="position-relative pointer" data-fancybox="product-images" data-caption="<%= var_img_title %>" href="#video_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_id_<%=rs_getImages.Fields.Item("img_id").Value %>">
+									<div class="video-container">
+										<video preload="metadata" id="video_<%=rs_getImages.Fields.Item("img_id").Value %>" class="video-player" controls disablepictureinpicture controlslist="nodownload"><source src="https://videos.bodyartforms.com/<%=rs_getImages.Fields.Item("img_full").Value%>#t=0.1" type="video/mp4"></video>
+									</div>
+								</a>	
+								<%else%>
 									<a class="position-relative pointer" data-fancybox="product-images" data-caption="<%= var_img_title %>" href="https://bodyartforms-products.bodyartforms.com/<%=(rs_getImages.Fields.Item("img_full").Value)%>" id="img_id_<%=rs_getImages.Fields.Item("img_id").Value %>">
 										<span class="position-absolute badge badge-secondary p-2 rounded-0" style="top:0;left:0;z-index:200"><i class="fa fa-search fa-lg"></i></span>
 										<img class="img-fluid lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=(rs_getImages.Fields.Item("img_full").Value)%>" alt="<%= var_img_title %>"  style="max-height: 550px" />
 										<div class="text-center small text-dark"><%= var_img_title %></div>
-									</a>	
+									</a>
+								<%end if%>	
 								<% 
 								end if ' only display if item is active
 								rs_getImages.MoveNext()

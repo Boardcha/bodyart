@@ -438,11 +438,11 @@ Set rsNavWaitingList = objCmd.Execute()
                                                                                                             all</span></span>
                                                                                                     </div>
                                                                                             </a>
-                                                                                            <a class="h6 d-block pb-1 track-plugs-dropdown" href="/products.asp?jewelry=tapers" id="image-tapers"><img data-src="/images/navigation/navi-400-tapers.jpg"
+                                                                                            <a class="h6 d-block pb-1 track-plugs-dropdown" href="/products.asp?jewelry=tapers" id="image-tapers"><img data-src="/images/navigation/navi-400-stretching.jpg"
                                                                                                 class="img-fluid 
                                                                                                 img-75 d-block lazyload">
                                                                                                 <div class="d-block">
-                                                                                                Stretching Tapers <span class="d-block d-xl-inline  ml-xl-4"><span class="badge badge-secondary font-weight-normal">View
+                                                                                                Stretching Tools <span class="d-block d-xl-inline  ml-xl-4"><span class="badge badge-secondary font-weight-normal">View
                                                                                                         all</span></span>
                                                                                                 </div>
                                                                                         </a>

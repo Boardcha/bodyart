@@ -167,94 +167,118 @@ $("#description").redactor({
 		load_img_footer();
 	});
 	
-	$("#mainimage").click(function(){
-		if ($(this).is(':checked')) {
-			$("#img_description").hide();
-			//$("#video").hide();
-			$(".dz-button").html('Drop <span>MAIN</span> images here or click to upload.');
-		}   
-	});		
-	
-	$("#additionalimage").click(function(){
-		if ($(this).is(':checked')) {
-			$("#img_description").removeClass("d-none").show();
-			//$("#video").hide();
-			$(".dz-button").html('Drop <span>ADDITIONAL</span> images here or click to upload.');
-		}   
-	});	
-	/*
-	$("#video").click(function(){
-		if ($(this).is(':checked')) {
-			$("#video").removeClass("d-none").show();
-			$("#img_description").hide();
-		}   
-	});	 
-	*/
-	
-	// Dropzone options	
-	//$( document ).ready(function() {
-		Dropzone.options.frmUpload = {
-			autoProcessQueue: false,
-			parallelUploads : 3,
-			uploadMultiple: true,
-			init: function () {
-				var myDropzone = this;
-		
-				// Update selector to match your button
-				$("#add_new_image").click(function (e) {
-					if (myDropzone.getQueuedFiles().length == 3) { 
-						e.preventDefault();
-						myDropzone.processQueue();
-					}
-					else {
-						alert("(3) images must be uploaded together!");
-					}				
-				});
-				
-				$("#clear_dropzone").click(function (e) {
-					myDropzone.removeAllFiles(true);
-				});
-				
-				this.on("sendingmultiple", function(file) {					
-					for (var i = 0; i < file.length; i++) {
-						 for (var j = 0; j < i; j++) {
-							if (file[j].width === file[i].width) { 
-								alert('Gotcha! It seems that you forgot to resize one of images. You can not upload images in the same dimensions.');
-								myDropzone.removeAllFiles(true);
-							}
-						 }
-					}
-				});	
-	
-				myDropzone.on("processing", function(file) {
-				  	if ($("#mainimage").is(':checked')) this.options.url = "products/ajax_add_main_image.asp";
-					if ($("#additionalimage").is(':checked')) this.options.url = "products/ajax_add_new_image.asp";	
-				});
 
-  				myDropzone.on('sending', function(file, xhr, formData) {
-					// Append all form inputs to the formData Dropzone will POST
-					var data = $('#frmUpload').serializeArray();
-					$.each(data, function(key, el) {
-						formData.append(el.name, el.value);
+	// Dropzone options	
+	Dropzone.options.frmUpload = {
+		autoProcessQueue: false,
+		parallelUploads : 3,
+		uploadMultiple: true,
+		addRemoveLinks: false,
+		init: function () {
+		var myDropzone = this;		
+			
+			myDropzone.on("addedfile", function(file) {		
+				if (file.type.match(/image.*/) || file.type.match(/video.*/)) {
+				
+					var reader = new FileReader();
+					reader.onload = (function(entry) {
+					var image = new Image(); 
+					image.src = entry.target.result;
+					image.onload = function() {
+						isDimensionAllowed = true;
+						if ($("#opt-main-image").is(':checked') || $("#opt-additional-image").is(':checked')){
+							if (this.width != 90 && this.width != 400 && this.width != 1000) isDimensionAllowed = false;
+							if (this.height != 90 && this.height != 400 && this.height != 1000) isDimensionAllowed = false;
+						}
+						if ($("#opt-video").is(':checked')){
+							if (this.width != 90 && this.width != 400) isDimensionAllowed = false;
+							if (this.height != 90 && this.height != 400) isDimensionAllowed = false;
+						}
+						if(!isDimensionAllowed){
+							myDropzone.removeAllFiles(true);
+							alert('Please check your image dimensions.');
+						}
+					};
 					});
-					var productid = $("#add_new_image").attr("data-productid");
-					var add_img_description = $('#add_img_description').val();
-					formData.append('productid', productid);
-					formData.append('add_img_description', add_img_description);
-				
+					reader.readAsDataURL(file);
+				}else{
+					myDropzone.removeAllFiles(true);
+					alert('Image and video files are allowed only.');				
+				}	
+			});	
+
+			myDropzone.on("processing", function(file) {
+				if ($("#opt-main-image").is(':checked')) this.options.url = "products/ajax_add_main_image.asp";
+				if ($("#opt-additional-image").is(':checked')) this.options.url = "products/ajax_add_new_image.asp";	
+				if ($("#opt-video").is(':checked')) this.options.url = "products/ajax_add_new_video.asp";	
+			});
+
+			myDropzone.on('sending', function(file, xhr, formData) {
+				// Append all form inputs to the formData Dropzone will POST
+				var data = $('#frmUpload').serializeArray();
+				$.each(data, function(key, el) {
+					formData.append(el.name, el.value);
 				});
-				
-				myDropzone.on("complete", function(file, response) {
-					myDropzone.removeFile(file);
-				});	
-				
-				myDropzone.on('success', function(file, response) {
-					if ($("#mainimage").is(':checked')) $("#main_img").attr("src", response);
-					if ($("#additionalimage").is(':checked')) load_img_footer();
-				});					
-			}
+				var productid = $("#btn-upload").attr("data-productid");
+				var add_img_description = $('#add_img_description').val();
+				formData.append('productid', productid);
+				formData.append('add_img_description', add_img_description);
+			
+			});
+			
+			myDropzone.on("complete", function(file, response) {
+				myDropzone.removeFile(file);
+			});	
+			
+			myDropzone.on('success', function(file, response) {
+				if ($("#opt-main-image").is(':checked')) $("#main_img").attr("src", response);
+				if ($("#opt-additional-image").is(':checked')) load_img_footer();
+				if ($("#opt-video").is(':checked')) load_img_footer();
+			});	
+
+			$("#btn-upload").unbind().click(function (e) {
+				if (myDropzone.getQueuedFiles().length == 3) { 
+					myDropzone.processQueue();
+				}
+				else {
+					alert("(3) media must be uploaded together!");
+					myDropzone.removeAllFiles(true);
+				}			
+			});
+			
+			$("#opt-video").click(function(){
+				if ($(this).is(':checked')) {
+					$("#opt-video").removeClass("d-none").show();
+					$("#img_description").hide();
+					$(".dz-button").html('Drop <span>VIDEO</span> and images here or click to upload.');
+					$(".note").html('Upload the video and thumbnails together<br>90 x 90, 400 x 400, and video');
+					myDropzone.removeAllFiles(true);
+				}   
+			});	
+
+			$("#opt-main-image").click(function(){
+				if ($(this).is(':checked')) {
+					$("#img_description").hide();
+					$(".dz-button").html('Drop <span>MAIN</span> images here or click to upload.');
+					$(".note").html('Upload all 3 image sizes together<br>1000 x 1000, 400 x 400, and 90 x 90');
+					myDropzone.removeAllFiles(true);
+				}   
+			});		
+			
+			$("#opt-additional-image").click(function(){
+				if ($(this).is(':checked')) {
+					$("#img_description").removeClass("d-none").show();
+					$(".dz-button").html('Drop <span>ADDITIONAL</span> images here or click to upload.');
+					$(".note").html('Upload all 3 image sizes together<br>1000 x 1000, 400 x 400, and 90 x 90');	
+					myDropzone.removeAllFiles(true);
+				}   
+			});				
+			
+			$("#clear_dropzone").click(function (e) {
+				myDropzone.removeAllFiles(true);
+			});			
 		}
-	//});
+	}
 
 	function load_img_footer() {
 		$('#detail_images').text('Loading images...');
@@ -269,8 +293,13 @@ $("#description").redactor({
 	// Display larger images on hover over thumbnails in footer
 	$(document).on("mouseenter", '.mini-thumb', function() { 
 		var img_name = $(this).attr("data-name");
+		var isVideo = $(this).attr("data-is-video");
 		$('#enlarge_footer_image').show();
-		$('#enlarge_footer_image').html('<img style="height:240px;width:auto" src="http://bodyartforms-products.bodyartforms.com/'+ img_name +'">')
+		if(isVideo == 1){
+			$('#enlarge_footer_image').html('<video width="320" height="240" loop="true" autoplay="autoplay" controls muted><source src="http://videos.bodyartforms.com/' + img_name + '" type="video/mp4"></video>')
+		}else{
+			$('#enlarge_footer_image').html('<img style="height:240px;width:auto" src="http://bodyartforms-products.bodyartforms.com/' + img_name + '">')
+		}	
 	});
 	$(document).on("mouseleave", '.mini-thumb', function() { 
 		$('#enlarge_footer_image').hide();
@@ -311,19 +340,19 @@ $("#description").redactor({
 	
 	// Display description update field when clicking an image thumbnail
 	$(document).on("click", '.mini-thumb', function() { 
-		$('.mini-thumb').css('border', "0");  
-		$(this).css('border', "2px dotted red");  
+		$('.mini-thumb img').css('border', "0");  
+		$(this).find("img.thumb-activate").css('border', "2px dotted red");  
+		//if($(this).is('img')) $(this).css('border', "2px dotted red");  
 		$("#edit_images_link").show();
 		var imgid = $(this).attr("data-imgid");
 		var img_description = $(this).attr("data-description");
+		var filename = $(this).attr("data-name");
 
 		$('#input-img-description').show();
 		$('.img-thumb-clone').html('');
 		$(this).clone().appendTo('.img-thumb-clone');
 		$('#input-img-description').attr('data-imgid', imgid);
 		$('#edit_images_link').attr('data-imgid', imgid);
-		var filename = $(this).attr('src').split('/');
-		filename = filename[filename.length-1];
 		$('#edit_images_link').attr('data-filename', filename);
 		$('#input-img-description').val(img_description);
 	});	
@@ -415,22 +444,18 @@ $("#description").redactor({
 			return $(this).text().trim();
 		}).get();
 		console.log(arr_selected_ones_main);
-	
 		
-		$('.variant-materials').each(function() {
+		$("select[name*='materials']:not('#materials_main')").each(function() {
+		
 			var arr_selected_ones_variant = $(this).val();
-		//	console.log(arr_selected_ones_variant);
 			var arrUniqueCompound = arrRemoveDuplicates(arr_selected_ones_main.concat(arr_selected_ones_variant));
-		//	console.log(arrUniqueCompound);	
-			$(this).val('');
+			console.log(arrUniqueCompound);	
 			$(this).val('').trigger("chosen:updated");
-			$(this).val(arrUniqueCompound).trigger("chosen:updated");	
+			$(this).val(arrUniqueCompound);	
 			$(this).change();
-		//	console.log('--------- next item below');
 		});
 
 		$("select[name*='materials']").trigger('chosen:updated');
-	
 			
 	}); // Apply to all materials button
 	
@@ -700,7 +725,7 @@ localStorage["copy_details"] = "" // set initial value to nothing
 	
 	function auto_update() {
 		// Auto-update form fields
-           $(".ajax-update input:not('.origqty, #img_90, #img_400, #img_1000, #additionalimage, #mainimage, #add_img_thumb, #add_img_description, #id-transfer-reviews, .no_update, #combine_productid, #combine_detailinfo'), .ajax-update textarea:not('#combine_comments'), .ajax-update select:not('#colors_main, #wearable_main')").change(function(){
+           $(".ajax-update input:not('.origqty, #img_90, #img_400, #img_1000, #opt-additional-image, #opt-main-image, #opt-video, #add_img_thumb, #add_img_description, #id-transfer-reviews, .no_update, #combine_productid, #combine_detailinfo'), .ajax-update textarea:not('#combine_comments'), .ajax-update select:not('#colors_main, #wearable_main')").change(function(){
 			var column_name = $(this).attr("data-column");
 			var column_val = $(this).val();
 			var id = $(".ajax-update :input[name='product-id']").val();
@@ -874,30 +899,6 @@ localStorage["copy_details"] = "" // set initial value to nothing
 	
 	auto_update();
 	update_qty();
-
-	// Button press to clear variant fields
-	$(".btn-clear-fields").click(function () {
-		update_field = $(this).attr("id");
-
-		if (update_field == 'clear-variant-materials') {
-			$('#materials_main').val('').trigger('chosen:updated');
-			$('#materials_main').val('').change();
-			$(".variant-materials").val('').trigger("chosen:updated");
-			$(".variant-materials").val('').change();
-		}
-		if (update_field == 'clear-variant-wearable') {
-			$('#wearable_main').val('').trigger('chosen:updated');
-			$('#wearable_main').val('').change();
-			$(".variant-wearable").val('').trigger("chosen:updated");
-			$(".variant-wearable").val('').change();
-		}
-		if (update_field == 'clear-variant-colors') {
-			$('#colors_main').val('').trigger('chosen:updated');
-			$('#colors_main').val('').change();
-			$(".variant-colors").val('').trigger("chosen:updated");
-			$(".variant-colors").val('').change();
-		}
-	});
 
 	// Add a new item
 	$("#add-detail").submit(function (event) {
@@ -1093,6 +1094,21 @@ $("#manage_tags").click(function () {
 	$("#show-tags").load("products/manage_tags.asp");
 });
 
+// Popup opener for managing wearable materials
+$("#manage_wearable").click(function () {
+	$("#show-materials").load("products/manage_materials.asp");
+});
+
+// Popup opener for managing materials
+$("#manage_materials").click(function () {
+	$("#show-materials").load("products/manage_materials.asp");
+});
+
+// Popup opener for managing categories
+$("#manage_categories").click(function () {
+	$("#show-categories").load("products/manage_categories.asp");
+});
+
 // Delete product tag
 $(document).on("click", '.delete-tag', function(event) { 
 	$.ajax({
@@ -1123,9 +1139,164 @@ $(document).on("click", '#add_new_tag', function(event) {
 		$("#select-tags").append(data);
 		$("#select-tags").trigger("chosen:updated");
 	});
+});		
+
+
+// Delete category
+$(document).on("click", '.delete-category', function(event) { 
+	$.ajax({
+		method: "GET",
+		url: "products/ajax_manage_categories.asp",
+		data: {category_id: $(this).attr("data-category-id"), deleteCategory:"yes"}
+	})
+	.done(function( data ) {
+		$("#show-categories").load("products/manage_categories.asp");
+		// Preserve categories already selected and retrieve updated tags from the table TBL_Categoies
+		$("#select-category").find('option').not(':selected').remove();
+		$("#select-category").append(data);
+		$("#select-category").trigger("chosen:updated");
+	})
+});		
+
+// Add new category
+$(document).on("click", '#add_new_category', function(event) { 
+
+	$.validator.addMethod(
+	  "regex",
+	  function(value, element, regexp) {
+		return regexp.test(value);
+	  },
+	  "Capital letters and special characters are not allowed, except hyphens."
+	);
+
+	$('#FRM_AddNewCategory').validate({ 
+        rules: {
+            category_name: {
+                required: true,
+            },
+            category_tag: {
+                required: true,
+				regex: /^[a-z0-9-]+$/
+            },
+			submitHandler: function(form, event) { 
+				event.preventDefault();
+			}			
+        }
+    });   
+	var isvalid = $("#FRM_AddNewCategory").valid();
+    if (isvalid) {	
+		$.ajax({
+			method: "GET",
+			url: "products/ajax_manage_categories.asp",
+			data: {category_name: $("#category_name").val(), category_tag: $("#category_tag").val(), addCategory:"yes"}
+		})
+		.done(function( data ) {
+			$("#show-categories").load("products/manage_categories.asp");
+			// Preserve categories already selected and retrieve updated tags from the table TBL_Categoies
+			$("#select-category").find('option').not(':selected').remove();
+			$("#select-category").append(data);
+			$("#select-category").trigger("chosen:updated");
+		});
+	}
 });	
 
-// Review button
+
+// Delete material
+$(document).on("click", '.delete-material', function(event) { 
+	$.ajax({
+		method: "GET",
+		dataType: "json",
+		url: "products/ajax_manage_materials.asp",
+		data: {material_id: $(this).attr("data-tag-id"), deleteMaterial:"yes"}
+	})
+	.done(function( json, msg ) {
+		$("#show-materials").load("products/manage_materials.asp");
+		// Preserve materials already selected and retrieve updated items from the table TBL_Materials
+		$("#materials_main").find('option').not(':selected').remove();
+		$("#materials_main").append(json.materials);
+		$("#materials_main").trigger("chosen:updated");
+		// Update all details
+		$('select.select-detail-materials').each(function(i, obj) {
+			$(obj).find('option').not(':selected').remove();
+			$(obj).append(json.materials);
+			$(obj).trigger("chosen:updated");	
+		});
+		$('select.select-detail-wearable-materials').each(function(i, obj) {
+			$(obj).find('option').not(':selected').remove();
+			$(obj).append(json.wearable_materials);
+			$(obj).trigger("chosen:updated");			
+		});		
+		$("#wearable_main").find('option').not(':selected').remove();
+		$("#wearable_main").append(json.wearable_materials);
+		$("#wearable_main").trigger("chosen:updated");	
+	})
+	.fail(function(xhr, status, error) {
+		console.log(error);
+	});	
+});		
+
+
+// Add new material
+$(document).on("click", '#add_new_material', function(event) { 
+	var wearable;
+	if($('#iswearable').is(":checked")) wearable = 1; else wearable = 0;
+	$.ajax({
+		method: "GET",
+		dataType: "json",
+		url: "products/ajax_manage_materials.asp",
+		data: {material: $("#material").val(), iswearable: wearable, addMaterial:"yes"}
+	})
+	.done(function( json, msg ) {
+		$("#show-materials").load("products/manage_materials.asp");
+		// Preserve materials already selected and retrieve updated items from the table TBL_Materials
+		$("#materials_main").find('option').not(':selected').remove();
+		$("#materials_main").append(json.materials);
+		$("#materials_main").trigger("chosen:updated");
+		// Update all details
+		$('select.select-detail-materials').each(function(i, obj) {
+			$(obj).find('option').not(':selected').remove();
+			$(obj).append(json.materials);
+			$(obj).trigger("chosen:updated");			
+		});
+		$('select.select-detail-wearable-materials').each(function(i, obj) {
+			$(obj).find('option').not(':selected').remove();
+			$(obj).append(json.wearable_materials);
+			$(obj).trigger("chosen:updated");			
+		});		
+		$("#wearable_main").find('option').not(':selected').remove();
+		$("#wearable_main").append(json.wearable_materials);
+		$("#wearable_main").trigger("chosen:updated");		
+	})
+	.fail(function(xhr, status, error) {
+		console.log(error);
+	});
+});
+
+	// Button press to clear variant fields
+	$(".btn-clear-fields").click(function () {
+		update_field = $(this).attr("id");
+
+		if (update_field == 'clear-variant-materials') {
+			$('#materials_main').val('').trigger('chosen:updated');
+			$('#materials_main').val('').change();
+			$(".variant-materials").val('').trigger("chosen:updated");
+			$(".variant-materials").val('').change();
+		}
+		if (update_field == 'clear-variant-wearable') {
+			$('#wearable_main').val('').trigger('chosen:updated');
+			$('#wearable_main').val('').change();
+			$(".variant-wearable").val('').trigger("chosen:updated");
+			$(".variant-wearable").val('').change();
+		}
+		if (update_field == 'clear-variant-colors') {
+			$('#colors_main').val('').trigger('chosen:updated');
+			$('#colors_main').val('').change();
+			$(".variant-colors").val('').trigger("chosen:updated");
+			$(".variant-colors").val('').change();
+		}
+	});
+
+	// Review button
 $(document).on("click", '#reviewed', function() { 
     var productid = $("#productid").val();
 
@@ -1138,6 +1309,7 @@ $(document).on("click", '#reviewed', function() {
 		$('#reviewed').hide();
 		$('#reviewed-msg').html("Review complete");
 	});
+
 });	
 
 

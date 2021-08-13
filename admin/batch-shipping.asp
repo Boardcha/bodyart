@@ -70,7 +70,6 @@ Set rsGetPackers = objCmd.Execute()
           <%             
           rsGetPackers.MoveNext()
           Wend %>
-          <input class="mr-1" name="Employee" type="checkbox" value="Group"><span class="mr-4">Group</span>
           <div class="mt-2">
                   <button class="btn btn-sm btn-primary mt-2 mr-2" id="btn-assign-orders" type="button">Assign orders</button>
                   <span id="msg-assign"></span>
@@ -166,7 +165,7 @@ Set rsGetPackers = objCmd.Execute()
           $("#div-archive-print").toggle();
         })
 
-	// Assign backorders
+	// Assign orders
   $(document).on("click", "#btn-assign-orders", function(event){
     $('#msg-assign').html('<i class="fa fa-spinner fa-2x fa-spin"></i>');
 
