@@ -22,7 +22,7 @@ end if
 ' Get most recent purchase order id #
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT (jewelry.title + ' ' + ISNULL(ProductDetails.Gauge, '') + ' ' + ISNULL(ProductDetails.Length, '') + ' ' + ISNULL(ProductDetails.ProductDetail1, '')) as description, tbl_po_details.po_qty, ProductDetails.detail_code, ProductDetails.ProductDetailID, ProductDetails.BinNumber_Detail, ProductDetails.location, TBL_Barcodes_SortOrder.ID_Description, dbo.TBL_PurchaseOrders.Brand FROM dbo.jewelry INNER JOIN dbo.ProductDetails ON dbo.jewelry.ProductID = dbo.ProductDetails.ProductID INNER JOIN dbo.tbl_po_details ON dbo.ProductDetails.ProductDetailID = dbo.tbl_po_details.po_detailid INNER JOIN dbo.TBL_PurchaseOrders ON dbo.tbl_po_details.po_orderid = dbo.TBL_PurchaseOrders.PurchaseOrderID LEFT OUTER JOIN dbo.TBL_Barcodes_SortOrder ON dbo.ProductDetails.DetailCode = dbo.TBL_Barcodes_SortOrder.ID_Number WHERE tbl_po_details.po_orderid = ? AND tbl_po_details.po_qty > 0 ORDER BY 'description' ASC"
+objCmd.CommandText = "SELECT (jewelry.title + ' ' + ISNULL(ProductDetails.Gauge, '') + ' ' + ISNULL(ProductDetails.Length, '') + ' ' + ISNULL(ProductDetails.ProductDetail1, '')) as description, tbl_po_details.po_qty, tbl_po_details.po_qty_vendor, ProductDetails.detail_code, ProductDetails.ProductDetailID, ProductDetails.BinNumber_Detail, ProductDetails.location, TBL_Barcodes_SortOrder.ID_Description, dbo.TBL_PurchaseOrders.Brand FROM dbo.jewelry INNER JOIN dbo.ProductDetails ON dbo.jewelry.ProductID = dbo.ProductDetails.ProductID INNER JOIN dbo.tbl_po_details ON dbo.ProductDetails.ProductDetailID = dbo.tbl_po_details.po_detailid INNER JOIN dbo.TBL_PurchaseOrders ON dbo.tbl_po_details.po_orderid = dbo.TBL_PurchaseOrders.PurchaseOrderID LEFT OUTER JOIN dbo.TBL_Barcodes_SortOrder ON dbo.ProductDetails.DetailCode = dbo.TBL_Barcodes_SortOrder.ID_Number WHERE tbl_po_details.po_orderid = ? AND tbl_po_details.po_qty > 0 ORDER BY 'description' ASC"
 objCmd.Parameters.Append(objCmd.CreateParameter("po_new_id",3,1,10,var_po_id))
 set rsGetItems = objCmd.Execute()
 %>
@@ -58,7 +58,11 @@ While NOT rsGetItems.EOF
 %>
   <tr>
     <td align="center">
-		<%= rsGetItems.Fields.Item("po_qty").Value %>
+	<%If rsGetItems.Fields.Item("po_qty_vendor").Value > 0 Then
+		Response.Write rsGetItems.Fields.Item("po_qty_vendor").Value
+	Else
+		Response.Write rsGetItems.Fields.Item("po_qty").Value
+	End If%>
 	</td>
     <td align="left">
 		<%= rsGetItems.Fields.Item("description").Value %>

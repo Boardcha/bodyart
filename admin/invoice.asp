@@ -245,25 +245,6 @@ if not rsGetOrder.eof then
 						<a class="btn btn-sm btn-outline-secondary d-inline-block"  href="invoice.asp?ID=<%= rsGetOrder.Fields.Item("ID").Value + 1%>"><i class="fa fa-angle-right fa-lg"></i></a> 
 					</div>
 					<div class="col12 p-0 text-right">
-						<% if rsGetOrder.Fields.Item("dhl_base64_shipping_label").Value = "" AND ISNULL(rsGetOrder.Fields.Item("dhl_base64_shipping_label").Value)  then 
-							display_shipping_label = "display:none!important"
-						end if
-						if instr(rsGetOrder.Fields.Item("shipping_type").Value,"DHL") > 0 then
-							label_url = "dhl/dhl-request-label-v4.asp?single=yes&newlabel=yes&invoiceid=" & rsGetOrder.Fields.Item("ID").Value
-							print_label_url = "dhl/dhl-print-labels.asp?request_amount=single&invoiceid=" & rsGetOrder.Fields.Item("ID").Value
-							shipping_company = "DHL"
-						end if
-						if instr(rsGetOrder.Fields.Item("shipping_type").Value,"USPS") > 0 then
-							label_url = "usps/usps-request-label.asp?single=yes&newlabel=yes&invoiceid=" & rsGetOrder.Fields.Item("ID").Value
-							print_label_url = "usps/usps-print-single-label.asp?invoiceid=" & rsGetOrder.Fields.Item("ID").Value
-							shipping_company = "USPS"
-						end if
-						%>
-						<a class="btn btn-sm btn-secondary d-inline-block" style="<%= display_shipping_label %>" id="reprint-label" href="<%= print_label_url %>" target="_blank">Re-print <%= shipping_company %> label</a>
-						<button id="request-label" class="btn btn-sm btn-secondary d-inline-block" data-url="<%= label_url %>" data-shipper="<%= shipping_company %>">Request <%= shipping_company %> label</button>
-						<% if shipping_company = "DHL" then %>
-						<button id="return-label" class="btn btn-sm btn-secondary d-inline-block"  data-toggle="modal" data-target="#modal-return-label">Return label</button>
-						<% end if %>
 						<a class="btn btn-sm btn-secondary d-inline-block" href="invoices/print-friendly-invoice.asp?ID=<%=(rsGetOrder.Fields.Item("ID").Value)%>" target="_blank">Print invoice</a>
 						<span id="holder-copy-order"></span>
 						<div id="label-message"></div>
@@ -450,6 +431,25 @@ if not rsGetOrder.eof then
 			<div class="form-group">
 			<label for="usps-tracking" class="usps-tracking font-weight-bold">USPS Tracking:</label>
 			<input name="usps-tracking" id="usps-tracking" class="usps-tracking form-control form-control-sm" data-column="USPS_tracking" data-friendly="USPS tracking" type="text" value="<%=(rsGetOrder.Fields.Item("USPS_tracking").Value)%>">
+			</div>
+			<div class="mb-3">
+				<% if rsGetOrder.Fields.Item("dhl_base64_shipping_label").Value = "" AND ISNULL(rsGetOrder.Fields.Item("dhl_base64_shipping_label").Value)  then 
+				display_shipping_label = "display:none!important"
+			end if
+			if instr(rsGetOrder.Fields.Item("shipping_type").Value,"DHL") > 0 then
+				label_url = "dhl/dhl-request-label-v4.asp?single=yes&newlabel=yes&invoiceid=" & rsGetOrder.Fields.Item("ID").Value
+				print_label_url = "dhl/dhl-print-labels.asp?request_amount=single&invoiceid=" & rsGetOrder.Fields.Item("ID").Value
+				shipping_company = "DHL"
+			end if
+			if instr(rsGetOrder.Fields.Item("shipping_type").Value,"USPS") > 0 then
+				label_url = "usps/usps-request-label.asp?single=yes&newlabel=yes&invoiceid=" & rsGetOrder.Fields.Item("ID").Value
+				print_label_url = "usps/usps-print-single-label.asp?invoiceid=" & rsGetOrder.Fields.Item("ID").Value
+				shipping_company = "USPS"
+			end if
+			%>
+			<a class="btn btn-sm btn-secondary d-inline-block" style="<%= display_shipping_label %>" id="reprint-label" href="<%= print_label_url %>" target="_blank">Re-print <%= shipping_company %> label</a>
+			<button id="request-label" class="btn btn-sm btn-secondary d-inline-block" data-url="<%= label_url %>" data-shipper="<%= shipping_company %>">Request <%= shipping_company %> label</button>
+			<button id="return-label" class="btn btn-sm btn-secondary d-inline-block"  data-toggle="modal" data-target="#modal-return-label">Return label</button>
 			</div>
 			<% if rsGetOrder.Fields.Item("USPS_tracking").Value <> "" then %>
 				<% if instr(rsGetOrder.Fields.Item("shipping_type").Value,"DHL") > 0 then %>

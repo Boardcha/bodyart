@@ -8,7 +8,8 @@ objCmd.CommandText = "SELECT SUM(p_od.po_qty * d.wlsl_price) AS po_total FROM tb
 objCmd.Parameters.Append(objCmd.CreateParameter("po_temp_id",3,1,10,request.form("tempid")))
 Set rsGetPOTotal = objCmd.Execute()
 
-
+'Response.Write "SELECT SUM(p_od.po_qty * (CASE WHEN p_od.po_qty_vendor > 0 THEN p_od.po_qty_vendor ELSE 1 END)  * d.wlsl_price) AS po_total FROM tbl_po_details AS p_od INNER JOIN ProductDetails AS d ON p_od.po_detailid = d.ProductDetailID WHERE (p_od.po_temp_id = " & request.form("tempid") & ")"
+'Response.End
 
 if not rsGetPOTotal.eof then
 	if rsGetPOTotal.Fields.Item("po_total").Value <> "" then

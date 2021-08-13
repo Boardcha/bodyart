@@ -7,7 +7,10 @@ objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
 objCmd.CommandText = "SELECT * FROM sent_items WHERE PackagedBy = ? AND ship_code = N'paid' AND shipped = N'Pending shipment' AND (dhl_base64_shipping_label <> '' OR usps_base64_shipping_label <> '') AND (shipping_type LIKE '%DHL%' OR shipping_type LIKE '%USPS%') ORDER BY CASE WHEN PackagedBy = '' THEN 'aa' ELSE PackagedBy END, CASE WHEN shipping_type LIKE '%office%' THEN 1 WHEN autoclave = 1 THEN 2 WHEN shipping_type LIKE '%express%' THEN 3 WHEN shipping_type LIKE '%ups%' THEN 4 WHEN shipping_type LIKE '%USPS Priority mail%' THEN 5 WHEN (shipping_type = 'USPS First Class Mail') THEN 6 WHEN shipping_type LIKE '%max%' THEN 7 WHEN  (shipping_type = 'DHL Basic mail') THEN 8 WHEN  (shipping_type = 'DHL GlobalMail Packet Priority') THEN 9 WHEN  (shipping_type = 'DHL GlobalMail Parcel Priority') THEN 10 WHEN  (shipping_type LIKE '%global basic%') THEN 11 ELSE 20 END ASC, ID ASC"
     objCmd.Parameters.Append(objCmd.CreateParameter("packer",200,1,30, request.querystring("packer") ))
 
-Set rsGetInvoice = objCmd.Execute()
+set rsGetInvoice = Server.CreateObject("ADODB.Recordset")
+rsGetInvoice.CursorLocation = 3 'adUseClient
+rsGetInvoice.Open objCmd
+total_records = rsGetInvoice.RecordCount
 %>
 <html class="print-invoice integrated">
 <head>
@@ -46,7 +49,7 @@ Set rsGetInvoice = objCmd.Execute()
 
     
 
-page_num = 1
+page_num = total_records
 While NOT rsGetInvoice.EOF
 split_img = ""
 shipping_type = rsGetInvoice.Fields.Item("shipping_type").Value
@@ -284,7 +287,7 @@ Set rsGetOrderDetails = Nothing
 </div>
 <div class="page-break"></div>
 <% 
-page_num = page_num + 1
+page_num = page_num - 1
   rsGetInvoice.MoveNext()
 Wend
 %>
