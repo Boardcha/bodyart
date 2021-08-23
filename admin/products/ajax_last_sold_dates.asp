@@ -27,7 +27,6 @@ end if
 	<thead class="thead-dark">
 	  <tr>
 		<th class="py-0" scope="col">Month</th>
-<<<<<<< HEAD
 		<th class="py-0 text-center" scope="col">Qty sold</th>
 	  </tr>
 	</thead>
@@ -67,14 +66,11 @@ End If
 	<thead class="thead-dark">
 	  <tr>
 		<th class="py-0" scope="col">Date sold</th>
-=======
->>>>>>> c02b5fc9e9a062d35f985c4be9732f2184e9381c
 		<th class="py-0 text-center" scope="col">Qty sold</th>
 	  </tr>
 	</thead>
 	<tbody>
 <%
-<<<<<<< HEAD
 While NOT rsGetInvoicesSold.EOF 
 %>
 	  <tr>
@@ -88,36 +84,6 @@ While NOT rsGetInvoicesSold.EOF
   <% 
   rsGetInvoicesSold.MoveNext()
 Wend
-=======
-If Not rsGetDatesSold.EOF Then
-	While NOT rsGetDatesSold.EOF 
-	%>
-	<tr>
-		<td class="py-0">
-			<%=rsGetDatesSold.Fields.Item("monthly").Value%>
-		</td>
-		<td class="py-0 text-center">
-			<%= rsGetDatesSold.Fields.Item("qty_sold").Value %>
-		</td>
-	</tr>
-	  <% 
-	  total = total + rsGetDatesSold.Fields.Item("qty_sold").Value 
-	  rsGetDatesSold.MoveNext()
-	Wend%>
-	<tr>
-		<td class="pt-3 py-0" colspan="2">
-			(<%=total%>) sales in last 6 months.
-		</td>
-	</tr>	
-<%Else%>
-	<tr>
-		<td class="pt-3 py-0" colspan="2">
-			No sales in last 6 months.
-		</td>
-	</tr>
-<%
-End If	
->>>>>>> c02b5fc9e9a062d35f985c4be9732f2184e9381c
 %>
 </tbody>
 </table>

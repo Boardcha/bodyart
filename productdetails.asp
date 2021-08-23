@@ -555,7 +555,7 @@ end if ' var_worn_in_cleaned <> ""
 		end if
 	end if
 	if rsProduct("country_origin") <> "" then
-		origin_country = ""
+		origin_country = "<li>Made in " & rsProduct("country_origin") & "</li>"
 	end if
 		
 		var_regular_stock = "yes"

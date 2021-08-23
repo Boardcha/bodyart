@@ -8,12 +8,16 @@ bootstrapped = "yes"
 
 	var_po_id = request("po_id")
 
+	If Request.Querystring("po_id") <> "" then
+		Session("po_id") = var_po_id
+	End if
+
 ' Begin updating database with submitted form information
 If Request.Form("qtyadd_1") <> "" then
 For i=1 to Request.Form("total")
 
 	If Request.Form("qtyadd_" & i) <> 0 then
-	
+
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn  
 	objCmd.CommandText = "UPDATE ProductDetails SET qty=qty + " & Request.Form("qtyadd_" & i) & ", DateRestocked = '" & date() & "' WHERE ProductDetailID = " & Request.Form("detailID_" & i)
@@ -39,9 +43,7 @@ For i=1 to Request.Form("total")
 Next
 End if
 
-If Request.Querystring("po_id") <> "" then
-	Session("po_id") = var_po_id
-End if
+
 
 ' If there are no items in the order, set it to be finalized on the current orders page
 

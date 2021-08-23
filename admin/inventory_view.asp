@@ -7,6 +7,9 @@ Server.ScriptTimeout=300
 '==== PAGE HAS BEEN BOOSTRAPPED =======
 bootstrapped = "yes"
 
+if request.querystring("readonly") = "yes" then
+	readonly = "yes"
+end if
 
 var_brand = request("brand")
 
@@ -16,30 +19,22 @@ else
 	var_brand = "brandname = '" + var_brand + "'"
 end if
 
+
+if readonly <> "yes" then
+
 ' Retrieve the newest temp PO # to use for saving order details
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
 objCmd.CommandText = "SELECT  TOP (1) po_temp_id FROM tbl_po_temp_ids ORDER BY po_temp_id DESC" 
 objCmd.Parameters.Append(objCmd.CreateParameter("value",200,1,100, var_brand))
 Set rsGetTempPONum = objCmd.Execute()
+
 	
 ' Create a new purchase order on page load if it's not resuming the last one
 if request.querystring("resume") = "yes" and request.cookies(var_brand) <> "" then
 	' Continue to use what was originally assigned to cookie below if it's not a new order
 	tempid = request.cookies(var_brand)
 
-<<<<<<< HEAD
-=======
-	if NOT rsGetTempPONum.EOF then
-		' Update last PO date_started date
-		set objCmd = Server.CreateObject("ADODB.command")
-		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "UPDATE tbl_po_temp_ids SET po_time_started = ? WHERE po_temp_id = ?"
-		objCmd.Parameters.Append(objCmd.CreateParameter("po_time_started",200,1,30, now() ))
-		objCmd.Parameters.Append(objCmd.CreateParameter("po_temp_id",3,1,12, rsGetTempPONum("po_temp_id") ))
-		objCmd.Execute()
-	end if
->>>>>>> c02b5fc9e9a062d35f985c4be9732f2184e9381c
 else
 	' Insert a new temp PO id # to use while paging through and creating order since it will need to be saved into database
 	set objCmd = Server.CreateObject("ADODB.command")
@@ -51,6 +46,9 @@ else
 	response.cookies(var_brand) = rsGetTempPONum.Fields.Item("po_temp_id").Value
 	tempid = request.cookies(var_brand)
 end if
+else
+	tempid = "0"
+end if '====== if readonly <> "yes" 
 
 ' If we need to reset the order refresh the page after the new temp ID has been created
 if request.querystring("reset") = "yes" then
@@ -129,12 +127,10 @@ elseif request.cookies("po-filter-autoclave") = "tag" then
 	' if we need to mass tag autoclave items then don't pull in all the details
 	objCmd.CommandText = "SELECT * FROM jewelry WHERE " + var_brand + " " + po_filter_title + " " + po_filter_details + " AND autoclavable = 0 ORDER BY title ASC"
 else
-	objCmd.CommandText = "SELECT *, (restock_threshold - qty) * -1 as thresh_level,(SELECT TOP(1) po_confirmed FROM tbl_po_details WHERE  (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_confirmed ,(SELECT TOP(1) po_manual_adjust FROM tbl_po_details WHERE  (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_manual_adjust,(SELECT TOP(1) po_qty FROM tbl_po_details WHERE (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_qty, (SELECT TOP(1) po_qty_vendor FROM tbl_po_details WHERE (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_qty_vendor, amt_waiting, inventory.location,  inventory.autoclavable, TBL_Barcodes_SortOrder.ID_Description FROM inventory INNER JOIN TBL_Barcodes_SortOrder ON inventory.DetailCode = TBL_Barcodes_SortOrder.ID_Number LEFT OUTER JOIN vw_po_waiting ON inventory.ProductDetailID = vw_po_waiting.DetailID WHERE " + var_brand + " " + po_filter_title + " " + po_filter_details + " AND customorder <> 'yes' " + po_filter_active + " " + po_filter_status + " " + po_filter_qty + " ORDER BY " + var_1st_filter + " title ASC, GaugeOrder ASC, ProductID ASC, item_order ASC"
+
+	objCmd.CommandText = "SELECT *, (restock_threshold - qty) * -1 as thresh_level,(SELECT TOP(1) po_confirmed FROM tbl_po_details WHERE  (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_confirmed ,(SELECT TOP(1) po_manual_adjust FROM tbl_po_details WHERE  (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_manual_adjust,(SELECT TOP(1) po_qty FROM tbl_po_details WHERE (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_qty, (SELECT TOP(1) po_qty_vendor FROM tbl_po_details WHERE (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_qty_vendor, amt_waiting, inventory.location,  inventory.autoclavable, TBL_Barcodes_SortOrder.ID_Description FROM inventory INNER JOIN TBL_Barcodes_SortOrder ON inventory.DetailCode = TBL_Barcodes_SortOrder.ID_Number LEFT OUTER JOIN vw_po_waiting ON inventory.ProductDetailID = vw_po_waiting.DetailID WHERE " + var_brand + " " + po_filter_title + " " + po_filter_details + " AND customorder <> 'yes' " + po_filter_active + " " + po_filter_status + " ORDER BY " + var_1st_filter + " title ASC, GaugeOrder ASC, ProductID ASC, item_order ASC"
 end if
 
-
-
-'objCmd.CommandText = "SELECT *, (restock_threshold - qty) * -1 as thresh_level,(SELECT TOP(1) po_confirmed FROM tbl_po_details WHERE  (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_confirmed ,(SELECT TOP(1) po_manual_adjust FROM tbl_po_details WHERE  (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_manual_adjust,(SELECT TOP(1) po_qty FROM tbl_po_details WHERE (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_qty, amt_waiting, inventory.location,  inventory.autoclavable, TBL_Barcodes_SortOrder.ID_Description FROM inventory INNER JOIN TBL_Barcodes_SortOrder ON inventory.DetailCode = TBL_Barcodes_SortOrder.ID_Number LEFT OUTER JOIN vw_po_waiting ON inventory.ProductDetailID = vw_po_waiting.DetailID WHERE " + var_brand + " AND customorder <> 'yes' " + po_filter_active + " " + po_filter_status + " " + po_autoclave_tag + " " + po_filter_qty + " ORDER BY " + var_1st_filter + " title ASC, GaugeOrder ASC, ProductID ASC, item_order ASC"
 set rsGetDetail = Server.CreateObject("ADODB.Recordset")
 rsGetDetail.CursorLocation = 3 'adUseClient
 rsGetDetail.Open objCmd
@@ -195,12 +191,14 @@ Set rsGetCompanyInfo = rsGetCompanyInfo_cmd.Execute
 	<a href="inventory_consignment.asp?brand=<%= Request.Querystring("brand") %>" class="button_small_grey button_shrink">Write a check</a>
     <% end if %>
 </h5>
+<% if readonly <> "yes" then %>
 <div class="reset">    
 	  <button class="btn btn-sm btn-secondary reset_po"type="button">Reset to new</button>
 	  
 	  <% if request.querystring("resume") <> "" then %>
 <% end if %> 
 </div>
+<% end if '==== if readonly <> "yes" %>
 
 
 <div class="mt-4 mb-2">
@@ -239,12 +237,14 @@ Set rsGetCompanyInfo = rsGetCompanyInfo_cmd.Execute
 </form>
 
 <form class="ajax-update">
+	<% if readonly <> "yes" then %>
 <div class="wrapper-createpo">      
 	  <button class="btn btn-purple mr-4 create_po" type="button">Create order</button>
 	<span class="alert-success csv" style="display:none">
 ORDER CREATED
 	</span>
 </div>
+<% end if '==== if readonly <> "yes" %>
 
 <div class="text-center paging paging-div">
 <!--#include file="inventory/inc-new-po-paging.asp" -->
@@ -253,19 +253,17 @@ ORDER CREATED
 <table class="table table-striped table-borderless mt-3">
 <thead class="thead-dark">
   <tr class="text-nowrap">
-    <th class="sticky-top"><a href="?brand=<%=Request.QueryString("brand")%>&amp;resume=<%=Request.QueryString("resume")%>"><i class="fa fa-sort fa-lg sort-icon mr-2"></i></a>Re-order</th>
-<<<<<<< HEAD
+    <th class="sticky-top"></th>
+	<% if readonly <> "yes" then %>
 	<th class="sticky-top">Bought in pairs</th>
-=======
-
-	<th class="sticky-top">Bought in pairs</th>
-
->>>>>>> c02b5fc9e9a062d35f985c4be9732f2184e9381c
 	<th class="sticky-top">Vendor qty</th>
 	<th class="sticky-top">Line total</th>
+	<% end if %>
 	<th class="sticky-top"><a href="?brand=<%=Request.QueryString("brand")%>&amp;resume=<%=Request.QueryString("resume")%>&amp;1stfilter=qty"><i class="fa fa-sort fa-lg sort-icon mr-2"></i></a>On hand</th>
+	<% if readonly <> "yes" then %>
     <th class="sticky-top"><a href="?brand=<%=Request.QueryString("brand")%>&amp;resume=<%=Request.QueryString("resume")%>&amp;1stfilter=max"><i class="fa fa-sort fa-lg sort-icon mr-2"></i></a>Max qty</th>
 	<th class="sticky-top"><a href="?brand=<%=Request.QueryString("brand")%>&amp;resume=<%=Request.QueryString("resume")%>&amp;1stfilter=thresh"><i class="fa fa-sort fa-lg sort-icon mr-2"></i></a>Threshold</th>
+	<% end if %>
 	<th class="sticky-top"><a href="?brand=<%=Request.QueryString("brand")%>&amp;resume=<%=Request.QueryString("resume")%>&amp;1stfilter=waiting"><i class="fa fa-sort fa-lg sort-icon mr-2"></i></a>Waiting</th>
     <th class="sticky-top">Item information</th>
 	<th class="sticky-top"><a href="?brand=<%=Request.QueryString("brand")%>&amp;resume=<%=Request.QueryString("resume")%>&amp;1stfilter=lastbought"><i class="fa fa-sort fa-lg sort-icon mr-2"></i></a>Last sold</th>
@@ -318,7 +316,7 @@ if var_productid <> rsGetDetail.Fields.Item("ProductID").Value then
 			i = i + 1
 		end if
 		%>
-		<input type="checkbox" value="1" name="autoclavable_<%= i %>" data-id="<%= rsGetDetail.Fields.Item("ProductID").Value %>" data-column="autoclavable" data-friendly="Autoclavable" <%= var_autoclave_checked %>> Autoclavable? <a href="http://bodyartforms-products.bodyartforms.com/<%= rsGetDetail.Fields.Item("largepic").Value %>" class="ml-3 enlarge" title="<%= rsGetDetail.Fields.Item("material").Value %>">img</a>
+<a href="http://bodyartforms-products.bodyartforms.com/<%= rsGetDetail.Fields.Item("largepic").Value %>" class="ml-3 enlarge" title="<%= rsGetDetail.Fields.Item("material").Value %>">img</a>
 		</div>
 		</td>
 	</tr>
@@ -362,10 +360,12 @@ end if
 
 if show_check = "no" then
 	var_reorder = ""
-	
+	if readonly <> "yes" then
 %>
 	<span class="mr-4">&nbsp;</span>
-<% else 
+<% 
+	end if
+else 
 	var_reorder = "reorder_all"
 	
 	'if it's been confirmed then show green check
@@ -384,18 +384,24 @@ if rsGetDetail.Fields.Item("po_manual_adjust").Value = 0 and rsGetDetail.Fields.
 	confirmed_gap = "no-display"
 else
 	confirmed_gap = ""
+
+	if readonly <> "yes" then
 	%>
 		<span class="pointer <%= confirmed_check %> mr-2" id="check<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" data-column="po_qty" data-value="<%= var_restock %>" data-id="<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>"><i class="fa fa-check-circle fa-lg"></i></span>
 		<% end if' only display if qty hasn't been adjusted 
 		%>
 		<span class="<%= confirmed_gap %> mr-2" id="checkgap<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>"></span>
 <% 
+	end if '==== if readonly <> "yes"
 end if %>	
 		<span class="mr-2"><%= rsGetDetail.Fields.Item("ProductDetailID").Value %></span>
+		<% if readonly <> "yes" then %>
 		<input name="orderqty_<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" type="text" class="form-control form-control-sm orderqty" style="width:50px" value="<%= var_restock %>" data-column="po_qty" data-id="<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>"> 
         <span class="mx-1">*</span> 
-		<span class="wlsl_price" data-price="<%=FormatNumber((rsGetDetail.Fields.Item("wlsl_price").Value), -1, -2, -0, -2)%>"><%=FormatCurrency((rsGetDetail.Fields.Item("wlsl_price").Value), -1, -2, -0, -2)%></span>     
+		<span class="wlsl_price" data-price="<%=FormatNumber((rsGetDetail.Fields.Item("wlsl_price").Value), -1, -2, -0, -2)%>"><%=FormatCurrency((rsGetDetail.Fields.Item("wlsl_price").Value), -1, -2, -0, -2)%></span>  
+		<% end if '==== if readonly <> "yes" then %>   
 	</td>
+	<% if readonly <> "yes" then %>
 	<td class="text-center align-middle">
 		<input type="checkbox" name="pair_<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" data-id="<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>">	
 	</td>
@@ -420,6 +426,7 @@ end if
 %>
 	<td class="<%= var_reorder %> <%= var_reorder_class %>" id="line_total_<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" data-line_total="<%=line_total%>" data-detailid="<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>"><% if var_restock > 0 then %><%= line_total%><%else %>&nbsp;<% end if %>
 	</td>
+	<% end if '===== if readonly <> "yes" %>
     <td style="text-align:center">
 		<% if rsGetDetail.Fields.Item("qty").Value <= 0 then
 			qty_class = "po_qty0 badge badge-danger font-weight-bold p-2"
@@ -429,13 +436,14 @@ end if
 		
 		<span class="po_qty <%= qty_class %>"><%= rsGetDetail.Fields.Item("qty").Value %></span>
 	</td>
+	<% if readonly <> "yes" then %>
 	<td style="text-align:center">
 		<input type="text" name="maxqty_<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" class="form-control form-control-sm" style="width:50px" value="<%=(rsGetDetail.Fields.Item("stock_qty").Value)%>" data-column="stock_qty" data-id="<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>">
 	</td>
 	<td style="text-align:center">
 		<input type="text" name="threshold_<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" class="form-control form-control-sm" style="width:50px" value="<%=(rsGetDetail.Fields.Item("restock_threshold").Value)%>" data-column="restock_threshold" data-id="<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>">
 	</td>
-
+<% end if %>
    
 	<td style="text-align:center">
 		<a class="badge badge-info p-2" href="waitinglist_view.asp?DetailID=<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" target="_blank"><%= rsGetDetail.Fields.Item("amt_waiting").Value %></a>
@@ -488,9 +496,11 @@ end if ' if not rsGetDetail.eof
 </div>
 </div>
 
+<% if readonly <> "yes" then %>
 <div class="fixed-bottom h3 m-0 p-2" style="background: rgba(25, 25, 25, .8);color:#ececec">
 	TOTAL: $<span id="total"></span>
 </div>
+<% end if '====if readonly <> "yes" %>
 </body>
 </html>
 <script type="text/javascript">

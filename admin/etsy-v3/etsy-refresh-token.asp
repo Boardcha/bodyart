@@ -44,17 +44,32 @@ Else 'If it is expired get a new token
 		etsy_token_expiration = json.StringOf("expires_in")
 
 		If etsy_access_token<>"" AND etsy_refresh_token<>"" AND etsy_token_expiration<>"" Then		
-			SqlString = "DELETE FROM TBL_Access_Tokens WHERE provider = 'etsy-access-token' OR provider = 'etsy-refresh-token'" 
-			DataConn.Execute(SqlString)		
-			
-			SqlString = "INSERT INTO TBL_Access_Tokens (access_token, provider, date_expires) VALUES('" & etsy_access_token & "', 'etsy-access-token', DATEADD(ss," & etsy_token_expiration & ", GETDATE()))" 
+			'==== SANDBOX DELETION
+			SqlString = "USE sandbox DELETE FROM TBL_Access_Tokens WHERE provider = 'etsy-access-token' OR provider = 'etsy-refresh-token'" 
+			DataConn.Execute(SqlString)	
+
+			'==== PRODUCTION DELETION
+			SqlString = "USE BAF_Site DELETE FROM TBL_Access_Tokens WHERE provider = 'etsy-access-token' OR provider = 'etsy-refresh-token'" 
 			DataConn.Execute(SqlString)	
 			
-			SqlString = "INSERT INTO TBL_Access_Tokens (access_token, provider) VALUES('" & etsy_refresh_token & "', 'etsy-refresh-token')" 
+			'==== SANDBOX INSERTION
+			SqlString = "USE sandbox INSERT INTO TBL_Access_Tokens (access_token, provider, date_expires) VALUES('" & etsy_access_token & "', 'etsy-access-token', DATEADD(ss," & etsy_token_expiration & ", GETDATE()))" 
+			DataConn.Execute(SqlString)	
+
+			'==== PRODUCTION INSERTION
+			SqlString = "USE BAF_Site INSERT INTO TBL_Access_Tokens (access_token, provider, date_expires) VALUES('" & etsy_access_token & "', 'etsy-access-token', DATEADD(ss," & etsy_token_expiration & ", GETDATE()))" 
+			DataConn.Execute(SqlString)	
+
+			'==== SANDBOX INSERTION
+			SqlString = "USE sandbox INSERT INTO TBL_Access_Tokens (access_token, provider) VALUES('" & etsy_refresh_token & "', 'etsy-refresh-token')" 
+			DataConn.Execute(SqlString)	
+
+			'==== PRODUCTION INSERTION
+			SqlString = "USE BAF_Site INSERT INTO TBL_Access_Tokens (access_token, provider) VALUES('" & etsy_refresh_token & "', 'etsy-refresh-token')" 
 			DataConn.Execute(SqlString)	
 		End If 
 	Else
-		Response.Write "Refresh token could not be found in the DB. To get one, call the page ""etsy-accees-token.asp"" and grant access."
+		Response.Write "Refresh token could not be found in the DB. To get one, call the page ""etsy-access-token.asp"" and grant access."
 		Response.End
 	End If
 End If

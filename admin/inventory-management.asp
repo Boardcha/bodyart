@@ -125,6 +125,7 @@ end if
 		<% end if %>
 		</td>
 		<td class="<%= apply_class %>">
+			<a class="btn btn-sm btn-purple mr-2" href="inventory_view.asp?brand=<%= rsGetMainList("brand") %>&amp;readonly=yes" target="_blank" >View stock</a>
 			<a href="add_company.asp#<%= rsGetMainList.Fields.Item("brand").Value %>" target="_blank"><%= rsGetMainList.Fields.Item("brand").Value %></a>
 		</td>
 		<% 	if user_name = "Nathan" or user_name = "Amanda" or user_name = "Ellen" then  %>

@@ -10,7 +10,7 @@ bootstrapped = "yes"
 	
 		set CopyProduct = Server.CreateObject("ADODB.Command")
 		CopyProduct.ActiveConnection = DataConn
-		CopyProduct.CommandText = "INSERT INTO jewelry(picture, largepic, active, new_page_date, date_added) VALUES ('nopic.gif', 'nopic.gif', " & 0 & ", '" & now() & "', '" & now() & "')"
+		CopyProduct.CommandText = "INSERT INTO jewelry(picture, largepic, active, new_page_date, date_added, added_by) VALUES ('nopic.gif', 'nopic.gif', " & 0 & ", '" & now() & "', '" & now() & "', '" & user_name & "')"
 		CopyProduct.Execute() 
 		
 		Set objCmd = Server.CreateObject ("ADODB.Command")
@@ -275,7 +275,6 @@ $(document).ready(function(){
                     <div class="col"><h4>#<%=(rs_getproduct.Fields.Item("ProductID").Value)%>
                         <a class="btn btn-sm btn-secondary d-inline-block" href="?ProductID=<%= rs_getproduct.Fields.Item("ProductID").Value - 1%>"><i class="fa fa-angle-left fa-lg"></i></a>
 						<a class="btn btn-sm btn-secondary d-inline-block" href="?ProductID=<%= rs_getproduct.Fields.Item("ProductID").Value + 1%>"><i class="fa fa-angle-right fa-lg"></i></a></h4> 
-<<<<<<< HEAD
 						<div class="">Added <%=(rs_getproduct.Fields.Item("date_added").Value)%> by <%= rs_getproduct("added_by") %></div>
 						<div>
 							<% if rs_getproduct("reviewed_by_1") <> "" then %>
@@ -293,9 +292,6 @@ $(document).ready(function(){
 							<span id="reviewed-msg"></span>
 							<% end if %>
 						</div>
-=======
-						<div class="">Added <%=(rs_getproduct.Fields.Item("date_added").Value)%></div>
->>>>>>> c02b5fc9e9a062d35f985c4be9732f2184e9381c
 					</div>
                 </div>
 				</div>				
@@ -555,19 +551,13 @@ end if
                     %>	
 					
 				<% While NOT rs_getCategories.EOF %>
-<<<<<<< HEAD
 					<option <% if rs_getproduct("jewelry") <> "" then %><%=IIF(isItemInArray(selected_array, rs_getCategories("category_tag")), "selected ","")%><% end if %> <%=IIF(Instr(rs_getCategories("category_name"), "__") > 0, " disabled", "")%> value="<%= Trim(rs_getCategories("category_tag")) %>"><%= Trim(rs_getCategories("category_name")) %></option>
 					<%rs_getCategories.MoveNext()%>
 				<% Wend %>	
 				
 
             </select>			
-=======
->>>>>>> c02b5fc9e9a062d35f985c4be9732f2184e9381c
 
-					<option <% if rs_getproduct("jewelry") <> "" then %><%=IIF(isItemInArray(selected_array, rs_getCategories("category_tag")), "selected ","")%><% end if %> <%=IIF(Instr(rs_getCategories("category_name"), "__") > 0, " disabled", "")%> value="<%= Trim(rs_getCategories("category_tag")) %>"><%= Trim(rs_getCategories("category_name")) %></option>
-					<%rs_getCategories.MoveNext()%>
-				<% Wend %>	
 			<div class="custom-control custom-checkbox">
 				<input type="checkbox" class="custom-control-input" name="pair" id="pair" value="yes"  <% if (rs_getproduct.Fields.Item("pair").Value) = "yes" then %>checked<% end if %> data-unchecked="no" data-column="pair">
 				<label class="custom-control-label" for="pair">Pair</label>
@@ -703,10 +693,6 @@ end if
 					<label class="font-weight-bold align-bottom" for="materials_main">Materials</label>
 				  </div>
 				  <div class="col text-right">
-<<<<<<< HEAD
-=======
-
->>>>>>> c02b5fc9e9a062d35f985c4be9732f2184e9381c
 					<button class="btn btn-sm btn-secondary py-0 mb-1 mr-1 btn-clear-fields" id="clear-variant-materials">Clear all</button>
 					<button class="btn btn-sm btn-secondary py-0 mb-1" id="apply_all_material">Copy materials to variants</button>
 					<button class="btn btn-sm btn-secondary py-0 mb-1" id="manage_materials" data-toggle="modal" data-target="#modal-show-materials">Manage materials</button>
@@ -724,10 +710,6 @@ end if
                 %>	
 				<% While NOT rs_getMaterials.EOF %>
 					<option <% if rs_getproduct("material") <> "" then %><%=IIF(isItemInArray(selected_materials_array, rs_getMaterials("material_name")), "selected ","")%><% end if %> <%=IIF(Instr(rs_getMaterials("material_name"), "__") > 0, " disabled", "")%> value="<%= Trim(rs_getMaterials("material_name")) %>"><%= Trim(rs_getMaterials("material_name")) %></option>
-<<<<<<< HEAD
-=======
-
->>>>>>> c02b5fc9e9a062d35f985c4be9732f2184e9381c
 					<%rs_getMaterials.MoveNext()%>
 				<% Wend %>			
             
@@ -849,7 +831,6 @@ end if
             </select>
         </div>
 
-<<<<<<< HEAD
 		<div class="form-group">
             <label class="font-weight-bold" for="country_origin">Country of origin</label>
             <select class="form-control form-control-sm " name="country_origin" data-column="country_origin" data-friendly="Origin Country" >
@@ -866,8 +847,6 @@ end if
                 <option value="">None</option>
             </select>
         </div>						  
-=======
->>>>>>> c02b5fc9e9a062d35f985c4be9732f2184e9381c
 		<div class="custom-control custom-checkbox">
 			<input class="custom-control-input" name="autoclavable" id="autoclavable" type="checkbox" value="1" <% if rs_getproduct.Fields.Item("autoclavable").Value = 1 then %>checked<% end if %> data-unchecked="0" data-column="autoclavable" data-friendly="Autoclavable">
 			<label class="custom-control-label" for="autoclavable">Autoclavable?</label>
@@ -958,10 +937,7 @@ end if
 
                <div class="form-group">
                 <label class="font-weight-bold" for="discount">Discount</label>
-<<<<<<< HEAD
 
-=======
->>>>>>> c02b5fc9e9a062d35f985c4be9732f2184e9381c
                 <select class="form-control form-control-sm" name="discount" data-column="SaleDiscount" data-friendly="Discount amount" >
                     <option value="<%= (rs_getproduct.Fields.Item("SaleDiscount").Value) %>" selected><% if rs_getproduct.Fields.Item("SaleDiscount").Value = 0 then %>None<%else%><%= (rs_getproduct.Fields.Item("SaleDiscount").Value) %><% end if %></option>
                     <option value="0">None</option>
@@ -997,7 +973,6 @@ var_sale_expiration = rs_getproduct.Fields.Item("sale_expiration").Value
 	& "-" & Right("0" & DatePart("d",var_sale_expiration), 2)
 end if
 '======== SALE DISCOUNTS ARE SET BACK TO 0 VIA A DAILY JOB IN THE DATABASE THAT CHECKS THE CURRENT EXPIRATION ON ALL PRODUCTS
-<<<<<<< HEAD
 						  
 	  
 				   
@@ -1010,14 +985,6 @@ end if
 																								 
             </div>
 
-=======
-
-		<div class="custom-control custom-checkbox">
-			<input class="custom-control-input" name="sale" id="sale" type="checkbox" value="Y" <%= var_checked %> data-unchecked="N" data-column="OnSale" data-friendly="On sale">
-			<label class="custom-control-label" for="sale">On sale</label>
-		  </div> 
-
->>>>>>> c02b5fc9e9a062d35f985c4be9732f2184e9381c
                 <% 	if (rs_getproduct.Fields.Item("SaleExempt").Value) = 1 then
                     var_checked = "checked"
                 else
@@ -1142,8 +1109,8 @@ end if
 				<option value="7mm">7mm</option>
 				<option value="9/32&quot;">9/32&quot;</option>
 				<option value="5/16&quot;">5/16&quot;</option>
-				<option value="11/32&quot;">11/32&quot;</option>
-				<option value="3/8&quot;">3/8&quot;</option>
+				<option value="11/32&quot; (9mm)">11/32&quot; (9mm)</option>
+				<option value="3/8&quot; (9.5mm)">3/8&quot; (9.5mm)</option>
 				<option value="10mm">10mm</option>
 				<option value="13/32&quot;">13/32&quot;</option>
 				<option value="7/16&quot;">7/16&quot;</option>
@@ -1435,8 +1402,8 @@ end if
 				<option value="7mm">7mm</option>
 				<option value="9/32&quot;">9/32&quot;</option>
 				<option value="5/16&quot;">5/16&quot;</option>
-				<option value="11/32&quot;">11/32&quot;</option>
-				<option value="3/8&quot;">3/8&quot;</option>
+				<option value="11/32&quot; (9mm)">11/32&quot; (9mm)</option>
+				<option value="3/8&quot; (9.5mm)">3/8&quot; (9.5mm)</option>
 				<option value="10mm">10mm</option>
 				<option value="13/32&quot;">13/32&quot;</option>
 				<option value="7/16&quot;">7/16&quot;</option>
@@ -1578,10 +1545,7 @@ end if
 						<select  class="select-detail-materials variant-materials" name="materials_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" id="materials_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" data-column="detail_materials" data-friendly="Materials" data-detailid="<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>"  multiple>
 							<% if rs_getdetails.Fields.Item("detail_materials").Value <> "" and Instr(rs_getdetails.Fields.Item("detail_materials").Value, "null") = 0 then
 								' break full text stored values out into an array to have an <option> selected for each entry
-<<<<<<< HEAD
 
-=======
->>>>>>> c02b5fc9e9a062d35f985c4be9732f2184e9381c
 								selected_materials_array = getUniqueItems(split(rs_getdetails.Fields.Item("detail_materials").Value,","))
 							end if ' if jewelry is not null
 							%>	
@@ -1591,10 +1555,7 @@ end if
 								<option <% if rs_getdetails("detail_materials") <> "" then %><%=IIF(isItemInArray(selected_materials_array, rs_getMaterials("material_name")), "selected ","")%><% end if %> <%=IIF(Instr(rs_getMaterials("material_name"), "__") > 0, " disabled", "")%> value="<%= Trim(rs_getMaterials("material_name")) %>"><%= Trim(rs_getMaterials("material_name")) %></option>
 								<%rs_getMaterials.MoveNext()%>
 							<% Wend %>					
-<<<<<<< HEAD
 
-=======
->>>>>>> c02b5fc9e9a062d35f985c4be9732f2184e9381c
 						</select>
 					</td>															
 					<td style="width:300px">
@@ -1602,10 +1563,7 @@ end if
 							<% if rs_getdetails.Fields.Item("colors").Value <> "" and Instr(rs_getdetails.Fields.Item("colors").Value, "null") = 0  then
 							    ' break full text stored values out into an array to have an <option> selected for each entry
 								jewelry_array = getUniqueItems(split(rs_getdetails.Fields.Item("colors").Value," "))
-<<<<<<< HEAD
 
-=======
->>>>>>> c02b5fc9e9a062d35f985c4be9732f2184e9381c
 							end if ' if jewelry is not null
 							%>	
 							
@@ -1791,10 +1749,7 @@ end if
 <script type="text/javascript" src="scripts/dropzone.js"></script>
 <script type="text/javascript" src="scripts/jquery.validate.min.js"></script>
 <script type="text/javascript" src="scripts/product-edit-version2.js?v=080921"></script>
-<<<<<<< HEAD
 
-=======
->>>>>>> c02b5fc9e9a062d35f985c4be9732f2184e9381c
 </html>
 <%
 Set rs_getuser = Nothing

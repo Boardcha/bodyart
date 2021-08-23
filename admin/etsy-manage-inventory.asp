@@ -21,12 +21,12 @@ success = sbAuthHeaderVal.Append(etsy_access_token)
 rest.Authorization = sbAuthHeaderVal.GetAsString()
 %>
 <html>
-
+<title>Manage Etsy Inventory</title>
     <body>
         <!--#include file="admin_header.asp"-->
 		<link href="/CSS/fortawesome/css/external-min.css?v=031920" rel="stylesheet" type="text/css" />
         <div class="px-2">
-            <h5 class="mt-3 mb-3">Update Etsy Inventory</h5>
+            <h5 class="mt-3 mb-3">Manage Etsy Inventory</h5>
         <form class="form-inline">
             <input class="form-control mr-3" style="width:250px" name="keywords" type="text" placeholder="Keyword search" value="<%= request.form("keywords")%>">
             <button class="btn btn-primary" type="submit" formaction="etsy-manage-inventory.asp?page=1" formmethod="post">Search</button>
@@ -278,7 +278,7 @@ Loop
 		
 		$.ajax({
 		method: "post",
-		url: "etsy/etsy-update-stock.asp",
+		url: "etsy-v3/etsy-update-stock.asp",
         data: {listingid: listingid, productid: productid, qty: qty, price: price, sku: sku}
 		})
 		.done(function(msg) {

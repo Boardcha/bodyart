@@ -95,7 +95,7 @@ While NOT rsGetPurchaseOrders.EOF
 %>
                 <tr id="<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>">
                   <td class="align-middle">
-                  <button type="button" class="btn btn-sm btn-danger delete_po" data-po_id="<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>"><i class="fa fa-trash-alt"></i></button>
+                  <button type="button" class="btn btn-sm btn-info delete_po" data-po_id="<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>"><i class="fa fa-eye-slash"></i></button>
                 </td>
                   <td class="align-middle"><%= FormatDateTime(rsGetPurchaseOrders.Fields.Item("DateOrdered").Value,2)%>&nbsp;&nbsp;&nbsp;#<a href="barcodes_modifyviews.asp?ID=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>&type=Order"><%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%></a>
                   <%
