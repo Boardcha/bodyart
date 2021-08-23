@@ -145,7 +145,9 @@ While NOT rsGetPurchaseOrders.EOF
                   </td>
                   <td class="align-middle"><% if (rsGetPurchaseOrders.Fields.Item("Received").Value) = "Y" then %>
                     <span class="badge badge-success">Yes</span> <%=(rsGetPurchaseOrders.Fields.Item("DateReceived").Value)%>
-                    <% else %><span class="badge badge-danger">No</span><% end if %></td>
+                    <% else %><span class="badge badge-danger">No</span>
+                    <span class="badge badge-info pointer po_received" data-po_id="<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>">Set to received</span>
+                    <% end if %></td>
                 </tr>
                 <% 
   rsGetPurchaseOrders.MoveNext()
@@ -172,6 +174,24 @@ Wend
       })
       .done(function(msg ) {
           $('#' + po_id).addClass('table-danger');
+          $('#' + po_id).fadeOut('slow');
+      })
+      .fail(function(msg) {
+          alert('FAILED');
+      });
+  });
+
+  // Update PO to received status 
+  $(document).on("click", ".po_received", function(event){
+      var po_id = $(this).attr("data-po_id");
+
+      $.ajax({
+      method: "POST",
+      url: "/admin/inventory/ajax-received-purchase-order.asp",
+      data: {po_id: po_id}
+      })
+      .done(function(msg ) {
+          $('#' + po_id).addClass('table-success');
           $('#' + po_id).fadeOut('slow');
       })
       .fail(function(msg) {

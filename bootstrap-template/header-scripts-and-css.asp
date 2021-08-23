@@ -20,6 +20,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="facebook-domain-verification" content="muhfd0zbw04kmod638n0srrqinj67i" />
         <meta name="description" content="<%= page_description %>">
         <% if var_extra_head_inc = "homepage" then %>
         <meta name="google-site-verification" content="WAeYp74lwrgsm6m1dfjFwmtRzL3MRidv2O5qBt2k7Wg" />

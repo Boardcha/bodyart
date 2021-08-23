@@ -125,6 +125,18 @@ if not rsProduct.eof then
 
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "" & _
+		"SELECT TOP 100 ORD.ProductID AS ProductID, ORD2.ProductID AS bought_with, count(*) as times_bought_together, JEW.title, JEW.picture " & _
+		"FROM TBL_OrderSummary AS ORD INNER JOIN TBL_OrderSummary AS ORD2 ON ORD.InvoiceID = ORD2.InvoiceID " & _
+		"AND ORD.ProductID != ORD2.ProductID AND ORD.ProductID = " & ProductID & " AND ORD2.ProductID in (SELECT ProductID FROM ProductDetails GROUP BY ProductID HAVING SUM(qty) > 0) " & _
+		"LEFT JOIN Jewelry JEW ON JEW.ProductID = ORD2.ProductID " & _
+		"GROUP BY ORD.ProductID, ORD2.ProductID, JEW.title, JEW.picture " & _
+		"HAVING count(*) > 5 " & _
+		"ORDER BY times_bought_together DESC"
+	Set rsCrossSellingItems = objCmd.Execute()
+
+	set objCmd = Server.CreateObject("ADODB.command")
+	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "SELECT * FROM tbl_color_charts"
 	Set rsColorCharts = objCmd.Execute()
 
@@ -543,7 +555,7 @@ end if ' var_worn_in_cleaned <> ""
 		end if
 	end if
 	if rsProduct("country_origin") <> "" then
-		origin_country = ""
+		origin_country = "<li>Made in " & rsProduct("country_origin") & "</li>"
 	end if
 		
 		var_regular_stock = "yes"
@@ -1352,22 +1364,38 @@ end if
 	<% end if ' total_reviews > 0 %>
 
 
+	<% If Not rsCrossSellingItems.EOF Then %>
+	<div class="display-5 mt-4 mb-2">Customers Also Bought
+	</div>
+	<div class="baf-carousel" id="cross-selling">
+	<% 	While NOT rsCrossSellingItems.EOF %>
+	<div class="slide">
+		<a href="productdetails.asp?ProductID=<%= rsCrossSellingItems("bought_with").Value %>">
+			<img class="img-fluid lazyload" src="/images/image-placeholder.png" data-src="https://bafthumbs-400.bodyartforms.com/<%=(rsCrossSellingItems("picture").Value)%>" alt="<%=(rsCrossSellingItems("title").Value)%>" />
+		</a>
+	</div>
+	<% rsCrossSellingItems.MoveNext()
+	Wend
+	%>
+	</div>
+	<% end if 'rsCrossSellingItems.EOF %>
+
+	
 	<% If Not rsRecentlyViewed.EOF Then %>
 	<div class="display-5 mt-4 mb-2">Recently Viewed
 	</div>
 	<div class="baf-carousel" id="recents">
-<% 	While NOT rsRecentlyViewed.EOF %>
-<div class="slide">
-	<a href="productdetails.asp?ProductID=<%= rsRecentlyViewed.Fields.Item("ProductID").Value %>">
-		<img class="img-fluid lazyload" src="/images/image-placeholder.png" data-src="https://bafthumbs-400.bodyartforms.com/<%=(rsRecentlyViewed.Fields.Item("picture").Value)%>" alt="<%=(rsRecentlyViewed.Fields.Item("title").Value)%>" />
-	</a>
-</div>
-<% rsRecentlyViewed.MoveNext()
+	<% 	While NOT rsRecentlyViewed.EOF %>
+	<div class="slide">
+		<a href="productdetails.asp?ProductID=<%= rsRecentlyViewed.Fields.Item("ProductID").Value %>">
+			<img class="img-fluid lazyload" src="/images/image-placeholder.png" data-src="https://bafthumbs-400.bodyartforms.com/<%=(rsRecentlyViewed.Fields.Item("picture").Value)%>" alt="<%=(rsRecentlyViewed.Fields.Item("title").Value)%>" />
+		</a>
+	</div>
+	<% rsRecentlyViewed.MoveNext()
 	Wend
 	%>
 	</div>
-<% end if 'rsRecentlyViewed.EOF %>	
-
+	<% end if 'rsRecentlyViewed.EOF %>		
 
 	<% end if ' only display if product is active %>
 <!--#include virtual="/bootstrap-template/footer.asp" -->
@@ -1400,3 +1428,30 @@ end if
 	  fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));
 </script>
+
+<%
+Set rsProduct = Nothing
+Set rsProductStats = Nothing
+Set rsRecentlyViewed = Nothing
+Set rsCrossSellingItems = Nothing
+Set rsColorCharts = Nothing
+Set rs_getImages = Nothing
+Set rs_StarCounts = Nothing
+Set rs_getDropDownItems = Nothing
+Set rsGetActiveItems = Nothing
+Set rsGaugeFilter = Nothing
+Set rs_reviews_gauge_dropdown = Nothing
+Set rs_reviews_color_dropdown = Nothing
+Set rs_photos_gauge_dropdown = Nothing
+Set rs_photos_color_dropdown = Nothing
+Set rsGetReview = Nothing
+Set rsGetPhotos = Nothing
+Set rsSizesOffered = Nothing
+Set rsGetUser = Nothing
+Set rsGetWishlist = Nothing
+Set rsGetCategory = Nothing
+Set rsGetOrderHistory = Nothing
+Set rsJsonReviews = Nothing
+Set rs_CheckThumbnailQty = Nothing
+DataConn.Close()
+%>

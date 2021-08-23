@@ -138,16 +138,6 @@
 			I grew up in Texas, moved away, and came back home. I love my new job here at BAF!  Everyone is amazing to work with!!! I am raising four beautiful girls, who are my life, my everything.  We are always busy with theater improv or cheerleading. You can also find us out and about enjoying this awesome state ... hiking, camping, or just exploring unknown areas. Life is what you make it. So you should enjoy the life you live, love the life you live, and if not, change it to make it your own. The world is too amazingly wonderful not to. My dream is when my girls are older I will aimlessly travel all over to experience opportunity, people, and places! 
 			</p>
 			</div>
-			<div class="col-12 col-sm alert alert-secondary m-2">
-				<h4>Soriah (Anodizing & Misc Projects)</h4>
-				<img class="pull-left img-fluid mr-3" src="images/employees/soriah.jpg" alt="Soriah" />
-				<p>
-					I’m a native Austinite fueled by donuts, nachos, Hot Cheetos, and cherry coke. I recently decided to jump ship from the video game industry, and I am beyond pleased with what I’ve found! BAF has a wonderful and welcoming environment with incredibly cool and talented people that I’m very proud to spend my time with. :) 
-		<br/><br/>
-		
-		When I’m not at work, I’m probably gaming, modding games, drawing, or foraging for bugs, mushrooms, and Very Neat Rocks. I also have a penny collection with some over 100 years old!
-				</p>
-		</div>
 	</div>
 	<div class="row">
 

@@ -57,21 +57,17 @@ end select
         ' --- pull details
         set objCmd = Server.CreateObject("ADODB.command")
         objCmd.ActiveConnection = DataConn
-        objCmd.CommandText = "SELECT ID_Description, BinNumber_Detail, location, ProductDetailID, ProductDetails.ProductID as ProductID, qty, type, qty_counted_discontinued, item_pulled, Gauge, Length, ProductDetail1  FROM ProductDetails INNER JOIN TBL_GaugeOrder ON COALESCE (ProductDetails.Gauge, '') = COALESCE (TBL_GaugeOrder.GaugeShow, '') INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID WHERE (BinNumber_Detail = 37 OR BinNumber_Detail = 0) AND ProductDetails.ProductID = ?  ORDER BY ID_BarcodeOrder ASC, BinNumber_Detail ASC, location ASC"
+        objCmd.CommandText = "SELECT ID_Description, BinNumber_Detail, location, ProductDetailID, ProductDetails.ProductID as ProductID, qty, type, qty_counted_discontinued, item_pulled, Gauge, Length, ProductDetail1  FROM ProductDetails INNER JOIN TBL_GaugeOrder ON COALESCE (ProductDetails.Gauge, '') = COALESCE (TBL_GaugeOrder.GaugeShow, '') INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID WHERE (BinNumber_Detail = 37 OR BinNumber_Detail = 0) AND ProductDetails.ProductID = ? and ProductDetails.active = 1 ORDER BY ID_BarcodeOrder ASC, BinNumber_Detail ASC, location ASC"
         objCmd.Parameters.Append(objCmd.CreateParameter("ID",3,1,15,rsGetProducts.Fields.Item("ProductID").Value ))
         'objCmd.Parameters.Append(objCmd.CreateParameter("who",200,1,50, rsGetUser.Fields.Item("name").Value ))
-        set rsGetDetails = objCmd.Execute()
 
-        ' ---- Check to see if there are any details left and if not, then send back json response
-        ' --- pull details
-        set objCmd = Server.CreateObject("ADODB.command")
-        objCmd.ActiveConnection = DataConn
-        objCmd.CommandText = "SELECT * FROM ProductDetails WHERE ProductID = ? AND item_pulled = 0"
-        objCmd.Parameters.Append(objCmd.CreateParameter("productid",3,1,20, rsGetProducts.Fields.Item("ProductID").Value  ))
-        set rsShowButton = objCmd.Execute()
+        set rsGetDetails = Server.CreateObject("ADODB.Recordset")
+        rsGetDetails.CursorLocation = 3 'adUseClient
+        rsGetDetails.Open objCmd
 
-        if not rsShowButton.eof and not rsShowButton.bof then
+        if rsGetDetails.RecordCount <= 0 then
             display_scanner_field = "style=""display:none"""
+            details_message = "<div class='alert alert-danger'>No active items to be pulled</div>"
         else
             display_scanner_field = " "
         end if
@@ -162,6 +158,7 @@ end select
         %>
     </tbody>
     </table>
+    <%= details_message %>
     <%         rsGetProducts.MoveNext()
 If rsGetProducts.EOF Then Exit For  ' ====== PAGING
 Next ' ====== PAGING

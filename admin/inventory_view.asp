@@ -28,15 +28,6 @@ if request.querystring("resume") = "yes" and request.cookies(var_brand) <> "" th
 	' Continue to use what was originally assigned to cookie below if it's not a new order
 	tempid = request.cookies(var_brand)
 
-	if NOT rsGetTempPONum.EOF then
-		' Update last PO date_started date
-		set objCmd = Server.CreateObject("ADODB.command")
-		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "UPDATE tbl_po_temp_ids SET po_time_started = ? WHERE po_temp_id = ?"
-		objCmd.Parameters.Append(objCmd.CreateParameter("po_time_started",200,1,30, now() ))
-		objCmd.Parameters.Append(objCmd.CreateParameter("po_temp_id",3,1,12, rsGetTempPONum("po_temp_id") ))
-		objCmd.Execute()
-	end if
 else
 	' Insert a new temp PO id # to use while paging through and creating order since it will need to be saved into database
 	set objCmd = Server.CreateObject("ADODB.command")

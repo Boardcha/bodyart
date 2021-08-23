@@ -20,7 +20,7 @@ bootstrapped = "yes"
 <body>
 <!--#include file="admin_header.asp"-->
 <div class="p-3">
-<% If var_access_level = "Admin" or user_name = "Jeannette" then 
+<% If var_access_level = "Admin" or var_access_level = "Manager" then 
 %>
 <form class="admin-fields ajax-update">
 <table class="table table-borderless table-hover">
@@ -90,8 +90,9 @@ bootstrapped = "yes"
 			<td style="text-align:center">
 				<select class="form-control form-control-sm" name="password" data-id="<%= rs_getUser.Fields.Item("ID").Value %>" data-username="<%= rs_getUser.Fields.Item("name").Value %>">
 					<option value="">Select recipient</option>
-					<option value="amanda3@bodyartforms.com" data-name="Amanda">Email to Amanda</option>
-					<option value="ellen1@bodyartforms.com" data-name="Ellen">Email to Ellen</option>
+					<option value="amanda@bodyartforms.com" data-name="Amanda">Email to Amanda</option>
+					<option value="ellen@bodyartforms.com" data-name="Ellen">Email to Ellen</option>
+					<option value="andres@bodyartforms.com" data-name="Andres">Email to Andres</option>
 				</select>
 			</td>
 			<td style="text-align:center">

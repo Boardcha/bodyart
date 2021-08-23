@@ -469,7 +469,7 @@ function refreshMenu() {
 	  ]
 	});
 
-	$('#recents').slick({
+	$('#recents,#cross-selling').slick({
 		slidesToShow: 6,
 		slidesToScroll: 6,
 		prevArrow: '<div class="slider-arrow-prev"><i class="fa fa-chevron-circle-left fa-2x text-white pointer"></i></div>',

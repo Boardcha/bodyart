@@ -1,17 +1,7 @@
 <%@LANGUAGE="VBSCRIPT"%>
-<!--#include virtual="/Connections/bodyartforms_sql_ADMIN.asp" -->
-<!--#include virtual="/Connections/chilkat.asp" -->
-<!--#include virtual="/Connections/etsy-constants.asp" -->
+<!--#include virtual="/admin/etsy-v3/etsy-refresh-token.asp" -->
 <%
 set rest = Server.CreateObject("Chilkat_9_5_0.Rest")
-set oauth1 = Server.CreateObject("Chilkat_9_5_0.OAuth1")
-
-oauth1.ConsumerKey = etsy_consumer_key
-oauth1.ConsumerSecret = etsy_consumer_secret
-oauth1.Token = etsy_oauth_permanent_token
-oauth1.TokenSecret = etsy_oauth_permanent_token_secret
-oauth1.SignatureMethod = "HMAC-SHA1"
-success = oauth1.GenNonce(16)
 
 autoReconnect = 1
 tls = 1
@@ -21,36 +11,21 @@ If (success = 0) Then
     Response.End
 End If
 
-' Tell the REST object to use the OAuth1 object.
-success = rest.SetAuthOAuth1(oauth1,1)   
+set sbAuthHeaderVal = Server.CreateObject("Chilkat_9_5_0.StringBuilder")
+success = sbAuthHeaderVal.Append("Bearer ")
+success = sbAuthHeaderVal.Append(etsy_access_token)
+rest.Authorization = sbAuthHeaderVal.GetAsString() 
 
-jsonCountryText = rest.FullRequestNoBody("GET","/v2/countries")
-If (rest.LastMethodSuccess = 0) Then
-    Response.Write "<pre>" & Server.HTMLEncode( rest.LastErrorText) & "</pre>"
-    Response.End
-End If
-
-set jsonCountries = Server.CreateObject("Chilkat_9_5_0.JsonObject")
-success = jsonCountries.Load(jsonCountryText)
-jsonCountries.EmitCompact = 0
-
-'Response.Write "<pre>" & Server.HTMLEncode( jsonCountries.Emit()) & "</pre>"
-'Response.Write "<pre>" & Server.HTMLEncode( "Response status code: " & rest.ResponseStatusCode) & "</pre>"
-
-' Tell the REST object to use the OAuth1 object.
-success = rest.SetAuthOAuth1(oauth1,1) 
-success = rest.ClearAllQueryParams()  
+success = rest.AddQueryParam("client_id", etsy_consumer_key) 
 success = rest.AddQueryParam("was_shipped",0)
 success = rest.AddQueryParam("was_paid",1)
 success = rest.AddQueryParam("limit",100)
 
-
-jsonResponseText = rest.FullRequestNoBody("GET","/v2/shops/Bodyartforms/receipts")
+jsonResponseText = rest.FullRequestNoBody("GET","/v3/application/shops/" & etsy_baf_shop_id & "/receipts")
 If (rest.LastMethodSuccess = 0) Then
     Response.Write "<pre>" & Server.HTMLEncode( rest.LastErrorText) & "</pre>"
     Response.End
-End If
-
+End If 
         
 set jsonResponse = Server.CreateObject("Chilkat_9_5_0.JsonObject")
 success = jsonResponse.Load(jsonResponseText)
@@ -63,7 +38,7 @@ jsonResponse.EmitCompact = 0
 i = 0
 count_i = jsonResponse.SizeOfArray("results")
 Do While i < count_i
-jsonResponse.I = i
+	jsonResponse.I = i
     var_email = jsonResponse.StringOf("results[i].buyer_email") 
     split_name = split(jsonResponse.StringOf("results[i].name"), " ")
         var_first = split_name(0)
@@ -75,24 +50,14 @@ jsonResponse.I = i
     var_city = jsonResponse.StringOf("results[i].city") 
     var_state = jsonResponse.StringOf("results[i].state") 
     var_zip = jsonResponse.StringOf("results[i].zip") 
-
-    '========== GET TWO LETTER COUNTRY ISO CODE ==========================
-    j = 0
-    count_j = jsonCountries.SizeOfArray("results")
-    Do While j < count_j
-    jsonCountries.J = j
-        
-        IF jsonCountries.StringOf("results[j].country_id") = jsonResponse.StringOf("results[i].country_id") THEN
-            var_country = jsonCountries.StringOf("results[j].iso_country_code") 
-        END IF
-    
-    j = j + 1
-    Loop
-
+	var_country = jsonResponse.StringOf("results[i].country_iso") 
     var_receipt_id = jsonResponse.StringOf("results[i].receipt_id")
-    var_shipping_rate = jsonResponse.StringOf("results[i].total_shipping_cost") 
-    var_order_tax = jsonResponse.StringOf("results[i].total_tax_cost") 
-
+    var_shipping_rate = jsonResponse.IntOf("results[i].total_shipping_cost.amount") 
+	If jsonResponse.IntOf("results[i].total_shipping_cost.divisor") > 0 Then var_shipping_rate = jsonResponse.IntOf("results[i].total_shipping_cost.amount") / jsonResponse.IntOf("results[i].total_shipping_cost.divisor")	
+    var_order_tax = jsonResponse.IntOf("results[i].total_tax_cost.amount") 
+	If jsonResponse.IntOf("results[i].total_tax_cost.divisor") > 0 Then var_order_tax = jsonResponse.IntOf("results[i].total_tax_cost.amount") / jsonResponse.IntOf("results[i].total_tax_cost.divisor")
+		
+	
     if var_shipping_rate = 3.95 then
 
     var_shipping_type = "DHL Basic mail"
@@ -122,9 +87,8 @@ jsonResponse.I = i
     var_shipping_type = "DHL GlobalMail Parcel Priority"
     
     end if
-    'response.write "<br/>Receipt ID: " & var_email
 
-
+	
     ' Only insert record if there is no transaction ID already in the table 
     set objCmd = Server.CreateObject("ADODB.Command")
     objCmd.ActiveConnection = DataConn
@@ -153,6 +117,8 @@ jsonResponse.I = i
     objCmd.Execute()
     Set objCmd = Nothing
 
+
+	
     '-------- Get invoice # for items ---------------
     set objCmd = Server.CreateObject("ADODB.Command")
     objCmd.ActiveConnection = DataConn
@@ -166,11 +132,10 @@ jsonResponse.I = i
         end if   
 
 
-    ' Tell the REST object to use the OAuth1 object.
-    success = rest.SetAuthOAuth1(oauth1,1)   
     success = rest.ClearAllQueryParams()
+	success = rest.AddQueryParam("client_id", etsy_consumer_key) 
     
-    jsonItemsResponseText = rest.FullRequestNoBody("GET","/v2/receipts/" & var_receipt_id & "/transactions/")
+    jsonItemsResponseText = rest.FullRequestNoBody("GET","/v3/application/shops/" & etsy_baf_shop_id & "/receipts/" & var_receipt_id & "/transactions")
     If (rest.LastMethodSuccess = 0) Then
         Response.Write "<pre>" & Server.HTMLEncode( rest.LastErrorText) & "</pre>"
         Response.End
@@ -190,23 +155,41 @@ jsonResponse.I = i
         jsonItemResponse.J = j
 
 
-    var_product_detailid = jsonItemResponse.IntOf("results[j].product_data.sku")
-    etsy_qty = jsonItemResponse.IntOf("results[j].quantity")
-    var_item_title = jsonItemResponse.StringOf("results[j].title")
-    var_etsy_price = jsonItemResponse.StringOf("results[j].price")
-    var_productid = 0
+		'var_product_detailid = jsonItemResponse.IntOf("results[j].product_data.sku")
+		'There were a sku element in transactions in the API v2 (above line) which is not exist in V3. 
+		'Etsy developers says they will include this again, so we may not have to send nested requests to get sku when they applied this.
+		'https://github.com/etsy/open-api/issues/161
+		' === Start getting sku value of the variant
+		success = rest.ClearAllQueryParams()
+		success = rest.AddQueryParam("client_id", etsy_consumer_key) 
+		etsy_listing_id = jsonItemResponse.IntOf("results[j].listing_id")
+		etsy_product_id = jsonItemResponse.StringOf("results[j].product_id")
+		jsonSkuResponseText = rest.FullRequestNoBody("GET","/v3/application/listings/" & etsy_listing_id & "/inventory/products/" & etsy_product_id)
+		If (rest.LastMethodSuccess = 0) Then
+			Response.Write "<pre>" & Server.HTMLEncode( rest.LastErrorText) & "</pre>"
+			Response.End
+		End If
+		set jsonSkuResponse = Server.CreateObject("Chilkat_9_5_0.JsonObject")
+		success = jsonSkuResponse.Load(jsonSkuResponseText)
+		jsonSkuResponse.EmitCompact = 0
+		var_product_detailid = jsonSkuResponse.StringOf("sku")
+		' === End of getting sku of the variant
+		
+		etsy_qty = jsonItemResponse.IntOf("results[j].quantity")
+		var_item_title = jsonItemResponse.StringOf("results[j].title")
+		var_etsy_price = jsonItemResponse.IntOf("results[j].price.amount")
+		if jsonItemResponse.IntOf("results[j].price.divisor") > 0 Then var_etsy_price = jsonItemResponse.IntOf("results[j].price.amount") / jsonItemResponse.IntOf("results[j].price.divisor")
+		var_productid = 0
 
-    
-
-    '============ Search Etsy title for character that tells us whether to deduct 1 or 2 from our site for Etsy items sold ===============
-    if InStr(var_item_title, ":") > 0 then
-        our_qty = etsy_qty
-        var_item_price = var_etsy_price
-    else
-        our_qty = 2 * etsy_qty
-        var_item_price = var_etsy_price / 2
-    end if
-
+		
+		'============ Search Etsy title for character that tells us whether to deduct 1 or 2 from our site for Etsy items sold ===============
+		if InStr(var_item_title, ":") > 0 then
+			our_qty = etsy_qty
+			var_item_price = var_etsy_price
+		else
+			our_qty = 2 * etsy_qty
+			var_item_price = var_etsy_price / 2
+		end if
 
         ' Get productid to insert into table
         set objCmd = Server.CreateObject("ADODB.Command")
@@ -246,7 +229,9 @@ jsonResponse.I = i
     Loop
 
     '===== CHECK TO SEE IF ANY PAYMENTS ARE IN THE SYSTEM FOR THE TRANSACTION. THIS IS REALLY THE ONLY WAY TO SEE IF AN ORDER HAS BEEN CANCELED AS OF APRIL 2020. THEY HAVE NO WAY TO SEARCH DIRECTLY FROM CANCELED ORDERS =======
-    jsonCancelledResponseText = rest.FullRequestNoBody("GET","/v2/shops/Bodyartforms/receipts/" & var_receipt_id & "/payments")
+    success = rest.ClearAllQueryParams()
+	success = rest.AddQueryParam("client_id", etsy_consumer_key) 
+    jsonCancelledResponseText = rest.FullRequestNoBody("GET","/v3/application/shops/" & etsy_baf_shop_id & "/receipts/" & var_receipt_id & "/payments")
     If (rest.LastMethodSuccess = 0) Then
         Response.Write "<pre>" & Server.HTMLEncode( rest.LastErrorText) & "</pre>"
         Response.End
@@ -270,7 +255,7 @@ jsonResponse.I = i
         Set objCmd = Nothing
         j = j + 1
     Loop
-
+	
     '======= SET ORDER IN OUR ADMIN TO CANCELLED, NOT PAID STATUS ============
     if payment_id = "" then
         set objCmd = Server.CreateObject("ADODB.command")
@@ -301,6 +286,18 @@ jsonResponse.I = i
     set rsCheckDupeOrder = nothing
 
     i = i + 1
+
 Loop
+
+Set rest = Nothing
+Set sbAuthHeaderVal = Nothing
+Set jsonResponse = Nothing
+Set rsCheckDupeOrder = Nothing
+Set rsGetInvoiceNum = Nothing
+Set jsonItemResponse = Nothing
+Set jsonSkuResponse = Nothing
+Set jsonCanceledResponse = Nothing
+Set objCmd = Nothing
+DataConn.Close
 
 %>
