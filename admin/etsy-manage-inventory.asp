@@ -225,8 +225,7 @@ Do While i < count_i
                     <%= rsGetItemInfo.Fields.Item("qty").Value %>
                   </td>
                   <td class="align-middle">
-                    <span class="mr-3"><%= var_title %></span>
-                     <%= var_item %>
+                    <a target="_blank" href="https://www.etsy.com/your/shops/Bodyartforms/tools/listings/<%= var_listing_id %>"><span class="mr-3"><%= var_title %></span><%= var_item %></a>
                   </td>
               </tr>
 <%
