@@ -128,7 +128,7 @@ if not rsProduct.eof then
 	objCmd.CommandText = "" & _
 		"SELECT TOP 100 ORD.ProductID AS ProductID, ORD2.ProductID AS bought_with, count(*) as times_bought_together, JEW.title, JEW.picture " & _
 		"FROM TBL_OrderSummary AS ORD INNER JOIN TBL_OrderSummary AS ORD2 ON ORD.InvoiceID = ORD2.InvoiceID " & _
-		"AND ORD.ProductID != ORD2.ProductID AND ORD.ProductID = " & ProductID & " AND ORD2.ProductID in (SELECT ProductID FROM ProductDetails GROUP BY ProductID HAVING SUM(qty) > 0) " & _
+		"AND ORD.ProductID != ORD2.ProductID AND ORD.ProductID = " & ProductID & " AND ORD2.ProductID in (SELECT ProductID FROM ProductDetails WHERE price > 0 GROUP BY ProductID HAVING SUM(qty) > 0) " & _
 		"LEFT JOIN Jewelry JEW ON JEW.ProductID = ORD2.ProductID " & _
 		"GROUP BY ORD.ProductID, ORD2.ProductID, JEW.title, JEW.picture " & _
 		"HAVING count(*) > 5 " & _
