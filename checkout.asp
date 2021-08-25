@@ -1042,7 +1042,7 @@ end if
 						<button class="btn btn-lg btn-primary btn-block checkout_button place_order" style="display: none" type="submit" form="checkout_form" name="place_order">PLACE ORDER</button>
 					<% end if %>
 					<% if request.querystring("type") = "paypal" then %>
-						<button class="btn btn-lg btn-primary btn-block checkout_button place_order checkout_paypal" style="display:none" type="submit" form="checkout_form" name="place_order">CONTINUE TO PAYPAL</button>
+						<button class="btn btn-lg btn-warning btn-block checkout_button place_order checkout_paypal" style="display:none" type="submit" form="checkout_form" name="place_order">CONTINUE TO <img class="ml-1" style="height:25px" src="/images/paypal.png" /></button>
 						<input type="hidden" name="paypal" value="on">
 					<% end if %>
 					<%
@@ -1053,6 +1053,7 @@ end if
 						afterpay_display = "display:none"
 					end if
 					%>
+					<!--
 					<div id="REMOVE-GO-LIVE" style="display:none">
 					<div class="afterpay_option" style="<%= afterpay_display %>">
 						<button class="btn btn-lg btn-primary btn-block checkout_button place_order checkout_afterpay" style="display:none" type="submit" form="checkout_form" name="place_order">PAY NOW WITH <img class="img-fluid d-inline w-50" src="/images/afterpay-white-logo.png"/></button>
@@ -1062,6 +1063,7 @@ end if
 						<% end if %>
 					</div>
 					</div>
+					-->
 					<div class="processing-message" style="display:none"></div>			
 						
 						
@@ -1103,13 +1105,15 @@ end if
 						<button class="btn btn-lg btn-primary btn-block checkout_button place_order mt-4" style="display: none" type="submit" form="checkout_form" name="place_order">PLACE ORDER</button>
 					<% end if %>
 					<% if request.querystring("type") = "paypal" then %>
-						<button type="submit" form="checkout_form" name="place_order" class="btn btn-lg btn-primary btn-block checkout_button place_order checkout_paypal mt-4" style="display: none">CONTINUE TO PAYPAL</button>
+						<button type="submit" form="checkout_form" name="place_order" class="btn btn-lg btn-warning btn-block checkout_button place_order checkout_paypal mt-4" style="display: none">CONTINUE TO <img class="ml-1" style="height:25px" src="/images/paypal.png" /></button>
 					<% end if %>
+					<!--
 					<div id="REMOVE-GO-LIVE" style="display:none">
 						<div class="afterpay_option" style="<%= afterpay_display %>">
 							<button class="btn btn-lg btn-primary btn-block checkout_button place_order checkout_afterpay" style="display:none" type="submit" form="checkout_form" name="place_order">PAY NOW WITH <img class="img-fluid d-inline w-50" src="/images/afterpay-white-logo.png"/></button>
 						</div>
 						</div>
+					<-->
 					<div class="processing-message" style="display:none"></div>
 				</div><!-- display bottom section for mobile only -->
 				<% end if ' OrderAddonsActive is null %>

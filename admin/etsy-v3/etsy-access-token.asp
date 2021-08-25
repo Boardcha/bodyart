@@ -47,14 +47,29 @@ If stateReceived <> "" then
 		
 		If etsy_access_token<>"" AND etsy_refresh_token<>"" AND etsy_token_expiration<>"" Then
 			'Overwrite access and refresh tokens
-			SqlString = "DELETE FROM TBL_Access_Tokens WHERE provider = 'etsy-access-token' OR provider = 'etsy-refresh-token'" 
+			'==== SANDBOX DELETION
+			SqlString = "USE sandbox DELETE FROM TBL_Access_Tokens WHERE provider = 'etsy-access-token' OR provider = 'etsy-refresh-token'" 
+			DataConn.Execute(SqlString)	
+
+			'==== PRODUCTION DELETION
+			SqlString = "USE BAF_Site DELETE FROM TBL_Access_Tokens WHERE provider = 'etsy-access-token' OR provider = 'etsy-refresh-token'" 
 			DataConn.Execute(SqlString)	
 			
-			SqlString = "INSERT INTO TBL_Access_Tokens (access_token, provider, date_expires) VALUES('" & etsy_access_token & "', 'etsy-access-token', DATEADD(ss," & etsy_token_expiration & ", GETDATE()))" 
+			'==== SANDBOX INSERTION
+			SqlString = "USE sandbox INSERT INTO TBL_Access_Tokens (access_token, provider, date_expires) VALUES('" & etsy_access_token & "', 'etsy-access-token', DATEADD(ss," & etsy_token_expiration & ", GETDATE()))" 
+			DataConn.Execute(SqlString)	
+
+			'==== PRODUCTION INSERTION
+			SqlString = "USE BAF_Site INSERT INTO TBL_Access_Tokens (access_token, provider, date_expires) VALUES('" & etsy_access_token & "', 'etsy-access-token', DATEADD(ss," & etsy_token_expiration & ", GETDATE()))" 
 			DataConn.Execute(SqlString)	
 			
-			SqlString = "INSERT INTO TBL_Access_Tokens (access_token, provider) VALUES('" & etsy_refresh_token & "', 'etsy-refresh-token')" 
-			DataConn.Execute(SqlString)			
+			'==== SANDBOX INSERTION
+			SqlString = "USE sandbox INSERT INTO TBL_Access_Tokens (access_token, provider) VALUES('" & etsy_refresh_token & "', 'etsy-refresh-token')" 
+			DataConn.Execute(SqlString)	
+			
+			'==== PRODUCTION INSERTION
+			SqlString = "USE BAF_Site INSERT INTO TBL_Access_Tokens (access_token, provider) VALUES('" & etsy_refresh_token & "', 'etsy-refresh-token')" 
+			DataConn.Execute(SqlString)	
 			
 			Response.Write "All good!" & "<br>"
 			Response.Write "Access token and refresh token saved to the DB. Please do not use this page again to get new tokens, this page requires ""GRANT ACCESS"" each time. BAF Admin interface will use etsy-refresh-token.asp page to get new access tokens automatically, when they are expired." & "<br>"

@@ -128,7 +128,27 @@ if not rsProduct.eof then
 	objCmd.CommandText = "" & _
 		"SELECT TOP 100 ORD.ProductID AS ProductID, ORD2.ProductID AS bought_with, count(*) as times_bought_together, JEW.title, JEW.picture " & _
 		"FROM TBL_OrderSummary AS ORD INNER JOIN TBL_OrderSummary AS ORD2 ON ORD.InvoiceID = ORD2.InvoiceID " & _
-		"AND ORD.ProductID != ORD2.ProductID AND ORD.ProductID = " & ProductID & " AND ORD2.ProductID in (SELECT ProductID FROM ProductDetails WHERE price > 0 GROUP BY ProductID HAVING SUM(qty) > 0) " & _
+		"AND ORD.ProductID != ORD2.ProductID AND ORD.ProductID = " & ProductID & " AND ORD2.ProductID in (SELECT ProductID FROM ProductDetails WHERE " & _
+		" ProductDetails.free = 0 " & _
+		" AND ORD2.item_price > 0 " & _
+		" AND ORD2.ProductID <> 1464 " & _
+		" AND ORD2.ProductID <> 1430 " & _
+		" AND ORD2.ProductID <> 1430 " & _
+		" AND ORD2.ProductID <> 530 " & _
+		" AND ORD2.ProductID <> 3928 " & _
+		" AND ORD2.ProductID <> 15385 " & _
+		" AND ORD2.ProductID <> 3611 " & _
+		" AND ORD2.ProductID <> 3587 " & _
+		" AND ORD2.ProductID <> 3086 " & _
+		" AND ORD2.ProductID <> 3704 " & _
+		" AND ORD2.ProductID <> 1649 " & _
+		" AND ORD2.ProductID <> 4287 " & _
+		" AND ORD2.ProductID <> 1483 " & _
+		" AND ORD2.ProductID <> 3926 " & _
+		" AND ORD2.ProductID <> 3803 " & _
+		" AND ORD2.ProductID <> 1851 " & _
+		" AND ORD2.ProductID <> 2890 " & _
+		"GROUP BY ProductID HAVING SUM(qty) > 0) " & _
 		"LEFT JOIN Jewelry JEW ON JEW.ProductID = ORD2.ProductID " & _
 		"GROUP BY ORD.ProductID, ORD2.ProductID, JEW.title, JEW.picture " & _
 		"HAVING count(*) > 5 " & _
@@ -1282,7 +1302,21 @@ end if
 	<div id="customer-photo-loader"></div>
 	<% End If ' Not rsGetPhotos.EOF %>
 
-	
+	<% If Not rsCrossSellingItems.EOF Then %>
+	<div class="display-5 mt-4 mb-2">Customers Also Bought
+	</div>
+	<div class="baf-carousel" id="cross-selling">
+	<% 	While NOT rsCrossSellingItems.EOF %>
+	<div class="slide">
+		<a href="productdetails.asp?ProductID=<%= rsCrossSellingItems("bought_with").Value %>">
+			<img class="img-fluid lazyload" src="/images/image-placeholder.png" data-src="https://bafthumbs-400.bodyartforms.com/<%=(rsCrossSellingItems("picture").Value)%>" alt="<%=(rsCrossSellingItems("title").Value)%>" />
+		</a>
+	</div>
+	<% rsCrossSellingItems.MoveNext()
+	Wend
+	%>
+	</div>
+	<% end if 'rsCrossSellingItems.EOF %>	
 
 
 	<% If total_reviews > 0 or var_show_star_ratings = "yes" Then %>
@@ -1364,23 +1398,6 @@ end if
 	<% end if ' total_reviews > 0 %>
 
 
-	<% If Not rsCrossSellingItems.EOF Then %>
-	<div class="display-5 mt-4 mb-2">Customers Also Bought
-	</div>
-	<div class="baf-carousel" id="cross-selling">
-	<% 	While NOT rsCrossSellingItems.EOF %>
-	<div class="slide">
-		<a href="productdetails.asp?ProductID=<%= rsCrossSellingItems("bought_with").Value %>">
-			<img class="img-fluid lazyload" src="/images/image-placeholder.png" data-src="https://bafthumbs-400.bodyartforms.com/<%=(rsCrossSellingItems("picture").Value)%>" alt="<%=(rsCrossSellingItems("title").Value)%>" />
-		</a>
-	</div>
-	<% rsCrossSellingItems.MoveNext()
-	Wend
-	%>
-	</div>
-	<% end if 'rsCrossSellingItems.EOF %>
-
-	
 	<% If Not rsRecentlyViewed.EOF Then %>
 	<div class="display-5 mt-4 mb-2">Recently Viewed
 	</div>

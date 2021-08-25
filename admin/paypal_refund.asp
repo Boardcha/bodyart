@@ -1,6 +1,6 @@
 <%@LANGUAGE="VBSCRIPT" CodePage=65001%>
 <!--#include file="../Connections/bodyartforms_sql_ADMIN.asp" -->
-<!-- #include file ="../PayPal/Constants.asp" -->
+<!-- #include file ="../Connections/paypal-constants.asp.asp" -->
 <!-- #include file ="../PayPal/CallerService.asp" -->
 <!-- #include file ="../PayPal/DisplayAllResponse.asp" -->
 <%

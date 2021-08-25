@@ -573,12 +573,23 @@ end if ' show if free sticker cookie has not been set to "no"
 										</h6>
 										</a>
 										</div>
+
+										<script
+										src="https://www.paypal.com/sdk/js?client-id=AYw-H4XtJundkJlqW2_gPoXKAGDjOhD8A3kW2lKr721pcW7uMhBFmcCKf1GJOIQwrMl8vGKo1f_vY-Uf&components=messages,buttons"
+										data-namespace="PayPalSDK">
+									</script>
 										<div class="checkout_paypal"  style="display:none">
-										<a class="btn btn-block btn-primary checkout_button" href="checkout.asp?type=paypal"><h6>CHECKOUT WITH PAYPAL
-											<br/><span style="font-size:2em">
-											<i class="ml-2 fa fa-cc-paypal"></i></span></h6>
-										</a>
-										</div>
+											<a class="btn btn-block btn-warning checkout_button" href="checkout.asp?type=paypal">
+												<img style="height:30px" src="/images/paypal.png" />
+											</a>
+											</div>
+										<div class="mt-2"
+										data-pp-message
+										data-pp-style-layout="text"
+										data-pp-style-logo-type="inline"
+										data-pp-style-text-color="black"
+										data-pp-amount="<%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %>">
+									</div>
 										<%
 										' === only show afterpay option to USA customers
 										if request.cookies("currency") = "" OR request.cookies("currency") = "USD" then
