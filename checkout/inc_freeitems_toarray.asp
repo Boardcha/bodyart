@@ -5,7 +5,7 @@ if request.cookies("OrderAddonsActive") = "" then
 ' ------- Get FREE items
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "SELECT jewelry.title,  ProductDetails.ProductDetail1, ProductDetails.qty, ProductDetails.free, jewelry.ProductID, ProductDetails.ProductDetailID, ProductDetails.Free_QTY,  ProductDetails.price, ProductDetails.wlsl_price, ProductDetails.Gauge, ProductDetails.Length, ProductDetails.ProductDetail1 FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID WHERE (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1)"
+		objCmd.CommandText = "SELECT jewelry.title,  ProductDetails.ProductDetail1, ProductDetails.qty, ProductDetails.free, jewelry.ProductID, ProductDetails.ProductDetailID, ProductDetails.Free_QTY,  ProductDetails.price, ProductDetails.wlsl_price, ProductDetails.Gauge, ProductDetails.Length, ProductDetails.ProductDetail1 FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID WHERE (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1) AND (jewelry.active = 1)"
 		Set rsGetFree = objCmd.Execute()
 		
 ' ------- End getting free items

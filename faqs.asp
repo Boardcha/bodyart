@@ -45,6 +45,7 @@
 									<li class="list-group-item"><a href="http://www.austinhumanesociety.org/" target="_blank">Austin Humane Society</a></li>
 									<li class="list-group-item"><a href="https://www.austinpetsalive.org/" target="_blank">Austin Pets Alive</a></li>
 									<li class="list-group-item"><a href="https://www.centraltexasfoodbank.org/" target="_blank">Central Texas Food Bank</a></li>
+									<li class="list-group-item"><a href="https://www.deanschneider.com" target="_blank">Dean Schneider Foundation</a></li>
 									<li class="list-group-item"><a href="http://www.defenders.org" target="_blank">Defenders of Wildlife</a></li>
 									<li class="list-group-item"><a href="https://www.elephants.com/" target="_blank">Elephant Sanctuary in Tenneessee</a></li>
 									<li class="list-group-item"><a href="https://emancipet.org/" target="_blank">Emancipet</a></li>

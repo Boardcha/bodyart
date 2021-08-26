@@ -126,7 +126,7 @@ if not rsProduct.eof then
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "" & _
-		"SELECT TOP 100 ORD.ProductID AS ProductID, ORD2.ProductID AS bought_with, count(*) as times_bought_together, JEW.title, JEW.picture " & _
+		"SELECT TOP 50 ORD.ProductID AS ProductID, ORD2.ProductID AS bought_with, count(*) as times_bought_together, JEW.title, JEW.picture " & _
 		"FROM TBL_OrderSummary AS ORD INNER JOIN TBL_OrderSummary AS ORD2 ON ORD.InvoiceID = ORD2.InvoiceID " & _
 		"AND ORD.ProductID != ORD2.ProductID AND ORD.ProductID = " & ProductID & " AND ORD2.ProductID in (SELECT ProductID FROM ProductDetails WHERE " & _
 		" ProductDetails.free = 0 " & _
@@ -575,7 +575,7 @@ end if ' var_worn_in_cleaned <> ""
 		end if
 	end if
 	if rsProduct("country_origin") <> "" then
-		origin_country = "<li>Made in " & rsProduct("country_origin") & "</li>"
+		origin_country = ""
 	end if
 		
 		var_regular_stock = "yes"
@@ -1309,7 +1309,7 @@ end if
 	<% 	While NOT rsCrossSellingItems.EOF %>
 	<div class="slide">
 		<a href="productdetails.asp?ProductID=<%= rsCrossSellingItems("bought_with").Value %>">
-			<img class="img-fluid lazyload" src="/images/image-placeholder.png" data-src="https://bafthumbs-400.bodyartforms.com/<%=(rsCrossSellingItems("picture").Value)%>" alt="<%=(rsCrossSellingItems("title").Value)%>" />
+			<img class="img-fluid lazyload CrossSellingItems" src="/images/image-placeholder.png" data-src="https://bafthumbs-400.bodyartforms.com/<%=(rsCrossSellingItems("picture").Value)%>" alt="<%=(rsCrossSellingItems("title").Value)%>" />
 		</a>
 	</div>
 	<% rsCrossSellingItems.MoveNext()
@@ -1426,7 +1426,7 @@ end if
 <% end if %>
 <script src="/js/jquery.fancybox.min.js"></script>
 <script type="text/javascript" src="/js/slick.min.js"></script>
-<script type="text/javascript" src="/js-pages/product-details.min.js?v=062121" ></script>
+<script type="text/javascript" src="/js-pages/product-details.min.js?v=082521" ></script>
 
 <!-- Start Afterpay Javascript -->
 <!--
@@ -1470,5 +1470,4 @@ Set rsGetCategory = Nothing
 Set rsGetOrderHistory = Nothing
 Set rsJsonReviews = Nothing
 Set rs_CheckThumbnailQty = Nothing
-DataConn.Close()
 %>
