@@ -526,6 +526,8 @@ footer, #mobilesearch, #accountmenu {
 	max-height: 100%;
 }
 
+#cross-selling .slick-track, #recents .slick-track{margin-left:0}
+
 @media (max-width: 320px) {
   #instafeed img {
     width: 50%; } 
