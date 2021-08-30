@@ -128,7 +128,7 @@ elseif request.cookies("po-filter-autoclave") = "tag" then
 	objCmd.CommandText = "SELECT * FROM jewelry WHERE " + var_brand + " " + po_filter_title + " " + po_filter_details + " AND autoclavable = 0 ORDER BY title ASC"
 else
 
-	objCmd.CommandText = "SELECT *, (restock_threshold - qty) * -1 as thresh_level,(SELECT TOP(1) po_confirmed FROM tbl_po_details WHERE  (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_confirmed ,(SELECT TOP(1) po_manual_adjust FROM tbl_po_details WHERE  (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_manual_adjust,(SELECT TOP(1) po_qty FROM tbl_po_details WHERE (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_qty, (SELECT TOP(1) po_qty_vendor FROM tbl_po_details WHERE (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_qty_vendor, amt_waiting, inventory.location,  inventory.autoclavable, TBL_Barcodes_SortOrder.ID_Description FROM inventory INNER JOIN TBL_Barcodes_SortOrder ON inventory.DetailCode = TBL_Barcodes_SortOrder.ID_Number LEFT OUTER JOIN vw_po_waiting ON inventory.ProductDetailID = vw_po_waiting.DetailID WHERE " + var_brand + " " + po_filter_title + " " + po_filter_details + " AND customorder <> 'yes' " + po_filter_active + " " + po_filter_status + " ORDER BY " + var_1st_filter + " title ASC, GaugeOrder ASC, ProductID ASC, item_order ASC"
+	objCmd.CommandText = "SELECT *, (restock_threshold - qty) * -1 as thresh_level,(SELECT TOP(1) po_confirmed FROM tbl_po_details WHERE  (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_confirmed ,(SELECT TOP(1) po_manual_adjust FROM tbl_po_details WHERE  (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_manual_adjust,(SELECT TOP(1) po_qty FROM tbl_po_details WHERE (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_qty, (SELECT TOP(1) po_qty_vendor FROM tbl_po_details WHERE (po_detailid = ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_qty_vendor, amt_waiting, inventory.location,  inventory.autoclavable, TBL_Barcodes_SortOrder.ID_Description, avg_rating FROM inventory INNER JOIN TBL_Barcodes_SortOrder ON inventory.DetailCode = TBL_Barcodes_SortOrder.ID_Number LEFT OUTER JOIN vw_po_waiting ON inventory.ProductDetailID = vw_po_waiting.DetailID WHERE " + var_brand + " " + po_filter_title + " " + po_filter_details + " AND customorder <> 'yes' " + po_filter_active + " " + po_filter_status + " ORDER BY " + var_1st_filter + " title ASC, GaugeOrder ASC, ProductID ASC, item_order ASC"
 end if
 
 set rsGetDetail = Server.CreateObject("ADODB.Recordset")
@@ -166,6 +166,7 @@ Set rsGetCompanyInfo = rsGetCompanyInfo_cmd.Execute
 <title><%= request.querystring("brand") %> : View stock</title>
 <link rel="stylesheet" href="../js-fancybox2/source/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
 <!--#include file="includes/inc_scripts.asp"-->
+<link href="../CSS/fortawesome/css/external-min.css?v=031920" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/js/popper.min.js"></script>
 <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
 <script type="text/javascript" src="scripts/generic_auto_update_fields.js?v=081221"></script>
@@ -301,6 +302,17 @@ if var_productid <> rsGetDetail.Fields.Item("ProductID").Value then
 		<a href="../productdetails.asp?ProductID=<%=(rsGetDetail.Fields.Item("ProductID").Value)%>" target="_blank"><img src="https://bafthumbs-400.bodyartforms.com/<%=(rsGetDetail.Fields.Item("picture").Value)%>" class="rounded float-left mr-2" style="height:50px;width:50px" <%= var_img_enlarge %>></a>
 		
 		<a class="text-light h5" href="product-edit.asp?ProductID=<%=(rsGetDetail.Fields.Item("ProductID").Value)%>" target="_blank"><%= rsGetDetail.Fields.Item("title").Value %><% if rsGetDetail.Fields.Item("type").Value <> "None" then %> - <%= rsGetDetail.Fields.Item("type").Value %><% end if %> (<%=(rsGetDetail.Fields.Item("ProductID").Value)%>)</a>
+
+		<% 
+		if rsGetDetail("avg_rating") <> "" then 
+			var_avg_rating = FormatNumber(rsGetDetail("avg_rating"),1)
+			var_avg_percentage = var_avg_rating * 20
+		%>
+		<span class="rating-box h5 ml-3">
+				<span class="rating h5" style="width:<%= var_avg_percentage %>%"></span>
+			</span>
+			<% end if %>
+
 			<% 	if rsGetDetail.Fields.Item("autoclavable").Value = 1 then
 					var_autoclave_checked = "checked"
 				else
@@ -444,7 +456,6 @@ end if
 		<input type="text" name="threshold_<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" class="form-control form-control-sm" style="width:50px" value="<%=(rsGetDetail.Fields.Item("restock_threshold").Value)%>" data-column="restock_threshold" data-id="<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>">
 	</td>
 <% end if %>
-   
 	<td style="text-align:center">
 		<a class="badge badge-info p-2" href="waitinglist_view.asp?DetailID=<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" target="_blank"><%= rsGetDetail.Fields.Item("amt_waiting").Value %></a>
 

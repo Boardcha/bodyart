@@ -130,6 +130,7 @@ if not rsProduct.eof then
 		"FROM TBL_OrderSummary AS ORD INNER JOIN TBL_OrderSummary AS ORD2 ON ORD.InvoiceID = ORD2.InvoiceID " & _
 		"AND ORD.ProductID != ORD2.ProductID AND ORD.ProductID = " & ProductID & " AND ORD2.ProductID in (SELECT ProductID FROM ProductDetails WHERE " & _
 		" ProductDetails.free = 0 " & _
+		" AND ProductDetails.active = 1 " & _
 		" AND ORD2.item_price > 0 " & _
 		" AND ORD2.ProductID <> 1464 " & _
 		" AND ORD2.ProductID <> 1430 " & _
@@ -148,10 +149,11 @@ if not rsProduct.eof then
 		" AND ORD2.ProductID <> 3803 " & _
 		" AND ORD2.ProductID <> 1851 " & _
 		" AND ORD2.ProductID <> 2890 " & _
+		" AND ORD2.ProductID <> 2991 " & _
 		"GROUP BY ProductID HAVING SUM(qty) > 0) " & _
 		"LEFT JOIN Jewelry JEW ON JEW.ProductID = ORD2.ProductID " & _
-		"GROUP BY ORD.ProductID, ORD2.ProductID, JEW.title, JEW.picture " & _
-		"HAVING count(*) > 5 " & _
+		"GROUP BY ORD.ProductID, ORD2.ProductID, JEW.title, JEW.picture, JEW.active " & _
+		"HAVING count(*) > 5 AND JEW.active = 1 " & _
 		"ORDER BY times_bought_together DESC"
 	Set rsCrossSellingItems = objCmd.Execute()
 
