@@ -599,7 +599,7 @@
 						<div class="card-body">
 							
 								
-						No, all of our body jewelry and earrings are shipped brand new and never worn, but not sterile. However, we do offer autoclave sterilization
+						All of our body jewelry and earrings are shipped brand new and never worn, but not sterile. However, we do offer autoclave sterilization
 						services
 						that you can add to eligible products at checkout.
 						</div>

@@ -17,12 +17,12 @@ else
 %>
 	<%If rs_GetImgID("is_video") = 1 Then%>
 	<div class="video-thumbnail mini-thumb" data-description="<%= rs_GetImgID.Fields.Item("img_description").Value %>" data-name="<%=(rs_GetImgID.Fields.Item("img_full").Value)%>" data-is-video="<%=(rs_GetImgID.Fields.Item("is_video").Value)%>" data-imgid="<%=(rs_GetImgID.Fields.Item("img_id").Value)%>" id="<%= rs_GetImgID.Fields.Item("img_id").Value %>">
-		<img src="http://bodyartforms-products.bodyartforms.com/<%=(rs_GetImgID.Fields.Item("img_thumb").Value)%>" class="my-1 mr-1 thumb-activate img_<%=(rs_GetImgID.Fields.Item("img_id").Value)%>"  style="width: 30px;height: auto">
+		<img src="http://bodyartforms-products.bodyartforms.com/<%=(rs_GetImgID.Fields.Item("img_thumb").Value)%>" class="my-1 mr-1 thumb-activate img_<%=(rs_GetImgID.Fields.Item("img_id").Value)%>" data-imgid="<%=(rs_GetImgID.Fields.Item("img_id").Value)%>"  style="width: 30px;height: auto">
 		<img src="/images/play-icon.png" class="play-icon-sm" />
 	</div>		
 	<%Else%>
 	<div class="image-thumbnail mini-thumb" data-description="<%= rs_GetImgID.Fields.Item("img_description").Value %>" data-name="<%=(rs_GetImgID.Fields.Item("img_full").Value)%>" data-is-video="<%=(rs_GetImgID.Fields.Item("is_video").Value)%>" data-imgid="<%=(rs_GetImgID.Fields.Item("img_id").Value)%>" id="<%= rs_GetImgID.Fields.Item("img_id").Value %>">
-		<img src="http://bodyartforms-products.bodyartforms.com/<%=(rs_GetImgID.Fields.Item("img_thumb").Value)%>" class="my-1 mr-1 thumb-activate img_<%=(rs_GetImgID.Fields.Item("img_id").Value)%>"  style="width: 30px;height: auto">
+		<img src="http://bodyartforms-products.bodyartforms.com/<%=(rs_GetImgID.Fields.Item("img_thumb").Value)%>" class="my-1 mr-1 thumb-activate img_<%=(rs_GetImgID.Fields.Item("img_id").Value)%>"  data-imgid="<%=(rs_GetImgID.Fields.Item("img_id").Value)%>" style="width: 30px;height: auto">
 	</div>			
 	<%End If%>
 <%

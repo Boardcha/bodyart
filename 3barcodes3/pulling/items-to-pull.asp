@@ -195,11 +195,20 @@ end if '==== rsGetItems.eof
             <div>Invoice # <%= rsGetOrder.Fields.Item("ID").Value %></div>
         <% end if %> 
         <% ' If a returned package is in the order
-        if rsGetItems.Fields.Item("ProductID").Value = 2991 then
+        if rsGetItems.Fields.Item("ProductID").Value = 25087 then
         %>
         <div class="alert alert-info">
         Ship returned order on shelf for 
         <div class="font-weight-bold"><%= rsGetOrder.Fields.Item("customer_first").Value %>&nbsp;<%= rsGetOrder.Fields.Item("customer_last").Value %> -- Invoice # <%= rsGetOrder.Fields.Item("ID").Value %></div>
+        </div>
+        <%
+        end if
+        %>
+        <% ' If a returned package is in the order
+        if rsGetItems.Fields.Item("ProductID").Value = 2991 then
+        %>
+        <div class="alert alert-info">
+        Send a return mailer
         </div>
         <%
         end if

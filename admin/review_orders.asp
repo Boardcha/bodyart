@@ -59,7 +59,7 @@ function uncheckAll(field)
 			if ($('#push_all').prop('checked')) {
 				$.ajax({
 					method: "post",
-					url: "etsy/etsy-import-orders.asp"
+					url: "etsy-v3/etsy-import-orders.asp"
 					})
 					.done(function(msg) {
 						$("#hidden-orders-message").html('<span class="alert alert-success p-1">Items set to ship out</span>');

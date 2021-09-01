@@ -630,7 +630,7 @@ end if ' show if free sticker cookie has not been set to "no"
 												%>
 												</ul>
 												<div class="small">
-														Adding on autoclave sterilization service will only delay your order by 1 business day (Express orders will not be delayed). The items above will be placed together in one autoclave pouch. 
+														Adding on autoclave sterilization service will only delay your order by 1 business day (Express orders will not be delayed). 
 												</div>
 												
 									

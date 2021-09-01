@@ -45,7 +45,7 @@ total_records = rsGetRecords.RecordCount
 
 		$.ajax({
 		method: "post",
-		url: "etsy/etsy-push-tracking.asp"
+		url: "etsy-v3/etsy-push-tracking.asp"
 		})
 		.done(function(msg) {
         $("#etsy-status").html('<div class="alert alert-success">Etsy orders have been set to shipped</div>');

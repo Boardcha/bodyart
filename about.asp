@@ -138,24 +138,26 @@
 			I grew up in Texas, moved away, and came back home. I love my new job here at BAF!  Everyone is amazing to work with!!! I am raising four beautiful girls, who are my life, my everything.  We are always busy with theater improv or cheerleading. You can also find us out and about enjoying this awesome state ... hiking, camping, or just exploring unknown areas. Life is what you make it. So you should enjoy the life you live, love the life you live, and if not, change it to make it your own. The world is too amazingly wonderful not to. My dream is when my girls are older I will aimlessly travel all over to experience opportunity, people, and places! 
 			</p>
 			</div>
+			<div class="col-12 col-sm alert alert-secondary m-2">
+				<h4>Adrienne (Anodizing & Inventory)</h4>
+				<img class="pull-left img-fluid mr-3" src="images/employees/adrienne.jpg" alt="Adrienne" />
+				<p>
+					I am an odd ball, proud weirdo and self proclaimed artist.  I have two children and have been with my husband for 17 years. I love horror, true crime, and anything paranormal. I am a sucker for Disney movies, my favorites being Cinderella and The Nightmare Before Christmas.  Everyday is halloween, and I myself am strange and unusual. I love, love, love working at BAF, and our amazing customers are the icing on the cake!
+				</p>
+		</div>
 	</div>
+
 	<div class="row">
 
 
+		<div class="col-12 col-sm alert alert-secondary m-2">
+			<h4>Brandon (Packaging)</h4>
+			<img class="pull-left img-fluid mr-3" src="images/employees/brandon.jpg" alt="Brandon" />
+			<p>
+				Lived in Austin my whole life. I know it like the back of my head but if you were to ask me for directions, I wouldn’t know where to start. I also have two dogs who have been living and breathing for 8 and 13 years. Been learning to bake since quarantine started. All I can say is I need more practice. I love drawing and I was good at it too but stopped for some reason which I need to get back into. Working at BAF has been a great experience so far with all the people I've met. Looking forward to what BAF has to offer next!
+			</p>
+		</div>
 
-
-	</div>
-	<div class="row">
-
-
-
-	<div class="col-12 col-sm alert alert-secondary m-2">
-		<h4>Adrienne (Packaging)</h4>
-		<img class="pull-left img-fluid mr-3" src="images/employees/adrienne.jpg" alt="Adrienne" />
-		<p>
-			I am an odd ball, proud weirdo and self proclaimed artist.  I have two children and have been with my husband for 17 years. I love horror, true crime, and anything paranormal. I am a sucker for Disney movies, my favorites being Cinderella and The Nightmare Before Christmas.  Everyday is halloween, and I myself am strange and unusual. I love, love, love working at BAF, and our amazing customers are the icing on the cake!
-		</p>
-</div>
 <div class="col-12 col-sm alert alert-secondary m-2">
 	<h4>Michael (Packaging)</h4>
 	<img class="pull-left img-fluid mr-3" src="images/employees/michael.jpg" alt="Michael" />
@@ -167,15 +169,13 @@
 	</div>
 	<div class="row">
 
-		<div class="col-12 col-sm alert alert-secondary m-2">
-			<h4>Brandon (Packaging)</h4>
-			<img class="pull-left img-fluid mr-3" src="images/employees/brandon.jpg" alt="Brandon" />
-			<p>
-				Lived in Austin my whole life. I know it like the back of my head but if you were to ask me for directions, I wouldn’t know where to start. I also have two dogs who have been living and breathing for 8 and 13 years. Been learning to bake since quarantine started. All I can say is I need more practice. I love drawing and I was good at it too but stopped for some reason which I need to get back into. Working at BAF has been a great experience so far with all the people I've met. Looking forward to what BAF has to offer next!
-			</p>
-		</div>
+
 		<div class="col-12 col-sm alert alert-secondary m-2">
 			<h4>Gary (Packaging)</h4>
+		
+		</div>
+		<div class="col-12 col-sm alert alert-secondary m-2">
+			<h4>Paty (Packaging)</h4>
 		
 		</div>
 </div>
