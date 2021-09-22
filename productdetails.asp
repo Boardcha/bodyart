@@ -542,18 +542,21 @@ end if ' var_worn_in_cleaned <> ""
 		var_mini_notice = ""
 	' BUILD PRODUCT NOTICES
 	if rsProduct.Fields.Item("SaleExempt").Value = 1 then
-		var_product_notice = var_product_notice & "<span class=""d-block mt-1""><strong>This item is exempt from any additional sales or coupons</strong> (except for the 10% preferred customer discount).</span>"
+		var_product_notice = var_product_notice & "<div class=""alert alert-warning mt-1""><strong>This item is exempt from any additional sales or coupons</strong> (except for the 10% preferred customer discount).</div>"
 	 end if
 	' Exempt from returning for cleansers or tools items
 	 If WeightNotice = "yes" then	
-		var_product_notice = var_product_notice & "<span class=""d-block mt-1""><strong>This item requires  priority mail shipping</strong> (USA only) or UPS shipping due to its weight, fragility, or odd shape. Free shipping is excluded from this product.</span>"
+		var_product_notice = var_product_notice & "<div class=""alert alert-warning mt-1""><strong>This item requires  priority mail shipping</strong> (USA only) or UPS shipping due to its weight, fragility, or odd shape. Free shipping is excluded from this product.</div>"
 	end if ' display weight notice	
 	if size_variation_notice <> "" then
 		var_product_notice = var_product_notice & size_variation_notice
 	 end if
 	 if instr(lcase(rsProduct.Fields.Item("material").Value),"wood") > 1 then
-		var_product_notice = var_product_notice & "<span class=""d-block mt-1""><strong>SPECIAL CARE:</strong> This item is made with wood. We recommend taking wood jewelry out before showering as water can ruin it.</span>"
+		var_product_notice = var_product_notice & "<div class=""alert alert-warning mt-1""><strong>SPECIAL CARE:</strong> This item is made with wood. We recommend taking wood jewelry out before showering as water can ruin it.</div>"
 	 end if
+	 if rsProduct("brandname") = "steel and silver" AND instr(lcase(var_threading_type), "internally") then
+		var_product_notice = var_product_notice & "<div class=""alert alert-warning mt-1""><strong>This jewelry is not compatible with any other ends</strong></div>"
+	end if
 	 
 
 	

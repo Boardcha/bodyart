@@ -65,7 +65,7 @@ Do While i < count_i
 		success = rest.AddQueryParam("tracking_code",rsGetEtsyTracks.Fields.Item("USPS_tracking").Value)
 		success = rest.AddQueryParam("carrier_name",carrier_name)
 
-		jsonResponseText = rest.FullRequestNoBody("POST","/v3/application/shops/" & etsy_baf_shop_id & "/receipts/" & rsGetEtsyTracks.Fields.Item("transactionID").Value & "/tracking")
+		jsonResponseText = rest.FullRequestFormUrlEncoded("POST","/v3/application/shops/" & etsy_baf_shop_id & "/receipts/" & rsGetEtsyTracks.Fields.Item("transactionID").Value & "/tracking")
 		If (rest.LastMethodSuccess = 0) Then
 			Response.Write "<pre>" & Server.HTMLEncode( rest.LastErrorText) & "</pre>"
 			Response.End

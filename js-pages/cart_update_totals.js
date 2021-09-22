@@ -25,8 +25,8 @@
 			tax_address = $("input[name='shipping-address']").val() + " " + $("input[name='shipping-address2']").val();
 
 		}
-		if (tax_state === 'AR' || tax_state === 'CO' || tax_state === 'GA' || tax_state === 'HI' || tax_state === 'IL' || tax_state === 'IN' || tax_state === 'IA' || tax_state === 'KS' || tax_state === 'KY' || tax_state === 'LA' || tax_state === 'ME' || tax_state === 'MD' || tax_state === 'MI' || tax_state === 'MN' || tax_state === 'NE' || tax_state === 'NV' || tax_state === 'NJ' || tax_state === 'NC' || tax_state === 'OK' || tax_state === 'PA' || tax_state === 'RI' || tax_state === 'SD' || tax_state === 'TX' || tax_state === 'UT' || tax_state === 'VA' || tax_state === 'VT' || tax_state === 'WA' || tax_state === 'WV') {
-			state_taxed = "yes";
+		if (tax_state === 'AR' || tax_state === 'CA'  || tax_state === 'CO' || tax_state === 'FL' || tax_state === 'GA' || tax_state === 'HI' || tax_state === 'IL' || tax_state === 'IN' || tax_state === 'IA' || tax_state === 'KY' || tax_state === 'LA' || tax_state === 'MA' || tax_state === 'ME' || tax_state === 'MD' || tax_state === 'MI' || tax_state === 'MN' || tax_state === 'NE' || tax_state === 'NV' || tax_state === 'NJ' || tax_state === 'NC' || tax_state === 'OK' || tax_state === 'OH' || tax_state === 'PA' || tax_state === 'RI' || tax_state === 'SD' || tax_state === 'TX' || tax_state === 'UT' || tax_state === 'VA' || tax_state === 'VT' || tax_state === 'WA' || tax_state === 'WV') {
+			state_taxed = "yes"; // This only runs the TaxJar calculation if a state is entered above. Uses less resources and calcs on states where we don't need to tax.
 		}
 		// END Tax calculation calls
 

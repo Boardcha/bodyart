@@ -124,6 +124,13 @@ End If
 
 	' Show if cart is NOT empty
 	If Not rs_getCart.EOF Then
+
+	'====== TRACK THE LAST DATE USER VIEWED THE CART PAGE =================
+	set objCmd = Server.CreateObject("ADODB.command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "UPDATE tbl_carts SET cartpage_date_viewed = GETDATE() WHERE " & var_db_field & " = ?"
+	objCmd.Parameters.Append(objCmd.CreateParameter("cart_custID",3,1,10, var_cart_userid))
+	objCmd.Execute()
 	%> 
 	<section>
 <!--#include virtual="/includes/inc-currency-images.asp" -->
@@ -688,7 +695,7 @@ end if ' show if free sticker cookie has not been set to "no"
 <% end if %>
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
 <script type="text/javascript" src="/js-pages/cart.min.js?v=03032020"></script>
-<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=020521"></script>
+<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=091421"></script>
 <!-- ^^^^^^  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE ^^^^^^ -->
 <script type="text/javascript">
 				calcAllTotals();

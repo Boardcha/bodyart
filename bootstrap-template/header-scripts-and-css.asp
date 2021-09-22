@@ -5,8 +5,11 @@
         j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
         'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
         })(window,document,'script','dataLayer','GTM-W46N98J');</script>
+        <!-- GTM-W46N98J is for Google Tag Manager -->
         <!-- End Google Tag Manager -->
 <!-- Installed April 2021 - Global site tag (gtag.js) - Google Analytics -->
+<!-- G-CG6EYC3NFB is GA4 Measurement ID located under Google Analytics > Admin > Property > Data Stream -->
+<!-- UA-32113869-1 is the standard Universal Analytics (old style) Tracking ID -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-CG6EYC3NFB"></script>
 <script>
   window.dataLayer = window.dataLayer || [];

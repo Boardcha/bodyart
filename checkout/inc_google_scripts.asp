@@ -3,7 +3,7 @@
 if session("google_sent") <> "yes" then
 %>
 <script type="text/javascript">
-// Installed Jan 2019 -- Google analytics purchase tracking
+// Revised in 2021 to GA4 variable names
 window.dataLayer = window.dataLayer || [];
 window.dataLayer.push({
 	'event':'purchase',
@@ -36,8 +36,11 @@ while NOT rsGoogle_GetOrderDetails.eof
 	
 	rsGoogle_GetOrderDetails.movenext()
 	wend
+	rsGoogle_GetOrderDetails.moveFirst()
 	
 	google_total = (SumLineItem - rsGetOrder.Fields.Item("total_preferred_discount").Value - rsGetOrder.Fields.Item("total_coupon_discount").Value - rsGetOrder.Fields.Item("total_free_credits").Value + rsGetOrder.Fields.Item("shipping_rate").Value + rsGetOrder.Fields.Item("total_sales_tax").Value - rsGetOrder.Fields.Item("total_store_credit").Value - rsGetOrder.Fields.Item("total_gift_cert").Value)
+
+	facebook_pixel_total = (SumLineItem - rsGetOrder.Fields.Item("total_preferred_discount").Value - rsGetOrder.Fields.Item("total_coupon_discount").Value - rsGetOrder.Fields.Item("total_free_credits").Value - rsGetOrder.Fields.Item("total_store_credit").Value - rsGetOrder.Fields.Item("total_gift_cert").Value)
 %>
 ],
 	'currency': 'USD',
@@ -50,7 +53,48 @@ while NOT rsGoogle_GetOrderDetails.eof
 }
 });
 </script>	
-<!-- Event snippet for Example conversion page -->
+
+
+<script type="text/javascript">
+	// Google Universal Analytics purchase tracking
+	window.dataLayer = window.dataLayer || [];
+	window.dataLayer.push({
+	'event':'UApurchase',
+	  'ecommerce': {
+		'purchase': {
+		  'products': [
+	<%
+	 ' array loop for detail items to send to google
+	while NOT rsGoogle_GetOrderDetails.eof
+	%>
+		{
+			'name': '<%= Server.HTMLEncode(rsGoogle_GetOrderDetails.Fields.Item("title").Value) %>',
+			'id': '<%= rsGoogle_GetOrderDetails.Fields.Item("ProductID").Value %>',
+			'price': '<%= FormatNumber(rsGoogle_GetOrderDetails.Fields.Item("item_price").Value,2) %>',
+			'brand': '<%= Server.HTMLEncode(rsGoogle_GetOrderDetails.Fields.Item("brandname").Value) %>',
+			'category': '<%= trim(rsGoogle_GetOrderDetails.Fields.Item("jewelry").Value) %>',
+			<% if rsGoogle_GetOrderDetails.Fields.Item("variant").Value <> "" then %>
+			'variant': '<%= trim(replace(rsGoogle_GetOrderDetails.Fields.Item("variant").Value,"'", "")) %>',
+			<% end if %>
+			'quantity': <%= rsGoogle_GetOrderDetails.Fields.Item("qty").Value %>
+		},
+	<% 	
+		rsGoogle_GetOrderDetails.movenext()
+		wend
+	%>
+	],
+		'actionField': {
+		'id': '<%= session("invoiceid") %>',
+		'affiliation': 'Bodyartforms',
+		'revenue': '<%= FormatNumber(google_total, -1, -2, -2, -2) %>', 
+		'tax':'<%= FormatNumber(rsGetOrder.Fields.Item("total_sales_tax").Value, -1, -2, -2, -2) %>',
+		'shipping': '<%= rsGetOrder.Fields.Item("shipping_rate").Value %>',
+		'coupon': '<%= rsGetOrder.Fields.Item("coupon_code").Value %>'
+		}
+		}
+	  }
+	});
+</script>	
 
 
 <!-- Facebook Pixel Code -->
@@ -63,7 +107,7 @@ document,'script','https://connect.facebook.net/en_US/fbevents.js');
 
 fbq('init', '532347420293260');
 fbq('track', 'Purchase', {
-	value: '<%= FormatNumber(SumLineItem, -1, -2, -2, -2) %>', currency:'USD',
+	value: '<%= FormatNumber(facebook_pixel_total, -1, -2, -2, -2) %>', currency:'USD',
 	content_type: 'product',
 	contents: [<%= LEFT(var_fb_line_item, (LEN(var_fb_line_item)-1)) %>]
 	});
