@@ -12,11 +12,12 @@
 	
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "UPDATE dbo.TBLReviews SET comments = ?, status = ?, date_posted = ?, review = ? WHERE ReviewID = ?"
+		objCmd.CommandText = "UPDATE dbo.TBLReviews SET reviewed_by = ?, comments = ?, status = ?, date_posted = ?, review = ? WHERE ReviewID = ?"
 		objCmd.Prepared = true
+		objCmd.Parameters.Append(objCmd.CreateParameter("po_reviewed_by",200,1,40, user_name ))
 		objCmd.Parameters.Append(objCmd.CreateParameter("Comments",200,1,500,Request.Form("comments")))
 		objCmd.Parameters.Append(objCmd.CreateParameter("Vote",200,1,300,var_status))
-		objCmd.Parameters.Append(objCmd.CreateParameter("DatePosted",200,1,20,date()))
+		objCmd.Parameters.Append(objCmd.CreateParameter("DatePosted",200,1,20, FormatDateTime(date(),2) ))
 		objCmd.Parameters.Append(objCmd.CreateParameter("review",200,1,4000,Request.Form("Review")))
 		objCmd.Parameters.Append(objCmd.CreateParameter("ReviewID",3,1,20,Request.Form("review-id")))
 		objCmd.Execute()

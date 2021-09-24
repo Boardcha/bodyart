@@ -1,5 +1,5 @@
 <%@LANGUAGE="VBSCRIPT" CODEPAGE="65001"%>
-<!--#include virtual="/template/inc_includes_ajax.asp" -->
+<!--#include virtual="/Connections/bodyartforms_sql_ADMIN.asp" -->
 <%
 response.write "id: " & request.form("PhotoID")
 filename = request.form("photo_filename")
@@ -10,8 +10,10 @@ if request.form("photo_status") = "1" then
 	' Update photos status
 	set objCmd = Server.CreateObject("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "UPDATE TBL_PhotoGallery SET status = 1, ProductID = ? WHERE PhotoID = ?" 
+	objCmd.CommandText = "UPDATE TBL_PhotoGallery SET status = 1, ProductID = ?, reviewed_date = ?, reviewed_by = ? WHERE PhotoID = ?" 
 	objCmd.Parameters.Append(objCmd.CreateParameter("@ProductID",3,1,10,request.form("ProductID")))
+	objCmd.Parameters.Append(objCmd.CreateParameter("reviewed_date",200,1,20, FormatDateTime(date(),2) ))
+	objCmd.Parameters.Append(objCmd.CreateParameter("reviewed_by",200,1,40, user_name ))
 	objCmd.Parameters.Append(objCmd.CreateParameter("@PhotoID",3,1,10,request.form("PhotoID")))
 	objCmd.Execute()
 
