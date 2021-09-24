@@ -39,6 +39,7 @@
 	"var_other_items":<%= var_other_items %>,
 	"total_minus_tax":"<%= FormatNumber(var_grandtotal - var_salesTax, -1, -2, -2, -2) %>",
 	"total_without_certsOrCredits":"<%= FormatNumber(var_total_without_certsOrCredits, -1, -2, -2, -2) %>",
+	"total_without_shipping":"<%= FormatNumber(var_grandtotal - var_shipping_cost, -1, -2, -2, -2) %>",
 	"weight":"<%= session("weight") %>"
 }
 <%

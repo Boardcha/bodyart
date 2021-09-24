@@ -1,3 +1,8 @@
+<% 
+If request("initiator") = "google-pay" Or request("initiator") = "apple-pay" Then
+	Response.ContentType = "application/json" 
+End If
+%>
 <!--#include virtual="/Connections/taxjar.asp"-->
 <!--#include virtual="/taxjar/taxjar-nexus-values.asp"-->
 
@@ -9,14 +14,19 @@ session("city_tax_collectable") = 0
 session("special_district_tax_collectable") = 0
 session("combined_tax_rate") = 0
 
-if request.form("tax_country") = "USA" OR request.form("tax_country") = "United States" then
+If request("initiator") = "google-pay" Or request("initiator") = "apple-pay" Then
+	session("shipping_cost") = request("shipping_cost")
+	session("taxable_amount") = request("taxable_amount")
+End If
+
+if request("tax_country") = "US" OR request("tax_country") = "USA" OR request("tax_country") = "United States" then
 	taxjar_to_country = "US"
 end if
-if request.form("tax_country") = "Great Britain" OR request.form("tax_country") = "Great Britain and Northern Ireland" OR request.form("tax_country") = "United Kingdom" then
+if request("tax_country") = "Great Britain" OR request("tax_country") = "Great Britain and Northern Ireland" OR request("tax_country") = "United Kingdom" then
 	taxjar_to_country = "GB"
 end if
 
-if request.form("state_taxed") = "yes" then
+if request("state_taxed") = "yes" then
 
 Set HttpReq = Server.CreateObject("MSXML2.ServerXMLHTTP")
 HttpReq.open "POST", taxjar_url, false
@@ -24,9 +34,9 @@ HttpReq.setRequestHeader "Content-Type", "application/json"
 HttpReq.SetRequestHeader "Authorization", "Bearer " & taxjar_authorization & ""
 HttpReq.Send("{" & _
 	"""to_country"":""" & taxjar_to_country & """," & _
-	"""to_state"":""" & request.form("tax_state") & """," & _
-	"""to_zip"":""" & request.form("tax_zip") & """," & _
-	"""to_street"": """ & request.form("tax_address") & """," & _
+	"""to_state"":""" & request("tax_state") & """," & _
+	"""to_zip"":""" & request("tax_zip") & """," & _
+	"""to_street"": """ & request("tax_address") & """," & _
 	"""from_country"":""US""," & _
 	"""from_state"":""TX""," & _
 	"""from_city"":""Georgetown""," & _
@@ -101,11 +111,17 @@ set HttpReq = Nothing
 if amount_to_collect <> 0 then
 	var_salesTax = amount_to_collect
 end if
-if request.form("tax_state") <> "" then
-	var_salestax_state = request.form("tax_state")
+if request("tax_state") <> "" then
+	var_salestax_state = request("tax_state")
 end if
 
 
-
-end if 'request.form("state_taxed") = "yes"
+end if 'request("state_taxed") = "yes"
 %>
+<% If request("initiator") = "google-pay" Or request("initiator") = "apple-pay" Then%>
+	<%If amount_to_collect <> "" Then%>
+		{"tax":"<%=amount_to_collect%>"}
+	<%Else%>
+		{"tax":"0"}
+	<%End If%>	
+<%End If%>
