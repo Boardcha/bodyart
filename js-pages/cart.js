@@ -1,4 +1,4 @@
-$('.checkout_now, .checkout_paypal').show();		
+$('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();		
 
 	// Remove discounts
 	$("#remove-credit").click(function() {
