@@ -212,6 +212,19 @@ if request.cookies("OrderAddonsActive") <> "" then
 else
 	show_section_addons = "d-none"
 end if 
+
+'Check Toogle Items
+set objCmd = Server.CreateObject("ADODB.command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "SELECT * FROM TBL_Toggle_Items"
+Set rsToggles = objCmd.Execute()
+
+While Not rsToggles.EOF
+	If rsToggles("toggle_item") = "toggle_autoclave" Then toggle_autoclave = rsToggles("value")
+	If rsToggles("toggle_item") = "toggle_checkout_cards" Then toggle_checkout_cards = rsToggles("value")
+	If rsToggles("toggle_item") = "toggle_checkout_paypal" Then toggle_checkout_paypal = rsToggles("value")
+	rsToggles.MoveNext
+Wend
 %>
 <!--#include virtual="/includes/inc-currency-images.asp" -->
 <!--#include virtual="/bootstrap-template/filters.asp" -->
@@ -1046,11 +1059,20 @@ end if
 							<div class="alert alert-danger submit_disabled" style="display:none"></div><!-- alert for that displays if a shipping type has not been selected -->
 							<% end if %>
 					<% if request.querystring("type") = "card" then %>
-						<button class="btn btn-lg btn-primary btn-block checkout_button place_order" style="display: none" type="submit" form="checkout_form" name="place_order">PLACE ORDER</button>
+						<% If toggle_checkout_cards = true Then %>
+							<button class="btn btn-lg btn-primary btn-block checkout_button place_order" style="display: none" type="submit" form="checkout_form" name="place_order">PLACE ORDER</button>
+						<% else %>
+							We're sorry, but our <b>credit card</b> checkout is temporarily unavailable. As soon as our payment processor comes back online, we will accept orders again. Please check back later.
+						<% end if %>
 					<% end if %>
 					<% if request.querystring("type") = "paypal" then %>
-						<button class="btn btn-lg btn-warning btn-block checkout_button place_order checkout_paypal" style="display:none" type="submit" form="checkout_form" name="place_order">CONTINUE TO <img class="ml-1" style="height:25px" src="/images/paypal.png" /></button>
-						<input type="hidden" name="paypal" value="on">
+						<% If toggle_checkout_paypal = true Then %>
+							<button class="btn btn-lg btn-warning btn-block checkout_button place_order checkout_paypal" style="display:none" type="submit" form="checkout_form" name="place_order">CONTINUE TO <img class="ml-1" style="height:25px" src="/images/paypal.png" /></button>
+							<input type="hidden" name="paypal" value="on">
+						<% else %>
+							<hr />
+							We're sorry, but our <b>PayPal</b> checkout is temporarily unavailable. As soon as PayPal comes back online, we will accept orders again. Please check back later.
+						<% end if %>						
 					<% end if %>
 					<%
 					' === only show afterpay option to USA customers
@@ -1194,3 +1216,6 @@ end if
 <!--
 <script type="text/javascript" src="/js-pages/afterpay-widget.js?v=020420" ></script>-->
 
+<%
+Set rsToggles = Nothing
+%>

@@ -72,12 +72,15 @@ end if
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT * FROM TBL_Toggle_Items WHERE toggle_item = 'toggle_autoclave'"
-Set rsAutoClave = objCmd.Execute()
+objCmd.CommandText = "SELECT * FROM TBL_Toggle_Items"
+Set rsToggles = objCmd.Execute()
 
-If Not rsAutoClave.EOF	Then
-	var_toggle_autoclave = rsAutoClave("value")
-End If
+While Not rsToggles.EOF
+	If rsToggles("toggle_item") = "toggle_autoclave" Then toggle_autoclave = rsToggles("value")
+	If rsToggles("toggle_item") = "toggle_checkout_cards" Then toggle_checkout_cards = rsToggles("value")
+	If rsToggles("toggle_item") = "toggle_checkout_paypal" Then toggle_checkout_paypal = rsToggles("value")
+	rsToggles.MoveNext
+Wend
 %>
 <!--#include virtual="cart/inc_cart_add_item.asp"-->
 <!--#include virtual="cart/inc_cart_main.asp"-->
@@ -558,45 +561,54 @@ end if ' show if free sticker cookie has not been set to "no"
 											<% end if ' free shipping notice only showing if order is not heavy
 											%>	
 										</div><!-- end card body -->
-								<div class="card-footer">
-										
-									<!--#include virtual="cart/inc_cart_grandtotal.asp"-->
-											<h4>TOTAL <% if strcountryName <> "US" then %> (USD)<% end if %>$<span class="cart_grand-total"><%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %></span></h4>
-									<div class="row_convert_total" style="display:none">
-										<div class="alert alert-success p-2">
-											<div><h6><img class="mr-2" style="width:20px;height:20px" src="/images/icons/<%= currency_img %>">ESTIMATE <span class="exchange-price"><span class="currency-type"></span> <span class="convert-total convert-price" data-price=""></span></span></h6></div>
-												<span class="exchange-price"><span class="currency-type bold"></span> <span class="convert-total convert-price bold" data-price=""></span> is a close estimate</span>. The total billed will be for <span class="bold">$<span class="cart_grand-total"><%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %></span> in US Dollars</span> and your bank will convert to the most current exchange rate.
+										<div class="card-footer">
+												
+											<!--#include virtual="cart/inc_cart_grandtotal.asp"-->
+													<h4>TOTAL <% if strcountryName <> "US" then %> (USD)<% end if %>$<span class="cart_grand-total"><%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %></span></h4>
+											<div class="row_convert_total" style="display:none">
+												<div class="alert alert-success p-2">
+													<div><h6><img class="mr-2" style="width:20px;height:20px" src="/images/icons/<%= currency_img %>">ESTIMATE <span class="exchange-price"><span class="currency-type"></span> <span class="convert-total convert-price" data-price=""></span></span></h6></div>
+														<span class="exchange-price"><span class="currency-type bold"></span> <span class="convert-total convert-price bold" data-price=""></span> is a close estimate</span>. The total billed will be for <span class="bold">$<span class="cart_grand-total"><%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %></span> in US Dollars</span> and your bank will convert to the most current exchange rate.
+												</div>
 										</div>
-								</div>
-								<div class="checkout_now" style="display:none">
-										<a class="btn btn-block btn-primary mb-3 checkout_button" href="checkout.asp?type=card" ><h6>CHECKOUT WITH <span class="payment-options">CREDIT CARD
-											<br/>
-											<span style="font-size:2em">
-											<i class="fa fa-cc-visa"></i>
-											<i class="fa fa-cc-mastercard"></i>
-											<i class="fa fa-cc-amex"></i>
-											<i class="fa fa-cc-discover"></i></span>
-										</span>
-										</h6>
-										</a>
-										</div>
-
-										<script
-										src="https://www.paypal.com/sdk/js?client-id=AYw-H4XtJundkJlqW2_gPoXKAGDjOhD8A3kW2lKr721pcW7uMhBFmcCKf1GJOIQwrMl8vGKo1f_vY-Uf&components=messages,buttons"
-										data-namespace="PayPalSDK">
-									</script>
-										<div class="checkout_paypal"  style="display:none">
-											<a class="btn btn-block btn-warning checkout_button" href="checkout.asp?type=paypal">
-												<img style="height:30px" src="/images/paypal.png" />
-											</a>
+										<% If toggle_checkout_cards = true Then %>
+											<div class="checkout_now" style="display:none">
+												<a class="btn btn-block btn-primary mb-3 checkout_button" href="checkout.asp?type=card" ><h6>CHECKOUT WITH <span class="payment-options">CREDIT CARD
+													<br/>
+													<span style="font-size:2em">
+													<i class="fa fa-cc-visa"></i>
+													<i class="fa fa-cc-mastercard"></i>
+													<i class="fa fa-cc-amex"></i>
+													<i class="fa fa-cc-discover"></i></span>
+												</span>
+												</h6>
+												</a>
 											</div>
+										<% else %>
+											We're sorry, but our <b>credit card</b> checkout is temporarily unavailable. As soon as our payment processor comes back online, we will accept orders again. Please check back later.
+											<hr />
+										<% end if %>										
+
+
+										<% If toggle_checkout_paypal = true Then %>
+											<script src="https://www.paypal.com/sdk/js?client-id=AYw-H4XtJundkJlqW2_gPoXKAGDjOhD8A3kW2lKr721pcW7uMhBFmcCKf1GJOIQwrMl8vGKo1f_vY-Uf&components=messages,buttons" data-namespace="PayPalSDK"></script>
+											<div class="checkout_paypal"  style="display:none">
+												<a class="btn btn-block btn-warning checkout_button" href="checkout.asp?type=paypal">
+													<img style="height:30px" src="/images/paypal.png" />
+												</a>
+											</div>
+										<% else %>
+											We're sorry, but our <b>PayPal</b> checkout is temporarily unavailable. As soon as PayPal comes back online, we will accept orders again. Please check back later.
+										<% end if %>
+
+						
 										<div class="mt-2"
 										data-pp-message
 										data-pp-style-layout="text"
 										data-pp-style-logo-type="inline"
 										data-pp-style-text-color="black"
 										data-pp-amount="<%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %>">
-									</div>
+										</div>
 										<%
 										' === only show afterpay option to USA customers
 										if request.cookies("currency") = "" OR request.cookies("currency") = "USD" then
@@ -614,7 +626,7 @@ end if ' show if free sticker cookie has not been set to "no"
 						</div><!-- end card footer for totals -->
 					  </div><!-- end card for totals -->
 									<% ' Display if ANY autoclavable items are found on the order 
-									if var_autoclavable = 1 and var_sterilization_added = 0 and var_toggle_autoclave = true then
+									if var_autoclavable = 1 and var_sterilization_added = 0 and toggle_autoclave = true then
 										rs_getCart.ReQuery() 
 									%>
 										<div class="alert alert-info p-2 mt-4">
@@ -706,3 +718,7 @@ end if ' show if free sticker cookie has not been set to "no"
 <script type = "text/javascript" src="https://static-us.afterpay.com/javascript/present-afterpay.js"></script>-->
 <!--
 <script type="text/javascript" src="/js-pages/afterpay-widget.js?v=020420" ></script>-->	
+
+<%
+Set rsToggles = Nothing
+%>
