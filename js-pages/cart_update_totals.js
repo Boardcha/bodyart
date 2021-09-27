@@ -42,8 +42,8 @@
 				//console.log("state taxes: " + state_taxed + " in " + tax_state);
 				
 				
-		//	alert(json.subtotal_after_discounts);
-			totalWithoutShipping = json.total_without_shipping;
+			subTotal = json.subtotal;
+			totalDiscount = json.total_discount;
 			salesTax = json.salestax;
 			$(".cart_subtotal").html(json.subtotal);
 			$(".cart_grand-total").html(json.grandtotal);
