@@ -8,6 +8,7 @@
 var tax = 0.0;
 var shippingCost = 0.0;
 var totalAmount = 0.0;
+var totalDiscount = 0.0;
 var selectedShippingId = 0;
 const baseRequest = {
   apiVersion: 2,
@@ -222,6 +223,15 @@ function onPaymentDataChanged(intermediatePaymentData) {
 function calculateNewTransactionInfo(shippingOptionId, intermediatePaymentData) {
   let newTransactionInfo = getGoogleTransactionInfo();
 
+  if(totalDiscount > 0){
+	  newTransactionInfo.displayItems.push({
+		type: "LINE_ITEM",
+		label: "Discounts",
+		price: -1 * parseFloat(totalDiscount).toFixed(2),
+		status: "FINAL"
+	  });  
+  }
+  
   shippingCost = getShippingCosts()[shippingOptionId];
   selectedShippingId = shippingOptionId;
   newTransactionInfo.displayItems.push({
@@ -299,7 +309,7 @@ function getGoogleTransactionInfo() {
       {
         label: "Subtotal",
         type: "SUBTOTAL",
-        price: parseFloat(totalWithoutShipping).toString(), // comes from cart_update_totals.js
+        price: parseFloat(subTotal).toString(), // comes from cart_update_totals.js
       }//, 
       /* Tax will be calculated after the user's address selection, in the function "calculateNewTransactionInfo"
 	  {
@@ -322,7 +332,7 @@ function getGoogleTransactionInfo() {
 function calculateTax(intermediatePaymentData, shippingCost) {
   
   shipping_cost = shippingCost
-  taxable_amount = totalWithoutShipping // comes from cart_update_totals.js
+  taxable_amount = subTotal // comes from cart_update_totals.js
   tax_country = intermediatePaymentData.shippingAddress.countryCode
   tax_state = intermediatePaymentData.shippingAddress.administrativeArea
   tax_zip = intermediatePaymentData.shippingAddress.postalCode
@@ -596,7 +606,7 @@ function processPayment(paymentData) {
       country_code = paymentData.shippingAddress.countryCode;
       phone_number = paymentData.shippingAddress.phoneNumber;
 	  email = paymentData.email;
-	  amount = totalWithoutShipping
+	  amount = subTotal
 
 	  // START send payment data to authorize.net to process
 	  $.ajax({
