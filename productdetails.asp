@@ -703,9 +703,8 @@ window.dataLayer.push({
 							
 								while NOT rs_getImages.eof
 
-									'isVariantOutOfStock refers to group of variants that same image has been assigned to. 
 									'To show an additional image (thumbnail) as greyed out, all variants the image assigned must be out of stock
-									If rs_getImages("total_qty_of_variants_this_image_assigned_to") <=0 Then isVariantOutOfStock = true Else isVariantOutOfStock = false
+									If rs_getImages("total_qty_of_variants_this_image_assigned_to") <=0 Then isThumbnailQtyZero = true Else isThumbnailQtyZero = false
 										
 									if rs_getImages.Fields.Item("active").Value = 1 then
 										
@@ -722,11 +721,11 @@ window.dataLayer.push({
 										%>	
 										<%if rs_getImages.Fields.Item("is_video").Value = 1 then%>
 											<div class="video-thumbnail">
-												<img <%If isVariantOutOfStock Then%>style="opacity:.3"<%End If%> class="img-fluid img-thumb lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=rs_getImages.Fields.Item("img_thumb").Value %>" alt="Thumbnail" title="<%= var_img_thumb_alt %>"  data-imgname="<%=(rs_getImages.Fields.Item("img_full").Value)%>" <% if img_assigned = "yes" then %> data-imgid="thumb_img_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_thumb_<%=rs_getImages.Fields.Item("img_id").Value %>" data-id="<%=rs_getImages.Fields.Item("img_id").Value %>" data-unassigned="no" <% else %> data-unassigned="yes" <% end if %> data-color-chart="no" />
-												<img <%If isVariantOutOfStock Then%>style="opacity:.3"<%End If%> src="/images/play-icon.png" class="play-icon" />
+												<img <%If isThumbnailQtyZero Then%>style="opacity:.3"<%End If%> class="img-fluid img-thumb lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=rs_getImages.Fields.Item("img_thumb").Value %>" alt="Thumbnail" title="<%= var_img_thumb_alt %>"  data-imgname="<%=(rs_getImages.Fields.Item("img_full").Value)%>" <% if img_assigned = "yes" then %> data-imgid="thumb_img_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_thumb_<%=rs_getImages.Fields.Item("img_id").Value %>" data-id="<%=rs_getImages.Fields.Item("img_id").Value %>" data-unassigned="no" <% else %> data-unassigned="yes" <% end if %> data-color-chart="no" />
+												<img <%If isThumbnailQtyZero Then%>style="opacity:.3"<%End If%> src="/images/play-icon.png" class="play-icon" />
 											</div>	
 										<%else%>							
-											<img <%If isVariantOutOfStock Then%>style="opacity:.3"<%End If%> class="img-fluid img-thumb lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=rs_getImages.Fields.Item("img_thumb").Value %>" alt="Thumbnail" title="<%= var_img_thumb_alt %>"  data-imgname="<%=(rs_getImages.Fields.Item("img_full").Value)%>" <% if img_assigned = "yes" then %> data-imgid="thumb_img_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_thumb_<%=rs_getImages.Fields.Item("img_id").Value %>" data-id="<%=rs_getImages.Fields.Item("img_id").Value %>" data-unassigned="no" <% else %> data-unassigned="yes" <% end if %> data-color-chart="no" />
+											<img <%If isThumbnailQtyZero Then%>style="opacity:.3"<%End If%> class="img-fluid img-thumb lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=rs_getImages.Fields.Item("img_thumb").Value %>" alt="Thumbnail" title="<%= var_img_thumb_alt %>"  data-imgname="<%=(rs_getImages.Fields.Item("img_full").Value)%>" <% if img_assigned = "yes" then %> data-imgid="thumb_img_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_thumb_<%=rs_getImages.Fields.Item("img_id").Value %>" data-id="<%=rs_getImages.Fields.Item("img_id").Value %>" data-unassigned="no" <% else %> data-unassigned="yes" <% end if %> data-color-chart="no" />
 										<%end if%>
 									<%
 									end if ' only show if item is active
