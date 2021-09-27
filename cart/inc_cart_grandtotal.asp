@@ -130,12 +130,13 @@ if Session("GiftCertAmount") = 0 and session("usecredit") <> "" then
 
 end if  ' ----------------------------------------
 ' END If JUST a gift certificate is being used AND NOT with a store credit
-
-var_grandtotal = ((var_subtotal - var_couponTotal - total_preferred_discount - var_credit_now + var_salesTax + shipping_cost - session("storeCredit_used")) - var_total_giftcert_used)
+var_total_discount = 0
+var_total_discount = var_couponTotal + total_preferred_discount + var_credit_now + session("storeCredit_used") + var_total_giftcert_used
+var_grandtotal = var_subtotal - var_total_discount + var_salesTax + shipping_cost
 
 if session("amount_to_collect") <> "" then
 if session("amount_to_collect") <> 0 then
-	var_grandtotal = ((var_subtotal - var_couponTotal - total_preferred_discount - var_credit_now + session("amount_to_collect") + shipping_cost - session("storeCredit_used")) - var_total_giftcert_used)
+	var_grandtotal = var_subtotal - var_total_discount + session("amount_to_collect") + shipping_cost
 end if
 end if
 
