@@ -223,11 +223,11 @@ function onPaymentDataChanged(intermediatePaymentData) {
 function calculateNewTransactionInfo(shippingOptionId, intermediatePaymentData) {
   let newTransactionInfo = getGoogleTransactionInfo();
 
-  if(totalDiscount > 0){
+  if(totalDiscount > 0.0){
 	  newTransactionInfo.displayItems.push({
 		type: "LINE_ITEM",
 		label: "Discounts",
-		price: -1 * parseFloat(totalDiscount).toFixed(2),
+		price: parseFloat(totalDiscount * -1).toFixed(2),
 		status: "FINAL"
 	  });  
   }
@@ -310,7 +310,8 @@ function getGoogleTransactionInfo() {
         label: "Subtotal",
         type: "SUBTOTAL",
         price: parseFloat(subTotal).toString(), // comes from cart_update_totals.js
-      }//, 
+      }	
+	  //, 
       /* Tax will be calculated after the user's address selection, in the function "calculateNewTransactionInfo"
 	  {
         label: "Tax",
