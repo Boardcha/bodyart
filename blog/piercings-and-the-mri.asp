@@ -14,8 +14,12 @@
 <div class="display-5 mb-5">
     Piercings and the MRI
     </div>
-    
-    <figure class="figure float-left mr-5" style="width:361px">
+    <figure class="figure" style="width:361px">
+        <a href="../products.asp?jewelry=retainer" target="_blank"><img style="width:300px;height:auto" src="/images/blog/jewelry-retainers.jpg"></a>
+        <figcaption class="figure-caption text-center"><a class="btn btn-purple" href="../products.asp?jewelry=retainer" target="_blank">See our retainer collection</a></figcaption>
+    </figure>
+
+    <figure class="figure" style="width:361px">
         <img class="figure-img img-fluid" src="images/2016/08/Liz-West-Flickr.jpg" />
         <figcaption class="figure-caption">People have been killed in the MRI by metal projectiles like oxygen tanks, wheelchair parts and other magnetic objects that came into range. (Photo credit: Liz West, Flickr)</figcaption>
     </figure>

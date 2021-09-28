@@ -5,8 +5,9 @@ if request.form("orderdetailid") <> "" then
 	If request.form("checked") = "true" Then isChecked = 1 Else isChecked =0
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "UPDATE TBL_OrderSummary SET problem_reviewed = ? WHERE OrderDetailID = ?"
+	objCmd.CommandText = "UPDATE TBL_OrderSummary SET problem_reviewed = ?, problem_reviewed_date = ? WHERE OrderDetailID = ?"
 	objCmd.Parameters.Append(objCmd.CreateParameter("problem_reviewed",3,1,15, isChecked ))
+	objCmd.Parameters.Append(objCmd.CreateParameter("problem_reviewed_date",200,1,20, FormatDateTime(date(),2) ))
     objCmd.Parameters.Append(objCmd.CreateParameter("orderdetailid",3,1,15, request.form("orderdetailid") ))
     objCmd.Execute()
 

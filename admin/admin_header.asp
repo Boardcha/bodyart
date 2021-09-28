@@ -1,11 +1,14 @@
 <%
 set objcmd = Server.CreateObject("ADODB.command")
 objcmd.ActiveConnection = DataConn
-objcmd.CommandText = "SELECT * FROM TBL_Toggle_Items WHERE toggle_item='toggle_autoclave'"
+objcmd.CommandText = "SELECT * FROM TBL_Toggle_Items"
 Set rsToggle = objcmd.Execute()
-If Not rsToggle.EOF Then 
-	If rsToggle("value") Then autoclave_checked = "checked"
-End If
+While Not rsToggle.EOF 
+	If rsToggle("toggle_item") = "toggle_autoclave" AND rsToggle("value") Then autoclave_checked = "checked"
+	If rsToggle("toggle_item") = "toggle_checkout_cards" AND rsToggle("value") Then checkout_cards_checked = "checked"
+	If rsToggle("toggle_item") = "toggle_checkout_paypal" AND rsToggle("value") Then checkout_paypal_checked = "checked"
+	rsToggle.MoveNext	
+Wend
 %>
 
 <% ' Set testing user access level
@@ -454,23 +457,41 @@ If var_access_level = "Admin" then  %>
 				</div>
 				<div class="col">
 					<style>
-						#autoclave-inner:before {
+						#autoclave-inner:before, #checkout-cards-inner:before, #checkout-paypal-inner:before {
 							content: "ON"
 						}
 
-						#autoclave-inner:after {
+						#autoclave-inner:after, #checkout-cards-inner:after, #checkout-paypal-inner:after {
 							content: "OFF"
 						}
 					</style>
 
 							<a href="#">Toggle autoclave option on checkout</a>
-								<div class="onoffswitch small">
-									<input type="checkbox" name="autoclave-switch" class="onoffswitch-checkbox" id="autoclave-switch" <%=autoclave_checked%>>
-									<label class="onoffswitch-label" style="margin-bottom:0;margin-top:3px" for="autoclave-switch">
-										<span id="autoclave-inner" class="onoffswitch-inner"></span>
-										<span class="onoffswitch-switch"></span>
-									</label>
-								</div>
+							<div class="onoffswitch small mb-3">
+								<input type="checkbox" name="toggle_autoclave" class="onoffswitch-checkbox" id="toggle_autoclave" <%=autoclave_checked%>>
+								<label class="onoffswitch-label" style="margin-bottom:0;margin-top:3px" for="toggle_autoclave">
+									<span id="autoclave-inner" class="onoffswitch-inner"></span>
+									<span class="onoffswitch-switch"></span>
+								</label>
+							</div>
+								
+							<a href="#">Toggle credit card checkout</a>
+							<div class="onoffswitch small mb-3">
+								<input type="checkbox" name="toggle_checkout_cards" class="onoffswitch-checkbox" id="toggle_checkout_cards" <%=checkout_cards_checked%>>
+								<label class="onoffswitch-label" style="margin-bottom:0;margin-top:3px" for="toggle_checkout_cards">
+									<span id="checkout-cards-inner" class="onoffswitch-inner"></span>
+									<span class="onoffswitch-switch"></span>
+								</label>
+							</div>		
+
+							<a href="#">Toggle PayPal checkout</a>
+							<div class="onoffswitch small mb-3">
+								<input type="checkbox" name="toggle_checkout_paypal" class="onoffswitch-checkbox" id="toggle_checkout_paypal" <%=checkout_paypal_checked%>>
+								<label class="onoffswitch-label" style="margin-bottom:0;margin-top:3px" for="toggle_checkout_paypal">
+									<span id="checkout-paypal-inner" class="onoffswitch-inner"></span>
+									<span class="onoffswitch-switch"></span>
+								</label>
+							</div>										
 			</div>
 		</div>
 	</div>
@@ -590,19 +611,12 @@ end if ' access level for moderation
 		}
 	});
 	
-	// Autoclave toggle
-	$("#autoclave-switch").on("click", function () {
-		var checked;
-		if ($("#autoclave-switch").is(":checked")) {
-		
-			checked = 1;
-		} else {
-			checked = 0;
-		}
+	// Toggles
+	$("#toggle_autoclave, #toggle_checkout_cards, #toggle_checkout_paypal").on("click", function () {
 		$.ajax({
 			method: "POST",
 			url: "toggle.asp",
-			data: {autoclave: checked}
+			data: {toggleItem: $(this).attr("id"), isChecked: $(this).is(":checked")}
 		})		
 	});	
 </script>

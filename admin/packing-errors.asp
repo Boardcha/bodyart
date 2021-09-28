@@ -43,10 +43,6 @@ Set rsGetPackers = objCmd.Execute()
         </p>
         <input class="btn btn-sm btn-purple ml-4" type="submit" name="Submit" value="Search">
     </div>
-	<div class="custom-control custom-checkbox d-inline-block mb-2">
-			<input type="checkbox" name="reviewed" id="reviewed" class="custom-control-input" <%If request("reviewed") = "on" Then Response.Write " checked"%>>
-			<label class="custom-control-label" for="reviewed">Include reviewed errors</label>
-	</div>
 <% if var_access_level = "Admin" OR var_access_level = "Manager" OR user_name = "Andres" then 
  %>
 <div class="alert alert-warning w-50">
@@ -137,10 +133,6 @@ $('.reviewed').change(function() {
 	  method: "post",
 	  url: "packing/set-item-reviewed.asp",
 	  data: {orderdetailid: orderdetailid, checked: checked}
-		})
-		.done(function(msg) {
-			if(checked)
-				$('#row-' + orderdetailid).fadeOut('slow');
 		})
 		.fail(function(msg) {
 			alert("CODE ERROR");

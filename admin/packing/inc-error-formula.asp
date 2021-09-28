@@ -17,7 +17,6 @@ else
   var_date2 = Request.querystring("date2")
 end if
 
-If request("reviewed") <> "on" Then ReviewdItems = " AND problem_reviewed = 0"
 
 Error_flip = 0
 Error_flip_total = 0
@@ -36,7 +35,7 @@ ErrorAdd = 0
   '===== GET ALL ERRORS ====================================
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT * FROM QRY_FaultyOrders WHERE (date_sent >= ? AND date_sent <= ?) AND PackagedBy = ? " & ReviewdItems & " ORDER BY item_problem ASC, date_sent DESC"
+	objCmd.CommandText = "SELECT * FROM QRY_FaultyOrders WHERE (date_sent >= ? AND date_sent <= ?) AND PackagedBy = ? " & " ORDER BY item_problem ASC, date_sent DESC"
 	objCmd.Parameters.Append(objCmd.CreateParameter("date1",133,1,20, var_date1 ))
   objCmd.Parameters.Append(objCmd.CreateParameter("date2",133,1,20, var_date2 ))
   objCmd.Parameters.Append(objCmd.CreateParameter("PackagedBy",200,1,30, var_packer ))
