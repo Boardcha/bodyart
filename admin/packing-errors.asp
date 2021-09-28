@@ -43,6 +43,10 @@ Set rsGetPackers = objCmd.Execute()
         </p>
         <input class="btn btn-sm btn-purple ml-4" type="submit" name="Submit" value="Search">
     </div>
+	<div class="custom-control custom-checkbox d-inline-block mb-2">
+			<input type="checkbox" name="reviewed" id="reviewed" class="custom-control-input" <%If request("reviewed") = "on" Then Response.Write " checked"%>>
+			<label class="custom-control-label" for="reviewed">Include reviewed errors</label>
+	</div>
 <% if var_access_level = "Admin" OR var_access_level = "Manager" OR user_name = "Andres" then 
  %>
 <div class="alert alert-warning w-50">
@@ -80,6 +84,11 @@ While NOT rsGetErrors.EOF
         %>
         <i class="pointer text-danger mr-4 fa fa-trash-alt remove-error" data-orderdetailid="<%= rsGetErrors.Fields.Item("OrderDetailID").Value %>"></i>
         <% end if %>
+		
+		<div class="custom-control custom-checkbox d-inline-block mr-3">
+			<input type="checkbox" name="reviewed_<%= rsGetErrors.Fields.Item("OrderDetailID").Value %>" id="reviewed_<%= rsGetErrors.Fields.Item("OrderDetailID").Value %>" class="custom-control-input reviewed" data-orderdetailid="<%= rsGetErrors.Fields.Item("OrderDetailID").Value %>" <% If rsGetErrors.Fields.Item("problem_reviewed").Value Then Response.Write " checked" %>>
+			<label class="custom-control-label" for="reviewed_<%= rsGetErrors.Fields.Item("OrderDetailID").Value %>"><b>Reviewed</b></label>
+		</div>		
         <a href="../../admin/invoice.asp?ID=<%= rsGetErrors.Fields.Item("ID").Value %>" target="_blank"><b><%=(rsGetErrors.Fields.Item("ID").Value)%></b></a><br>
 
     <strong><%=(rsGetErrors.Fields.Item("item_problem").Value)%>&nbsp;
@@ -108,8 +117,7 @@ Set rsGetErrors = Nothing
 <script type="text/javascript">
 $(".remove-error").click(function() {
     var orderdetailid = $(this).attr('data-orderdetailid');
-    console.log(orderdetailid);
-		$.ajax({
+	$.ajax({
       method: "post",
       url: "packing/remove-error.asp",
       data: {orderdetailid: orderdetailid}
@@ -119,8 +127,24 @@ $(".remove-error").click(function() {
 		})
 		.fail(function(msg) {
 			alert("CODE ERROR");
-		})
 	});
-	
+});
+
+$('.reviewed').change(function() {
+	var checked = this.checked;
+	var orderdetailid = $(this).attr('data-orderdetailid');
+	$.ajax({
+	  method: "post",
+	  url: "packing/set-item-reviewed.asp",
+	  data: {orderdetailid: orderdetailid, checked: checked}
+		})
+		.done(function(msg) {
+			if(checked)
+				$('#row-' + orderdetailid).fadeOut('slow');
+		})
+		.fail(function(msg) {
+			alert("CODE ERROR");
+	});		
+});	
 </script>
 
