@@ -15,11 +15,13 @@ Else
 End If
 
 
+
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
 objCmd.CommandText = "SELECT * FROM jewelry WHERE ProductID = ? AND ProductID <> 2424"
 objCmd.Parameters.Append(objCmd.CreateParameter("ProductID",3,1,10,ProductID))
 Set rsProduct = objCmd.Execute()
+
 
 
 ' Get all product stats from flat products static table
@@ -91,6 +93,8 @@ objCmd.CommandText = "SELECT ProductID, title, picture FROM jewelry WHERE Produc
 Set rsRecentlyViewed = objCmd.Execute()
 end if ' if productid is numeric
 ' ----- END recently viewed items -----------
+
+
 
 
 
@@ -724,8 +728,10 @@ window.dataLayer.push({
 												<img <%If isThumbnailQtyZero Then%>style="opacity:.3"<%End If%> class="img-fluid img-thumb lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=rs_getImages.Fields.Item("img_thumb").Value %>" alt="Thumbnail" title="<%= var_img_thumb_alt %>"  data-imgname="<%=(rs_getImages.Fields.Item("img_full").Value)%>" <% if img_assigned = "yes" then %> data-imgid="thumb_img_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_thumb_<%=rs_getImages.Fields.Item("img_id").Value %>" data-id="<%=rs_getImages.Fields.Item("img_id").Value %>" data-unassigned="no" <% else %> data-unassigned="yes" <% end if %> data-color-chart="no" />
 												<img <%If isThumbnailQtyZero Then%>style="opacity:.3"<%End If%> src="/images/play-icon.png" class="play-icon" />
 											</div>	
-										<%else%>							
+										<%else%>	
+										<div class="image-thumbnail <%If isThumbnailQtyZero Then%>diagonal-line<%End If%>">										
 											<img <%If isThumbnailQtyZero Then%>style="opacity:.3"<%End If%> class="img-fluid img-thumb lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=rs_getImages.Fields.Item("img_thumb").Value %>" alt="Thumbnail" title="<%= var_img_thumb_alt %>"  data-imgname="<%=(rs_getImages.Fields.Item("img_full").Value)%>" <% if img_assigned = "yes" then %> data-imgid="thumb_img_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_thumb_<%=rs_getImages.Fields.Item("img_id").Value %>" data-id="<%=rs_getImages.Fields.Item("img_id").Value %>" data-unassigned="no" <% else %> data-unassigned="yes" <% end if %> data-color-chart="no" />
+										</div>
 										<%end if%>
 									<%
 									end if ' only show if item is active
@@ -991,6 +997,8 @@ end if
 <button class="btn btn-sm btn-outline-secondary" id="hide-mm" type="button">Hide mm sizes</button>
 <% end if %>
 </div>
+
+
 
 
 
