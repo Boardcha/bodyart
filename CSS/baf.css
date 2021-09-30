@@ -15798,44 +15798,56 @@ footer, #mobilesearch, #accountmenu {
 }
 
 .video-thumbnail, .image-thumbnail {
-  display: inline-block;
-  position: relative;
+    display: inline-block;
+    position: relative;
 }
 
-.video-thumbnail .img-thumb {
-  width: 100%;
+.video-thumbnail .img-thumb, .image-thumbnail .img-thumb{
+	width: 100%
 }
 
-.play-icon-sm {
-  width: 20px;
-  position: absolute;
-  top: 12px;
-  left: 5px;
+.diagonal-line:after{
+     content:     "";
+     display:     block;
+     position:    absolute;
+     width:       100%;
+     height:      100%;
+     top:         0;
+     left:        0;
+     z-index:     -1;
+     background: linear-gradient(to right bottom, white, white 48%, #737373 49%, #737373 51%, white 52%, white) !important;
 }
 
-.play-icon {
-  width: 30px;
-  position: absolute;
-  top: calc(50% - 10px);
-  left: calc(50% - 15px);
+.play-icon-sm{ 
+	width : 20px;
+	position: absolute;
+    top: 12px;
+    left: 5px;
 }
 
-.video-player {
-  max-height: 550px;
-  position: absolute;
-  width: 100%;
-  height: 100%;
+.play-icon{ 
+	width: 30px;
+    position: absolute;
+    top: calc(50% - 10px);
+    left: calc(50% - 15px);
+}
+	
+.video-player{
+	max-height:550px;
+	position: absolute;
+	width: 100%;
+	height: 100%;
 }
 
-.video-container {
-  position: relative;
-  width: 100%;
-  padding-bottom: 100%;
-  max-width: 550px;
+.video-container{
+	position: relative;
+	width: 100%;
+	padding-bottom: 100%;
+	max-width: 550px;
 }
 
-.fancybox-content .video-player {
-  max-height: 100%;
+.fancybox-content .video-player{
+	max-height: 100%;
 }
 
 #cross-selling .slick-track, #recents .slick-track{margin-left:0}

@@ -118,7 +118,7 @@ Dim rsInactive_numRows
 
 Set rsInactive = Server.CreateObject("ADODB.Recordset")
 rsInactive.ActiveConnection = MM_bodyartforms_sql_STRING
-rsInactive.Source = "SELECT * FROM dbo.TBLDiscounts WHERE DateExpired < '" & now() & "' AND DateExpired > '" & now() - 120 & "' AND coupon_single_use = 0 ORDER BY DateExpired DESC"
+rsInactive.Source = "SELECT * FROM dbo.TBLDiscounts WHERE DateExpired < '" & now() & "' AND DateExpired > '" & now() - 720 & "' AND coupon_single_use = 0 ORDER BY DateExpired DESC"
 rsInactive.CursorLocation = 3 'adUseClient
 rsInactive.LockType = 1 'Read-only records
 rsInactive.Open()

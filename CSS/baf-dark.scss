@@ -624,8 +624,20 @@ footer, #mobilesearch, #accountmenu {
     position: relative;
 }
 
-.video-thumbnail .img-thumb{
+.video-thumbnail .img-thumb, .image-thumbnail .img-thumb{
 	width: 100%
+}
+
+.diagonal-line:after{
+     content:     "";
+     display:     block;
+     position:    absolute;
+     width:       100%;
+     height:      100%;
+     top:         0;
+     left:        0;
+     z-index:     -1;
+     background: linear-gradient(to right bottom, white, white 48%, #737373 49%, #737373 51%, white 52%, white) !important;
 }
 
 .play-icon-sm{ 

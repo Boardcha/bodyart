@@ -15,11 +15,14 @@ Else
 End If
 
 
+
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
 objCmd.CommandText = "SELECT * FROM jewelry WHERE ProductID = ? AND ProductID <> 2424"
 objCmd.Parameters.Append(objCmd.CreateParameter("ProductID",3,1,10,ProductID))
 Set rsProduct = objCmd.Execute()
+
+
 
 ' Get all product stats from flat products static table
 set objCmd = Server.CreateObject("ADODB.command")
@@ -90,6 +93,8 @@ objCmd.CommandText = "SELECT ProductID, title, picture FROM jewelry WHERE Produc
 Set rsRecentlyViewed = objCmd.Execute()
 end if ' if productid is numeric
 ' ----- END recently viewed items -----------
+
+
 
 
 
@@ -175,7 +180,10 @@ if not rsProduct.eof then
 
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT DISTINCT i.img_id, i.product_id, i.img_full, i.img_thumb, i.img_description, i.img_sort, i.is_video, CASE WHEN p.active IS NULL THEN '1' WHEN p.active = 0 THEN '0' ELSE '1' END AS active, CASE WHEN p.img_id IS NULL THEN '0' ELSE '1' END AS detail_img_id FROM tbl_images AS i LEFT OUTER JOIN ProductDetails AS p ON i.img_id = p.img_id WHERE i.product_id = ? ORDER BY i.img_sort"
+	objCmd.CommandText = "SELECT DISTINCT i.img_id, i.product_id, i.img_full, i.img_thumb, i.img_description, i.img_sort, i.is_video, CASE WHEN p.active IS NULL THEN '1' WHEN p.active = 0 THEN '0' ELSE '1' END AS active, CASE WHEN p.img_id IS NULL THEN '0' ELSE '1' END AS detail_img_id, g.total_qty_of_variants_this_image_assigned_to " & _
+	"FROM tbl_images AS i LEFT OUTER JOIN ProductDetails AS p ON i.img_id = p.img_id " & _
+	"INNER JOIN (SELECT img_id, SUM(qty) As total_qty_of_variants_this_image_assigned_to FROM ProductDetails GROUP BY img_id) g ON i.img_id=g.img_id " & _
+	"WHERE i.product_id = ? ORDER BY i.img_sort"
 	objCmd.Parameters.Append(objCmd.CreateParameter("ProductID",3,1,10,ProductID))
 	Set rs_getImages = objCmd.Execute()
 
@@ -688,61 +696,53 @@ window.dataLayer.push({
 							if var_show_thumbnails = "yes" then
 							%>
 							<div class="m-0 pr-0 col-2 col-md-2 col-lg-2 col-xl-2 col-break1600-1 baf-carousel-vertical col-img-thumbs" id="vert-thumb-carousel">
-								<img  class="img-fluid img-thumb lazyload <%= var_qty0 %>" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=rsProduct.Fields.Item("picture").Value %>" alt="Main photo" title="Main photo"  data-imgid="thumb_img_0" data-imgname="<%= rsProduct.Fields.Item("largepic").Value %>" id="img_thumb_0" data-id="0" data-color-chart="no" data-unassigned="no" />
+								<img  class="img-fluid img-thumb lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=rsProduct.Fields.Item("picture").Value %>" alt="Main photo" title="Main photo"  data-imgid="thumb_img_0" data-imgname="<%= rsProduct.Fields.Item("largepic").Value %>" id="img_thumb_0" data-id="0" data-color-chart="no" data-unassigned="no" />
 							<%							
 							end if 
 
-						
+
 							
-							 ' Loop through extra images if there are any
+							' Loop through extra images if there are any
 							if NOT rs_getImages.eof then 
 							
-							while NOT rs_getImages.eof
-							
-							' DID NOT FINISH OUT THIS CODE... GREY OUT THUMBNAIL IF ALL DETAILS FOR THAT IMAGE HAVE A QTY OF 0
-							set objCmd = Server.CreateObject("ADODB.command")
-							objCmd.ActiveConnection = DataConn
-							objCmd.CommandText = "SELECT qty FROM ProductDetails WHERE img_id = ? AND active = 1"
-							objCmd.Parameters.Append(objCmd.CreateParameter("img_id",3,1,10,0))
-							Set rs_CheckThumbnailQty = objCmd.Execute()
-			
-						' DID NOT FINISH OUT THIS CODE... GREY OUT THUMBNAIL IF ALL DETAILS FOR THAT IMAGE HAVE A QTY OF 0
-								var_qty0 = ""
-						'	if rs_getImages.Fields.Item("qty").Value = 0 then
-						'		var_qty0 = "thumbnail-qty0"
-						'	end if 		
-			
-							if rs_getImages.Fields.Item("active").Value = 1 then
-								
-								if rs_getImages.Fields.Item("detail_img_id").Value = 1 then
-									img_assigned = "yes"
-								else
-									img_assigned = "no"
-								end if			
-							
-								var_img_thumb_alt = ""
-							if rs_getImages.Fields.Item("img_description").Value <> "" then
-								var_img_thumb_alt = rs_getImages.Fields.Item("img_description").Value
-							end if
-							%>	
-							<%if rs_getImages.Fields.Item("is_video").Value = 1 then%>
-							<div class="video-thumbnail">
-								<img class="img-fluid img-thumb lazyload <%= var_qty0 %>" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=rs_getImages.Fields.Item("img_thumb").Value %>" alt="Thumbnail" title="<%= var_img_thumb_alt %>"  data-imgname="<%=(rs_getImages.Fields.Item("img_full").Value)%>" <% if img_assigned = "yes" then %> data-imgid="thumb_img_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_thumb_<%=rs_getImages.Fields.Item("img_id").Value %>" data-id="<%=rs_getImages.Fields.Item("img_id").Value %>" data-unassigned="no" <% else %> data-unassigned="yes" <% end if %> data-color-chart="no" />
-								<img src="/images/play-icon.png" class="play-icon" />
-							</div>	
-							<%else%>							
-								<img class="img-fluid img-thumb lazyload <%= var_qty0 %>" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=rs_getImages.Fields.Item("img_thumb").Value %>" alt="Thumbnail" title="<%= var_img_thumb_alt %>"  data-imgname="<%=(rs_getImages.Fields.Item("img_full").Value)%>" <% if img_assigned = "yes" then %> data-imgid="thumb_img_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_thumb_<%=rs_getImages.Fields.Item("img_id").Value %>" data-id="<%=rs_getImages.Fields.Item("img_id").Value %>" data-unassigned="no" <% else %> data-unassigned="yes" <% end if %> data-color-chart="no" />
-							<%end if%>
-							<%
-							end if ' only show if item is active
-							rs_getImages.MoveNext()
-							wend
-							rs_getImages.ReQuery()
+								while NOT rs_getImages.eof
+
+									'To show an additional image (thumbnail) as greyed out, all variants the image assigned must be out of stock
+									If rs_getImages("total_qty_of_variants_this_image_assigned_to") <=0 Then isThumbnailQtyZero = true Else isThumbnailQtyZero = false
+										
+									if rs_getImages.Fields.Item("active").Value = 1 then
+										
+										if rs_getImages.Fields.Item("detail_img_id").Value = 1 then
+											img_assigned = "yes"
+										else
+											img_assigned = "no"
+										end if			
+									
+										var_img_thumb_alt = ""
+										if rs_getImages.Fields.Item("img_description").Value <> "" then
+											var_img_thumb_alt = rs_getImages.Fields.Item("img_description").Value
+										end if
+										%>	
+										<%if rs_getImages.Fields.Item("is_video").Value = 1 then%>
+											<div class="video-thumbnail">
+												<img class="img-fluid img-thumb lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=rs_getImages.Fields.Item("img_thumb").Value %>" alt="Thumbnail" title="<%= var_img_thumb_alt %>"  data-imgname="<%=(rs_getImages.Fields.Item("img_full").Value)%>" <% if img_assigned = "yes" then %> data-imgid="thumb_img_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_thumb_<%=rs_getImages.Fields.Item("img_id").Value %>" data-id="<%=rs_getImages.Fields.Item("img_id").Value %>" data-unassigned="no" <% else %> data-unassigned="yes" <% end if %> data-color-chart="no" />
+												<img src="/images/play-icon.png" class="play-icon" />
+											</div>	
+										<%else%>	
+										<div class="image-thumbnail <%If isThumbnailQtyZero Then%>diagonal-line<%End If%>">										
+											<img <%If isThumbnailQtyZero Then%>style="opacity:.3"<%End If%> class="img-fluid img-thumb lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=rs_getImages.Fields.Item("img_thumb").Value %>" alt="Thumbnail" title="<%= var_img_thumb_alt %>"  data-imgname="<%=(rs_getImages.Fields.Item("img_full").Value)%>" <% if img_assigned = "yes" then %> data-imgid="thumb_img_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_thumb_<%=rs_getImages.Fields.Item("img_id").Value %>" data-id="<%=rs_getImages.Fields.Item("img_id").Value %>" data-unassigned="no" <% else %> data-unassigned="yes" <% end if %> data-color-chart="no" />
+										</div>
+										<%end if%>
+									<%
+									end if ' only show if item is active
+									rs_getImages.MoveNext()
+								wend
+								rs_getImages.ReQuery()
 							end if
 							%>
-						
-								<%= var_thumbs_charts %>
-								<%
+					
+							<%= var_thumbs_charts %>
+							<%
 							if var_show_thumbnails = "yes" then		
 							%>
 							</div><!-- end product-thumbnails -->
@@ -760,7 +760,7 @@ window.dataLayer.push({
 								<div class="slider-main-image baf-carousel" style="max-width:650px;max-height: 550px" >
 									<a class="position-relative pointer" data-fancybox="product-images" data-caption="Main Photo" href="https://bodyartforms-products.bodyartforms.com/<%=(rsProduct.Fields.Item("largepic").Value)%>" id="img_id_0">
 										<span class="position-absolute badge badge-secondary p-2 rounded-0" style="top:0;left:0;z-index:200"><i class="fa fa-search fa-lg"></i></span>
-									<img class="img-fluid" height="550px" width="550px" src="https://bodyartforms-products.bodyartforms.com/<%=(rsProduct.Fields.Item("largepic").Value)%>" alt="<%= rsProduct.Fields.Item("title").Value %>" style="max-height: 550px" />
+										<img class="img-fluid" height="550px" width="550px" src="https://bodyartforms-products.bodyartforms.com/<%=(rsProduct.Fields.Item("largepic").Value)%>" alt="<%= rsProduct.Fields.Item("title").Value %>" style="max-height: 550px;" />
 									<div class="text-center small text-dark">Main Photo</div>
 									</a>
 										
@@ -780,7 +780,7 @@ window.dataLayer.push({
 								<%else%>
 									<a class="position-relative pointer" data-fancybox="product-images" data-caption="<%= var_img_title %>" href="https://bodyartforms-products.bodyartforms.com/<%=(rs_getImages.Fields.Item("img_full").Value)%>" id="img_id_<%=rs_getImages.Fields.Item("img_id").Value %>">
 										<span class="position-absolute badge badge-secondary p-2 rounded-0" style="top:0;left:0;z-index:200"><i class="fa fa-search fa-lg"></i></span>
-										<img class="img-fluid lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=(rs_getImages.Fields.Item("img_full").Value)%>" alt="<%= var_img_title %>"  style="max-height: 550px" />
+											<img class="img-fluid lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=(rs_getImages.Fields.Item("img_full").Value)%>" alt="<%= var_img_title %>"  style="max-height: 550px;" />
 										<div class="text-center small text-dark"><%= var_img_title %></div>
 									</a>
 								<%end if%>	
@@ -997,6 +997,8 @@ end if
 <button class="btn btn-sm btn-outline-secondary" id="hide-mm" type="button">Hide mm sizes</button>
 <% end if %>
 </div>
+
+
 
 
 
@@ -1474,5 +1476,4 @@ Set rsGetWishlist = Nothing
 Set rsGetCategory = Nothing
 Set rsGetOrderHistory = Nothing
 Set rsJsonReviews = Nothing
-Set rs_CheckThumbnailQty = Nothing
 %>
