@@ -541,4 +541,23 @@
 	end if
 	'======= END INVENTORY COUNT NOTIFICATION ===========================
 
+	'======= BEGIN REPORT PHOTO =====================================================
+	if mailer_type = "reported-photo" then 
+		display_interface = "no"
+
+		if Request.form("comments") <> "" then
+			
+			mail_to_email = "bafservice1@bodyartforms.com"
+			mail_to_name = "Bodyartforms"
+			mail_reply_email = Request.form("email")
+			mail_reply_name = Request.form("name")
+			
+			mail_subject = "Reported photo"
+			mail_body = "<b>Page url: </b><br/><a href='" + Request.form("url") + "'>" + Request.form("url") + "</a><br/><br /><b>Comments:</b><br/>" + Request.form("comments") + "<br/><br /><b>Reported media:</b><br/><br/>" + Request.form("media_reported")
+
+		end if
+
+		Call baf_sendmail()
+	end if 
+	'======= END REPORT PHOTO =====================================================	
 %>
