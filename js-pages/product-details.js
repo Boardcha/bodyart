@@ -690,3 +690,40 @@ $(document).on('click', '#hide-mm', function(event) {
 	$('#show-mm').show();
 	$('#hide-mm').hide();
 });
+
+//Report product photo
+$(document).ready(function() {
+	$('#modal-report-photo').on('show.bs.modal', function (event) {
+	  var src = $(event.relatedTarget).data('photo-src');
+	  var video_src = $(event.relatedTarget).data('video-src');
+	  if(video_src != undefined) mediaType = "video"; else mediaType = "photo"
+	  $(this).find("#photo-src").val(src);
+	  $(this).find("#report-photo-label").html("Report this " + mediaType);
+
+	  if(mediaType == "photo"){
+		$(this).find("#reported-img").html('<img style="width:50%; max-width:500px" class="reported-image" src="' + src + '" />')
+	  }else{
+	    $(this).find("#reported-img").html(video_src);
+	  }
+	});
+
+	$("#frmReportPhoto").submit(function(e) {
+		var form = $("#frmReportPhoto")
+
+		if (form[0].checkValidity() === false) {
+			e.preventDefault()
+			e.stopPropagation()
+			console.log("invalid form elements");
+		} else {  
+			$('#report-photo-message').load("/emails/ajax_report_photo.asp", {
+				comments:  $('#report-photo-comments').val(), url: window.location.href, media_reported: $('#reported-img').html()
+			}, function() {
+				window.setTimeout(function () {
+				  $('#report-photo-message').html("");
+				}, 5000 );
+			});
+		}
+		form[0].classList.add('was-validated');
+		e.preventDefault();
+	});	
+});
