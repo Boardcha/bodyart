@@ -12,7 +12,7 @@ else
 end if
 
 	
-	if Instr(shipping_option, "USPS") > 0 then
+	if Instr(shipping_option, "USPS") > 0 OR Instr(shipping_option, "DHL") > 0 then
 	
 		shipping_select = shipping_option
 		shipping_arr = split(shipping_select, ",")

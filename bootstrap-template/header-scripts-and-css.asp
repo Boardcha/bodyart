@@ -18,6 +18,7 @@
 
   gtag('config', 'G-CG6EYC3NFB');
 </script>
+<script>(function(d){var e=d.createElement('script');e.src='https://td.yieldify.com/yieldify/code.js?w_uuid=ef4e975b-07ee-476e-86fd-1f9ae619a60f&k=1&loca='+window.location.href;e.async=true;d.getElementsByTagName('head')[0].appendChild(e);}(document));</script>
 
 
         <meta charset="UTF-8">

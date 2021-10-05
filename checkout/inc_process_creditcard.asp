@@ -1,6 +1,6 @@
 <%
 ' BILL AUTH.NET CIM IF CUSTOMER IS REGISTERED ==========================================================
-if var_grandtotal > 0 and request.form("paypal") <> "on" and request.form("afterpay") <> "on" and request.form("cash") <> "on" and request.form("cim_billing") <> "paypal" and request.form("cim_billing") <> "cash" then
+if var_grandtotal > 0 and request.form("googlepay") <> "on" and request.form("applepay") <> "on" and request.form("paypal") <> "on" and request.form("afterpay") <> "on" and request.form("cash") <> "on" and request.form("cim_billing") <> "paypal" and request.form("cim_billing") <> "cash" then
 
 if request.form("cim_billing") <> "" then
 

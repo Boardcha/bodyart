@@ -182,7 +182,7 @@ if not rsProduct.eof then
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "SELECT DISTINCT i.img_id, i.product_id, i.img_full, i.img_thumb, i.img_description, i.img_sort, i.is_video, CASE WHEN p.active IS NULL THEN '1' WHEN p.active = 0 THEN '0' ELSE '1' END AS active, CASE WHEN p.img_id IS NULL THEN '0' ELSE '1' END AS detail_img_id, g.total_qty_of_variants_this_image_assigned_to " & _
 	"FROM tbl_images AS i LEFT OUTER JOIN ProductDetails AS p ON i.img_id = p.img_id " & _
-	"INNER JOIN (SELECT img_id, SUM(qty) As total_qty_of_variants_this_image_assigned_to FROM ProductDetails GROUP BY img_id) g ON i.img_id=g.img_id " & _
+	"LEFT OUTER JOIN (SELECT img_id, SUM(qty) As total_qty_of_variants_this_image_assigned_to FROM ProductDetails GROUP BY img_id) g ON i.img_id=g.img_id " & _
 	"WHERE i.product_id = ? ORDER BY i.img_sort"
 	objCmd.Parameters.Append(objCmd.CreateParameter("ProductID",3,1,10,ProductID))
 	Set rs_getImages = objCmd.Execute()

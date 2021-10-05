@@ -44,6 +44,7 @@ menu.addEventListener("click", function(e){
 		});
 	});
 } // Run after window finishes loading
+
 </script>	
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->
@@ -127,7 +128,7 @@ Wend
 
 	' Show if cart is NOT empty
 	If Not rs_getCart.EOF Then
-
+	
 	'====== TRACK THE LAST DATE USER VIEWED THE CART PAGE =================
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
@@ -590,7 +591,6 @@ end if ' show if free sticker cookie has not been set to "no"
 
 
 										<% If toggle_checkout_paypal = true Then %>
-											<script src="https://www.paypal.com/sdk/js?client-id=AYw-H4XtJundkJlqW2_gPoXKAGDjOhD8A3kW2lKr721pcW7uMhBFmcCKf1GJOIQwrMl8vGKo1f_vY-Uf&components=messages,buttons" data-namespace="PayPalSDK"></script>
 											<div class="checkout_paypal"  style="display:none">
 												<a class="btn btn-block btn-warning checkout_button" href="checkout.asp?type=paypal">
 													<img style="height:30px" src="/images/paypal.png" />
@@ -599,15 +599,7 @@ end if ' show if free sticker cookie has not been set to "no"
 										<% else %>
 											<div class="alert alert-danger">We're sorry, but our <b>PayPal</b> checkout is temporarily unavailable. As soon as PayPal comes back online, we will accept orders again. Please check back later.</div>
 										<% end if %>
-
-						
-										<div class="mt-2"
-										data-pp-message
-										data-pp-style-layout="text"
-										data-pp-style-logo-type="inline"
-										data-pp-style-text-color="black"
-										data-pp-amount="<%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %>">
-										</div>
+									
 										<%
 										' === only show afterpay option to USA customers
 										if request.cookies("currency") = "" OR request.cookies("currency") = "USD" then
@@ -648,7 +640,7 @@ end if ' show if free sticker cookie has not been set to "no"
 												%>
 												</ul>
 												<div class="small">
-														Adding on autoclave sterilization service will only delay your order by 1 business day (Express orders will not be delayed). 
+													Adding on autoclave sterilization service will only delay your order by 1 business day (Express orders will not be delayed). 
 												</div>
 												
 									
@@ -706,18 +698,21 @@ end if ' show if free sticker cookie has not been set to "no"
 <% end if %>
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
 <script type="text/javascript" src="/js-pages/cart.min.js?v=03032020"></script>
-<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=091421"></script>
+<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=100421"></script>
 <!-- ^^^^^^  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE ^^^^^^ -->
 <script type="text/javascript">
 				calcAllTotals();
 
 </script>
-<!-- Start Afterpay Javascript -->
-<!--
-<script type = "text/javascript" src="https://static-us.afterpay.com/javascript/present-afterpay.js"></script>-->
-<!--
-<script type="text/javascript" src="/js-pages/afterpay-widget.js?v=020420" ></script>-->	
-
+<script>
+	var shippingWeight = 0.0;
+	<% If session("weight") <>"" Then%>
+		shippingWeight = <%=session("weight")%>; // TO DO: This needs to be updated when any qty updated on cart.asp, will be handled after Apple API is integrated.
+	<%End If%>
+</script>
+<!-- Google Pay Javascript -->
+<script async src="https://pay.google.com/gp/p/js/pay.js" onload="onGooglePayLoaded()"></script>
+<script src="/js/google-pay-v2api.js"></script>
 <%
 Set rsToggles = Nothing
 %>

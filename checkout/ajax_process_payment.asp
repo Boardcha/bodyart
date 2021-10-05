@@ -24,15 +24,22 @@ end if
 ' If no stock changes have occurred
 if stock_display = "" then 
 	var_stock_fail_json = "success"
-%>
-	"stock_status":"success",
-<%
+	%>
+		"stock_status":"success",
+	<%
+	'Let Google and Apple APIs know if order is flagged
+	
+	If session("flag") = "yes" Then%>
+		"flagged":"yes"
+	<%End If
+
 else
 	var_stock_fail_json = "fail"
-%>
-	"stock_status":"fail"
-<%
+	%>
+		"stock_status":"fail"
+	<%
 end if 
+
 
 rs_getCart.ReQuery() ' requery after stock check
 
@@ -40,12 +47,12 @@ rs_getCart.ReQuery() ' requery after stock check
 if stock_display = "" then 
 
 if Not rs_getCart.EOF then
-
 'Set array to store all order details (FOR CHECKOUT STORAGE INTO DATABASE)
 	reDim array_details_2(8,0)
 	Dim array_add_new : array_add_new = 0 
 	
 %>
+
 <!--#include virtual="checkout/inc_random_code_generator.asp"--> 
 	<!--#include virtual="cart/inc_cart_loopitems-begin.asp"-->
 	<!--#include virtual="checkout/inc_orderdetails_toarray.asp"--> 
@@ -77,6 +84,8 @@ if Not rs_getCart.EOF then
 %>
 <!--#include virtual="checkout/inc_process_cashorder.asp"--> 
 <!--#include virtual="checkout/inc_process_creditcard.asp"--> 
+<!--#include virtual="checkout/inc_process_googlepay.asp"--> 
+<!--#include virtual="checkout/inc_process_applepay.asp"--> 
 <%
 
 if payment_approved = "yes" then

@@ -2,128 +2,128 @@
 <%
 if var_addons_active <> "yes" then
 
-' START if customer is logged in then get CIM auth.net address information
-' =================================================================================
-if CustID_Cookie <> "" and CustID_Cookie <> 0 then
+	' START if customer is logged in then get CIM auth.net address information
+	' =================================================================================
+	if CustID_Cookie <> "" and CustID_Cookie <> 0 then
 
-	set objCmd = Server.CreateObject("ADODB.command")
-	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT * FROM customers WHERE customer_ID = ?"
-	objCmd.Parameters.Append(objCmd.CreateParameter("CustID_Cookie",3,1,10,CustID_Cookie))
-	Set rsGetUser = objCmd.Execute()
-	
-	
-	' Set customers main CIM ID to variable
-	var_cim_custid = rsGetUser.Fields.Item("cim_custid").Value
-	var_email = rsGetUser.Fields.Item("email").Value
-	var_our_custid = rsGetUser.Fields.Item("customer_ID").Value
-
-		' used to store into order on checkout/inc_save_cims_to_order
-		var_cim_shipping_id = request.form("cim_shipping")
-	
-	' Get CIM SHIPPING information ONLY if a new address wasn't entered into form
-	if request.form("cim_shipping") <> "" and (request.form("shipping-first") = "" and request.form("shipping-last") = "") then
-	
-		' Connect to Authorize.net CIM to get shipping address book information
-		strGetShipping = "<?xml version=""1.0"" encoding=""utf-8""?>" _
-		& "<getCustomerShippingAddressRequest xmlns=""AnetApi/xml/v1/schema/AnetApiSchema.xsd"">" _
-		& MerchantAuthentication() _
-		& "  <customerProfileId>" & var_cim_custid & "</customerProfileId>" _
-		& "  <customerAddressId>" & request.form("cim_shipping") & "</customerAddressId>" _
-		& "</getCustomerShippingAddressRequest>"
+		set objCmd = Server.CreateObject("ADODB.command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "SELECT * FROM customers WHERE customer_ID = ?"
+		objCmd.Parameters.Append(objCmd.CreateParameter("CustID_Cookie",3,1,10,CustID_Cookie))
+		Set rsGetUser = objCmd.Execute()
 		
-		Set objResponseGetShipping = SendApiRequest(strGetShipping)
+		
+		' Set customers main CIM ID to variable
+		var_cim_custid = rsGetUser.Fields.Item("cim_custid").Value
+		var_email = rsGetUser.Fields.Item("email").Value
+		var_our_custid = rsGetUser.Fields.Item("customer_ID").Value
 
-		' If connection is a success to address book than retrieve values and assign to variables
-		If IsApiResponseSuccess(objResponseGetShipping) Then
-			var_shipping_first = DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:firstName").Text)
+			' used to store into order on checkout/inc_save_cims_to_order
+			var_cim_shipping_id = request.form("cim_shipping")
+		
+		' Get CIM SHIPPING information ONLY if a new address wasn't entered into form
+		if request.form("cim_shipping") <> "" and (request.form("shipping-first") = "" and request.form("shipping-last") = "") then
+		
+			' Connect to Authorize.net CIM to get shipping address book information
+			strGetShipping = "<?xml version=""1.0"" encoding=""utf-8""?>" _
+			& "<getCustomerShippingAddressRequest xmlns=""AnetApi/xml/v1/schema/AnetApiSchema.xsd"">" _
+			& MerchantAuthentication() _
+			& "  <customerProfileId>" & var_cim_custid & "</customerProfileId>" _
+			& "  <customerAddressId>" & request.form("cim_shipping") & "</customerAddressId>" _
+			& "</getCustomerShippingAddressRequest>"
 			
-			session("shipping_first") = DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:firstName").Text)
-	
-			var_shipping_last = DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:lastName").Text)
-			
-			session("shipping_last") = DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:lastName").Text)
-			
-			var_shipping_company = DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:company").Text)
-			
-			session("shipping_company") = DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:company").Text)
-			
-			'Split out state from authorize.net and break it out to address 1 and address 2 fields
-			split_address = Split(objResponseGetShipping.selectSingleNode("/*/api:address/api:address").Text, "|")
-    			var_shipping_address1 = DecodeUTF8(split_address(0))
-				var_shipping_address2 = DecodeUTF8(split_address(1))
-				session("shipping_address1") = DecodeUTF8(split_address(0))
-				session("shipping_address2") = DecodeUTF8(split_address(1))
+			Set objResponseGetShipping = SendApiRequest(strGetShipping)
+
+			' If connection is a success to address book than retrieve values and assign to variables
+			If IsApiResponseSuccess(objResponseGetShipping) Then
+				var_shipping_first = DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:firstName").Text)
 				
+				session("shipping_first") = DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:firstName").Text)
+		
+				var_shipping_last = DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:lastName").Text)
 				
+				session("shipping_last") = DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:lastName").Text)
+				
+				var_shipping_company = DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:company").Text)
+				
+				session("shipping_company") = DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:company").Text)
+				
+				'Split out state from authorize.net and break it out to address 1 and address 2 fields
+				split_address = Split(objResponseGetShipping.selectSingleNode("/*/api:address/api:address").Text, "|")
+					var_shipping_address1 = DecodeUTF8(split_address(0))
+					var_shipping_address2 = DecodeUTF8(split_address(1))
+					session("shipping_address1") = DecodeUTF8(split_address(0))
+					session("shipping_address2") = DecodeUTF8(split_address(1))
 					
-			var_shipping_city = DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:city").Text)
-			
-			session("city") = DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:city").Text)
-			
-			var_shipping_state = replace(DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:state").Text), "|", "")
-			
-			session("state") =  replace(DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:state").Text), "|", "")
-				
-			var_shipping_zip = objResponseGetShipping.selectSingleNode("/*/api:address/api:zip").Text
-			
-			session("shipping_zip") = objResponseGetShipping.selectSingleNode("/*/api:address/api:zip").Text
-			
-			var_shipping_country = objResponseGetShipping.selectSingleNode("/*/api:address/api:country").Text
-			
-			session("country") = objResponseGetShipping.selectSingleNode("/*/api:address/api:country").Text
-			
-			var_phone = objResponseGetShipping.selectSingleNode("/*/api:address/api:phoneNumber").Text
-			
-			strShipping_ID = objResponseGetShipping.selectSingleNode("/*/api:address/api:customerAddressId").Text
-		End if
-	
-	end if ' Get CIM shipping information ONLY if a new address wasn't entered into form
-	
-	' START Get CIM BILLING information ONLY if a new address wasn't entered into form
-	if request.form("cim_billing") <> "" and (request.form("billing-first") = "" and request.form("billing-last") = "") then
-	
-		' used to store into order on checkout/inc_save_cims_to_order
-		var_cim_billing_id = request.form("cim_billing")
-	
-		strGetBillingAddress = "<?xml version=""1.0"" encoding=""utf-8""?>" _
-		& "<getCustomerPaymentProfileRequest xmlns=""AnetApi/xml/v1/schema/AnetApiSchema.xsd"">" _
-		& MerchantAuthentication() _
-		& "  <customerProfileId>" & cim_custid & "</customerProfileId>" _
-		& "  <customerPaymentProfileId>" & request.form("cim_billing") & "</customerPaymentProfileId>" _
-		& "</getCustomerPaymentProfileRequest>"
-		
-		Set objResponseGetAddress = SendApiRequest(strGetBillingAddress)
-
-		' If connection is a success to address book than retrieve values and assign to variables
-		If IsApiResponseSuccess(objResponseGetAddress) Then
-			strBilling_cardnumber = objResponseGetAddress.selectSingleNode("/*/api:paymentProfile/api:payment/api:creditCard/api:cardNumber").Text
-			strCardType = "Credit card"			
-	' NOT VALID BY AUTH.NET	strCardType = objResponseGetAddress.selectSingleNode("/*/api:paymentProfile/api:payment/api:creditCard/api:cardType").Text
-			'Split out state from authorize.net and break it out to address 1 and address 2 fields
-			split_address_billing = Split(objResponseGetAddress.selectSingleNode("/*/api:paymentProfile/api:billTo/api:address").Text, "|")
-    			var_billing_address1 = split_address_billing(0)
-				var_billing_address = split_address_billing(0)
-				var_billing_address2 = split_address_billing(1)
 					
-			var_billing_city = objResponseGetAddress.selectSingleNode("/*/api:paymentProfile/api:billTo/api:city").Text
-			var_billing_state = objResponseGetAddress.selectSingleNode("/*/api:paymentProfile/api:billTo/api:state").Text
-			var_billing_zip = objResponseGetAddress.selectSingleNode("/*/api:paymentProfile/api:billTo/api:zip").Text
-			strBilling_ID = objResponseGetAddress.selectSingleNode("/*/api:paymentProfile/api:customerPaymentProfileId").Text
-		End if
+						
+				var_shipping_city = DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:city").Text)
+				
+				session("city") = DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:city").Text)
+				
+				var_shipping_state = replace(DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:state").Text), "|", "")
+				
+				session("state") =  replace(DecodeUTF8(objResponseGetShipping.selectSingleNode("/*/api:address/api:state").Text), "|", "")
+					
+				var_shipping_zip = objResponseGetShipping.selectSingleNode("/*/api:address/api:zip").Text
+				
+				session("shipping_zip") = objResponseGetShipping.selectSingleNode("/*/api:address/api:zip").Text
+				
+				var_shipping_country = objResponseGetShipping.selectSingleNode("/*/api:address/api:country").Text
+				
+				session("country") = objResponseGetShipping.selectSingleNode("/*/api:address/api:country").Text
+				
+				var_phone = objResponseGetShipping.selectSingleNode("/*/api:address/api:phoneNumber").Text
+				
+				strShipping_ID = objResponseGetShipping.selectSingleNode("/*/api:address/api:customerAddressId").Text
+			End if
 		
-	end if ' END Get CIM BILLING information ONLY if a new address wasn't entered into form
+		end if ' Get CIM shipping information ONLY if a new address wasn't entered into form
+		
+		' START Get CIM BILLING information ONLY if a new address wasn't entered into form
+		if request.form("cim_billing") <> "" and (request.form("billing-first") = "" and request.form("billing-last") = "") then
+		
+			' used to store into order on checkout/inc_save_cims_to_order
+			var_cim_billing_id = request.form("cim_billing")
+		
+			strGetBillingAddress = "<?xml version=""1.0"" encoding=""utf-8""?>" _
+			& "<getCustomerPaymentProfileRequest xmlns=""AnetApi/xml/v1/schema/AnetApiSchema.xsd"">" _
+			& MerchantAuthentication() _
+			& "  <customerProfileId>" & cim_custid & "</customerProfileId>" _
+			& "  <customerPaymentProfileId>" & request.form("cim_billing") & "</customerPaymentProfileId>" _
+			& "</getCustomerPaymentProfileRequest>"
+			
+			Set objResponseGetAddress = SendApiRequest(strGetBillingAddress)
 
-else ' IF CUSTOMER IS NOT LOGGED INSERT
+			' If connection is a success to address book than retrieve values and assign to variables
+			If IsApiResponseSuccess(objResponseGetAddress) Then
+				strBilling_cardnumber = objResponseGetAddress.selectSingleNode("/*/api:paymentProfile/api:payment/api:creditCard/api:cardNumber").Text
+				strCardType = "Credit card"			
+		' NOT VALID BY AUTH.NET	strCardType = objResponseGetAddress.selectSingleNode("/*/api:paymentProfile/api:payment/api:creditCard/api:cardType").Text
+				'Split out state from authorize.net and break it out to address 1 and address 2 fields
+				split_address_billing = Split(objResponseGetAddress.selectSingleNode("/*/api:paymentProfile/api:billTo/api:address").Text, "|")
+					var_billing_address1 = split_address_billing(0)
+					var_billing_address = split_address_billing(0)
+					var_billing_address2 = split_address_billing(1)
+						
+				var_billing_city = objResponseGetAddress.selectSingleNode("/*/api:paymentProfile/api:billTo/api:city").Text
+				var_billing_state = objResponseGetAddress.selectSingleNode("/*/api:paymentProfile/api:billTo/api:state").Text
+				var_billing_zip = objResponseGetAddress.selectSingleNode("/*/api:paymentProfile/api:billTo/api:zip").Text
+				strBilling_ID = objResponseGetAddress.selectSingleNode("/*/api:paymentProfile/api:customerPaymentProfileId").Text
+			End if
+			
+		end if ' END Get CIM BILLING information ONLY if a new address wasn't entered into form
 
-	var_email = request.form("e-mail")
-	
-end if
-' END getting CIM information
-' =================================================================================
+	else ' IF CUSTOMER IS NOT LOGGED INSERT
+
+		var_email = request.form("e-mail")
+		
+	end if
+	' END getting CIM information
+	' =================================================================================
 	session("email") = var_email
 
-' Get form values IF customer is not logged in or information has been entered into form
+	' Get form values IF customer is not logged in or information has been entered into form
 	if request.form("shipping-first") <> "" and request.form("shipping-last") <> "" then
 		
 		var_phone = request.form("phone")
@@ -179,14 +179,45 @@ end if
 		end if
 	end if
 	
+	If request.form("googlepay") = "on" Or request.form("applepay") = "on" Then 'In this case, shipping and billing info comes from Google and Apple API
+	    var_billing_name = request.form("full_name")
+		var_shipping_first = getFirstName(request.form("full_name"))
+		var_shipping_last = getLastName(request.form("full_name"))
+		var_billing_address = request.form("address1")
+		var_billing_zip = request.form("postal_code")
+		var_shipping_address1 = request.form("address1")
+		var_shipping_address2 = request.form("address2")
+		var_shipping_city = request.form("locality")
+		var_shipping_state = request.form("administrative_area")
+		var_shipping_zip = request.form("postal_code")	
+		var_shipping_phone = request.form("phone_number")		
+		var_shipping_country_code = request.form("country_code")
+		var_email = request.form("email")
+		session("email") = var_email
+		
+		set objCmd = Server.CreateObject("ADODB.command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "SELECT Country, Country_UPSCode FROM TBL_Countries WHERE Country_UPSCode = '" & var_shipping_country_code & "'"
+		Set rsCountry = objCmd.Execute()
+
+		If Not rsCountry.EOF	Then
+			var_shipping_country = rsCountry("Country")
+		Else
+			var_shipping_country = var_shipping_country_code
+		End If
+		Set rsCountry = Nothing
+	End If
+	
 end if ' if var_addons_active 
 
 ' CREDIT CARD payment method
 ' =================================================================================
-if request.form("card_number") <> "" or (request.form("cim_billing") <> "paypal" and request.form("cim_billing") <> "cash" and request.form("afterpay") <> "on") then
+if request.form("card_number") <> "" or (request.form("cim_billing") <> "paypal" and request.form("cim_billing") <> "cash" and request.form("afterpay") <> "on" and request.form("googlepay") <> "on" and request.form("applepay") <> "on") then
 %>
 	"paypal":"no",
 	"afterpay":"no",
+	"googlepay":"no",
+	"applepay":"no",
 	"cash":"no",
 	"invoiceid":"0",
 	"order":"saved",
@@ -204,6 +235,8 @@ end if ' credit card payment
 	%>
 		"paypal":"yes",
 		"afterpay":"no",
+		"googlepay":"no",
+		"applepay":"no",
 		"cash":"no",
 		"order":"saved",
 		"status":"",
@@ -220,6 +253,8 @@ end if ' credit card payment
 	%>
 		"paypal":"no",
 		"afterpay":"yes",
+		"googlepay":"no",
+		"applepay":"no",		
 		"cash":"no",
 		"order":"saved",
 		"status":"",
@@ -236,9 +271,43 @@ end if ' credit card payment
 	%>
 		"cash":"yes",
 		"paypal":"no",
+		"googlepay":"no",
+		"applepay":"no",		
 		"order":"saved",
 		"status":"cash",
 		"cc_approved":"no"
+	<%	
+	end if ' if payment method is CASH
+' =================================================================================
+
+' Google Pay payment method
+' =================================================================================
+	if request.form("googlepay") = "on" then
+	
+		strCardType = "GooglePay"
+	%>
+		"cash":"no",
+		"paypal":"no",
+		"googlepay":"yes",
+		"applepay":"no",		
+		"order":"saved",
+		"status":"",
+	<%	
+	end if ' if payment method is CASH
+' =================================================================================
+
+' Apple Pay payment method
+' =================================================================================
+	if request.form("applepay") = "on" then
+	
+		strCardType = "ApplePay"
+	%>
+		"cash":"no",
+		"paypal":"no",
+		"googlepay":"no",
+		"applepay":"yes",		
+		"order":"saved",
+		"status":""
 	<%	
 	end if ' if payment method is CASH
 ' =================================================================================
@@ -295,7 +364,8 @@ if var_addons_active <> "yes" then
 			
 			objCmd.Parameters.Append(objCmd.CreateParameter("@pay_method",200,1,30,strCardType))
 			objCmd.Parameters.Append(objCmd.CreateParameter("@shipped",200,1,15,"Pending..."))
-			objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,now()))
+			'objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,now())) 'UGUR: This doesn't work on my local 
+			objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,Cstr(now())))
 
 			if session("preferred") = "yes" then
 				var_store_coupon = "YTG89R57"
@@ -376,11 +446,43 @@ if var_addons_active <> "yes" then
 				objCmd.Parameters.Append(objCmd.CreateParameter("item_price",6,1,10,array_details_2(4,i)))
 				objCmd.Parameters.Append(objCmd.CreateParameter("item_notes",200,1,50,array_details_2(7,i)))
 				objCmd.Parameters.Append(objCmd.CreateParameter("preorder_notes",200,1,2000,array_details_2(5,i)))
-				objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10,array_details_2(8,i)))
+				'objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10,array_details_2(8,i)))
+				objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10, 1))
 		objCmd.Execute()
 	next ' loop through array
 
 ' END store order
 ' =================================================================================
 end if 'if var_addons_active
+%>
+
+<%
+' FUNCTIONS
+Function getFirstName(fullName)
+
+	If Instr(fullName, ",") > 0 Then
+		firstName = Trim(Mid(fullName, Instr(fullName, ",") + 1))
+	ElseIf Instr(fullName, " ") > 0 Then
+		firstName = Trim(Mid(fullName, 1, InstrRev(fullName, " ")))
+	Else
+		firstName = fullName
+	End If
+	
+	getFirstName = firstName
+	
+End Function
+
+Function getLastName(fullName)
+
+	If Instr(fullName, ",") > 0 Then
+		lastName = Trim(Mid(fullName, 1, Instr(fullName, ",") - 1))
+	ElseIf Instr(fullName, " ") > 0 Then
+		lastName = Trim(Mid(fullName, InstrRev(fullName, " ") + 1))
+	Else
+		lastName = ""
+	End If
+	
+	getLastName = lastName
+	
+End Function
 %>
