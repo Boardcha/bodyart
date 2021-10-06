@@ -182,7 +182,7 @@ if not rsProduct.eof then
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "SELECT DISTINCT i.img_id, i.product_id, i.img_full, i.img_thumb, i.img_description, i.img_sort, i.is_video, CASE WHEN p.active IS NULL THEN '1' WHEN p.active = 0 THEN '0' ELSE '1' END AS active, CASE WHEN p.img_id IS NULL THEN '0' ELSE '1' END AS detail_img_id, g.total_qty_of_variants_this_image_assigned_to " & _
 	"FROM tbl_images AS i LEFT OUTER JOIN ProductDetails AS p ON i.img_id = p.img_id " & _
-	"INNER JOIN (SELECT img_id, SUM(qty) As total_qty_of_variants_this_image_assigned_to FROM ProductDetails GROUP BY img_id) g ON i.img_id=g.img_id " & _
+	"LEFT OUTER JOIN (SELECT img_id, SUM(qty) As total_qty_of_variants_this_image_assigned_to FROM ProductDetails GROUP BY img_id) g ON i.img_id=g.img_id " & _
 	"WHERE i.product_id = ? ORDER BY i.img_sort"
 	objCmd.Parameters.Append(objCmd.CreateParameter("ProductID",3,1,10,ProductID))
 	Set rs_getImages = objCmd.Execute()
@@ -755,34 +755,14 @@ window.dataLayer.push({
 								main_col_sizes = "col"
 							end if
 							%>
-							
-<style>
-// THIS WILL BE MOVED TO CSS FILES AFTER CONFIRMATION
-.slick-slide a.report{
-    display: none;
-}
-.slick-slide.slick-current a.report{
-  display: block;
-}
-a.report:before{
-	background: url("data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/PjxzdmcgZmlsbD0ibm9uZSIgaGVpZ2h0PSIyNCIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgc3Ryb2tlLWxpbmVqb2luPSJyb3VuZCIgc3Ryb2tlLXdpZHRoPSIyIiB2aWV3Qm94PSIwIDAgMjQgMjQiIHdpZHRoPSIyNCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cGF0aCBkPSJNNCAxNXMxLTEgNC0xIDUgMiA4IDIgNC0xIDQtMVYzcy0xIDEtNCAxLTUtMi04LTItNCAxLTQgMXoiLz48bGluZSB4MT0iNCIgeDI9IjQiIHkxPSIyMiIgeTI9IjE1Ii8+PC9zdmc+")
-	no-repeat left center;
-	padding-right:20px;
-	content:"";
-	background-size: 80%;
-}
-</style>
 							<div class="m-0 <%= main_col_sizes %> col-img-main">
-								
 								<div class="slider-main-image baf-carousel" style="max-width:650px;max-height: 550px" >
-									<div> <!--Slick slider div -->
-										<a class="position-relative pointer" data-fancybox="product-images" data-caption="Main Photo" href="https://bodyartforms-products.bodyartforms.com/<%=(rsProduct.Fields.Item("largepic").Value)%>" id="img_id_0">
-											<span class="position-absolute badge badge-secondary p-2 rounded-0" style="top:0;left:0;z-index:200"><i class="fa fa-search fa-lg"></i></span>
-											<img class="img-fluid" height="550px" width="550px" src="https://bodyartforms-products.bodyartforms.com/<%=(rsProduct.Fields.Item("largepic").Value)%>" alt="<%= rsProduct.Fields.Item("title").Value %>" style="max-height: 550px;" />
-										<div class="text-center small text-dark">Main Photo</div>
-										</a>
-										<a class="report small text-dark pointer" data-toggle="modal" data-target="#modal-report-photo" data-photo-src="https://bodyartforms-products.bodyartforms.com/<%=(rsProduct.Fields.Item("largepic").Value)%>">Report photo</a>
-									</div>	
+									<a class="position-relative pointer" data-fancybox="product-images" data-caption="Main Photo" href="https://bodyartforms-products.bodyartforms.com/<%=(rsProduct.Fields.Item("largepic").Value)%>" id="img_id_0">
+										<span class="position-absolute badge badge-secondary p-2 rounded-0" style="top:0;left:0;z-index:200"><i class="fa fa-search fa-lg"></i></span>
+										<img class="img-fluid" height="550px" width="550px" src="https://bodyartforms-products.bodyartforms.com/<%=(rsProduct.Fields.Item("largepic").Value)%>" alt="<%= rsProduct.Fields.Item("title").Value %>" style="max-height: 550px;" />
+									<div class="text-center small text-dark">Main Photo</div>
+									</a>
+										
 								<% while NOT rs_getImages.eof
 								if rs_getImages.Fields.Item("active").Value = 1 then
 								var_img_title = ""
@@ -791,23 +771,17 @@ a.report:before{
 								end if
 								%>
 								<%if rs_getImages.Fields.Item("is_video").Value = 1 then%>
-								<div> <!--Slick slider div -->
-									<a class="position-relative pointer" data-fancybox="product-images" data-caption="<%= var_img_title %>" href="#video_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_id_<%=rs_getImages.Fields.Item("img_id").Value %>">
-										<div class="video-container">
-											<video preload="metadata" id="video_<%=rs_getImages.Fields.Item("img_id").Value %>" class="video-player" controls disablepictureinpicture controlslist="nodownload"><source src="https://videos.bodyartforms.com/<%=rs_getImages.Fields.Item("img_full").Value%>#t=0.1" type="video/mp4"></video>
-										</div>
-									</a>
-									<a class="report small text-dark" style="cursor:pointer" data-toggle="modal" data-target="#modal-report-photo" data-video-src="https://bodyartforms-products.bodyartforms.com/<%=(rs_getImages.Fields.Item("img_full").Value)%>">Report video</a>
-								</div>								
-								<%else%>
-									<div> <!--Slick slider div -->
-										<a class="position-relative pointer" data-fancybox="product-images" data-caption="<%= var_img_title %>" href="https://bodyartforms-products.bodyartforms.com/<%=(rs_getImages.Fields.Item("img_full").Value)%>" id="img_id_<%=rs_getImages.Fields.Item("img_id").Value %>">
-											<span class="position-absolute badge badge-secondary p-2 rounded-0" style="top:0;left:0;z-index:200"><i class="fa fa-search fa-lg"></i></span>
-												<img class="img-fluid lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=(rs_getImages.Fields.Item("img_full").Value)%>" alt="<%= var_img_title %>"  style="max-height: 550px;" />
-											<div class="text-center small text-dark"><%= var_img_title %></div>
-										</a>
-										<a class="report small text-dark" style="cursor:pointer" data-toggle="modal" data-target="#modal-report-photo" data-photo-src="https://bodyartforms-products.bodyartforms.com/<%=(rs_getImages.Fields.Item("img_full").Value)%>">Report photo</a>
+								<a class="position-relative pointer" data-fancybox="product-images" data-caption="<%= var_img_title %>" href="#video_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_id_<%=rs_getImages.Fields.Item("img_id").Value %>">
+									<div class="video-container">
+										<video preload="metadata" id="video_<%=rs_getImages.Fields.Item("img_id").Value %>" class="video-player" controls disablepictureinpicture controlslist="nodownload"><source src="https://videos.bodyartforms.com/<%=rs_getImages.Fields.Item("img_full").Value%>#t=0.1" type="video/mp4"></video>
 									</div>
+								</a>	
+								<%else%>
+									<a class="position-relative pointer" data-fancybox="product-images" data-caption="<%= var_img_title %>" href="https://bodyartforms-products.bodyartforms.com/<%=(rs_getImages.Fields.Item("img_full").Value)%>" id="img_id_<%=rs_getImages.Fields.Item("img_id").Value %>">
+										<span class="position-absolute badge badge-secondary p-2 rounded-0" style="top:0;left:0;z-index:200"><i class="fa fa-search fa-lg"></i></span>
+											<img class="img-fluid lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=(rs_getImages.Fields.Item("img_full").Value)%>" alt="<%= var_img_title %>"  style="max-height: 550px;" />
+										<div class="text-center small text-dark"><%= var_img_title %></div>
+									</a>
 								<%end if%>	
 								<% 
 								end if ' only display if item is active
@@ -1447,10 +1421,9 @@ end if
 	<% end if 'rsRecentlyViewed.EOF %>		
 
 	<% end if ' only display if product is active %>
-
 	
 	<!-- BEGIN REPORT PHOTO MODAL WINDOW -->
-	<div class="modal fade" id="modal-report-photo" tabindex="-1" role="dialog"  aria-labelledby="modal-report-photo" >
+	<div class="modal fade" id="modal-report-photo" tabindex="-1" role="dialog"  aria-labelledby="modal-report-photo" style="z-index:999999">
 		<div class="modal-dialog" role="document">
 			<div class="modal-content">
 					<div class="modal-header">
@@ -1461,8 +1434,7 @@ end if
 					</div>
 					<div class="modal-body">
 						<form class="needs-validation" name="frmReportPhoto" id="frmReportPhoto" novalidate>
-							<input class="photo-src" name="photo-src" type="hidden" id="photo-src" value="">
-							<div class="form-group text-center" id="reported-img"></div>
+							<div class="form-group">Please write a short description.</div>
 							<div class="form-group">
 								<input class="form-control" type="text" name="report-photo-comments" id="report-photo-comments" placeholder="Comments" required>
 							</div>
@@ -1475,9 +1447,10 @@ end if
 			</div>
 		</div>
 	</div>
-	<!-- END REPORT PHOTO MODAL WINDOW -->
-
+	<!-- END REPORT PHOTO MODAL WINDOW -->	
+	
 <!--#include virtual="/bootstrap-template/footer.asp" -->
+
 <script type="text/javascript" src="/js-pages/currency-exchange.min.js?v=022420"></script>
 <% if (session("exchange-rate") = "" OR session("exchange-currency") <> request.cookies("currency")) AND request.cookies("currency") <> "" AND request.cookies("currency") <> "USD" then %>
 <script>
@@ -1487,7 +1460,7 @@ end if
 <% end if %>
 <script src="/js/jquery.fancybox.min.js"></script>
 <script type="text/javascript" src="/js/slick.min.js"></script>
-<script type="text/javascript" src="/js-pages/product-details.min.js?v=082522" ></script>
+<script type="text/javascript" src="/js-pages/product-details.min.js?v=082523" ></script>
 
 <!-- Start Afterpay Javascript -->
 <!--
