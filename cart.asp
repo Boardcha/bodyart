@@ -73,15 +73,12 @@ end if
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT * FROM TBL_Toggle_Items"
-Set rsToggles = objCmd.Execute()
+objCmd.CommandText = "SELECT * FROM TBL_Toggle_Items WHERE toggle_item = 'toggle_autoclave'"
+Set rsAutoClave = objCmd.Execute()
 
-While Not rsToggles.EOF
-	If rsToggles("toggle_item") = "toggle_autoclave" Then toggle_autoclave = rsToggles("value")
-	If rsToggles("toggle_item") = "toggle_checkout_cards" Then toggle_checkout_cards = rsToggles("value")
-	If rsToggles("toggle_item") = "toggle_checkout_paypal" Then toggle_checkout_paypal = rsToggles("value")
-	rsToggles.MoveNext
-Wend
+If Not rsAutoClave.EOF	Then
+	var_toggle_autoclave = rsAutoClave("value")
+End If
 %>
 <!--#include virtual="cart/inc_cart_add_item.asp"-->
 <!--#include virtual="cart/inc_cart_main.asp"-->
@@ -128,13 +125,6 @@ Wend
 
 	' Show if cart is NOT empty
 	If Not rs_getCart.EOF Then
-	
-	'====== TRACK THE LAST DATE USER VIEWED THE CART PAGE =================
-	set objCmd = Server.CreateObject("ADODB.command")
-	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "UPDATE tbl_carts SET cartpage_date_viewed = GETDATE() WHERE " & var_db_field & " = ?"
-	objCmd.Parameters.Append(objCmd.CreateParameter("cart_custID",3,1,10, var_cart_userid))
-	objCmd.Execute()
 	%> 
 	<section>
 <!--#include virtual="/includes/inc-currency-images.asp" -->
@@ -562,44 +552,36 @@ end if ' show if free sticker cookie has not been set to "no"
 											<% end if ' free shipping notice only showing if order is not heavy
 											%>	
 										</div><!-- end card body -->
-										<div class="card-footer">
-												
-											<!--#include virtual="cart/inc_cart_grandtotal.asp"-->
-													<h4>TOTAL <% if strcountryName <> "US" then %> (USD)<% end if %>$<span class="cart_grand-total"><%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %></span></h4>
-											<div class="row_convert_total" style="display:none">
-												<div class="alert alert-success p-2">
-													<div><h6><img class="mr-2" style="width:20px;height:20px" src="/images/icons/<%= currency_img %>">ESTIMATE <span class="exchange-price"><span class="currency-type"></span> <span class="convert-total convert-price" data-price=""></span></span></h6></div>
-														<span class="exchange-price"><span class="currency-type bold"></span> <span class="convert-total convert-price bold" data-price=""></span> is a close estimate</span>. The total billed will be for <span class="bold">$<span class="cart_grand-total"><%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %></span> in US Dollars</span> and your bank will convert to the most current exchange rate.
-												</div>
+								<div class="card-footer">
+										
+									<!--#include virtual="cart/inc_cart_grandtotal.asp"-->
+											<h4>TOTAL <% if strcountryName <> "US" then %> (USD)<% end if %>$<span class="cart_grand-total"><%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %></span></h4>
+									<div class="row_convert_total" style="display:none">
+										<div class="alert alert-success p-2">
+											<div><h6><img class="mr-2" style="width:20px;height:20px" src="/images/icons/<%= currency_img %>">ESTIMATE <span class="exchange-price"><span class="currency-type"></span> <span class="convert-total convert-price" data-price=""></span></span></h6></div>
+												<span class="exchange-price"><span class="currency-type bold"></span> <span class="convert-total convert-price bold" data-price=""></span> is a close estimate</span>. The total billed will be for <span class="bold">$<span class="cart_grand-total"><%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %></span> in US Dollars</span> and your bank will convert to the most current exchange rate.
 										</div>
-										<% If toggle_checkout_cards = true Then %>
-											<div class="checkout_now" style="display:none">
-												<a class="btn btn-block btn-primary mb-3 checkout_button" href="checkout.asp?type=card" ><h6>CHECKOUT WITH <span class="payment-options">CREDIT CARD
-													<br/>
-													<span style="font-size:2em">
-													<i class="fa fa-cc-visa"></i>
-													<i class="fa fa-cc-mastercard"></i>
-													<i class="fa fa-cc-amex"></i>
-													<i class="fa fa-cc-discover"></i></span>
-												</span>
-												</h6>
-												</a>
-											</div>
-										<% else %>
-											<div class="alert alert-danger">We're sorry, but our <b>credit card</b> checkout is temporarily unavailable. As soon as our payment processor comes back online, we will accept orders again. Please check back later.</div>
-										<% end if %>										
-
-
-										<% If toggle_checkout_paypal = true Then %>
-											<div class="checkout_paypal"  style="display:none">
-												<a class="btn btn-block btn-warning checkout_button" href="checkout.asp?type=paypal">
-													<img style="height:30px" src="/images/paypal.png" />
-												</a>
-											</div>
-										<% else %>
-											<div class="alert alert-danger">We're sorry, but our <b>PayPal</b> checkout is temporarily unavailable. As soon as PayPal comes back online, we will accept orders again. Please check back later.</div>
-										<% end if %>
-									
+								</div>
+								<div class="checkout_now" style="display:none">
+										<a class="btn btn-block btn-primary mb-3 checkout_button" href="checkout.asp?type=card" ><h6>CHECKOUT WITH <span class="payment-options">CREDIT CARD
+											<br/>
+											<span style="font-size:2em">
+											<i class="fa fa-cc-visa"></i>
+											<i class="fa fa-cc-mastercard"></i>
+											<i class="fa fa-cc-amex"></i>
+											<i class="fa fa-cc-discover"></i></span>
+										</span>
+										</h6>
+										</a>
+										</div>
+										<div class="checkout_paypal"  style="display:none">
+										<a class="btn btn-block btn-primary mb-3 checkout_button" href="checkout.asp?type=paypal"><h6>CHECKOUT WITH PAYPAL
+											<br/><span style="font-size:2em">
+											<i class="ml-2 fa fa-cc-paypal"></i></span></h6>
+										</a>
+										</div>
+										<div id="btn-googlepay" class="mb-3 checkout_button" style="width: 100%; height: 79px; display: none;"></div>
+										<!--<apple-pay-button id="btn-applepay" buttonstyle="white" type="check-out" locale="en"></apple-pay-button>-->
 										<%
 										' === only show afterpay option to USA customers
 										if request.cookies("currency") = "" OR request.cookies("currency") = "USD" then
@@ -617,7 +599,7 @@ end if ' show if free sticker cookie has not been set to "no"
 						</div><!-- end card footer for totals -->
 					  </div><!-- end card for totals -->
 									<% ' Display if ANY autoclavable items are found on the order 
-									if var_autoclavable = 1 and var_sterilization_added = 0 and toggle_autoclave = true then
+									if var_autoclavable = 1 and var_sterilization_added = 0 and var_toggle_autoclave = true then
 										rs_getCart.ReQuery() 
 									%>
 										<div class="alert alert-info p-2 mt-4">
@@ -640,7 +622,7 @@ end if ' show if free sticker cookie has not been set to "no"
 												%>
 												</ul>
 												<div class="small">
-													Adding on autoclave sterilization service will only delay your order by 1 business day (Express orders will not be delayed). 
+														Adding on autoclave sterilization service will only delay your order by 1 business day (Express orders will not be delayed). The items above will be placed together in one autoclave pouch. 
 												</div>
 												
 									
@@ -698,21 +680,31 @@ end if ' show if free sticker cookie has not been set to "no"
 <% end if %>
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
 <script type="text/javascript" src="/js-pages/cart.min.js?v=03032020"></script>
-<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=100421"></script>
+<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=020521"></script>
 <!-- ^^^^^^  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE ^^^^^^ -->
 <script type="text/javascript">
 				calcAllTotals();
-
-</script>
-<script>
-	var shippingWeight = 0.0;
-	<% If session("weight") <>"" Then%>
-		shippingWeight = <%=session("weight")%>; // TO DO: This needs to be updated when any qty updated on cart.asp, will be handled after Apple API is integrated.
-	<%End If%>
 </script>
 <!-- Google Pay Javascript -->
 <script async src="https://pay.google.com/gp/p/js/pay.js" onload="onGooglePayLoaded()"></script>
 <script src="/js/google-pay-v2api.js"></script>
-<%
-Set rsToggles = Nothing
-%>
+<!-- Apple Pay Javascript -->
+<script src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js"></script>
+<script>
+//Show Apple Pay button if device is compatible
+/*
+$( document ).ready(function() {
+$("apple-pay-button").show();
+if (window.ApplePaySession) {
+   var merchantIdentifier = 'merchant.com.bodyartforms';
+   if (ApplePaySession.canMakePayments(merchantIdentifier))
+	   $("apple-pay-button").show();
+}
+});
+*/
+</script>
+<!-- Start Afterpay Javascript -->
+<!--
+<script type = "text/javascript" src="https://static-us.afterpay.com/javascript/present-afterpay.js"></script>-->
+<!--
+<script type="text/javascript" src="/js-pages/afterpay-widget.js?v=020420" ></script>-->
