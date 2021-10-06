@@ -697,15 +697,50 @@ footer, #mobilesearch, #accountmenu {
   }
 
 
+.fancybox-report{
+	background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    color: #ccc !important;
+    cursor: pointer !important;
+    opacity: .8;
+    padding: 8px !important;
+    position: absolute;
+    left: -15px;
+    top: -44px;
+    z-index: 401;
+	width: 145px !important;
+	height: 35px !important;
+}
+.fancybox-report:hover {
+  color: #fff;
+  opacity: 1; }
 
+.fancybox-slide--html .fancybox-report {
+  color: currentColor;
+  padding: 10px;
+  left: 0;
+  top: 0; }
 
-
-
-
-
-
-
-
-
-    
-
+.fancybox-is-scaling .fancybox-report,
+.fancybox-is-zoomable.fancybox-can-pan .fancybox-report {
+  display: none; }
+  
+@media (max-height: 576px){
+	.fancybox-slide--image .fancybox-report {
+		background: #4e4e4e !important;
+		color: #f2f4f6;
+		height: 36px;
+		opacity: 1;
+		padding: 6px;
+		left: 0;
+		top: 0;
+		width: 36px;
+	}
+}
+.fancybox-report svg{
+	height: 16px !important;
+    width: 16px !important;
+    display: inline-block !important;
+    margin-right: 5px;
+}	
