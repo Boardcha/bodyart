@@ -694,17 +694,7 @@ $(document).on('click', '#hide-mm', function(event) {
 //Report product photo
 $(document).ready(function() {
 	$('#modal-report-photo').on('show.bs.modal', function (event) {
-	  var src = $(event.relatedTarget).data('photo-src');
-	  var video_src = $(event.relatedTarget).data('video-src');
-	  if(video_src != undefined) mediaType = "video"; else mediaType = "photo"
-	  $(this).find("#photo-src").val(src);
-	  $(this).find("#report-photo-label").html("Report this " + mediaType);
-
-	  if(mediaType == "photo"){
-		$(this).find("#reported-img").html('<img style="width:50%; max-width:500px" class="reported-image" src="' + src + '" />')
-	  }else{
-	    $(this).find("#reported-img").html(video_src);
-	  }
+	  $(this).find("#report-photo-label").html("Report this photo");
 	});
 
 	$("#frmReportPhoto").submit(function(e) {
@@ -715,8 +705,10 @@ $(document).ready(function() {
 			e.stopPropagation()
 			console.log("invalid form elements");
 		} else {  
+			var imgSrc = $('.fancybox-slide--current .fancybox-image').attr('src');
+			var imgCaption = $('.fancybox-caption').text();
 			$('#report-photo-message').load("/emails/ajax_report_photo.asp", {
-				comments:  $('#report-photo-comments').val(), url: window.location.href, media_reported: $('#reported-img').html()
+				comments:  $('#report-photo-comments').val(), url: window.location.href, img_src: imgSrc, caption: imgCaption
 			}, function() {
 				window.setTimeout(function () {
 				  $('#report-photo-message').html("");
@@ -727,3 +719,4 @@ $(document).ready(function() {
 		e.preventDefault();
 	});	
 });
+
