@@ -553,7 +553,7 @@
 			mail_reply_name = Request.form("name")
 			
 			mail_subject = "Reported photo"
-			mail_body = "<b>Page url: </b><br/><a href='" + Request.form("url") + "'>" + Request.form("url") + "</a><br/><br /><b>Comments:</b><br/>" + Request.form("comments") + "<br/><br /><b>Reported media:</b><br/><br/>" + Request.form("media_reported")
+			mail_body = "<b>Page url: </b><br/><a href='" + Request.form("url") + "'>" + Request.form("url") + "</a><br/><br /><b>Comments:</b><br/>" + Request.form("comments") + "<br/><br /><b>Reported photo:</b> " + Request.form("caption") + "<br/><br/>" + "<img style=""width:50%; max-width:500px"" src=""" + Request.form("img_src") + """ />"
 
 		end if
 

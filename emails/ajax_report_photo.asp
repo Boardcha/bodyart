@@ -1,10 +1,8 @@
 <% @LANGUAGE="VBSCRIPT" %>
 <!--#include virtual="/template/inc_includes.asp" -->
 
-<% 'if Request.form("email") <> "" then 
-
-mailer_type = "reported-photo"
-				
+<%
+mailer_type = "reported-photo"			
 %>
 
 <!--#include virtual="emails/function-send-email.asp"-->
