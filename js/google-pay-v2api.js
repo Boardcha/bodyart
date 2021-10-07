@@ -162,12 +162,12 @@ function onPaymentAuthorized(paymentData) {
     .then(function() {
       resolve({transactionState: 'SUCCESS'});
     })
-    .catch(function() {
-        resolve({
+    .catch(function(error) {
+		resolve({
         transactionState: 'ERROR',
         error: {
           intent: 'PAYMENT_AUTHORIZATION',
-          message: 'Insufficient funds',
+          message: error,
           reason: 'PAYMENT_DATA_INVALID'
         }
       });
@@ -607,7 +607,7 @@ function processPayment(paymentData) {
       country_code = paymentData.shippingAddress.countryCode;
       phone_number = paymentData.shippingAddress.phoneNumber;
 	  email = paymentData.email;
-	  amount = subTotal
+	  amount = subTotal;
 
 	  // START send payment data to authorize.net to process
 	  $.ajax({
@@ -624,11 +624,11 @@ function processPayment(paymentData) {
 			.done(function( json, msg ) {
 				if (json.stock_status === "fail") {
 					console.log("stock_status: fail");
-					reject(new Error('Unfortunately we do not have enough quantity in stock for some of the item(s) in your cart.'));
+					reject("Unfortunately we do not have enough quantity in stock for some of the item(s) in your cart.");
 					calcAllTotals();
 				}else if (json.flagged === "yes") {
-					console.log("Order or user is flagged.");
-					reject(new Error('This order can not be processed online. Please contact customer service for assistance.'));				
+					console.log("ORDER or USER is FLAGGED !!!");
+					reject("This order can not be processed online. Please contact customer service for assistance.");							
 				} else { // If items are in stock 
 					if (json.cc_approved === "yes") {
 						resolve({});
@@ -638,13 +638,13 @@ function processPayment(paymentData) {
 						console.log("Payment declined");
 						console.log("msg.responseText: " + msg.responseText);
 						console.log("json.errorText: " + json.errorText);
-						reject(new Error('Payment declined. ' + json.cc_reason));
+						reject("Payment declined. " + json.cc_reason);
 					}				
 				}			
 			})
 			.fail(function() {
-				reject(new Error('Payment declined. Please review your information and try again.'));
+				reject("Payment declined. Please review your information and try again.");
 			});
-    }, 3000);
+    }, 1000);
   });
 }
