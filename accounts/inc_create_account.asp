@@ -1,28 +1,40 @@
 <%
-
 ' CREATE NEW CUSTOMER ACCOUNT if they opted in
 ' =================================================================================
-if request.form("password") <> "" and request.form("check") = "" then
-		' THe check field is to help prevent against bots
+password = request.form("password")
+check = request.form("check")
+email = request.form("e-mail")
+'overwrite variables if user signed-in with Google
+If google_signin_email <> "" Then
+	email = google_signin_email
+	password = "hg4!=g4s68.n" & getSalt(10, extraChars) 'Set a different temporary password for each user signed in with Google
+End If
+
+if email <> "" and check = "" then
+	' THe check field is to help prevent against bots
 
 	'Set variable for mailer
 	mailer_type = "new account"
 	
 	salt = getSalt(32, extraChars)
-	newPass = sha256(salt & request.form("password") & extra_key)
+	newPass = sha256(salt & password & extra_key)
 
 	'Add new account information into our database
+	If google_firstName <> "" Then firstName = "'" & google_firstName & "'" Else firstName = "NULL"
+	If google_lastName <> "" Then lastName = "'" & google_lastName & "'" Else lastName = "NULL"
+	If google_user_id <> "" Then googleUserId = "'" & google_user_id & "'" Else googleUserId = "NULL"
+	If google_signin_email <> "" Then registered_with_social_login = 1 Else registered_with_social_login = 0
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "INSERT INTO customers (email, password_hashed, salt) VALUES (?, '" & newPass & "', '" & salt & "')"
-	objCmd.Parameters.Append(objCmd.CreateParameter("email",200,1,50,request.form("e-mail")))
+	objCmd.CommandText = "INSERT INTO customers (email, password_hashed, salt, customer_first, customer_last, registered_with_social_login, google_user_id) VALUES (?, '" & newPass & "', '" & salt & "', " & firstName & ", " & lastName & ", " & registered_with_social_login & ", " & googleUserId & ")"
+	objCmd.Parameters.Append(objCmd.CreateParameter("email",200,1,50, email))
 	objCmd.Execute()
 	
 	'Retrieve customer ID number from our database
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "SELECT customer_ID, email FROM customers WHERE email = ? ORDER BY customer_ID DESC"
-	objCmd.Parameters.Append(objCmd.CreateParameter("email",200,1,50,request.form("e-mail")))
+	objCmd.Parameters.Append(objCmd.CreateParameter("email",200,1,50, email))
 	Set rsGetUserID = objCmd.Execute()
 	
 	'Create cookie and session for new customer (log them in automatically)
@@ -203,7 +215,7 @@ if request.form("password") <> "" and request.form("check") = "" then
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "INSERT INTO TBLDiscounts (DiscountCode, DateExpired, coupon_single_email, DiscountPercent, coupon_single_use, DateAdded, DiscountType, active, dateactive, coupon_assigned, DiscountDescription) VALUES (?, GETDATE()+30, ?, 10, 1, GETDATE(), 'Percentage', 'A', GETDATE()-1, 1, 'New account creation')"
 	objCmd.Parameters.Append(objCmd.CreateParameter("Code",200,1,30,var_cert_code))
-	objCmd.Parameters.Append(objCmd.CreateParameter("Email",200,1,30,request.form("e-mail")))
+	objCmd.Parameters.Append(objCmd.CreateParameter("Email",200,1,30, email))
 	objCmd.Execute()
 	
 	' Sent out account creation welcome email below
@@ -213,12 +225,10 @@ if request.form("password") <> "" and request.form("check") = "" then
 	<!--#include virtual="/accounts/inc_transfer_cart_contents.asp" -->
 <%
 	
-	
 	' clear all DB and variables
 	set rsGetUserID = nothing
 	
 end if ' if password is not empty
 ' END create new customer account
 ' =================================================================================
-
 %>
