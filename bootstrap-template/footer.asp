@@ -149,6 +149,46 @@ end if
     });
 
 </script>  
+<!--Google Sign-in-->
+<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+<script>
+    function onSuccess(googleUser) {
+		var profile = googleUser.getBasicProfile();	
+		var id_token = googleUser.getAuthResponse().id_token;
+		var xhr = new XMLHttpRequest();
+		xhr.open('POST', '/oauth/google-signin-token.asp');
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		xhr.overrideMimeType("application/json");
+		xhr.onload = function() {
+		  var json = JSON.parse(xhr.responseText);
+		  if(json.status == "logged-in")
+			window.location.href = "/account.asp";
+		};
+		xhr.send("idtoken=" + id_token);
+		
+	}
+    function onFailure(error) {
+      console.log(error);
+    }
+    function renderButton() {
+		gapi.signin2.render('google_sign_in', {
+		'scope': 'profile email',
+		'width': 240,
+		'height': 50,
+		'longtitle': true,
+		'theme': 'dark',
+		'onsuccess': onSuccess,
+		'onfailure': onFailure
+		});
+    }
+	function signOut() {
+		var auth2 = gapi.auth2.getAuthInstance();
+		auth2.signOut().then(function () {
+		  console.log('User signed out.');
+		});
+	}	
+</script>
+  
 <% ' ---- ONLY SHOW TO COUNTRIES IN THE EU -----------
 %>
 <!--#include virtual="/functions/inc-eu-country-codes.asp" -->

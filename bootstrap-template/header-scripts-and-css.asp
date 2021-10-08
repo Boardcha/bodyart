@@ -1,3 +1,4 @@
+<!--#include virtual="/oauth/google-oauth-credentials.inc" -->
 <!-- Installed April 2021 - Global site tag (gtag.js) - Google Analytics -->
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -18,7 +19,6 @@
 
   gtag('config', 'G-CG6EYC3NFB');
 </script>
-<script>(function(d){var e=d.createElement('script');e.src='https://td.yieldify.com/yieldify/code.js?w_uuid=ef4e975b-07ee-476e-86fd-1f9ae619a60f&k=1&loca='+window.location.href;e.async=true;d.getElementsByTagName('head')[0].appendChild(e);}(document));</script>
 
 
         <meta charset="UTF-8">
@@ -40,6 +40,7 @@
         <link rel="manifest" href="/webmanifest.json">
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
         <link rel="shortcut icon" href="/favicon.ico">
+		<meta name="google-signin-client_id" content="<%=google_oauth_clientId%>.apps.googleusercontent.com">
         <meta name="msapplication-TileColor" content="#2b5797">
         <meta name="theme-color" content="#ffffff">
         <% if request.cookies("darkmode") <> "on" then %> 
