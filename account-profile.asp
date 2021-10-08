@@ -125,6 +125,7 @@ if session("admin_tempcustid") <> "" then %>
 		</div>
 		<div class="card-body">
 	<form class="needs-validation col-md-4 p-0" name="frm-update-pass" id="frm-update-pass" novalidate>
+		<%If rsGetUser("registered_with_social_login").Value <> True Then%>
 		<div class="form-group">
 			<label for="current_password">Current password: <span class="text-danger">*</span></label>
 			<input class="form-control" name="current_password" id="current_password" type="password"  required/>
@@ -132,6 +133,7 @@ if session("admin_tempcustid") <> "" then %>
 					Current password is required
 			</div>
 		</div>
+		<%End If%>	
 		<div class="form-group">
 			<label for="password_confirmation">New password: <span class="text-danger">*</span></label>
 			<input class="form-control" name="password_confirmation" id="profile_password_confirmation" type="password" required/>
@@ -158,4 +160,4 @@ end if   'rsGetUser.EOF
 
 
 <!--#include virtual="/bootstrap-template/footer.asp" -->
-<script type="text/javascript" src="/js-pages/account-profile.min.js?v=113018"></script> 
+<script type="text/javascript" src="/js-pages/account-profile.min.js?v=113019"></script> 
