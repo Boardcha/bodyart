@@ -303,20 +303,25 @@
 
     // See Documentation/API/Events for more information
     // Example:
-    /*
+	/*
       afterShow: function( instance, current ) {
         console.info( 'Clicked element:' );
         console.info( current.opts.$orig );
-      }
-    */
+      },
+	*/
 
-    onInit: $.noop, // When instance has been initialized
+    onInit: $.noop,
 
     beforeLoad: $.noop, // Before the content of a slide is being loaded
     afterLoad: $.noop, // When the content of a slide is done loading
 
-    beforeShow: $.noop, // Before open animation starts
-    afterShow: $.noop, // When content is done loading and animating
+    beforeShow: $.noop,
+	 
+    afterShow: function( instance, current ) {
+        if( current.opts.$orig.data("report-button") != "yes")  {
+			$(".fancybox-report").css("display","none");
+		}
+    },
 
     beforeClose: $.noop, // Before the instance attempts to close. Return false to cancel the close.
     afterClose: $.noop, // After instance has been closed
