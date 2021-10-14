@@ -18,8 +18,6 @@ check_stock = "yes"
 <!--#include virtual="cart/inc_cart_main.asp"-->
 <!--#include virtual="cart/inc_cart_loopitems-begin.asp"-->
 <!--#include virtual="cart/inc_cart_loopitems-end.asp"-->
-<% rs_getCart.ReQuery() 
-%>
 <!--#include virtual="cart/inc_cart_grandtotal.asp"-->
 <%
 'response.write "<br/>subtotal " & var_subtotal
@@ -241,7 +239,7 @@ Wend
 			<div class="container-fluid p-0" style="margin-left:-.75em;margin-right:-.75em">
 <%
 ' Show if cart is empty
-If rs_getCart.EOF Then
+if cart_status = "empty" Then
 %>
 	 <div class="alert alert-primary my-3">There are no items in your shopping cart</div>
     <%
@@ -251,7 +249,7 @@ End If 'End Show if cart is empty
 
 
 ' Show if cart is NOT empty
-If Not rs_getCart.EOF Then
+if cart_status = "not-empty" Then
 
 '====== TRACK THE LAST DATE USER VIEWED THE CART PAGE =================
 set objCmd = Server.CreateObject("ADODB.command")
@@ -767,7 +765,6 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 <% end if ' if checkout type is not paypal %>
 <!--#include virtual="cart/inc_cart_loopitems-begin.asp"-->
 <!--#include virtual="cart/inc_cart_loopitems-end.asp"-->
-<% rs_getCart.ReQuery() %>
 
 <section class="shipping-options" <%= hide_section_addons %>> 
 	<div class="card mb-5">

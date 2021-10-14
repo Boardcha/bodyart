@@ -1,6 +1,5 @@
 	var totalWithoutShipping = 0;
 	var salesTax = 0;
-	var shippingWeight = 0;
 	
 	function calcAllTotals(e) {
 		
@@ -29,7 +28,7 @@
 			tax_address = $("input[name='shipping-address']").val() + " " + $("input[name='shipping-address2']").val();
 
 		}
-		if (tax_state === 'AR' || tax_state === 'CO' || tax_state === 'GA' || tax_state === 'HI' || tax_state === 'IL' || tax_state === 'IN' || tax_state === 'IA' || tax_state === 'KS' || tax_state === 'KY' || tax_state === 'LA' || tax_state === 'ME' || tax_state === 'MD' || tax_state === 'MI' || tax_state === 'MN' || tax_state === 'NE' || tax_state === 'NV' || tax_state === 'NJ' || tax_state === 'NC' || tax_state === 'OK' || tax_state === 'PA' || tax_state === 'RI' || tax_state === 'SD' || tax_state === 'TX' || tax_state === 'UT' || tax_state === 'VA' || tax_state === 'VT' || tax_state === 'WA' || tax_state === 'WV') {
+		if (tax_state === 'AR' || tax_state === 'CA' || tax_state === 'CO' || tax_state === 'FL' || tax_state === 'GA' || tax_state === 'HI' || tax_state === 'IL' || tax_state === 'IN' || tax_state === 'IA' || tax_state === 'KS' || tax_state === 'KY' || tax_state === 'LA' || tax_state === 'ME' || tax_state === 'MD' || tax_state === 'MI' || tax_state === 'MN' || tax_state === 'NE' || tax_state === 'NV' || tax_state === 'NJ' || tax_state === 'NC' || tax_state === 'OH' || tax_state === 'OK' || tax_state === 'PA' || tax_state === 'RI' || tax_state === 'SD' || tax_state === 'TX' || tax_state === 'UT' || tax_state === 'VA' || tax_state === 'VT' || tax_state === 'WA' || tax_state === 'WV') {
 			state_taxed = "yes";
 		}
 		// END Tax calculation calls
@@ -57,7 +56,6 @@
 			$("#cart_gift-cert").html(json.var_total_giftcert_used);
 			$("#store_credit_amt").html(json.store_credit_amt);
 			$("#use_now_amount").html(json.use_now_credits);
-			shippingWeight = json.weight;
 
 			if (tax_country === 'USA') {
 				$(".cart_sales-tax-state").html(json.salestax_state + ' ');

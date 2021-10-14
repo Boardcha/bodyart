@@ -562,8 +562,8 @@ end if ' var_worn_in_cleaned <> ""
 	 if instr(lcase(rsProduct.Fields.Item("material").Value),"wood") > 1 then
 		var_product_notice = var_product_notice & "<div class=""alert alert-warning mt-1""><strong>SPECIAL CARE:</strong> This item is made with wood. We recommend taking wood jewelry out before showering as water can ruin it.</div>"
 	 end if
-	 if rsProduct("brandname") = "steel and silver" AND instr(lcase(var_threading_type), "internally") then
-		var_product_notice = var_product_notice & "<div class=""alert alert-warning mt-1""><strong>This jewelry is not compatible with any other ends</strong></div>"
+	 if rsProduct("brandname") = "steel and silver" AND instr(lcase(var_threading_type), "internally") AND instr(lcase(var_sizes_offered), "14g") <= 0 then
+		var_product_notice = var_product_notice & "<div class=""alert alert-warning mt-1""><strong>This jewelry is not compatible with any other ends </strong></div>"
 	end if
 	 
 
@@ -618,7 +618,7 @@ end if ' not rsProduct.eof
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <% If not rsProduct.eof then %>
 <script type="text/javascript">
-// GTM Product view
+// GA4 GTM push
 window.dataLayer = window.dataLayer || [];
 window.dataLayer.push({
 	'event': 'view_item',
@@ -630,6 +630,56 @@ window.dataLayer.push({
       }]
   }
 });
+
+// Standard UA GTM push
+// GTM Product view
+window.dataLayer = window.dataLayer || [];
+window.dataLayer.push({
+  event: 'ua_viewproduct',
+  ecommerce: {
+    detail: {
+      products: [{
+        id: '<%= rsProduct.Fields.Item("ProductID").Value %>',
+        name: '<%= rsProduct.Fields.Item("title").Value %>',
+        category: '<%= trim(rsProduct.Fields.Item("jewelry").Value) %>',
+        brand: '<%= rsProduct.Fields.Item("brandname").Value %>'
+      }]
+    }
+  }
+});
+
+
+// Regular Google UA Ecommerce data layer push for GTM - add to cart
+window.onload=function(){
+var button_addcart = document.getElementById('btn-add-cart');
+		button_addcart.addEventListener("click",function(e){
+			var qty = document.getElementById("add-qty").value;
+			var variant = document.querySelector("input[name=add-cart]:checked");
+			variant = variant.getAttribute("data-variant");
+			if (document.cookie.indexOf('currency') > -1 ) {
+				var currency = getCookie("currency");
+			} else {
+				var currency = 'USD'
+			}
+		window.dataLayer.push({
+		event: 'ua_add_to_cart',
+		ecommerce: {
+			'currencyCode': currency,
+			add: {
+			products: [{
+				id: '<%= rsProduct.Fields.Item("ProductID").Value %>',
+				name: '<%= rsProduct.Fields.Item("title").Value %>',
+				category: '<%= trim(rsProduct.Fields.Item("jewelry").Value) %>',
+				variant: variant,
+				brand: '<%= rsProduct.Fields.Item("brandname").Value %>',
+				quantity: qty
+				
+			}]
+			}
+		}
+		});
+	});
+} // Run after window finishes loading
 </script>	
 <% end if %>
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
@@ -1451,6 +1501,7 @@ end if
 	  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=180076978718781";
 	  fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));
+
 </script>
 
 <%

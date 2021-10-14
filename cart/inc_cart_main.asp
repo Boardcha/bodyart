@@ -30,7 +30,6 @@ end if
 	objCmd.CommandText = "SELECT tbl_carts.cart_id, tbl_carts.cart_detailID, tbl_carts.cart_preorderNotes, tbl_carts.cart_custId, tbl_carts.cart_qty, tbl_carts.cart_wishlistid, jewelry.title, jewelry.internal, jewelry.customorder, jewelry.autoclavable, jewelry.brandname, jewelry.SaleDiscount, jewelry.secret_sale, jewelry.ProductID, jewelry.pair, jewelry.picture, ProductDetails.Gauge, ProductDetails.Length, ProductDetails.price, ProductDetails.wlsl_price, ProductDetails.qty, ProductDetails.ProductDetail1, ProductDetails.ProductDetailID, jewelry.SaleExempt, jewelry.jewelry, TBL_Companies.preorder_timeframes, ProductDetails.weight, (jewelry.title + ' ' + ISNULL(ProductDetails.Gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') + ' ' +  ISNULL(ProductDetails.ProductDetail1,'')) AS 'mini_preview_text', (ISNULL(ProductDetails.Gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') + ' ' +  ISNULL(ProductDetails.ProductDetail1,'')) AS 'variant', CAST(ProductDetails.price * tbl_carts.cart_qty as money) AS 'mini_line_price' FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID INNER JOIN tbl_carts ON ProductDetails.ProductDetailID = tbl_carts.cart_detailId INNER JOIN TBL_Companies ON jewelry.brandname = TBL_Companies.name WHERE (tbl_carts." & var_db_field & " = ?) AND cart_save_for_later = 0 " & var_addons & " AND ProductDetails.active = 1 AND jewelry.active = 1"
 	objCmd.Parameters.Append(objCmd.CreateParameter("cart_custID",3,1,10,var_cart_userid))
 	Set rs_getCart = objCmd.Execute()
-	
 
 	if NOT rs_getCart.eof then
 	
@@ -42,6 +41,31 @@ end if
 		objCmd.Execute()
 	
 	end if
+
+	'=========== SET VARIABLE IF CART IS EMPTY, Set cart COOKIE TOTAL AND check STOCK LEVELS ======================
+	If Not rs_getCart.EOF Or Not rs_getCart.BOF Then
+			var_cart_count = 0
+			While Not rs_getCart.EOF
+			
+				var_cart_count = var_cart_count + rs_getCart.Fields.Item("cart_qty").Value
+			
+			rs_getCart.MoveNext()
+			Wend
+			
+			
+			Response.Cookies("cartCount") = var_cart_count
+			Response.Cookies("cartCount").Expires = DATE + 300
+			cart_status = "not-empty"
+			
+
+	else ' if cart is empty
+		Response.Cookies("cartCount") = 0
+		Response.Cookies("cartCount").Expires = DATE + 300
+		cart_status = "empty"
+
+	end if
+	' ---- End Set cart COOKIE TOTAL and check stock levels ------------------------
+
 	
 if Request.Cookies("ID") <> "" then ' if customer is logged in
 	
@@ -259,32 +283,6 @@ if check_stock = "yes" then
 	<!--#include virtual="cart/inc_cart_stock_check.asp"-->
 <%
 end if	
-
-' ---- Set cart COOKIE TOTAL AND check STOCK LEVELS------------------------
-
-If Not rs_getCart.EOF Or Not rs_getCart.BOF Then
-		var_cart_count = 0
-		Do While Not rs_getCart.EOF
-		
-			var_cart_count = var_cart_count + rs_getCart.Fields.Item("cart_qty").Value
-		
-		rs_getCart.MoveNext()
-		Loop
-
-	rs_getCart.ReQuery()
-		
-		
-		Response.Cookies("cartCount") = var_cart_count
-		Response.Cookies("cartCount").Expires = DATE + 300
-		
-
-else ' if cart is empty
-	Response.Cookies("cartCount") = 0
-	Response.Cookies("cartCount").Expires = DATE + 300
-
-end if
-' ---- End Set cart COOKIE TOTAL and check stock levels ------------------------
-
 
 ' ------- Get FREE items
 		set objCmd = Server.CreateObject("ADODB.command")

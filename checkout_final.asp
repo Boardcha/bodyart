@@ -18,8 +18,7 @@
 <!--#include virtual="cart/inc_cart_loopitems-begin.asp"-->
 <!--#include virtual="cart/inc_cart_loopitems-end.asp"-->
 <!--#include virtual="cart/inc_cart_grandtotal.asp"-->
-<% rs_getCart.ReQuery() 
-
+<% 
 if session("cc_status") = "approved" then ' APPROVED credit card ==========================  
 %>
 <!--#include virtual="checkout/inc_google_scripts.asp"--> 

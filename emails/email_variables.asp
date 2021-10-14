@@ -530,8 +530,8 @@
 	if mailer_type = "inventory-count-notification" then
 		display_interface = "no"
 			
-		mail_to_email = "ellen1@bodyartforms.com"
-		mail_to_name = "Ellen"
+		mail_to_email = "jackie@bodyartforms.com"
+		mail_to_name = "Jackie"
 		
 		mail_subject = "Inventory issue item #" & rsGetRegular.Fields.Item("ProductDetailID").Value
 		mail_body = "<font face='verdana' size='2'>Item # " & rsGetRegular.Fields.Item("ProductDetailID").Value & " seems to have an issue with either the product being inactive, or it's a clearance/limited item that has not been moved over into the correct area."

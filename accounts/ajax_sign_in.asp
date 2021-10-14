@@ -91,9 +91,7 @@
 	end if ' if user is logged in 
 	
 End If ' end Not rsGetUser.EOF
-%>
-<!--#include virtual="/cart/inc_cart_main.asp"-->
-<%	
+	
 DataConn.Close()
 Set DataConn = Nothing
 %>

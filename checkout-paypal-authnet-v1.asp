@@ -276,7 +276,6 @@ End If ' end step 2 ----------------------------------------
 <!--#include virtual="checkout/inc_giftcert_check_dupes.asp"--> 
 <%
 mailer_type = ""
-rs_getCart.ReQuery() 
 %>
 <!--#include virtual="cart/inc_cart_loopitems-begin.asp"-->
 <!--#include virtual="checkout/inc_orderdetails_toarray.asp"--> 
@@ -326,9 +325,6 @@ if request.cookies("OrderAddonsActive") = "" then
 %>
 <!--#include virtual="emails/function-send-email.asp"-->
 <!--#include virtual="emails/email_variables.asp"-->
-<%	
-rs_getCart.ReQuery() ' for Google
-%>
 <!--#include virtual="/checkout/inc-set-to-pending.asp" -->	
 <% end if 'if not OrderAddonsActive
 %>

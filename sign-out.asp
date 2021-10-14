@@ -58,5 +58,5 @@ $(document).ready(function() {
 <br/>
 <br/>
 
-<!--#include virtual="cart/inc_cart_main.asp"-->
+
 <!--#include virtual="/bootstrap-template/footer.asp" -->
