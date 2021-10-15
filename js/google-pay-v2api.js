@@ -5,11 +5,7 @@
  * @see {@link https://developers.google.com/pay/api/web/reference/request-objects#PaymentDataRequest|apiVersion in PaymentDataRequest}
  */
 
-var tax = 0.0;
-var shippingCost = 0.0;
-var totalAmount = 0.0;
-var totalDiscount = 0.0;
-var selectedShippingId = 0;
+
 const baseRequest = {
   apiVersion: 2,
   apiVersionMinor: 0
@@ -332,18 +328,18 @@ function getGoogleTransactionInfo() {
  */
 function calculateTax(intermediatePaymentData, shippingCost) {
   
-  shipping_cost = shippingCost
-  taxable_amount = subTotal // comes from cart_update_totals.js
-  tax_country = intermediatePaymentData.shippingAddress.countryCode
-  tax_state = intermediatePaymentData.shippingAddress.administrativeArea
-  tax_zip = intermediatePaymentData.shippingAddress.postalCode
-  tax_address =intermediatePaymentData.shippingAddress.address1
+  shipping_cost = shippingCost;
+  taxable_amount = subTotal; // comes from cart_update_totals.js
+  tax_country = intermediatePaymentData.shippingAddress.countryCode;
+  tax_state = intermediatePaymentData.shippingAddress.administrativeArea;
+  tax_zip = intermediatePaymentData.shippingAddress.postalCode;
+  tax_address =intermediatePaymentData.shippingAddress.address1;
    
   $.ajax({
 	method: "post",
 	dataType: "json",
 	async: false,
-	url: "cart/ajax-sales-taxjar-rates.asp",
+	url: "/cart/ajax-sales-taxjar-rates.asp",
 	data: {initiator: "google-pay", state_taxed: "yes", shipping_cost: shipping_cost, taxable_amount: taxable_amount, tax_country: tax_country, tax_state: tax_state, tax_zip: tax_zip, tax_address: tax_address},
 	success: function( json ) {
        tax = json.tax;
@@ -592,8 +588,6 @@ function processPayment(paymentData) {
 
   return new Promise(function(resolve, reject) {
     setTimeout(function() {
-      // show returned data in developer console for debugging
-      console.log(paymentData);
       // @todo pass payment token to your gateway to process payment
       paymentToken = paymentData.paymentMethodData.tokenizationData.token;
 	  var encryptedToken = window.btoa(paymentToken);
