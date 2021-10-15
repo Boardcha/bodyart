@@ -4,7 +4,8 @@
 Mode = "TEST" ' OR PRODUCTION
 'Note: Apple Pay does not work on localhost since they require domain verification.
 
-If Mode = "PRODUCTION" Then domain = "bodyartforms.com" else domain = "whats.org"
+'If Mode = "PRODUCTION" Then domain = "bodyartforms.com" else domain = "whats.org"
+domain = "bodyartforms.com"
 
 set objUrl = Server.CreateObject("Chilkat_9_5_0.Url")
 validation_url = Request.QueryString("url")
