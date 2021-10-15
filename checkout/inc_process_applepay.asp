@@ -28,14 +28,17 @@ If request.form("applepay") = "on" Then
 		&   "<description></description>" _  
 		& "</shipping>" _  
 		& "<billTo>" _  
-		&   "<firstName>" & request.form("full_name") & "</firstName>" _  
-		&   "<lastName></lastName>" _  
-		&   "<address>" & request.form("address") & "</address>" _  
+		&   "<firstName>" & request.form("first_name") & "</firstName>" _  
+		&   "<lastName>" & request.form("last_name") & "</lastName>" _  
+		&   "<address>" & request.form("address1") & " " & request.form("address2") & "</address>" _  
 		&   "<city>" & request.form("locality") & "</city>" _  
 		&   "<state>" & request.form("administrative_area") & "</state>" _  
 		&   "<zip>" & request.form("postal_code") & "</zip>" _  
 		&   "<country>" & request.form("country_code") & "</country>" _  
-		& "</billTo>" _  
+		& "</billTo>" _ 
+		& "<retail>" _  
+		&   "<marketType>0</marketType>" _  		
+		& "</retail>" _ 
 	& "</transactionRequest>" _
 	& "</createTransactionRequest>"
 
@@ -45,6 +48,7 @@ If request.form("applepay") = "on" Then
 		strTransactionId = objResponseChargeCard.selectSingleNode("/*/api:transactionResponse/api:transId").Text
 		session("cc_transid") = strTransactionId
 		strCardType = objResponseChargeCard.selectSingleNode("/*/api:transactionResponse/api:accountType").Text
+	
 		
 		' If approved... ' 1 = Approved, 2 = Declined, 3 = Error, 4 = Held for Review
 		If objResponseChargeCard.selectSingleNode("/*/api:transactionResponse/api:responseCode").Text = 1 Then 
@@ -52,11 +56,17 @@ If request.form("applepay") = "on" Then
 				"cc_approved":"yes", "cc_reason":"approved",
 				"apple_pay_response":"<%=objResponseChargeCard.selectSingleNode("/*/api:transactionResponse").Text%>"
 			<% 	
+			payment_approved = "yes"
+			mailer_type = "cc approved"
+			session("cc_status") = "approved"
 		Else
 			%>
 				"cc_approved":"no", "cc_reason":"<%= objResponseChargeCard.selectSingleNode("/*/api:transactionResponse/api:errors/api:error/api:errorText").Text %>",
 				"apple_pay_response":"<%=objResponseChargeCard.selectSingleNode("/*/api:transactionResponse").Text%>"
-			<% 			
+			<% 		
+			payment_approved = "no"	
+			session("cc_status") = "declined"
+			session("cc_decline_reason") = objResponseChargeCard.selectSingleNode("/*/api:transactionResponse/api:errors/api:error/api:errorText").Text	
 		End If
 	Else
 		%>
@@ -65,8 +75,7 @@ If request.form("applepay") = "on" Then
 		<% 			
 	End If
 
-	Response.Write "AUTH.NET RESPONSE:<br>" & objResponseChargeCard.selectSingleNode("/*/api:transactionResponse").Text & "<br><br>"	
-	
+		
 	' ---- Add transaction ID, and response verification information to order
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn

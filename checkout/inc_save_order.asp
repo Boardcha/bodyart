@@ -307,7 +307,7 @@ end if ' credit card payment
 		"googlepay":"no",
 		"applepay":"yes",		
 		"order":"saved",
-		"status":""
+		"status":"",
 	<%	
 	end if ' if payment method is CASH
 ' =================================================================================
@@ -446,8 +446,8 @@ if var_addons_active <> "yes" then
 				objCmd.Parameters.Append(objCmd.CreateParameter("item_price",6,1,10,array_details_2(4,i)))
 				objCmd.Parameters.Append(objCmd.CreateParameter("item_notes",200,1,50,array_details_2(7,i)))
 				objCmd.Parameters.Append(objCmd.CreateParameter("preorder_notes",200,1,2000,array_details_2(5,i)))
-				'objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10,array_details_2(8,i)))
-				objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10, 1))
+				objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10,array_details_2(8,i)))
+				'objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10, 1))
 		objCmd.Execute()
 	next ' loop through array
 

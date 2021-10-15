@@ -1,12 +1,13 @@
 <%@LANGUAGE="VBSCRIPT" CODEPAGE="65001" %>
 <% 
+'Response.Write "1111"
+'Response.End
 var_process_order = "yes"
 check_stock = "yes"
 
 if request.cookies("OrderAddonsActive") <> "" then
 	var_addons_active = "yes"
 end if
-
 
 ' BEGIN build { for .json return throughout this page}
 %>
@@ -40,9 +41,7 @@ else
 	<%
 end if 
 
-
 rs_getCart.ReQuery() ' requery after stock check
-
 ' If no stock changes have occurred
 if stock_display = "" then 
 
@@ -52,7 +51,6 @@ if Not rs_getCart.EOF then
 	Dim array_add_new : array_add_new = 0 
 	
 %>
-
 <!--#include virtual="checkout/inc_random_code_generator.asp"--> 
 	<!--#include virtual="cart/inc_cart_loopitems-begin.asp"-->
 	<!--#include virtual="checkout/inc_orderdetails_toarray.asp"--> 
@@ -75,7 +73,6 @@ if Not rs_getCart.EOF then
 <% end if %>
 
 <% ' ************************************************
-
 ' Loop again to only store items after a successful payment 
 
 
@@ -84,7 +81,7 @@ if Not rs_getCart.EOF then
 %>
 <!--#include virtual="checkout/inc_process_cashorder.asp"--> 
 <!--#include virtual="checkout/inc_process_creditcard.asp"--> 
-<!--#include virtual="checkout/inc_process_googlepay.asp"--> 
+<!--#include virtual="checkout/inc_process_googlepay.asp"-->
 <!--#include virtual="checkout/inc_process_applepay.asp"--> 
 <%
 

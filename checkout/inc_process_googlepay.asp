@@ -30,7 +30,7 @@ If request.form("googlepay") = "on" Then
 		& "<billTo>" _  
 		&   "<firstName>" & request.form("full_name") & "</firstName>" _  
 		&   "<lastName></lastName>" _  
-		&   "<address>" & request.form("address1") & "</address>" _  
+		&   "<address>" & request.form("address1") & " " & request.form("address2") & "</address>" _  
 		&   "<city>" & request.form("locality") & "</city>" _  
 		&   "<state>" & request.form("administrative_area") & "</state>" _  
 		&   "<zip>" & request.form("postal_code") & "</zip>" _  
