@@ -546,18 +546,6 @@ end if ' access level for moderation
 
 <% End If ' end Not rsGetUser.EOF Or NOT rsGetUser.BOF %>
 
-	<% If rsGetUser.EOF And rsGetUser.BOF Then %>
-	<li class="nav-item">
-		<a class="btn btn-sm btn-secondary small mx-2 mt-1" href="/admin/login.asp">Login</a>
-	</li>
-	<% 
-	if request.querystring("login") <> "yes" and var_id = 0  and request.querystring("token") = "" then ' to prevent from looping to login page
-		response.redirect "login.asp?login=yes&status=" & request.querystring("status")
-	end if 
-
-	End If ' end rsGetUser.EOF And rsGetUser.BOF 
-	%>
-
 
 <li class="nav-item"><!-- begin dark mode button -->
 	<% if request.cookies("admindarkmode") <> "on" then
