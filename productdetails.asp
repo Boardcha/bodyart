@@ -805,7 +805,6 @@ var button_addcart = document.getElementById('btn-add-cart');
 								main_col_sizes = "col"
 							end if
 							%>
-
 							<div class="m-0 <%= main_col_sizes %> col-img-main">
 								<div class="slider-main-image baf-carousel" style="max-width:650px;max-height: 550px" >
 									<a class="position-relative pointer" data-fancybox="product-images" data-caption="Main Photo" href="https://bodyartforms-products.bodyartforms.com/<%=(rsProduct.Fields.Item("largepic").Value)%>" id="img_id_0">
@@ -1472,6 +1471,34 @@ end if
 	<% end if 'rsRecentlyViewed.EOF %>		
 
 	<% end if ' only display if product is active %>
+	
+	<!-- BEGIN REPORT PHOTO MODAL WINDOW -->
+	<div class="modal fade" id="modal-report-photo" tabindex="-1" role="dialog"  aria-labelledby="modal-report-photo" style="z-index:999999">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="report-photo-label"></h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form class="needs-validation" name="frmReportPhoto" id="frmReportPhoto" novalidate>
+							<div class="form-group">Please write a short description.</div>
+							<div class="form-group">
+								<input class="form-control" type="text" name="report-photo-comments" id="report-photo-comments" placeholder="Comments" required>
+							</div>
+							<div id="report-photo-message"></div>
+							<div class="text-center">
+								<button type="submit" name="btn-report" class="btn btn-block btn-purple">Report</button>
+							</div>
+						</form>
+					</div>
+			</div>
+		</div>
+	</div>
+	<!-- END REPORT PHOTO MODAL WINDOW -->	
+	
 <!--#include virtual="/bootstrap-template/footer.asp" -->
 
 <script type="text/javascript" src="/js-pages/currency-exchange.min.js?v=022420"></script>
@@ -1483,7 +1510,7 @@ end if
 <% end if %>
 <script src="/js/jquery.fancybox.min.js"></script>
 <script type="text/javascript" src="/js/slick.min.js"></script>
-<script type="text/javascript" src="/js-pages/product-details.min.js?v=082521" ></script>
+<script type="text/javascript" src="/js-pages/product-details.min.js?v=082523" ></script>
 
 <!-- Start Afterpay Javascript -->
 <!--
