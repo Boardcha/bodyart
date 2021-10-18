@@ -690,3 +690,33 @@ $(document).on('click', '#hide-mm', function(event) {
 	$('#show-mm').show();
 	$('#hide-mm').hide();
 });
+
+//Report product photo
+$(document).ready(function() {
+	$('#modal-report-photo').on('show.bs.modal', function (event) {
+	  $(this).find("#report-photo-label").html("Report this photo");
+	});
+
+	$("#frmReportPhoto").submit(function(e) {
+		var form = $("#frmReportPhoto")
+
+		if (form[0].checkValidity() === false) {
+			e.preventDefault()
+			e.stopPropagation()
+			console.log("invalid form elements");
+		} else {  
+			var imgSrc = $('.fancybox-slide--current .fancybox-image').attr('src');
+			var imgCaption = $('.fancybox-caption').text();
+			$('#report-photo-message').load("/emails/ajax_report_photo.asp", {
+				comments:  $('#report-photo-comments').val(), url: window.location.href, img_src: imgSrc, caption: imgCaption
+			}, function() {
+				window.setTimeout(function () {
+				  $('#report-photo-message').html("");
+				}, 5000 );
+			});
+		}
+		form[0].classList.add('was-validated');
+		e.preventDefault();
+	});	
+});
+

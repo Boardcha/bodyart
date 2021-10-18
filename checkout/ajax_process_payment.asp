@@ -41,12 +41,11 @@ else
 end if 
 
 
-rs_getCart.ReQuery() ' requery after stock check
 
 ' If no stock changes have occurred
 if stock_display = "" then 
 
-if Not rs_getCart.EOF then
+if cart_status = "not-empty" Then
 'Set array to store all order details (FOR CHECKOUT STORAGE INTO DATABASE)
 	reDim array_details_2(8,0)
 	Dim array_add_new : array_add_new = 0 

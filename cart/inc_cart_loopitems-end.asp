@@ -1,6 +1,6 @@
 <%		
 rs_getCart.MoveNext()
-Loop
+Wend
 ' End recordset list
 
 ' Auto remove autoclave service if nothing is in cart that can be autoclaved

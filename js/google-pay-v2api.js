@@ -429,7 +429,7 @@ function getShippingOptions(countryCode, USPSOnly) {
 			"label": "Free: Paid on original order",
 			"description": ""
 		});	
-	console.log("weight: " + shippingWeight);
+		
 	if (countryCode =='US' && USPSOnly == false && shippingWeight <= 8) 
 		shippingOptions.push({
 			"id": "7",

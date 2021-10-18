@@ -17,6 +17,7 @@ exempt_item_in_cart = ""
 var_autoclavable = 0
 var_sterilization_added = 0
 credit_now = 0 ' added May 2016 to fix PayPal issue of doubling up on credits in email confirmation
+str_autoclave_items = ""
 
 
 if session("storeCredit_used") = "" then
@@ -27,7 +28,8 @@ if session("credit_now") = "" then
 	session("credit_now") = 0
 end if
 
-Do While Not rs_getCart.EOF
+rs_getCart.ReQuery()
+While Not rs_getCart.EOF
 
 var_item_count = var_item_count + 1
 
@@ -148,6 +150,11 @@ end if
 if rs_getCart.Fields.Item("cart_detailID").Value = 34356 then
 	var_sterilization_added = 1
 	var_cart_id_autoclave = rs_getCart.Fields.Item("cart_id").Value
+end if
+
+'======= BUILD AUTOCLAVE STRING TO BE DISPLAYED ON CART.ASP PAGE =========================
+if rs_getCart("autoclavable") = 1 then
+	str_autoclave_items = "<li>" & rs_getCart("title") & "</li>" & str_autoclave_items
 end if
 
 

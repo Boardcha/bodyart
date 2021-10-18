@@ -54,7 +54,7 @@ end select
 			rsGetPhotos.AbsolutePage = intPage '======== PAGING
 For intRecord = 1 To rsGetPhotos.PageSize
 			%>
-				<a href="https://<%= DomainLink %>/<%= rsGetPhotos.Fields.Item("filename").Value %>"  data-fancybox="customer-photos" data-caption="<%= Server.HTMLEncode(rsGetPhotos.Fields.Item("Gauge").Value & " " & rsGetPhotos.Fields.Item("Length").Value & " " & rsGetPhotos.Fields.Item("ProductDetail1").Value) & " -- Photo # " & rsGetPhotos.Fields.Item("PhotoID").Value %>"><img class="w-auto mr-1 lazyload" style="height: 150px" src="https://<%= DomainLink %>/thumb_<%= rsGetPhotos.Fields.Item("filename").Value %>" alt="Customer photo" title="<%= Server.HTMLEncode(rsGetPhotos.Fields.Item("Gauge").Value & " " & rsGetPhotos.Fields.Item("Length").Value & " " & rsGetPhotos.Fields.Item("ProductDetail1").Value) & " -- Photo # " & rsGetPhotos.Fields.Item("PhotoID").Value %>"/></a>
+				<a href="https://<%= DomainLink %>/<%= rsGetPhotos.Fields.Item("filename").Value %>" data-report-button="yes" data-fancybox="customer-photos" data-caption="<%= Server.HTMLEncode(rsGetPhotos.Fields.Item("Gauge").Value & " " & rsGetPhotos.Fields.Item("Length").Value & " " & rsGetPhotos.Fields.Item("ProductDetail1").Value) & " -- Photo # " & rsGetPhotos.Fields.Item("PhotoID").Value %>"><img class="w-auto mr-1 lazyload" style="height: 150px" src="https://<%= DomainLink %>/thumb_<%= rsGetPhotos.Fields.Item("filename").Value %>" alt="Customer photo" title="<%= Server.HTMLEncode(rsGetPhotos.Fields.Item("Gauge").Value & " " & rsGetPhotos.Fields.Item("Length").Value & " " & rsGetPhotos.Fields.Item("ProductDetail1").Value) & " -- Photo # " & rsGetPhotos.Fields.Item("PhotoID").Value %>"/></a>
 			<% 
 			rsGetPhotos.MoveNext()
 If rsGetPhotos.EOF Then Exit For  ' ====== PAGING

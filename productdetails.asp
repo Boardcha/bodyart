@@ -562,8 +562,8 @@ end if ' var_worn_in_cleaned <> ""
 	 if instr(lcase(rsProduct.Fields.Item("material").Value),"wood") > 1 then
 		var_product_notice = var_product_notice & "<div class=""alert alert-warning mt-1""><strong>SPECIAL CARE:</strong> This item is made with wood. We recommend taking wood jewelry out before showering as water can ruin it.</div>"
 	 end if
-	 if rsProduct("brandname") = "steel and silver" AND instr(lcase(var_threading_type), "internally") then
-		var_product_notice = var_product_notice & "<div class=""alert alert-warning mt-1""><strong>This jewelry is not compatible with any other ends</strong></div>"
+	 if rsProduct("brandname") = "steel and silver" AND instr(lcase(var_threading_type), "internally") AND instr(lcase(var_sizes_offered), "14g") <= 0 then
+		var_product_notice = var_product_notice & "<div class=""alert alert-warning mt-1""><strong>This jewelry is not compatible with any other ends</strong><br><a href='/products.asp?keywords=silver&jewelry=curved&jewelry=labret&jewelry=barbell&gauge=16g&material=316L+Stainless+Steel&material=Titanium&price=0%3B100&threading=Internally+threaded' target='_blank'>Click here</a> for compatible ends.</div>"
 	end if
 	 
 
@@ -618,7 +618,7 @@ end if ' not rsProduct.eof
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <% If not rsProduct.eof then %>
 <script type="text/javascript">
-// GTM Product view
+// GA4 GTM push
 window.dataLayer = window.dataLayer || [];
 window.dataLayer.push({
 	'event': 'view_item',
@@ -630,6 +630,56 @@ window.dataLayer.push({
       }]
   }
 });
+
+// Standard UA GTM push
+// GTM Product view
+window.dataLayer = window.dataLayer || [];
+window.dataLayer.push({
+  event: 'ua_viewproduct',
+  ecommerce: {
+    detail: {
+      products: [{
+        id: '<%= rsProduct.Fields.Item("ProductID").Value %>',
+        name: '<%= rsProduct.Fields.Item("title").Value %>',
+        category: '<%= trim(rsProduct.Fields.Item("jewelry").Value) %>',
+        brand: '<%= rsProduct.Fields.Item("brandname").Value %>'
+      }]
+    }
+  }
+});
+
+
+// Regular Google UA Ecommerce data layer push for GTM - add to cart
+window.onload=function(){
+var button_addcart = document.getElementById('btn-add-cart');
+		button_addcart.addEventListener("click",function(e){
+			var qty = document.getElementById("add-qty").value;
+			var variant = document.querySelector("input[name=add-cart]:checked");
+			variant = variant.getAttribute("data-variant");
+			if (document.cookie.indexOf('currency') > -1 ) {
+				var currency = getCookie("currency");
+			} else {
+				var currency = 'USD'
+			}
+		window.dataLayer.push({
+		event: 'ua_add_to_cart',
+		ecommerce: {
+			'currencyCode': currency,
+			add: {
+			products: [{
+				id: '<%= rsProduct.Fields.Item("ProductID").Value %>',
+				name: '<%= rsProduct.Fields.Item("title").Value %>',
+				category: '<%= trim(rsProduct.Fields.Item("jewelry").Value) %>',
+				variant: variant,
+				brand: '<%= rsProduct.Fields.Item("brandname").Value %>',
+				quantity: qty
+				
+			}]
+			}
+		}
+		});
+	});
+} // Run after window finishes loading
 </script>	
 <% end if %>
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
@@ -755,7 +805,6 @@ window.dataLayer.push({
 								main_col_sizes = "col"
 							end if
 							%>
-
 							<div class="m-0 <%= main_col_sizes %> col-img-main">
 								<div class="slider-main-image baf-carousel" style="max-width:650px;max-height: 550px" >
 									<a class="position-relative pointer" data-fancybox="product-images" data-caption="Main Photo" href="https://bodyartforms-products.bodyartforms.com/<%=(rsProduct.Fields.Item("largepic").Value)%>" id="img_id_0">
@@ -1422,6 +1471,34 @@ end if
 	<% end if 'rsRecentlyViewed.EOF %>		
 
 	<% end if ' only display if product is active %>
+	
+	<!-- BEGIN REPORT PHOTO MODAL WINDOW -->
+	<div class="modal fade" id="modal-report-photo" tabindex="-1" role="dialog"  aria-labelledby="modal-report-photo" style="z-index:999999">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+					<div class="modal-header">
+						<h5 class="modal-title" id="report-photo-label"></h5>
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+								<span aria-hidden="true">&times;</span>
+						</button>
+					</div>
+					<div class="modal-body">
+						<form class="needs-validation" name="frmReportPhoto" id="frmReportPhoto" novalidate>
+							<div class="form-group">Briefly describe the issue with the photo</div>
+							<div class="form-group">
+								<input class="form-control" type="text" name="report-photo-comments" id="report-photo-comments" placeholder="Comments" required>
+							</div>
+							<div id="report-photo-message"></div>
+							<div class="text-center">
+								<button type="submit" name="btn-report" class="btn btn-block btn-purple">Report</button>
+							</div>
+						</form>
+					</div>
+			</div>
+		</div>
+	</div>
+	<!-- END REPORT PHOTO MODAL WINDOW -->	
+	
 <!--#include virtual="/bootstrap-template/footer.asp" -->
 
 <script type="text/javascript" src="/js-pages/currency-exchange.min.js?v=022420"></script>
@@ -1433,7 +1510,7 @@ end if
 <% end if %>
 <script src="/js/jquery.fancybox.min.js"></script>
 <script type="text/javascript" src="/js/slick.min.js"></script>
-<script type="text/javascript" src="/js-pages/product-details.min.js?v=082521" ></script>
+<script type="text/javascript" src="/js-pages/product-details.min.js?v=101821" ></script>
 
 <!-- Start Afterpay Javascript -->
 <!--
@@ -1451,6 +1528,7 @@ end if
 	  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=180076978718781";
 	  fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));
+
 </script>
 
 <%

@@ -530,8 +530,8 @@
 	if mailer_type = "inventory-count-notification" then
 		display_interface = "no"
 			
-		mail_to_email = "ellen1@bodyartforms.com"
-		mail_to_name = "Ellen"
+		mail_to_email = "jackie@bodyartforms.com"
+		mail_to_name = "Jackie"
 		
 		mail_subject = "Inventory issue item #" & rsGetRegular.Fields.Item("ProductDetailID").Value
 		mail_body = "<font face='verdana' size='2'>Item # " & rsGetRegular.Fields.Item("ProductDetailID").Value & " seems to have an issue with either the product being inactive, or it's a clearance/limited item that has not been moved over into the correct area."
@@ -541,4 +541,23 @@
 	end if
 	'======= END INVENTORY COUNT NOTIFICATION ===========================
 
+	'======= BEGIN REPORT PHOTO =====================================================
+	if mailer_type = "reported-photo" then 
+		display_interface = "no"
+
+		if Request.form("comments") <> "" then
+			
+			mail_to_email = "bafservice1@bodyartforms.com"
+			mail_to_name = "Bodyartforms"
+			mail_reply_email = Request.form("email")
+			mail_reply_name = Request.form("name")
+			
+			mail_subject = "Reported photo"
+			mail_body = "<b>Page url: </b><br/><a href='" + Request.form("url") + "'>" + Request.form("url") + "</a><br/><br /><b>Comments:</b><br/>" + Request.form("comments") + "<br/><br /><b>Reported photo:</b> " + Request.form("caption") + "<br/><br/>" + "<img style=""width:50%; max-width:500px"" src=""" + Request.form("img_src") + """ />"
+
+		end if
+
+		Call baf_sendmail()
+	end if 
+	'======= END REPORT PHOTO =====================================================	
 %>
