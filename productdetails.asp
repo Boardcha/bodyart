@@ -563,7 +563,7 @@ end if ' var_worn_in_cleaned <> ""
 		var_product_notice = var_product_notice & "<div class=""alert alert-warning mt-1""><strong>SPECIAL CARE:</strong> This item is made with wood. We recommend taking wood jewelry out before showering as water can ruin it.</div>"
 	 end if
 	 if rsProduct("brandname") = "steel and silver" AND instr(lcase(var_threading_type), "internally") AND instr(lcase(var_sizes_offered), "14g") <= 0 then
-		var_product_notice = var_product_notice & "<div class=""alert alert-warning mt-1""><strong>This jewelry is not compatible with any other ends </strong></div>"
+		var_product_notice = var_product_notice & "<div class=""alert alert-warning mt-1""><strong>This jewelry is not compatible with any other ends</strong><br><a href='/products.asp?keywords=silver&jewelry=curved&jewelry=labret&jewelry=barbell&gauge=16g&material=316L+Stainless+Steel&material=Titanium&price=0%3B100&threading=Internally+threaded' target='_blank'>Click here</a> for compatible ends.</div>"
 	end if
 	 
 
@@ -1484,7 +1484,7 @@ end if
 					</div>
 					<div class="modal-body">
 						<form class="needs-validation" name="frmReportPhoto" id="frmReportPhoto" novalidate>
-							<div class="form-group">Please write a short description.</div>
+							<div class="form-group">Briefly describe the issue with the photo</div>
 							<div class="form-group">
 								<input class="form-control" type="text" name="report-photo-comments" id="report-photo-comments" placeholder="Comments" required>
 							</div>
@@ -1510,7 +1510,7 @@ end if
 <% end if %>
 <script src="/js/jquery.fancybox.min.js"></script>
 <script type="text/javascript" src="/js/slick.min.js"></script>
-<script type="text/javascript" src="/js-pages/product-details.min.js?v=082523" ></script>
+<script type="text/javascript" src="/js-pages/product-details.min.js?v=101821" ></script>
 
 <!-- Start Afterpay Javascript -->
 <!--

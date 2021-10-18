@@ -545,7 +545,13 @@ end if ' access level for moderation
 	</li>
 
 <% End If ' end Not rsGetUser.EOF Or NOT rsGetUser.BOF %>
-
+<% If rsGetUser.EOF And rsGetUser.BOF Then %>
+	<li class="nav-item">
+		<a class="btn btn-sm btn-secondary small mx-2 mt-1" href="/admin/login.asp?login=yes">Login</a>
+	</li>
+	<% 
+	End If ' end rsGetUser.EOF And rsGetUser.BOF 
+	%>
 
 <li class="nav-item"><!-- begin dark mode button -->
 	<% if request.cookies("admindarkmode") <> "on" then

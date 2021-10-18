@@ -279,6 +279,7 @@ end if ' Calculate COUPON CODE ------------------------------
 
 if check_stock = "yes" then
 	var_cart_count = 0
+	rs_getCart.ReQuery() 
 %>
 	<!--#include virtual="cart/inc_cart_stock_check.asp"-->
 <%

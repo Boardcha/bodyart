@@ -698,15 +698,6 @@ end if ' show if free sticker cookie has not been set to "no"
 				calcAllTotals();
 
 </script>
-<script>
-	var shippingWeight = 0.0;
-	<% If session("weight") <>"" Then%>
-		shippingWeight = <%=session("weight")%>; // TO DO: This needs to be updated when any qty updated on cart.asp, will be handled after Apple API is integrated.
-	<%End If%>
-</script>
-<!-- Google Pay Javascript -->
-<script async src="https://pay.google.com/gp/p/js/pay.js" onload="onGooglePayLoaded()"></script>
-<script src="/js/google-pay-v2api.js"></script>
 <%
 Set rsToggles = Nothing
 %>
