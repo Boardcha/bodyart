@@ -51,6 +51,9 @@ end if
                         <li class="text-capitalize py-1 py-md-0 d-md-block">
                             <a class="text-light" href="/returns.asp">Return policy</a>
                         </li>
+                        <li class="text-capitalize py-1 py-md-0 d-md-block">
+                            <a class="text-light" href="/about.asp">About our team</a>
+                        </li>
                 </ul>
                 <% if request.cookies("darkmode") <> "on" then
                     darkchecked = "" 

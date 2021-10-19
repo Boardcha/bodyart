@@ -980,17 +980,22 @@ localStorage["copy_details"] = "" // set initial value to nothing
 	//	Sorting image function
 	$(function () {
     $("#detail_images").sortable({
-		items: 'img',
+		items: 'div',
+		scroll: false,
         update: function (event, ui) {
 			var sort_array = $("#detail_images").sortable("toArray");
-
+			console.log(JSON.stringify(sort_array));
 			$.ajax({
 			url: "products/ajax-update-image-sorting.asp",
 			method: "POST",
 			data: {id_array:JSON.stringify(sort_array)},
 			})
 			.done(function( msg ) {
-				$('#sort-message').html("Sort saved").show().delay(3000).fadeOut( "slow");
+				$('#sort-message').css("background","#39b55f");
+				$('#sort-message').css("color", "white");
+				$('#sort-message').css("padding", "3px");
+				$('#sort-message').css("border-radius", "3px");
+				$('#sort-message').html("Sort saved!").show().delay(2500).fadeOut("slow");
 			})
 			.fail(function(msg) {
 				alert("Sort failed");
