@@ -87,10 +87,10 @@ end if ' if form fields are not empty
 			<input class="form-control form-control-sm w-25" type="password" name="password">
 		</div>
 
-			<button class="btn btn-purple" type="submit" formmethod="post" formaction="login.asp">Login</button>
+			<button class="btn btn-purple" type="submit" formmethod="post" formaction="login.asp?login=yes">Login</button>
 
 <% if request.querystring("status") = "failed" then %>
-	<div class="alert alert-red">
+	<div class="alert alert-danger">
 		Sorry, but the username or password does not match. Please try again.
 	</div>
 <% end if %>	

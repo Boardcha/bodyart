@@ -2,7 +2,7 @@
 <!--#include file="../Connections/bodyartforms_sql_ADMIN.asp" -->
 <%
 ' *** Logout the current user.
-MM_logoutRedirectPage = "index.asp"
+MM_logoutRedirectPage = "/admin/login.asp?login=yes"
 Session.Contents.Remove("MM_Username")
 Session.Contents.Remove("MM_UserAuthorization")
 				
