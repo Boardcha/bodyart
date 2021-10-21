@@ -1,3 +1,4 @@
+<!--#include virtual="/oauth/google-oauth-credentials.inc" -->
 <!-- Installed April 2021 - Global site tag (gtag.js) - Google Analytics -->
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
@@ -40,6 +41,7 @@
         <link rel="manifest" href="/webmanifest.json">
         <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
         <link rel="shortcut icon" href="/favicon.ico">
+<meta name="google-signin-client_id" content="<%=google_oauth_clientId%>.apps.googleusercontent.com">
         <meta name="msapplication-TileColor" content="#2b5797">
         <meta name="theme-color" content="#ffffff">
         <% if request.cookies("darkmode") <> "on" then %> 
