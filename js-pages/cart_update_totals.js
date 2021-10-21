@@ -1,5 +1,6 @@
 	var totalWithoutShipping = 0;
 	var salesTax = 0;
+	var shippingWeight = 0;
 	
 	function calcAllTotals(e) {
 		
@@ -35,6 +36,7 @@
 
 		$.ajax({
 			type: "post",
+			async: false, 
 			url: "cart/inc_cart_totals.asp",
 			dataType : "json",
 			data: {shipping_option: shipping_option, page_name: page_name, tax_country: tax_country, tax_state: tax_state, tax_zip: tax_zip, tax_address: tax_address, state_taxed: state_taxed},
@@ -42,8 +44,8 @@
 				//console.log("state taxes: " + state_taxed + " in " + tax_state);
 				
 				
-			subTotal = json.subtotal;
-			totalDiscount = json.total_discount;
+			subTotal = parseFloat(json.subtotal);
+			totalDiscount = parseFloat(json.total_discount);
 			salesTax = json.salestax;
 			$(".cart_subtotal").html(json.subtotal);
 			$(".cart_grand-total").html(json.grandtotal);
@@ -56,6 +58,7 @@
 			$("#cart_gift-cert").html(json.var_total_giftcert_used);
 			$("#store_credit_amt").html(json.store_credit_amt);
 			$("#use_now_amount").html(json.use_now_credits);
+			shippingWeight = json.weight;
 
 			if (tax_country === 'USA') {
 				$(".cart_sales-tax-state").html(json.salestax_state + ' ');
