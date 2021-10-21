@@ -5,11 +5,7 @@
  * @see {@link https://developers.google.com/pay/api/web/reference/request-objects#PaymentDataRequest|apiVersion in PaymentDataRequest}
  */
 
-var tax = 0.0;
-var shippingCost = 0.0;
-var totalAmount = 0.0;
-var totalDiscount = 0.0;
-var selectedShippingId = 0;
+
 const baseRequest = {
   apiVersion: 2,
   apiVersionMinor: 0
@@ -156,23 +152,21 @@ function getGooglePaymentsClient() {
 
 function onPaymentAuthorized(paymentData) {
   return new Promise(function(resolve, reject){
-	
   // handle the response
   processPayment(paymentData)
     .then(function() {
       resolve({transactionState: 'SUCCESS'});
     })
-    .catch(function() {
-        resolve({
+    .catch(function(error) {
+		resolve({
         transactionState: 'ERROR',
         error: {
           intent: 'PAYMENT_AUTHORIZATION',
-          message: 'Insufficient funds',
+          message: error,
           reason: 'PAYMENT_DATA_INVALID'
         }
       });
     });
-
   });
 }
 
@@ -188,25 +182,22 @@ function onPaymentAuthorized(paymentData) {
 function onPaymentDataChanged(intermediatePaymentData) {
 
   return new Promise(function(resolve, reject) {
-
     let shippingAddress = intermediatePaymentData.shippingAddress;
     let shippingOptionData = intermediatePaymentData.shippingOptionData;
+	let shippingOptions = getShippingOptions(shippingAddress.countryCode, shippingAddress.postalCode);
     let paymentDataRequestUpdate = {};
-
     if (intermediatePaymentData.callbackTrigger == "INITIALIZE" || intermediatePaymentData.callbackTrigger == "SHIPPING_ADDRESS") {
-	  //========== ZIP CODES THAT DHL DOES NOT DELIVER TO AND NEED TO BE FORCED TO USPS ========
-	  const notAvailableForDHL = ["96799", "96910", "96912", "96913", "96915", "96916", "96917", "96919", "96921", "96923", "96928", "96929", "96931", "96932", "96939", "96940", "96941", "96942", "96943", "96944", "96950", "96951", "96952", "96960", "96970"];
-	  if(notAvailableForDHL.includes(shippingAddress.postalCode)){
-        paymentDataRequestUpdate.newShippingOptionParameters = getShippingOptions(shippingAddress.countryCode, true); // USPSOnly = true
-	  }else {
-		paymentDataRequestUpdate.newShippingOptionParameters = getShippingOptions(shippingAddress.countryCode, false); // USPSOnly = false
-	  }
-      let selectedShippingOptionId = paymentDataRequestUpdate.newShippingOptionParameters.defaultSelectedOptionId;
-      paymentDataRequestUpdate.newTransactionInfo = calculateNewTransactionInfo(selectedShippingOptionId, intermediatePaymentData);
+	  console.log(getShippingOptions(shippingAddress.countryCode, shippingAddress.postalCode));
+      paymentDataRequestUpdate.newShippingOptionParameters = shippingOptions;
+	  let defaultShippingOptionId = paymentDataRequestUpdate.newShippingOptionParameters.defaultSelectedOptionId;	  
+      paymentDataRequestUpdate.newTransactionInfo = calculateNewTransactionInfo(defaultShippingOptionId, intermediatePaymentData);
+	  selectedShippingCompany = getSelectedShippingCompany(getObjectByValue(shippingOptions.shippingOptions, "id", defaultShippingOptionId)[0].label);
     }
     else if (intermediatePaymentData.callbackTrigger == "SHIPPING_OPTION") {
       paymentDataRequestUpdate.newTransactionInfo = calculateNewTransactionInfo(shippingOptionData.id, intermediatePaymentData);
+	  selectedShippingCompany = getSelectedShippingCompany(getObjectByValue(shippingOptions.shippingOptions, "id", shippingOptionData.id)[0].label);
     }
+	console.log(paymentDataRequestUpdate);
     resolve(paymentDataRequestUpdate);
   });
 }
@@ -222,7 +213,7 @@ function onPaymentDataChanged(intermediatePaymentData) {
  */
 function calculateNewTransactionInfo(shippingOptionId, intermediatePaymentData) {
   let newTransactionInfo = getGoogleTransactionInfo();
-
+	  
   if(totalDiscount > 0.0){
 	  newTransactionInfo.displayItems.push({
 		type: "LINE_ITEM",
@@ -231,9 +222,10 @@ function calculateNewTransactionInfo(shippingOptionId, intermediatePaymentData) 
 		status: "FINAL"
 	  });  
   }
-  
-  shippingCost = getShippingCosts()[shippingOptionId];
+
   selectedShippingId = shippingOptionId;
+  shippingCost = getShippingCosts(selectedShippingId);
+  
   newTransactionInfo.displayItems.push({
     type: "LINE_ITEM",
     label: "Shipping cost",
@@ -254,7 +246,6 @@ function calculateNewTransactionInfo(shippingOptionId, intermediatePaymentData) 
   newTransactionInfo.displayItems.forEach(displayItem => totalPrice += parseFloat(displayItem.price));
   newTransactionInfo.totalPrice = parseFloat(totalPrice).toFixed(2).toString();
   totalAmount = parseFloat(totalPrice).toFixed(2);
-  console.log("grandTotal:" + totalAmount.toString());
   return newTransactionInfo;
 }
 
@@ -332,18 +323,18 @@ function getGoogleTransactionInfo() {
  */
 function calculateTax(intermediatePaymentData, shippingCost) {
   
-  shipping_cost = shippingCost
-  taxable_amount = subTotal // comes from cart_update_totals.js
-  tax_country = intermediatePaymentData.shippingAddress.countryCode
-  tax_state = intermediatePaymentData.shippingAddress.administrativeArea
-  tax_zip = intermediatePaymentData.shippingAddress.postalCode
-  tax_address =intermediatePaymentData.shippingAddress.address1
+  shipping_cost = shippingCost;
+  taxable_amount = subTotal; // comes from cart_update_totals.js
+  tax_country = intermediatePaymentData.shippingAddress.countryCode;
+  tax_state = intermediatePaymentData.shippingAddress.administrativeArea;
+  tax_zip = intermediatePaymentData.shippingAddress.postalCode;
+  tax_address =intermediatePaymentData.shippingAddress.address1;
    
   $.ajax({
 	method: "post",
 	dataType: "json",
 	async: false,
-	url: "cart/ajax-sales-taxjar-rates.asp",
+	url: "/cart/ajax-sales-taxjar-rates.asp",
 	data: {initiator: "google-pay", state_taxed: "yes", shipping_cost: shipping_cost, taxable_amount: taxable_amount, tax_country: tax_country, tax_state: tax_state, tax_zip: tax_zip, tax_address: tax_address},
 	success: function( json ) {
        tax = json.tax;
@@ -355,49 +346,6 @@ function calculateTax(intermediatePaymentData, shippingCost) {
 	return parseFloat(tax).toFixed(2);
 }
 
-/**
- * Provide a key value store for shippping options.
- */
-function getShippingCosts() {
-  return {
-	"0": "0.00",   // Do not charge shipping amount on addons
-    "10": "13.95", //USPS Priority mail heavy
-    "25": "23.95", //USPS Express mail
-    "30": "4.95",  //USPS First Class Mail
-	"31": "7.95",  //USPS Priority mail
-	"3": "4.95",   //DHL Expedited Max
-	"7": "0.00",   //Free: DHL Basic mail
-	"26": "44.95", //USPS Express mail international
-	"11": "2.95",  //DHL GlobalMail Packet Priority
-	"28": "4.95",  //DHL GlobalMail Parcel Priority
-	"14": "31.95", //USPS Global priority mail
-	"27": "65.95", //USPS Express mail international
-	"13": "2.95",  //DHL GlobalMail Packet Priority
-	"29": "5.95"  //DHL GlobalMail Parcel Priority
-  }
-}
-
-/**
- * Provide a key value store for shippping options.
- */
-function getShippingCompany() {
-  return {
-	"0": "Paid on original order", // Do not charge shipping amount on addons
-    "10": "USPS", //USPS Priority mail heavy
-    "25": "USPS", //USPS Express mail
-    "30": "USPS",  //USPS First Class Mail
-	"31": "USPS",  //USPS Priority mail
-	"3": "DHL",   //DHL Expedited Max
-	"7": "DHL",   //Free: DHL Basic mail
-	"26": "USPS", //USPS Express mail international
-	"11": "DHL",  //DHL GlobalMail Packet Priority
-	"28": "DHL",  //DHL GlobalMail Parcel Priority
-	"14": "USPS", //USPS Global priority mail
-	"27": "USPS", //USPS Express mail international
-	"13": "DHL",  //DHL GlobalMail Packet Priority
-	"29": "DHL"  //DHL GlobalMail Parcel Priority
-  }
-}
 
 /**
  * Provide Google Pay API with shipping address parameters when using dynamic buy flow.
@@ -411,121 +359,6 @@ function getGoogleShippingAddressParameters() {
   };
 }
 
-
-/**
- * Provide Google Pay API with shipping options and a default selected shipping option.
- *
- * @see {@link https://developers.google.com/pay/api/web/reference/request-objects#ShippingOptionParameters|ShippingOptionParameters}
- * @returns {object} shipping option parameters, suitable for use as shippingOptionParameters property of PaymentDataRequest
- */
-function getShippingOptions(countryCode, USPSOnly) {
-
-	let shippingOptions = [];
-	let addons = getCookie("OrderAddonsActive");
-	console.log("cookie addons:" + addons);
-	if (addons !== "" && typeof addons !== "undefined" ) 
-		shippingOptions.push({
-			"id": "0",
-			"label": "Free: Paid on original order",
-			"description": ""
-		});	
-		
-	if (countryCode =='US' && USPSOnly == false && shippingWeight <= 8) 
-		shippingOptions.push({
-			"id": "7",
-			"label": "Free: DHL Basic mail",
-			"description": "Average delivery time 7-14 business days."
-		});	
-
-	if (countryCode =='CA' && USPSOnly == false && shippingWeight <= 15) 
-		shippingOptions.push({
-			"id": "11",
-			"label": "$2.95: DHL GlobalMail Packet Priority",
-			"description": "TRACKED TO USA BORDER ONLY. Average delivery time is 3-4 weeks."
-		  });
-		  
-	if (countryCode =='US' && USPSOnly == false && shippingWeight <= 32) 
-		shippingOptions.push({
-			"id": "3",
-			"label": "$4.95: DHL Expedited Max",
-			"description": "Estimated delivery time: 3-4 business days."
-		});
-		
-	if (countryCode =='US' && shippingWeight <= 3) 
-		shippingOptions.push({
-			"id": "30",
-			"label": "$4.95: USPS First Class Mail",
-			"description": "Average delivery time 7-14 business days."
-		});
-
-	if (countryCode =='US' && shippingWeight <= 32) 
-		shippingOptions.push({
-			"id": "31",
-			"label": "$7.95: USPS Priority mail",
-			"description": "Estimated delivery time: 2-3 business days."
-		});
-		
-	if (countryCode =='US') // HEAVY
-		shippingOptions.push({
-			"id": "10", 
-			"label": "$13.95: USPS Priority mail heavy", 
-			"description": "Estimated delivery time: 2-3 business days."
-		});
-		
-	if (countryCode =='US' && shippingWeight <= 32) 
-		shippingOptions.push({
-			"id": "25",
-			"label": "$23.95: USPS Express mail",
-			"description": "Estimated delivery time: 1-2 business days."
-		});
-
-	if (countryCode =='CA' && USPSOnly == false) // HEAVY 
-		shippingOptions.push({
-			"id": "28",
-			"label": "$4.95: DHL GlobalMail Parcel Priority",
-			"description": "FULLY TRACKABLE. Average delivery time is 3-4 weeks."
-		});	
-		
-	if (countryCode =='CA' && shippingWeight <= 16) 
-		shippingOptions.push({
-			"id": "26",
-			"label": "$44.95: USPS Express mail international",
-			"description": "Estimated delivery time 3-5 days."
-		});			
-		
-	if (countryCode != 'CA' && countryCode != 'US' && USPSOnly == false && shippingWeight <= 15) // INTERNATIONAL
-		shippingOptions.push({
-			"id": "13",
-			"label": "$2.95: DHL GlobalMail Packet Priority",
-			"description": "TRACKED TO USA BORDER ONLY. Average delivery time is 3-4 weeks."
-		});	
-
-	if (countryCode != 'CA' && countryCode != 'US' && USPSOnly == false) // INTERNATIONAL / HEAVY
-		shippingOptions.push({
-			"id": "29",
-			"label": "$5.95: DHL GlobalMail Parcel Priority",
-			"description": "FULLY TRACKABLE. Average delivery time is 3-4 weeks."
-		});	
-		
-	if (countryCode != 'CA' && countryCode != 'US' && shippingWeight <= 13) // INTERNATIONAL
-		shippingOptions.push({
-			"id": "14",
-			"label": "$31.95: USPS Global priority mail",
-			"description": "Average delivery time is 3-4 weeks."
-		});		
-
-	if (countryCode != 'CA' && countryCode != 'US' && shippingWeight <= 16) // INTERNATIONAL
-		shippingOptions.push({
-			"id": "27",
-			"label": "$65.95: USPS Express mail international",
-			"description": "Estimated delivery time 3-5 business days."
-		});	
-	
-	return {
-		defaultSelectedOptionId: shippingOptions[0].id, // First one is the cheapest one
-		shippingOptions
-	};
-}
 
 /**
  * Provide Google Pay API with a payment data error.
@@ -563,14 +396,13 @@ function prefetchGooglePaymentData() {
 function onGooglePaymentButtonClicked() {
   const paymentDataRequest = getGooglePaymentDataRequest();
   paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
-
   const paymentsClient = getGooglePaymentsClient();
   paymentsClient.loadPaymentData(paymentDataRequest);
 }
 
 /**
  * Get cookie value by name
- */
+*/
 function getCookie(cName) {
   const name = cName + "=";
   const cDecoded = decodeURIComponent(document.cookie); 
@@ -582,6 +414,78 @@ function getCookie(cName) {
   return res
 }
 
+var getObjectByValue = function (array, key, value) {
+    return array.filter(function (object) {
+        return object[key] === value;
+    });
+};
+
+
+/**
+ * Pull shipping options from DB
+*/
+function getShippingOptions(countryCode, zipCode){
+	let shippingOptions = [];
+	$.ajax({
+		method: "post",
+		//dataType: "json",
+		async: false,
+		url: "/google-pay/ajax_display_shipping_options.asp",
+		data: {country_code: countryCode, zip_code: zipCode},
+		success: function( data ) {
+			data = JSON.parse(data);
+			selectedShippingId = data[0].id;
+			selectedShippingCompany = getSelectedShippingCompany(data[0].label);
+			shippingOptions = data;
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) { 
+			console.log("Shipping options error: " + errorThrown); 
+		}      	
+	}); 
+
+	return {
+		defaultSelectedOptionId: shippingOptions[0].id, // First one is the cheapest one
+		shippingOptions
+	};	
+}
+
+/**
+ * Get short name for shipping company
+*/
+function getSelectedShippingCompany(label){
+	if (label.indexOf("USPS") > -1) 
+		return "USPS";
+	else if (label.indexOf("DHL") > -1) 
+		return "DHL";
+	else if (label.indexOf("UPS") > -1) 
+		return "UPS";
+	else
+		return "Paid on original order";		 
+}
+
+/**
+ * Get shipping cost for selected shipping option on payment sheet
+*/ 
+function getShippingCosts(selectedShippingId){
+	var shippingCost = 0;
+	$.ajax({
+		method: "post",
+		dataType: "json",
+		async: false,
+		url: "/google-pay/ajax_get_shipping_cost.asp",
+		data: {shipping_id: selectedShippingId},
+		success: function( json ) {
+		   shippingCost = json.cost;
+		},
+		error: function(XMLHttpRequest, textStatus, errorThrown) { 
+			console.log("error: " + errorThrown); 
+		}      	
+	});
+	
+	return shippingCost;
+ 
+}
+		 
 /**
  * Process payment data returned by the Google Pay API
  *
@@ -589,11 +493,8 @@ function getCookie(cName) {
  * @see {@link https://developers.google.com/pay/api/web/reference/response-objects#PaymentData|PaymentData object reference}
  */
 function processPayment(paymentData) {
-
   return new Promise(function(resolve, reject) {
     setTimeout(function() {
-      // show returned data in developer console for debugging
-      console.log(paymentData);
       // @todo pass payment token to your gateway to process payment
       paymentToken = paymentData.paymentMethodData.tokenizationData.token;
 	  var encryptedToken = window.btoa(paymentToken);
@@ -607,7 +508,7 @@ function processPayment(paymentData) {
       country_code = paymentData.shippingAddress.countryCode;
       phone_number = paymentData.shippingAddress.phoneNumber;
 	  email = paymentData.email;
-	  amount = subTotal
+	  amount = subTotal;
 
 	  // START send payment data to authorize.net to process
 	  $.ajax({
@@ -617,18 +518,18 @@ function processPayment(paymentData) {
 	  url: "checkout/ajax_process_payment.asp",
 	  data: {googlepay: "on", encryptedToken: encryptedToken, full_name: full_name, address1: address1, address2: address2, locality: locality, 
 	         administrative_area: administrative_area, postal_code: postal_code, country_code: country_code, amount: totalAmount, tax: tax, 
-			 shipping_amount: shippingCost, shipping_option: selectedShippingId + "," + shippingCost + "," + getShippingCompany()[selectedShippingId],
+			 shipping_amount: shippingCost, shipping_option: selectedShippingId + "," + shippingCost + "," + selectedShippingCompany,
 			 phone_number: phone_number, email: email
 			}
 			})
 			.done(function( json, msg ) {
 				if (json.stock_status === "fail") {
 					console.log("stock_status: fail");
-					reject(new Error('Unfortunately we do not have enough quantity in stock for some of the item(s) in your cart.'));
+					reject("Unfortunately we do not have enough quantity in stock for some of the item(s) in your cart.");
 					calcAllTotals();
 				}else if (json.flagged === "yes") {
-					console.log("Order or user is flagged.");
-					reject(new Error('This order can not be processed online. Please contact customer service for assistance.'));				
+					console.log("ORDER or USER is FLAGGED !!!");
+					reject("This order can not be processed online. Please contact customer service for assistance.");							
 				} else { // If items are in stock 
 					if (json.cc_approved === "yes") {
 						resolve({});
@@ -636,15 +537,14 @@ function processPayment(paymentData) {
 						window.location = "/checkout_final.asp";
 					} else {				
 						console.log("Payment declined");
-						console.log("msg.responseText: " + msg.responseText);
 						console.log("json.errorText: " + json.errorText);
-						reject(new Error('Payment declined. ' + json.cc_reason));
+						reject("Payment declined. " + json.cc_reason);
 					}				
 				}			
 			})
 			.fail(function() {
-				reject(new Error('Payment declined. Please review your information and try again.'));
+				reject("Payment declined. Please review your information and try again.");
 			});
-    }, 3000);
+    }, 1000);
   });
 }

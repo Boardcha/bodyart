@@ -152,6 +152,10 @@ $(".btn-cart-load").click(function(){
             .done(function (json, msg) {
                 if (json.status === "logged-in") {
                     window.location = "account.asp";
+				} else if (json.status === "not-active") {
+                    $(".signin-message").html("This account is not active. Please check your inbox for activation link. If you did not receive the email, please check your spam folder.");
+                    $(".alert-signin").show();
+                    $('#btn_signin').removeAttr("disabled");
                 } else {
                     $(".signin-message").html("User name or password did not match. Please try again.");
                     $(".alert-signin").show();
@@ -228,7 +232,7 @@ $(".btn-cart-load").click(function(){
 		})
 		.done(function(json, msg) {
 			if (json.duplicate == "no") {
-                $('#message-create-account').html('<div class="alert alert-success">Your account has been created. <a href="account.asp">Click here</a> to go to your new account page.</div>');
+                $('#message-create-account').html('<div class="alert alert-success">An email has been sent to your email address containing an activation link. Please click on the link to activate your account. If you do not receive the email within a few minutes, please check your spam folder.</div>');
                 $('#btn-create-account').prop('disabled', true);
 			} else {
 				$('#message-create-account').html('<div class="alert alert-danger">There is already an account registered with this e-mail, or another error occurred. If you have forgotten your password you can retrieve it <a class="alert-link" href="#" data-toggle="modal" data-target="#forgotpassword" data-dismiss="modal">at this link</a></div>');

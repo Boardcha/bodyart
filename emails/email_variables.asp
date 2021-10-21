@@ -66,15 +66,24 @@
 	end if ' send out gift certificate
 
 	if mailer_type = "new account" then 'newly created customer account
-	google_utmsource = "Account registration"
-		mail_to_email = request.form("e-mail")
+		google_utmsource = "Account registration"
+		mail_to_email = Request("email")
 		mail_to_name = "New Account"
 		mail_subject = "Bodyartforms welcome"
-		mail_body = "<div class='column2' style='box-sizing: border-box;display:inline-block;vertical-align: top;margin-bottom:3em'><strong>Hello!</strong><br/><br/>Thanks for signing up for an account. You can now access your account page at the link below:<br/><a href='https://bodyartforms.com/account.asp' style='color: #475F8D !important; text-decoration: none'>https://bodyartforms.com/account.asp</a><br/><br/><strong>Your username is:</strong> " & mail_to_email & "</div><div class='column2' style='box-sizing: border-box;display:inline-block;color:#0c5460;background-color:#d1ecf1;border-color:1px solid #bee5eb;padding:.75rem 1.25rem;border-radius:.25em'><div style='font-weight:bold;font-size:1.2em'>About our company</div><p>We're a sister owned family business based near Austin, Texas. We've been around since 2001! We have a small close knit group that work hard to make sure you have the best experience possible when you order from us.</p><p>Our motto has always been to give the best customer service possible. If we make a mistake, we'll fix it ASAP. If you have questions or concerns, feel free to get in touch with us via email at service@bodyartforms.com or via phone at our toll free # (877) 223-5005. We're happy to help!</p><div style='font-weight:bold;font-size:1.2em'>What we believe in</div><p>We believe in treating our employees fairly by paying a livable wage, providing health care & retirement benefits, & providing paid vacation/sick time. We also keep a very chill work environment... no bosses breathing down your neck over here!</p>And lastly, we give to charity ... In most years we give over $50,000! We proudly support various causes that are making a difference around the world. The more our company makes, the more profits we donate to charity!</p></div>"
+		mail_body = "<div class='column2' style='box-sizing: border-box;display:inline-block;vertical-align: top;margin-bottom:3em'><strong>Hello!</strong><br/><br/>Your account is now active!. You can access your account page at the link below:<br/><a href='https://bodyartforms.com/account.asp' style='color: #475F8D !important; text-decoration: none'>https://bodyartforms.com/account.asp</a><br/><br/><strong>Your username is:</strong> " & mail_to_email & "</div><div class='column2' style='box-sizing: border-box;display:inline-block;color:#0c5460;background-color:#d1ecf1;border-color:1px solid #bee5eb;padding:.75rem 1.25rem;border-radius:.25em'><div style='font-weight:bold;font-size:1.2em'>About our company</div><p>We're a sister owned family business based near Austin, Texas. We've been around since 2001! We have a small close knit group that work hard to make sure you have the best experience possible when you order from us.</p><p>Our motto has always been to give the best customer service possible. If we make a mistake, we'll fix it ASAP. If you have questions or concerns, feel free to get in touch with us via email at service@bodyartforms.com or via phone at our toll free # (877) 223-5005. We're happy to help!</p><div style='font-weight:bold;font-size:1.2em'>What we believe in</div><p>We believe in treating our employees fairly by paying a livable wage, providing health care & retirement benefits, & providing paid vacation/sick time. We also keep a very chill work environment... no bosses breathing down your neck over here!</p>And lastly, we give to charity ... In most years we give over $50,000! We proudly support various causes that are making a difference around the world. The more our company makes, the more profits we donate to charity!</p></div>"
 		
 		Call baf_sendmail()
 	end if ' create new account
 	
+	if mailer_type = "account activation" then
+		google_utmsource = "Account activation"
+		mail_to_email = request.form("e-mail")
+		mail_to_name = "Account Activation"
+		mail_subject = "Bodyartforms Account Activation"
+		mail_body = "<div class='column2' style='box-sizing: border-box;display:inline-block;vertical-align: top;margin-bottom:3em'><strong>Hello!</strong><br/><br/>Thank you for registering with Bodyartforms.com. Please click on the below link to activate your account.<br/><br/><a href='https://bodyartforms.com/account-activation.asp?email=" & mail_to_email & "&hash=" & activation_hash & "' style='color: #475F8D !important; text-decoration: none; white-space: nowrap;'>https://bodyartforms.com/account-activation.asp?email=" & mail_to_email & "&hash=" & activation_hash & "</a><br/><br/><br/><br/>If you have any questions or need assistance please reply to this e-mail to get in touch with us or call customer service at (877) 223-5005</div>"
+		
+		Call baf_sendmail()
+	end if ' create new account	
 	if email_onetime_coupon = "yes" then ' Send out a one time use coupon (for new customer accounts)
 		google_utmsource = "One time use coupon"
 		mail_to_email = request.form("e-mail")

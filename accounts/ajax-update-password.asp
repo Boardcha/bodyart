@@ -8,11 +8,11 @@
 ' Get salt from DB by customer ID
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT salt, password_hashed FROM customers WHERE customer_ID = ?"
+objCmd.CommandText = "SELECT salt, password_hashed, registered_with_social_login FROM customers WHERE customer_ID = ?"
 objCmd.Parameters.Append(objCmd.CreateParameter("id",3,1,10,CustID_Cookie))
-set rsGetSalt = objCmd.Execute()
+set rsUserInfo = objCmd.Execute()
 
-usersalt = rsGetSalt.Fields.Item("salt").Value
+usersalt = rsUserInfo.Fields.Item("salt").Value
 hashedPass = sha256(usersalt & request.form("current_password") & extra_key)
 
 
@@ -25,8 +25,10 @@ objCmd.Parameters.Append(objCmd.CreateParameter("password",200,1,250,hashedPass)
 set rsMatchingPassFound = objCmd.Execute()
 
 ' If a match is found
-if NOT rsMatchingPassFound.BOF and NOT rsMatchingPassFound.EOF then
+if (NOT rsMatchingPassFound.BOF and NOT rsMatchingPassFound.EOF) OR rsUserInfo("registered_with_social_login") = true then
 
+	'If they registered with a social plugin, once they set a password on account-profile.asp we need to set registered_with_social_login = 0 in DB
+	'Now They have regular password and If they want to change their password, their current password should be asked
 	' Re-hash new password to save in BAF database
 	salt = getSalt(32, extraChars)
 	newPass = sha256(salt & request.form("password") & extra_key)
@@ -36,7 +38,7 @@ if NOT rsMatchingPassFound.BOF and NOT rsMatchingPassFound.EOF then
 	
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "UPDATE customers SET pass_last_updated = '" & now() & "',  password_hashed = ?, salt = ?, reset_token = '', reset_token_timestamp = '' WHERE customer_ID = ?" 
+		objCmd.CommandText = "UPDATE customers SET pass_last_updated = '" & now() & "',  password_hashed = ?, salt = ?, reset_token = '', reset_token_timestamp = '', registered_with_social_login = 0  WHERE customer_ID = ?" 
 		objCmd.Parameters.Append(objCmd.CreateParameter("password",200,1,250,newPass))
 		objCmd.Parameters.Append(objCmd.CreateParameter("salt",200,1,250,salt))
 		objCmd.Parameters.Append(objCmd.CreateParameter("id",3,1,10,CustID_Cookie))

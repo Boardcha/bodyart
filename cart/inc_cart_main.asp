@@ -52,6 +52,7 @@ end if
 			rs_getCart.MoveNext()
 			Wend
 			
+			rs_getCart.ReQuery()
 			
 			Response.Cookies("cartCount") = var_cart_count
 			Response.Cookies("cartCount").Expires = DATE + 300
@@ -275,11 +276,8 @@ end if ' Calculate COUPON CODE ------------------------------
 ' END ----- COUPON AND GIFT CERTIFICATE variables for displaying information on front end --------------
 
 
-
-
 if check_stock = "yes" then
 	var_cart_count = 0
-	rs_getCart.ReQuery() 
 %>
 	<!--#include virtual="cart/inc_cart_stock_check.asp"-->
 <%

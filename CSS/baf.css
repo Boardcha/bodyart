@@ -15929,4 +15929,38 @@ footer, #mobilesearch, #accountmenu {
     margin-right: 5px;
 }	
 
+.abcRioButton{width:100% !important;}
+
+apple-pay-button {
+	--apple-pay-button-width: 100%;
+    --apple-pay-button-height: 74px;
+    --apple-pay-button-border-radius: 4px;
+    --apple-pay-button-padding: 0px 10%;
+    --apple-pay-button-box-sizing: border-box;
+}
+
+#btn-applepay{
+	width: 100%;
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 1px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+    cursor: pointer;
+	background-color: white;
+	border-radius: 4px;
+}
+
+.gpay-button.white:hover{
+	background-color: white !important;
+}
+
+.gpay-button.white.focus{
+	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 1px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px !important;
+	outline: unset !important;
+}
+.gpay-button-fill > .gpay-button.checkout{
+	padding: 9px 20%;
+}
+
+.gpay-button.white.checkout.en {
+    background-image: url("/images/google-checkout.svg") !important;
+}
+
 /*# sourceMappingURL=baf.css.map */

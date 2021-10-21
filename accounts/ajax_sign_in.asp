@@ -23,7 +23,7 @@
 
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT customer_ID, password_hashed, salt FROM customers WHERE email = ? AND password_hashed = ? ORDER BY customer_ID ASC"
+	objCmd.CommandText = "SELECT customer_ID, password_hashed, salt, active FROM customers WHERE email = ? AND password_hashed = ? ORDER BY customer_ID ASC"
 	objCmd.Parameters.Append(objCmd.CreateParameter("email",200,1,250,Request.Form("email")))
 	objCmd.Parameters.Append(objCmd.CreateParameter("password",200,1,250,hashed_pass))
 	set rsGetUser = objCmd.Execute()
@@ -33,14 +33,19 @@
 
 	If rsGetUser.eof then 
 	
-	  session("login_email") = Request.Form("email")
-%>
-{ "status":"logged-out" }
-<% 
+		session("login_email") = Request.Form("email")
+		%>
+		{ "status":"logged-out" }
+		<% 
 	else
-%>
-{ "status":"logged-in" }	
-<%
+		if rsGetUser("active")= true then
+			%>
+			{ "status":"logged-in" }	
+			<%
+					else%>
+			{ "status":"not-active" }			
+		<%end if
+		
 	' Write last login date
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
@@ -90,7 +95,7 @@
 	
 	end if ' if user is logged in 
 	
-End If ' end Not rsGetUser.EOF
+End If ' end rsGetUser.EOF
 	
 DataConn.Close()
 Set DataConn = Nothing

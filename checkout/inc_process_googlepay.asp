@@ -30,7 +30,7 @@ If request.form("googlepay") = "on" Then
 		& "<billTo>" _  
 		&   "<firstName>" & request.form("full_name") & "</firstName>" _  
 		&   "<lastName></lastName>" _  
-		&   "<address>" & request.form("address1") & "</address>" _  
+		&   "<address>" & request.form("address1") & " " & request.form("address2") & "</address>" _  
 		&   "<city>" & request.form("locality") & "</city>" _  
 		&   "<state>" & request.form("administrative_area") & "</state>" _  
 		&   "<zip>" & request.form("postal_code") & "</zip>" _  
@@ -44,7 +44,7 @@ If request.form("googlepay") = "on" Then
 	If IsApiResponseSuccess(objResponseChargeCard) Then
 		strTransactionId = objResponseChargeCard.selectSingleNode("/*/api:transactionResponse/api:transId").Text
 		session("cc_transid") = strTransactionId
-		strCardType = objResponseChargeCard.selectSingleNode("/*/api:transactionResponse/api:accountType").Text
+		strCardType = "GooglePay"
 		
 		' If approved... ' 1 = Approved, 2 = Declined, 3 = Error, 4 = Held for Review
 		If objResponseChargeCard.selectSingleNode("/*/api:transactionResponse/api:responseCode").Text = 1 Then 
@@ -67,7 +67,7 @@ If request.form("googlepay") = "on" Then
 	Else
 		%>
 			"cc_approved":"no", "cc_reason":"Problem with payment information",
-			"google_pay_response":"<%=objResponseChargeCard.selectSingleNode("/*/api:transactionResponse").Text%>"
+			"google_pay_response":"Authorize.net API response is not successful."
 		<% 			
 	End If
 

@@ -1026,6 +1026,12 @@ Set rsNavWaitingList = objCmd.Execute()
                                 </div>
                                 <div class="modal-body">
                                         <form class="needs-validation" id="frm-signin" novalidate>
+												<div class="form-group">
+													<div id="google_sign_in"></div>
+												</div>
+												<div style="width: 100%;height: 13px;border-bottom: 1px solid #c7c7c7;text-align: center;margin-bottom: 25px;">
+													<div style="color: #969191; font-size: 15px; background-color: #fff; margin:auto auto; width: 40px;"> OR </div>
+												</div>
                                                 <div class="form-group">
                                                         <input type="email" name="email" class="form-control"
                                                                 placeholder="E-mail" required>
@@ -1054,7 +1060,7 @@ Set rsNavWaitingList = objCmd.Execute()
                                                 </div>
                                         </form>
                                 </div>
-                                <h4 class="text-muted text-center">OR</h4>
+                                <h6 class="text-muted text-center mt-2 mb-2">Don't have an account yet?</h6>
                                 <div class="d-block text-center">
                                         <button class="btn btn-purple btn-sm" data-toggle="modal" data-target="#createaccount"
                                                 data-dismiss="modal">Create a new account</button>
