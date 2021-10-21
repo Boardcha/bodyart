@@ -7,7 +7,6 @@ if request.cookies("OrderAddonsActive") <> "" then
 	var_addons_active = "yes"
 end if
 
-
 ' BEGIN build { for .json return throughout this page}
 %>
 	{
@@ -83,7 +82,7 @@ if cart_status = "not-empty" Then
 %>
 <!--#include virtual="checkout/inc_process_cashorder.asp"--> 
 <!--#include virtual="checkout/inc_process_creditcard.asp"--> 
-<!--#include virtual="checkout/inc_process_googlepay.asp"--> 
+<!--#include virtual="checkout/inc_process_googlepay.asp"-->
 <!--#include virtual="checkout/inc_process_applepay.asp"--> 
 <%
 
