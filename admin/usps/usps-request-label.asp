@@ -103,12 +103,13 @@ objCmd.CommandText = "SELECT top 100 PERCENT " & _
     "FROM TBL_OrderSummary " & _
     "GROUP BY InvoiceID " & _
     ") as d ON O.ID = d.InvoiceID " & _
-    " LEFT OUTER JOIN TBLDiscounts AS C ON O.coupon_code = C.DiscountCode" & _
+    " LEFT JOIN (SELECT DISTINCT DiscountCode, DiscountPercent FROM TBLDiscounts) AS C ON O.coupon_code = C.DiscountCode" & _
     " WHERE "  & sql_where
 if request.querystring("single") = "yes" then
     '==== REQUEST SINGLE LABEL TO PRINT
         objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,12, request.querystring("invoiceid") ))
 end if
+
 
 Set rsGetOrder = objCmd.Execute()
 
