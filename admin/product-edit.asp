@@ -1171,7 +1171,7 @@ end if
 			<button type="submit" class="btn btn-sm btn-primary" id="add-button">Add</button>
 		</td>
 		<td>
-			<span style="display:none" id="move-copy-productid"><span id="move-copy-text"></span> to product # <input  class="form-control form-control-sm" type="text" size="10" name="toggle-productid" id="toggle-productid"></span>
+			<span style="display:none" id="move-copy-productid"><span id="move-copy-text"></span> to product # <input  class="form-control form-control-sm" type="text" size="10" name="toggle-productid" id="toggle-productid" data-orig-id="<%= rs_getproduct("ProductID") %>"></span>
 			<input name="date-added" type="hidden" value="<%= date() %>">
 			<input name="productid" type="hidden" value="<%= Request.QueryString("ProductID") %>">
 		</td>
@@ -1748,7 +1748,7 @@ end if
 <script type="text/javascript" src="/js/chosen/chosen.jquery.js"></script>
 <script type="text/javascript" src="scripts/dropzone.js"></script>
 <script type="text/javascript" src="scripts/jquery.validate.min.js"></script>
-<script type="text/javascript" src="scripts/product-edit-version2.js?v=080921"></script>
+<script type="text/javascript" src="scripts/product-edit-version2.js?v=102121"></script>
 
 </html>
 <%

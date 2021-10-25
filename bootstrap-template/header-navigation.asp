@@ -161,7 +161,11 @@ Set rsNavWaitingList = objCmd.Execute()
                                                                 class="d-md-none"> Jewelry</span>
                                                 </a>
                                         </li>
-                                        <li class="nav-item dropdown position-static  p-1">
+                                        <li class="nav-item p-1">
+                                                <a class="nav-link text-light py-2 pl-3 header-menu-link" href="/products.asp?feature=top_seller" id="top-sellers">TOP SELLERS
+                                                </a>
+                                        </li>
+                                        <li class="nav-item dropdown position-static p-1">
                                                 <a class="nav-link dropdown-toggle text-light py-2 px-3 px-lg-1 header-menu-open" href="#" id="saleDropdown"
                                                         role="button" data-toggle="dropdown" aria-haspopup="true"
                                                         aria-expanded="false">

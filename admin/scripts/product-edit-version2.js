@@ -589,6 +589,7 @@ localStorage["copy_details"] = "" // set initial value to nothing
 	// ------------ When product # is inputted for copy/move then load ajax and redirect to new page
 	$("#toggle-productid").change(function(){
 		var productid = $("#toggle-productid").val();
+		var orig_productid = $(this).attr("data-orig-id");
 		if ($('#move-copy-productid').hasClass('copy-detail')) {
 			var toggle_type = "copy" 
 			var details = localStorage["copy_details"]
@@ -606,7 +607,7 @@ localStorage["copy_details"] = "" // set initial value to nothing
 		method: "POST",
 		dataType: "json",
 		url: "products/ajax_duplicate_move_product.asp",
-		data: {move_to_id: productid, details: details, toggle_type: toggle_type, section: section}
+		data: {move_to_id: productid, orig_productid: orig_productid, details: details, toggle_type: toggle_type, section: section}
 		})
 		.done(function( json, msg ) {
 			window.location.replace("?productid=" + json.productid);

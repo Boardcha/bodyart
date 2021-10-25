@@ -22,7 +22,7 @@ End if
 
 Set rsGetRegular_cmd = Server.CreateObject ("ADODB.Command")
 rsGetRegular_cmd.ActiveConnection = MM_bodyartforms_sql_STRING
-rsGetRegular_cmd.CommandText = "SELECT jewelry.ProductID, ProductDetails.ProductDetailID, jewelry.title, jewelry.type, jewelry.active AS MainActive, jewelry.picture, ProductDetails.weight, ProductDetails.DateLastPurchased, ProductDetails.qty, ProductDetails.ProductDetail1, ProductDetails.Gauge, ProductDetails.Length, ProductDetails.active AS DetailActive,  ProductDetails.Date_InventoryCount, ProductDetails.Inventory_TimesScanned FROM jewelry INNER JOIN ProductDetails ON jewelry.ProductID = ProductDetails.ProductID WHERE ProductDetailID = ?" 
+rsGetRegular_cmd.CommandText = "SELECT jewelry.ProductID, ProductDetails.ProductDetailID, jewelry.title, jewelry.type, jewelry.active AS MainActive, jewelry.picture, ProductDetails.weight, ProductDetails.DateLastPurchased, ProductDetails.qty, ProductDetails.ProductDetail1, ProductDetails.Gauge, ProductDetails.Length, largepic, ProductDetails.active AS DetailActive,  ProductDetails.Date_InventoryCount, ProductDetails.Inventory_TimesScanned, DetailCode, location, ID_Description FROM jewelry INNER JOIN ProductDetails ON jewelry.ProductID = ProductDetails.ProductID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number WHERE ProductDetailID = ?" 
 rsGetRegular_cmd.Prepared = true
 rsGetRegular_cmd.Parameters.Append rsGetRegular_cmd.CreateParameter("param1", 5, 1, -1, ItemScan) ' adDouble
 
@@ -52,7 +52,7 @@ rsGetRegular.ReQuery
 
 Else
 	If Request.Form("OrigScan") <> "" Then
-		Response.write "<span class=""alert"">Failed scan match</span>"
+		Response.write "<span class=""alert alert-danger"">Failed scan match</span>"
 		Complete = "yes"
 	End if
 End if
@@ -98,38 +98,7 @@ End if ' If regular recordset is not empty
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 <meta name="mobile-web-app-capable" content="yes">
-<link rel="stylesheet" href="css/scanners.css" type="text/css" />
-<style type="text/css">
-
-<!--
-body {
-		-webkit-text-size-adjust:none;
-	  	font-family: Helvetica, Arial, Verdana, sans-serif;
-	  	font-size: 15px;
-	  	color: black;
-	  }
-	
-.smallfont {
-	   font-size: 13px;
-	   }	
-	   
-.accent {
-		font-weight: bold;
-		font-size: 16px;
-			}   
-
-.accepted {
-		   color: #090;
-		   font-weight: bold;
-		   font-size: 20px;
-		   }
-.alert {
-	   color: #CC0000;
-	   font-weight: bold;
-	   font-size: 20px;
-	   }
--->
-</style>
+<link href="/CSS/baf.min.css?v=092519" rel="stylesheet" type="text/css" />
 <!--#include file="../includes/inc_scripts.asp"-->
 <script type="text/javascript">
 	$(document).ready(function() {
@@ -147,21 +116,16 @@ body {
 				})
 				.done(function( msg ) {
 				
-					// Highlight field green for success
-					$("input[name='"+ field_name +"']").removeClass("ajax_input_fail");
-					$("input[name='"+ field_name +"']").addClass("ajax_input_success");
-
-					setTimeout(function(){
-						$("input[name='"+ field_name +"']").addClass("ajax_input_fadeout");
-						$("input[name='"+ field_name +"']").removeClass("ajax_input_success");}, 3000);					
-						$("input[name='"+ field_name +"']").removeClass("ajax_input_fadeout");
+					$('#weight-message').removeClass('alert alert-danger');
+					$('#weight-message').addClass('alert alert-success');
+					$('#weight-message').html('Weight updated');
 						
 					//	alert( "success" + msg + "Detail-id: " + detailid + " Qty: " + qtychange);
 				})
 				.fail(function(msg) {
 
-					$("input[name='"+ field_name +"']").addClass("ajax_input_fail");
-					setTimeout(function(){}, 3000);	
+					$('#weight-message').addClass('alert alert-danger');
+					$('#weight-message').html('Weight update failed. Code or input issue.');
 				
 				//	alert( "error" + msg + "Detail-id: " + detailid + " Qty: " + qtychange);
 				});
@@ -172,6 +136,14 @@ body {
 			var qtychange = $(this).val();
 			var detailid = $(this).attr("data-detailid");
 			var field_name = $(this).attr("name");
+
+			// add a fail safe in case someone scans a bin into the qty field making the qty count crazy high
+			if (qtychange > 300){
+				$('#qty-message').addClass('alert alert-danger');
+				$('#qty-message').html('Re-enter correct quantity. Quantity entered is over 300.');
+			}
+
+			else {
 			
 				$.ajax({
 				method: "POST",
@@ -181,76 +153,77 @@ body {
 				.done(function( msg ) {
 				
 					// Highlight field green for success
-					$("input[name='"+ field_name +"']").removeClass("ajax_input_fail");
-					$("input[name='"+ field_name +"']").addClass("ajax_input_success");
-
-					setTimeout(function(){
-						$("input[name='"+ field_name +"']").addClass("ajax_input_fadeout");
-						$("input[name='"+ field_name +"']").removeClass("ajax_input_success");}, 3000);					
-						$("input[name='"+ field_name +"']").removeClass("ajax_input_fadeout");
+					$('#qty-message').removeClass('alert alert-danger');
+					$('#qty-message').addClass('alert alert-success');
+					$('#qty-message').html('Quantity updated');
 						
 					//	alert( "success" + msg + "Detail-id: " + detailid + " Qty: " + qtychange);
 				})
 				.fail(function(msg) {
 
-					$("input[name='"+ field_name +"']").addClass("ajax_input_fail");
-					setTimeout(function(){}, 3000);	
+					$('#qty-message').addClass('alert alert-danger');
+					$('#qty-message').html('Quantity update failed. Code or input issue.');
 				
 				//	alert( "error" + msg + "Detail-id: " + detailid + " Qty: " + qtychange);
 				});
-		}); // end weight update
+			} // if qty is not over 300
+		}); // end qty update
 
 	});	
 </script>
 </head>
 
-<body>
+<body class="p-2">
 <form action="ItemCount.asp" method="post" name="FRM_Scan">
-<input name="Item" type="text" id="Item" placeholder="Scan item #" autofocus/>
+	<div class="form-group">
+		<input class="form-control" name="Item" type="text" id="Item" placeholder="Scan item #" autofocus/>
+	</div>
 <button type="submit" style="display: none">></button>
 <% if not rsGetRegular.eof then
 	var_ProductDetailID = rsGetRegular.Fields.Item("ProductDetailID").Value
 	end if
 %>
-<br/><br/>
+
 <% if not rsGetRegular.eof then %>
-	<div class="inventory-count-regular">
-		Qty: <input name="qty" type="text" id="qty" data-detailid="<%= var_ProductDetailID %>" size="4" />
-		<%' if rsGetRegular.Fields.Item("weight").Value = 0 then 'if weight field is empty %>
-			<br/><br/>			
-			Weight: <input name="weight" id="weight" type="text" size="4" placeholder="<%= rsGetRegular.Fields.Item("weight").Value %>" data-detailid="<%= var_ProductDetailID %>" />
-			
-		<%' end if 'if weight field is empty %> 
+	<div class="row">
+		<div class="col mb-4">
+			<img class="float-left mr-3" style="width:150px;height:150px" src="http://bodyartforms-products.bodyartforms.com/<%=(rsGetRegular.Fields.Item("largepic").Value)%>" alt="Image">
+			<%=(rsGetRegular.Fields.Item("title").Value)%>&nbsp;<%=(rsGetRegular.Fields.Item("ProductDetail1").Value)%>&nbsp;<%=(rsGetRegular.Fields.Item("Gauge").Value)%>&nbsp;<%=(rsGetRegular.Fields.Item("Length").Value)%>
+			<br>
+			<span class="badge badge-info"><%= rsGetRegular("ID_Description")%>&nbsp;&nbsp;<%= rsGetRegular("location") %></span>
+		</div>
 	</div>
+
+<div class="form-group">	
+	Qty: <input name="qty" type="text" id="qty" data-detailid="<%= var_ProductDetailID %>" size="4" />
+</div>	
+<div id="qty-message"></div>
 <% end if ' if a record has been found %>
-<p>
   <% If Not rsGetRegular.EOF Or Not rsGetRegular.BOF Then %>  
   <% If RecentlySold = "yes" then   ' SHOW BELOW IF ITEM HASN'T BEEN SOLD IN THE LAST 24 HOURS%>
-</p>
- <span class="inventory-count-qty"><%= rsGetRegular.Fields.Item("qty").Value %> in stock</span>
-	<br/><br/>
+ <div class="alert alert-success">
+	 <%= rsGetRegular.Fields.Item("qty").Value %> in stock <% If Not rsGetPreorders.EOF Or Not rsGetPreorders.BOF Then %> 
+ 	+ <%= preorder_qty %> reserved for pre-orders
+ <% End If ' end Not rsGetPreorders.EOF Or NOT rsGetPreorders.BOF %>
+</div>
+
 <div>
-	<div style="float: left; width: 90px;">
-		<img src="http://bodyartforms-products.bodyartforms.com/<%=(rsGetRegular.Fields.Item("picture").Value)%>" alt="Image" width="75" height="75">
-	</div> 
-	<div style="float: left; width: 70%">
-		<%=(rsGetRegular.Fields.Item("title").Value)%>&nbsp;<%=(rsGetRegular.Fields.Item("ProductDetail1").Value)%>&nbsp;<%=(rsGetRegular.Fields.Item("Gauge").Value)%>&nbsp;<%=(rsGetRegular.Fields.Item("Length").Value)%>
-	</div>
-	  
-	  <% If Not rsGetPreorders.EOF Or Not rsGetPreorders.BOF Then %> 
-		<span class="accent">(+ <%= preorder_qty %> reserved for pre-orders)</span>
-		<% End If ' end Not rsGetPreorders.EOF Or NOT rsGetPreorders.BOF %>
 
 	<% else ' DISPLAY BELOW IF ITEM HAS BEEN SOLD IN LAST 24 HOURS%> 
-	<span class="alert">Write down #<%=(rsGetRegular.Fields.Item("ProductDetailID").Value)%> and re-scan later<br>
+	<span class="alert alert-danger">Write down #<%=(rsGetRegular.Fields.Item("ProductDetailID").Value)%> and re-scan later<br>
 	  Last sold <%= (rsGetRegular.Fields.Item("DateLastPurchased").Value) %></span>
 	</p>
 	<% end if %>
-<div style="clear: both;"></div>
 </div>
+<%' if rsGetRegular.Fields.Item("weight").Value = 0 then 'if weight field is empty %>	
+<div class="form-group mt-3">
+	Weight: <input name="weight" id="weight" type="text" size="4" placeholder="<%= rsGetRegular.Fields.Item("weight").Value %>" data-detailid="<%= var_ProductDetailID %>" />
+	<div id="weight-message"></div>
+</div>
+<%' end if 'if weight field is empty %> 
 <% Else
 If Request.form("Item") <> "" then %>
-       <span class="alert">No item found</span>
+       <span class="alert alert-danger">No item found</span>
   <%  End if
  %>
 
@@ -258,7 +231,7 @@ If Request.form("Item") <> "" then %>
 End If ' end rsGetRegular.EOF And rsGetRegular.BOF %>
 </form> 
 <% if session("hide_invreg_notes") = "" then %>
-	<div class="page-notes">
+	<div class="alert alert-info mt-4">
 	<strong>How this page works - Inventory count (Regular stock)</strong>&nbsp;&nbsp;&nbsp;&nbsp;<a href="ItemCount.asp?hide=yes">Hide this</a>
 	<br/>
 	Use with the scanners. Scan the SMALL BARCODE into the top field (just like you would an invoice). The product pulls up and tells you how many we have in stock. If it's correct, scan the next bin on move on. If you need to update the quantity or the weight, enter the value, and then press the done button on the screen. The field WILL TURN GREEN once it's updated.

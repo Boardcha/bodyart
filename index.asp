@@ -18,39 +18,60 @@ Set rsGetSliders = DataConn.Execute(SqlString)
 SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE new_page_date >= GETDATE()-45 AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND brandname <> 'Wildcard' AND customorder <> 'yes' ORDER BY new_page_date DESC" 
 Set rsGetNewestProducts = DataConn.Execute(SqlString)
 
-SqlString = "SELECT TOP(2) Testimonial_Name, Testimonial_Date, Testimonial FROM dbo.TBL_Testimonials WHERE Testimonial_Date >= DATEADD(month, -72, GETDATE()) ORDER BY newid()" 
-Set rsGetTestimonials = DataConn.Execute(SqlString)
-
 SqlString = "SELECT TOP (12) * FROM (SELECT TOP (100) * FROM FlatProducts WHERE active = 1 AND customorder <> 'yes' AND free_item IS NULL AND type = 'None' AND (NOT (material LIKE '%acrylic%')) AND (NOT (tags LIKE '%save%')) ORDER BY qty_sold_last_7_days DESC) as t ORDER BY NEWID()" 
 Set rsPopularThisWeek = DataConn.Execute(SqlString)
-%>
-				<div class="baf-carousel slider-container text-center">
-				<div id="HomeSlider">
-				<% While NOT rsGetSliders.EOF %>
-					<a class="homepage-graphic" href="<%=rsGetSliders("url")%>" id="<%=rsGetSliders("slider_name")%>">
-						<picture>
-							<source media="(max-width: 550px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img550x350")%>">
-							<source media="(max-width: 850px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img850x350")%>">
-							<source media="(max-width: 1024px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img1024x350")%>">
-							<source media="(max-width: 1600px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img1600x350")%>">
-							<source media="(min-width: 1920px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img1920x350")%>">
-								<img class="img-fluid hero-slider" src="<%=rsGetSliders("img1600x350")%>" 
-							srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img1920x350")%> 1920w,
-							https://sliders.bodyartforms.com/<%=rsGetSliders("img1600x350")%> 1600w,
-							https://sliders.bodyartforms.com/<%=rsGetSliders("img1024x350")%> 1024w,
-							https://sliders.bodyartforms.com/<%=rsGetSliders("img850x350")%> 850w,
-							https://sliders.bodyartforms.com/<%=rsGetSliders("img550x350")%> 550w"
-							sizes="100vw"
-							alt="<%=rsGetSliders("slider_name")%>" />
-						</picture>
-					</a>
-					<%rsGetSliders.MoveNext%>	
-				<% Wend %>			
-				</div>
-			</div>
 
-			<h1 class="display-5"><a class="text-dark" href="/products.asp?new=Yes">New Products <a class="btn btn-sm btn-light" href="/products.asp?new=Yes"><i class="fa fa-chevron-double-right fa-2x"></i></a></h1>
-<div class="full-width-block">
+SqlString = "SELECT TOP(20) Testimonial_Name, Testimonial FROM dbo.TBL_Testimonials WHERE use_on_homepage = 1 ORDER BY newid()" 
+Set rsGetTestimonials = DataConn.Execute(SqlString)
+%>
+<div class="baf-carousel slider-container text-center">
+	<div id="HomeSlider">
+	<% While NOT rsGetSliders.EOF %>
+		<a class="homepage-graphic" href="<%=rsGetSliders("url")%>" id="<%=rsGetSliders("slider_name")%>">
+			<picture>
+				<source media="(max-width: 550px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img550x350")%>">
+				<source media="(max-width: 850px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img850x350")%>">
+				<source media="(max-width: 1024px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img1024x350")%>">
+				<source media="(max-width: 1600px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img1600x350")%>">
+				<source media="(min-width: 1920px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img1920x350")%>">
+					<img class="img-fluid hero-slider" src="<%=rsGetSliders("img1600x350")%>" 
+				srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img1920x350")%> 1920w,
+				https://sliders.bodyartforms.com/<%=rsGetSliders("img1600x350")%> 1600w,
+				https://sliders.bodyartforms.com/<%=rsGetSliders("img1024x350")%> 1024w,
+				https://sliders.bodyartforms.com/<%=rsGetSliders("img850x350")%> 850w,
+				https://sliders.bodyartforms.com/<%=rsGetSliders("img550x350")%> 550w"
+				sizes="100vw"
+				alt="<%=rsGetSliders("slider_name")%>" />
+			</picture>
+		</a>
+		<%rsGetSliders.MoveNext%>	
+	<% Wend %>			
+	</div>
+</div>
+
+			<% 
+			If Not rsGetTestimonials.EOF Then %>
+			<div class="baf-carousel mb-3" id="testimonials">
+			<% 	While NOT rsGetTestimonials.EOF %>
+			<div class="slide alert alert-secondary">
+				<i class="fa fa-lg fa-double-quote-serif-left pr-2"></i>
+				<%=(rsGetTestimonials.Fields.Item("Testimonial").Value)%>
+		
+				<i class="fa fa-lg fa-double-quote-serif-right pl-2"></i>
+				<span class="pl-3">
+				</span>
+			</div>
+			<% rsGetTestimonials.MoveNext()
+			Wend
+			%>
+			</div>
+			<% end if 'rsGetTestimonials.EOF 
+			 %>
+
+			<a href="/products.asp?new=Yes"><img src="/images/button-shop-new-items.png"></a>
+
+
+<div class="mt-2 full-width-block">
 							<div class="baf-carousel" id="NewSlider">
 										<% 
 										i = 1
@@ -260,109 +281,9 @@ end if
 				rsPopularThisWeek.MoveNext()
 Wend
 %>
-</div><!-- popular products flex container -->	
-
-
-
-
-	
-<div class="full-width-block">
-	<!-- begin instagram & testimonials block -->
-				<div class="container-fluid mb-4 mt-5">
-				<div class="row">
-					<div class="col-12 col-md-3 col-lg-2 bg-black text-light pt-md-5 pt-2 m-0 h5 text-center align-middle">
-						<a href="http://instagram.com/bodyartforms" target="_blank">
-							<i class="fa fa-instagram fa-3x text-light"></i>
-						</a>
-						<p>
-							Follow us
-							<a href="http://instagram.com/bodyartforms" target="_blank" class="text-info">@bodyartforms</a>
-							<br/> Tag your photos #MyBAF
-						</p>
-					</div>
-					<div class="col-12 col-md-5 col-lg-6 p-0 m-0" id="instafeed">
-
-	<!--#include virtual="Connections/instagram.asp" -->
-	<%
-	' ========= REQUEST INSTAGRAM MEDIA ==================================
-	
-	set rest = Server.CreateObject("Chilkat_9_5_0.Rest")
-	
-	'  Connect to the REST server.
-	bTls = 1
-	port = 443
-	bAutoReconnect = 1
-	success = rest.Connect(instagram_api_url,port,bTls,bAutoReconnect)
-	success = rest.ClearAllQueryParams()
-	success = rest.AddQueryParam("fields", "id,timestamp,caption,media_type,media_url")
-	success = rest.AddQueryParam("access_token", db_instagram_access_token)
-	
-	
-	' Set the Authorization property to "Bearer <token>"
-		set sbAuthHeaderVal = Server.CreateObject("Chilkat_9_5_0.StringBuilder")
-		success = sbAuthHeaderVal.Append("Bearer ")
-		rest.Authorization = sbAuthHeaderVal.GetAsString()
-	
-	ResponseGetInstagramMedia = rest.FullRequestNoBody("GET","/me/media")
-	
-	set JsonGetInstagramMedia = Server.CreateObject("Chilkat_9_5_0.JsonObject")
-	JsonGetInstagramMedia.EmitCompact = 0
-	JsonGetInstagramMedia.Load(ResponseGetInstagramMedia)
-	'Response.Write "<pre>" & Server.HTMLEncode( JsonGetInstagramMedia.Emit()) & "</pre>"
-	
-	'===== IF MEDIA DATA FOUND, THEN DISPLAY ON PAGE ===========================
-	if JsonGetInstagramMedia.StringOf("data") <> "" then
-	
-		Set InstagramArray = JsonGetInstagramMedia.ArrayOf("data")
-	
-		For e = 0 To 11
-			Set MediaObj = InstagramArray.ObjectAt(e)  
-			
-			if MediaObj.StringOf("media_type") = "IMAGE" then
-				embed_url = "<img src='" &  MediaObj.StringOf("media_url") & "' class='p-0 m-0' width='150px' height='150px'>"
-			end if
-			if MediaObj.StringOf("media_type") = "VIDEO" then
-				embed_url = "<video width='150' class='p-0 m-0  align-top' controls poster='" &  MediaObj.StringOf("thumbnail_url") & "'><source src='" &  MediaObj.StringOf("media_url") & "' type='video/mp4'></video>"
-			end if
-	
-			response.write  embed_url & var_instagram_single_image
-	
-		Next
-	
-	end if
-	%>
-					</div>
-					<div class="col-12 col-md-4 col-lg-4 pl-4 pr-3 px-md-auto">
-						<h5 class="mt-4 mt-md-auto">
-								What our customers are saying...
-						</h5>
-							
-											<% 
-							While NOT rsGetTestimonials.EOF 
-							%>
-							<div class="my-2 alert alert-info">
-								<i class="fa fa-lg fa-double-quote-serif-left pr-2"></i>
-							<%=(rsGetTestimonials.Fields.Item("Testimonial").Value)%>
-							
-									<i class="fa fa-lg fa-double-quote-serif-right pl-2"></i>
-								<span class="pl-3">—
-									<%= rsGetTestimonials.Fields.Item("Testimonial_Name").Value %>
-								</span>
-							</div>
-												<% 
-							rsGetTestimonials.MoveNext()
-							Wend
-							%>
-					</div>
-				</div>
-				</div>
-			<!-- end instagram block -->
-		</div><!-- end full width block -->
-
-
-	
+</div><!-- popular products flex container -->		
 	
 
 			<!--#include virtual="/bootstrap-template/footer.asp" -->
 			<script type="text/javascript" src="/js/slick.min.js"></script>
-			<script type="text/javascript" src="/js-pages/homepage.min.js?v=121520"></script>
+			<script type="text/javascript" src="/js-pages/homepage.min.js?v=102221_v2"></script>

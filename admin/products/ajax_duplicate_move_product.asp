@@ -69,8 +69,17 @@ if request.form("toggle_type") = "move" then
 			if strItem <> "" then 
 				set objCmd = Server.CreateObject("ADODB.Command")
 				objCmd.ActiveConnection = DataConn
-				objCmd.CommandText = "UPDATE ProductDetails SET img_id = 0, ProductID = " + request.form("move_to_id") + "  WHERE ProductDetailID = " + strItem
+				objCmd.CommandText = "UPDATE ProductDetails SET ProductID = " + request.form("move_to_id") + "  WHERE ProductDetailID = " + strItem
 				objCmd.Execute()
+
+				'======= RE-ASSIGN DETAIL IMAGE TO NEW PRODUCT IF AN IMAGE WAS ASSIGNED ========
+				set objCmd = Server.CreateObject("ADODB.Command")
+				objCmd.ActiveConnection = DataConn
+				objCmd.CommandText = "UPDATE tbl_images SET product_id = ? WHERE product_id = ?" 
+				objCmd.Parameters.Append(objCmd.CreateParameter("movetoId",3,1,10, request.form("move_to_id") ))
+				objCmd.Parameters.Append(objCmd.CreateParameter("moveFromId",3,1,10, request.form("orig_productid") ))
+				objCmd.Execute()
+
 			end if ' make sure a detail id is provided to write db
 			
 		Next

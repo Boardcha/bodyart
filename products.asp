@@ -260,6 +260,7 @@ end if
 	ProductSortText = ""
 	End if
 	%>
+	<% if request("feature") <> "top_seller" then %>
 	<div class="dropdown d-inline-block my-2 my-sm-0  mr-sm-2">
 		<button class="btn btn-sm btn-outline-secondary text-left dropdown-toggle" type="button" id="dropdownSort" data-flip="false" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 		  SORT BY: <%= ProductSortText %>
@@ -297,7 +298,7 @@ end if
 </div><!-- button group -->
 </div><!-- drop down menu -->
 </div><!-- drop down -->
-
+<% end if 'display if not top sellers category %>
 	<div class="dropdown d-inline-block my-2 my-sm-0 mr-sm-2">
 			<button class="btn btn-sm btn-outline-secondary text-left dropdown-toggle" type="button" id="dropdownResults" data-flip="false" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 					Viewing <% if TotalRecords = Session("resultsperpage") then %>all (<%= TotalRecords %>)<%else%><%= Session("resultsperpage") %> per page<% end if %>

@@ -32,6 +32,8 @@
 
 
 
+
+
 ' SET VARIABLES
 DetectTags = ""
 
@@ -771,6 +773,10 @@ If request.querystring("exclude-material") = "on" then
 		objCmd.Parameters.Append(objCmd.CreateParameter("@materialexclude",200,1,5, "yes"))
 else
 	objCmd.Parameters.Append(objCmd.CreateParameter("@materialexclude",200,1,5, "no"))
+end if
+
+If request.querystring("feature") <> "" then
+		objCmd.Parameters.Append(objCmd.CreateParameter("@feature",200,1,30, request.querystring("feature") ))
 end if
 		
 		objCmd.Parameters.Append(objCmd.CreateParameter("@new",200,1,10,SearchNew))

@@ -80,6 +80,61 @@ $('#NewSlider').slick({
   ]
 });
 
+$('#testimonials').slick({
+	slidesToShow: 3,
+  slidesToScroll: 3,
+  prevArrow: '<div class="slider-arrow-prev" style="height:60%"><i class="fa fa-chevron-circle-left fa-2x text-dark pointer"></i></div>',
+  nextArrow: '<div class="slider-arrow-next" style="height:60%"><i class="fa fa-chevron-circle-right fa-2x text-dark pointer"></i></div>',
+  responsive: [
+
+    {
+      breakpoint: 4000,
+      settings: {
+        slidesToShow: 5,
+        slidesToScroll: 5
+      }
+    },
+    {
+      breakpoint: 1920,
+      settings: {
+        slidesToShow: 5,
+        slidesToScroll: 5
+      }
+    },
+    {
+      breakpoint: 1600,
+      settings: {
+        slidesToShow: 5,
+        slidesToScroll: 5
+      }
+    },
+    {
+      breakpoint: 1024,
+      settings: {
+        slidesToShow: 3,
+        slidesToScroll: 3
+      }
+    },
+    {
+      breakpoint: 600,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1
+      }
+    },
+    {
+      breakpoint: 480,
+      settings: {
+        slidesToShow: 1,
+        slidesToScroll: 1
+      }
+    }
+    // You can unslick at a given breakpoint now by adding:
+    // settings: "unslick"
+    // instead of a settings object
+  ]
+});
+
 
 // Homepage newsletter signup
 $("#homepage-newsletter-signup").on("click", function () {
