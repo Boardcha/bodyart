@@ -91,17 +91,39 @@ console.log(preorder_specs);
 		};
 		setStarValues();
 
+		
 	// START show/hide info on modal to review a product
 	$(document).on('click', '.btn-review-modal', function(e) {
-		$('#review_order_detail_id').val($(this).attr('data-orderitemid'));
+		var order_detail_id = $(this).attr('data-orderitemid');
+		$('#review_order_detail_id').val(order_detail_id);
 		$('#review-body').show();
-		$('#text-review').val('');
-		setStarValues();
-		$('#frm-write-review [name="rating"]').prop('checked', false);
+		if($(this).attr('data-edit')=="yes"){
+			$('#review_edit').val("yes");
+			$.ajax({
+				method: "post",
+				dataType: "json",
+				url: "products/ajax-get-product-review.asp",
+				contentType: "application/x-www-form-urlencoded;charset=UTF-8",
+				data: {id: order_detail_id}
+				})
+				.done(function(json, data, msg) {
+					$('#text-review').val(json.review);
+					setStarValues();
+					$('.star' + json.rating).prop('checked', true);
+				})
+				.fail(function(json, msg) {
+					console.log("Retrieving review failed. " + msg);
+				})	
+		}else{
+			$('#text-review').val('');
+			setStarValues();
+			$('#frm-write-review [name="rating"]').prop('checked', false);
+		}
 	});
 
 	// START submit item review
 	$(document).on('submit', '#frm-write-review', function(e) {
+		var review_edit = $('#review_edit').val();
 		var order_detail_id = $('#review_order_detail_id').val();
 		var review = $("#frm-write-review [name='review']").val();
 		var rating = $("#frm-write-review [name='rating']:checked").val();
@@ -120,15 +142,13 @@ console.log(preorder_specs);
 			method: "post",
 			url: "products/ajax-write-product-review-submit.asp",
 			contentType: "application/x-www-form-urlencoded;charset=UTF-8",
-			data: {id: order_detail_id, review: review, rating: rating}
+			data: {id: order_detail_id, review: review, rating: rating, review_edit: review_edit}
 			})
 			.done(function( msg) {
 				$('#message-review-modal').html('<div class="alert alert-success">Thank you for reviewing this product. Once your review is accepted and published, you will see the points reflected on your account that you can exchange for store credit.</div>');
 				
 				$('.modal-submit').hide();
-				$('.review-phase1-' + order_detail_id).removeClass('btn-update-attributes');
-				$('.review-phase1-' + order_detail_id).addClass('alert-success');
-				$('.review-phase1-' + order_detail_id).removeAttr('data-title data-orderitemid data-toggle data-target');
+				$('.review-info-' + order_detail_id).html('<span title="Pending" class="btn btn-sm alert-success"><i class="fa fa-star-half-o fa-lg"></i></span>');
 			})
 			.fail(function(msg) {
 				$('#message-review-modal').html('<div class="alert alert-danger">Website error. Please check that your review is filled out. If you continue to have trouble, please contact customer service for assistance.</div>');
