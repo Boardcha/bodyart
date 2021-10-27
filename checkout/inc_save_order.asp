@@ -364,8 +364,8 @@ if var_addons_active <> "yes" then
 			
 			objCmd.Parameters.Append(objCmd.CreateParameter("@pay_method",200,1,30,strCardType))
 			objCmd.Parameters.Append(objCmd.CreateParameter("@shipped",200,1,15,"Pending..."))
-			objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,now())) 'UGUR: This doesn't work on my local Cstr is needed.
-			'objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,Cstr(now())))
+			'objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,now())) 'UGUR: This doesnt work on my local 
+			objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,Cstr(now())))
 
 			if session("preferred") = "yes" then
 				var_store_coupon = "YTG89R57"

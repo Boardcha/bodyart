@@ -151,53 +151,7 @@ end if
 		values_separator : " - "
     });
 
-</script> 
-
-<!--Google Sign-in-->
-<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
-<script>
-   function init() {
-        gapi.load('auth2', function() {
-            auth2 = gapi.auth2.init({
-                client_id: '534605611929-1n69ud9b72jvjh21okl82g4sjttdjmj8.apps.googleusercontent.com',
-                cookiepolicy: 'single_host_origin',
-                scope: 'profile email'
-            });
-			renderButton();
-            element = document.getElementById('google_sign_in');
-            auth2.attachClickHandler(element, {}, onSignIn, onFailure);
-        });
-    }
-    function onSignIn(googleUser) {
-		var profile = googleUser.getBasicProfile();	
-		var id_token = googleUser.getAuthResponse().id_token;
-		var xhr = new XMLHttpRequest();
-		xhr.open('POST', '/oauth/google-signin-token.asp');
-		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		xhr.overrideMimeType("application/json");
-		xhr.onload = function() {
-		  var json = JSON.parse(xhr.responseText);
-		  if(json.status == "logged-in")
-		    googleUser.disconnect();
-			window.location.href = "/account.asp";
-		};
-		xhr.send("idtoken=" + id_token);
-		
-	}
-    function onFailure(error) {
-      console.log(error);
-    }
-    function renderButton() {
-		gapi.signin2.render('google_sign_in', {
-		'scope': 'profile email',
-		'width': 240,
-		'height': 50,
-		'longtitle': true,
-		'theme': 'dark'
-		});
-    }
-</script>
- 
+</script>  
 <% ' ---- ONLY SHOW TO COUNTRIES IN THE EU -----------
 %>
 <!--#include virtual="/functions/inc-eu-country-codes.asp" -->
@@ -215,7 +169,7 @@ end if
         data-close-text="Got it!">
     </script>
 <% end if ' ONLY TO EU COUNTRIES %>
- <script type="text/javascript" src="/js-pages/footer.min.js?v=040221"></script>  
+ <script type="text/javascript" src="/js-pages/footer.min.js?v=102621"></script>  
 <% if request.cookies("adminuser") = "yes" then %>
 <script>
     // Toggle sandbox front end load

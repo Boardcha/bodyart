@@ -1209,7 +1209,7 @@ end if
 		updateCurrency();
 </script>
 <% end if %>
-<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=102021"></script>
+<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=102721"></script>
 <script type="text/javascript" src="/js-pages/cart.min.js?v=050319" async></script>
 <script type="text/javascript" src="/js-pages/checkout.min.js?v=072021"></script>
 <!-- Start Afterpay Javascript -->

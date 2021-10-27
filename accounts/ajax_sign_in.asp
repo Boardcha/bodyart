@@ -42,9 +42,6 @@
 			%>
 			{ "status":"logged-in" }	
 			<%
-					else%>
-			{ "status":"not-active" }			
-		<%end if
 		
 	' Write last login date
 	set objCmd = Server.CreateObject("ADODB.command")
@@ -92,8 +89,14 @@
 		  end if
 
 		Set objCrypt = Nothing
+
 	
 	end if ' if user is logged in 
+
+	else '==== IF USER HAS NOT CLICKED ACTIVATION EMAIL LINK
+	%>
+		{ "status":"not-active" }			
+	<%end if
 	
 End If ' end rsGetUser.EOF
 	

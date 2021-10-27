@@ -7,6 +7,7 @@ if request.cookies("OrderAddonsActive") <> "" then
 	var_addons_active = "yes"
 end if
 
+
 ' BEGIN build { for .json return throughout this page}
 %>
 	{
@@ -66,6 +67,7 @@ if cart_status = "not-empty" Then
 <% if var_addons_active <> "yes" then %>
 <!--#include virtual="functions/hash_extra_key.asp"-->
 <!--#include virtual="accounts/inc_create_cim_account.asp"-->
+<!--#include virtual="/functions/token.asp"-->
 <!--#include virtual="accounts/inc_create_account.asp"-->
 <!--#include virtual="checkout/inc_save_cim_profiles.asp" -->
 <!--#include virtual="accounts/inc_update_cim_profiles.asp" -->
@@ -82,7 +84,7 @@ if cart_status = "not-empty" Then
 %>
 <!--#include virtual="checkout/inc_process_cashorder.asp"--> 
 <!--#include virtual="checkout/inc_process_creditcard.asp"--> 
-<!--#include virtual="checkout/inc_process_googlepay.asp"-->
+<!--#include virtual="checkout/inc_process_googlepay.asp"--> 
 <!--#include virtual="checkout/inc_process_applepay.asp"--> 
 <%
 

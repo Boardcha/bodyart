@@ -1,7 +1,7 @@
 <!--#include virtual="/Connections/sql_connection.asp" -->
 <!--#include virtual="/Connections/authnet.asp"-->
 <!--#include virtual="/Connections/chilkat.asp" -->
-<!--#include virtual="/oauth/google-oauth-credentials.inc" -->
+<!--#include virtual="/Connections/google-oauth-credentials.inc" -->
 <!--#include virtual="/functions/hash_extra_key.asp"-->
 <!--#include virtual="/functions/encrypt.asp"-->
 <!--#include virtual="/functions/salt.asp"-->

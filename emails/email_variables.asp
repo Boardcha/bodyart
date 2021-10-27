@@ -79,15 +79,15 @@
 		google_utmsource = "Account activation"
 		mail_to_email = request.form("e-mail")
 		mail_to_name = "Account Activation"
-		mail_subject = "Bodyartforms Account Activation"
+		mail_subject = "Bodyartforms Account Activation Link"
 		mail_body = "<div class='column2' style='box-sizing: border-box;display:inline-block;vertical-align: top;margin-bottom:3em'><strong>Hello!</strong><br/><br/>Thank you for registering with Bodyartforms.com. Please click on the below link to activate your account.<br/><br/><a href='https://bodyartforms.com/account-activation.asp?email=" & mail_to_email & "&hash=" & activation_hash & "' style='color: #475F8D !important; text-decoration: none; white-space: nowrap;'>https://bodyartforms.com/account-activation.asp?email=" & mail_to_email & "&hash=" & activation_hash & "</a><br/><br/><br/><br/>If you have any questions or need assistance please reply to this e-mail to get in touch with us or call customer service at (877) 223-5005</div>"
 		
 		Call baf_sendmail()
 	end if ' create new account	
 	if email_onetime_coupon = "yes" then ' Send out a one time use coupon (for new customer accounts)
 		google_utmsource = "One time use coupon"
-		mail_to_email = request.form("e-mail")
-		mail_to_name = request.form("shipping-first")
+		mail_to_email = Request("email")
+		mail_to_name = "New Account Coupon"
 		mail_subject = "10% OFF coupon for registering"
 		mail_body = "<div style=""text-align:center""><img src=""https://www.bodyartforms.com/images/10-percent-off.png"" width=""250px""></div><br/><br/><strong>Hi " & mail_to_name & "!</strong><br/><br/>To show our appreciation for you registering an account at Bodyartforms, here is a one time 10% OFF coupon code <span style=""color:#74498C;font-weight:bold"">" & var_cert_code & "</span> that you can use through " & FormatDateTime(now()+29,2) & ". Simply use the code  <span style=""color:#74498C;font-weight:bold"">" & var_cert_code & "</span> at checkout to receive your discount :)<br/><br/>If you have any questions or need assistance please reply to this e-mail to get in touch with us or call customer service at (877) 223-5005"
 		

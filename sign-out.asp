@@ -24,17 +24,6 @@ session("custID_account") = ""
 ' put includes below because cookies have now been emptied out
 %>
 <!--#include virtual="cart/generate_guest_id.asp"-->
-<script type="text/javascript">
-$(document).ready(function() {
-	$('#cart_count_text').hide();
-	$('.logged-in').hide();
-	$('.logged-out').show();
-});
-</script>
-
-
-
-
 <div class="display-5 mb-5">
 	Signed out
 </div>
@@ -60,3 +49,10 @@ $(document).ready(function() {
 
 
 <!--#include virtual="/bootstrap-template/footer.asp" -->
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#cart_count_text').hide();
+		$('.logged-in').hide();
+		$('.logged-out').show();
+	});
+	</script>

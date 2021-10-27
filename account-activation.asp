@@ -46,6 +46,28 @@ If Not rsGetUser.EOF Then
 	mailer_type = "new account"
 	'Send mail out only when the user used the hash first time
 	If rsGetUser("active") = false Then%>
+
+	<!--#include virtual="/checkout/inc_random_code_generator.asp"-->
+<!--#include virtual="/includes/inc-dupe-onetime-codes.asp"--> 
+<%
+' Prepare a one time use coupon for creating an account
+var_cert_code = getPassword(15, extraChars, firstNumber, firstLower, firstUpper, firstOther, latterNumber, latterLower, latterUpper, latterOther)
+
+' Call function
+CheckDupe(var_cert_code)
+
+' Set extra mailer type
+email_onetime_coupon = "yes"
+
+set objCmd = Server.CreateObject("ADODB.command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "INSERT INTO TBLDiscounts (DiscountCode, DateExpired, coupon_single_email, DiscountPercent, coupon_single_use, DateAdded, DiscountType, active, dateactive, coupon_assigned, DiscountDescription) VALUES (?, GETDATE()+30, ?, 10, 1, GETDATE(), 'Percentage', 'A', GETDATE()-1, 1, 'New account creation')"
+objCmd.Parameters.Append(objCmd.CreateParameter("Code",200,1,30,var_cert_code))
+objCmd.Parameters.Append(objCmd.CreateParameter("Email",200,1,30, email))
+objCmd.Execute()
+
+' Sent out account creation welcome email below
+%>	
 <!--#include virtual="/emails/function-send-email.asp"-->
 <!--#include virtual="/emails/email_variables.asp"-->	
 	<%End If

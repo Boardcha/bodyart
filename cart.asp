@@ -591,7 +591,7 @@ end if ' show if free sticker cookie has not been set to "no"
 
 
 										<% If toggle_checkout_paypal = true Then %>
-											<div class="checkout_paypal mb-3"  style="display:none">
+											<div class="checkout_paypal"  style="display:none">
 												<a class="btn btn-block btn-warning checkout_button" href="checkout.asp?type=paypal">
 													<img style="height:30px" src="/images/paypal.png" />
 												</a>
@@ -600,8 +600,6 @@ end if ' show if free sticker cookie has not been set to "no"
 											<div class="alert alert-danger">We're sorry, but our <b>PayPal</b> checkout is temporarily unavailable. As soon as PayPal comes back online, we will accept orders again. Please check back later.</div>
 										<% end if %>
 									
-										<div id="btn-googlepay" class="mb-3 checkout_button" style="width: 100%; height: 79px; display: none;"></div>
-										<apple-pay-button id="btn-applepay" buttonstyle="white" type="check-out" locale="en"></apple-pay-button>
 										<%
 										' === only show afterpay option to USA customers
 										if request.cookies("currency") = "" OR request.cookies("currency") = "USD" then
@@ -692,31 +690,13 @@ end if ' show if free sticker cookie has not been set to "no"
 		updateCurrency();
 </script>
 <% end if %>
-
-<!-- Global variables for Apple & Google Pay -->
-<script>
-	var tax = 0.0;
-	var shippingCost = 0.0;
-	var subTotal = 0.0;
-	var totalAmount = 0.0;
-	var totalDiscount = 0.0; // Gets updated in calcAllTotals()
-	var selectedShippingId = 0;
-	var selectedShippingCompany = "";
-</script>
-
-<!-- Google Pay Javascript -->
-<script src="/js/google-pay-v2api.js?ver=1"></script>
-<script async src="https://pay.google.com/gp/p/js/pay.js" onload="onGooglePayLoaded()"></script>
-
-<!-- Apple Pay Javascript -->
-<script src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js"></script>
-<script src="/js/apple-pay-api.js?ver=3"></script>
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
 <script type="text/javascript" src="/js-pages/cart.min.js?v=03032020"></script>
-<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=100422"></script>
+<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=102721"></script>
 <!-- ^^^^^^  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE ^^^^^^ -->
 <script type="text/javascript">
-	calcAllTotals();
+				calcAllTotals();
+
 </script>
 <%
 Set rsToggles = Nothing
