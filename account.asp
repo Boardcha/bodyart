@@ -371,13 +371,13 @@ While not rsGetOrderDetails.eof
 		var_review_info = "<button class=""btn btn-light btn-sm btn-update-attributes btn-clear-forms btn-review-modal review-phase1-" & rsGetOrderDetails.Fields.Item("OrderDetailID").Value & """ type=""button"" data-orderitemid=""" & rsGetOrderDetails.Fields.Item("OrderDetailID").Value &""" data-title=""" & rsGetOrderDetails.Fields.Item("concat-title").Value &""" data-toggle=""modal"" data-target=""#reviewModal""><i class=""fa fa-star-half-o fa-lg""></i></button>"	
 	end if
 	if rsGetOrderDetails.Fields.Item("ReviewStatus").Value = "pending" then
-		var_review_info = "<span class=""btn btn-sm alert-success""><i class=""fa fa-star-half-o fa-lg""></i></span>"
+		var_review_info = "<span title=""Pending"" class=""btn btn-sm alert-success""><i class=""fa fa-star-half-o fa-lg""></i></span>"
 	end if
 	if rsGetOrderDetails.Fields.Item("ReviewStatus").Value = "rejected" then
 			var_review_info = "<button class=""btn btn-danger btn-sm btn-update-attributes btn-clear-forms btn-review-modal review-phase1-" & rsGetOrderDetails.Fields.Item("OrderDetailID").Value & """ type=""button"" data-orderitemid=""" & rsGetOrderDetails.Fields.Item("OrderDetailID").Value &""" data-title=""" & rsGetOrderDetails.Fields.Item("concat-title").Value &""" data-toggle=""modal"" data-target=""#reviewModal""><i class=""fa fa-star-half-o fa-lg""></i></button>"
 	end if ' for review
 	if rsGetOrderDetails.Fields.Item("ReviewStatus").Value = "accepted" then
-		var_review_info = ""
+		var_review_info = "<button class=""btn btn-light btn-sm btn-update-attributes btn-clear-forms btn-review-modal review-phase1-" & rsGetOrderDetails.Fields.Item("OrderDetailID").Value & """ type=""button"" data-edit=""yes"" data-orderitemid=""" & rsGetOrderDetails.Fields.Item("OrderDetailID").Value &""" data-title=""" & rsGetOrderDetails.Fields.Item("concat-title").Value &""" data-toggle=""modal"" data-target=""#reviewModal""><i class=""fa fa-star fa-lg""></i></button>"	
 	end if
 	
 	'    PHOTO REVIEWS
@@ -414,7 +414,7 @@ While not rsGetOrderDetails.eof
 						<a href="/productdetails.asp?ProductID=<%= rsGetOrderDetails.Fields.Item("ProductID").Value %>" target="_self">
 				<img class="img-fluid" src="https://bafthumbs-400.bodyartforms.com/<%= rsGetOrderDetails.Fields.Item("picture").Value %>" alt="Product photo"></a>
 				<div class="position-absolute order-img-icons p-0 m-0">
-						<%= var_review_info %>
+						<span class="review-info-<%=rsGetOrderDetails.Fields.Item("OrderDetailID").Value%>"><%= var_review_info %></span>
 						<%= var_photo_info %>
 					</div>
 			</div>
@@ -972,12 +972,15 @@ By clicking the start button below, you'll be taken to our product search where 
 						
 					  </div>	
 					<div class="form-group">
-					<textarea class="form-control" name="review" id="text-review" minlength="10" maxlength="2000" rows="7" placeholder="Type your review here" required></textarea>
+					<textarea class="form-control" name="review" id="text-review" minlength="10" maxlength="2000" rows="7" placeholder="Type your review here" required>
+					
+					</textarea>
 					<div class="invalid-feedback">
 						Text review is required
 				</div>
 				</div>
 				<input type="hidden" value="" name="order_detail_id" id="review_order_detail_id">
+				<input type="hidden" value="" name="review_edit" id="review_edit">
 			</div>
 			<div id="message-review-modal" class="modal-message"></div>
 		</div>
@@ -1093,4 +1096,4 @@ By clicking the start button below, you'll be taken to our product search where 
 <% end if   'rsGetUser.EOF %>
 
 <!--#include virtual="/bootstrap-template/footer.asp" -->
-<script type="text/javascript" src="/js-pages/order-history.min.js?v=081020"></script> 
+<script type="text/javascript" src="/js-pages/order-history.min.js?v=081022"></script> 
