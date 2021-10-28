@@ -25,13 +25,12 @@ session("custID_account") = ""
 %>
 <!--#include virtual="cart/generate_guest_id.asp"-->
 <div class="display-5 mb-5">
-	Signed out
+	<i class="fa fa-spinner fa-spin fa-2x mr-3"></i>Logging you out...
 </div>
-	<a href="index.asp">Go to Bodyartforms home page</a>
-	<br />
-	<br />
-	<a href="#" data-toggle="modal" data-target="#signin">Log in again</a>
-<br/>
+<br>
+<br>
+<br>
+<br>
 <br/>
 <br/>
 <br/>
@@ -56,3 +55,4 @@ session("custID_account") = ""
 		$('.logged-out').show();
 	});
 	</script>
+	<% response.redirect "/index.asp?status=signout" %>

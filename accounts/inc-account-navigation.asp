@@ -26,14 +26,12 @@ elseif Request.ServerVariables("URL") = "/account-waiting-list.asp" then
 	active_waiting = "btn-info"
 end if 
 %>
-
+<% if rsGetUser("active") = True then %>
 <ul class="nav nav-pills my-3" id="account-tabs">
-		<li class="nav-item m-1">
-				<a class="nav-link btn btn-sm <%= active_profile %>" href="account-profile.asp">Profile</a>
-		</li>
 		<li class="nav-item m-1">
 				<a class="nav-link btn btn-sm <%= active_orders %>" href="account.asp">Orders</a>
 		</li>
+		
 		<li class="nav-item m-1">
 				<a class="nav-link btn btn-sm <%= active_billing %>" href="account-billing.asp">Credit Cards</a>
 		</li>
@@ -58,4 +56,9 @@ end if
 				<a class="nav-link btn btn-sm <%= active_search %>" href="account-searches.asp">Saved Searches</a>
 		</li>
 		<% end if %>
+		<li class="nav-item m-1">
+			<a class="nav-link btn btn-sm <%= active_profile %>" href="account-profile.asp">Profile</a>
+		</li>
+		
 </ul>
+<% end if '===== only show navigation if account is active %>

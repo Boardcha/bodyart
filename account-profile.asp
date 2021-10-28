@@ -17,7 +17,7 @@ var_flagged = ""
 ' Pull the customer information from a cookie
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "SELECT * FROM customers  WHERE customer_ID = ?"
+		objCmd.CommandText = "SELECT * FROM customers WHERE customer_ID = ?"
 		objCmd.Parameters.Append(objCmd.CreateParameter("CustID_Cookie",3,1,10,CustID_Cookie))
 		Set rsGetUser = objCmd.Execute()
 		
@@ -59,6 +59,8 @@ if session("admin_tempcustid") <> "" then %>
 <% If rsGetUser.EOF or var_flagged = "yes" Then
 %>
 	<div class="alert alert-danger">Not logged in or no account found</div>
+<% elseif rsGetUser("active") = 0 then %>
+	<div class="alert alert-danger"><h5>Your account has not been activated yet.</h5>Please click on the activation link sent to your email to confirm your account registration and access your account.</div>
 <% else %>
 
 	<% ' variable set on signin_transfer.asp -- Shows notice to user if NON logged in cart items got transferred to their account cart
@@ -118,7 +120,8 @@ if session("admin_tempcustid") <> "" then %>
 	</div><!-- end card body -->
 </div><!-- end card -->	
 
-
+<% '============ DO NOT SHOW UPDATE PASSWORD AREA IF SOMEONE SIGNED IN VIA GOOGLE OAUTH ======= 
+if rsGetUser("google_user_id") = "" then %>
 <div class="card card-light mt-5">
 		<div class="card-header">
 				<h5>Update your password</h5>
@@ -152,6 +155,7 @@ if session("admin_tempcustid") <> "" then %>
 		<div class="message-update-pass"></div>
 	</div><!-- end card body -->
 </div><!-- end card -->	
+<% end if %>
 <%
 end if   'rsGetUser.EOF
 %>  

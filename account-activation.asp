@@ -1,4 +1,9 @@
 <% @LANGUAGE="VBSCRIPT" %>
+<%
+page_title = "Account Activation"
+page_description = "Bodyartforms Account Activation"
+page_keywords = ""
+%>
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->
@@ -50,6 +55,7 @@ If Not rsGetUser.EOF Then
 	<!--#include virtual="/checkout/inc_random_code_generator.asp"-->
 <!--#include virtual="/includes/inc-dupe-onetime-codes.asp"--> 
 <%
+
 ' Prepare a one time use coupon for creating an account
 var_cert_code = getPassword(15, extraChars, firstNumber, firstLower, firstUpper, firstOther, latterNumber, latterLower, latterUpper, latterOther)
 
@@ -67,6 +73,7 @@ objCmd.Parameters.Append(objCmd.CreateParameter("Email",200,1,30, email))
 objCmd.Execute()
 
 ' Sent out account creation welcome email below
+
 %>	
 <!--#include virtual="/emails/function-send-email.asp"-->
 <!--#include virtual="/emails/email_variables.asp"-->	
