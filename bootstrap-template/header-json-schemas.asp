@@ -144,6 +144,11 @@
                           "logo": "http://www.bodyartforms.com/images/baf-logo-head-text.png",
                           "image": "http://www.bodyartforms.com/images/baf-logo-head-text.png",
                           "priceRange": "$$",
+                          "potentialAction": {
+                            "@type": "SearchAction",
+                            "target": "https://www.bodyartforms.com/products.asp?keywords={search_term_string}",
+                            "query-input": "required name=search_term_string"
+                          },
                           "telephone": "+18772235005",
                           "url": "http://www.bodyartforms.com",
                             "contactPoint": [{
@@ -184,17 +189,6 @@
                                 "https://www.pinterest.com/bodyartforms/",
                                 "https://plus.google.com/+bodyartforms/posts"
                           ]
-                        }
-        
-                        {
-                          "@context": "http://schema.org",
-                          "@type": "WebSite",
-                          "url": "https://www.bodyartforms.com/",
-                          "potentialAction": {
-                                "@type": "SearchAction",
-                                "target": "https://www.bodyartforms.com/products.asp?keywords={search_term_string}",
-                                "query-input": "required name=search_term_string"
-                          }
                         }
                 </script>
         <% end if %>

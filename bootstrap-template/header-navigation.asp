@@ -98,7 +98,7 @@ Set rsNavWaitingList = objCmd.Execute()
                                 </a>
                                 <% else ' not logged in %>
                                 <a class="mx-2 text-light" data-toggle="modal" data-target="#signin" href="#">
-                                        <span class="d-none d-md-inline-block pr-3">Sign In / Register</span>
+                                        <span class="d-none d-md-inline-block pr-3"><i class="fa fa-user fa-lg pr-2"></i>Account</span>
                                         <i class="fa fa-user fa-lg d-md-none pr-xxs-1 pl-xs-2 pr-xs-3"></i>
                                 </a>
                                 <% end if %>
