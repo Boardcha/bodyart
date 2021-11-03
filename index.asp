@@ -11,6 +11,12 @@
 <!--#include virtual="/bootstrap-template/header-navigation.asp" -->
 		<link rel="stylesheet" type="text/css" href="/CSS/slick.css"/>
 		<!--#include virtual="/bootstrap-template/filters.asp" -->
+		<% if request.querystring("status") = "signout" then %>
+		<div class="alert alert-success alert-dismissible mb-5">
+			<h4>LOGOUT SUCCESSFUL</h4><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+
+		</div>
+		<% end if %>
 		<%
 SqlString = "SELECT * FROM TBL_Sliders WHERE active= 1 AND GETDATE() BETWEEN date_start AND date_end ORDER BY show_up_order" 
 Set rsGetSliders = DataConn.Execute(SqlString)

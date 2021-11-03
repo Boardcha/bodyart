@@ -98,7 +98,7 @@ Set rsNavWaitingList = objCmd.Execute()
                                 </a>
                                 <% else ' not logged in %>
                                 <a class="mx-2 text-light" data-toggle="modal" data-target="#signin" href="#">
-                                        <span class="d-none d-md-inline-block pr-3">Sign In / Register</span>
+                                        <span class="d-none d-md-inline-block pr-3"><i class="fa fa-user fa-lg pr-2"></i>Account</span>
                                         <i class="fa fa-user fa-lg d-md-none pr-xxs-1 pl-xs-2 pr-xs-3"></i>
                                 </a>
                                 <% end if %>
@@ -1030,12 +1030,12 @@ Set rsNavWaitingList = objCmd.Execute()
                                 </div>
                                 <div class="modal-body">
                                         <form class="needs-validation" id="frm-signin" novalidate>
-												<div class="form-group">
-													<div id="google_sign_in"></div>
-												</div>
-												<div style="width: 100%;height: 13px;border-bottom: 1px solid #c7c7c7;text-align: center;margin-bottom: 25px;">
-													<div style="color: #969191; font-size: 15px; background-color: #fff; margin:auto auto; width: 40px;"> OR </div>
-												</div>
+                                                <div class="form-group">
+                                                        <div id="google_sign_in"></div>
+                                                </div>
+                                                <div style="width: 100%;height: 13px;border-bottom: 1px solid #c7c7c7;text-align: center;margin-bottom: 25px;">
+                                                        <div style="color: #969191; font-size: 15px; background-color: #fff; margin:auto auto; width: 40px;"> OR </div>
+                                                </div>
                                                 <div class="form-group">
                                                         <input type="email" name="email" class="form-control"
                                                                 placeholder="E-mail" required>
@@ -1058,6 +1058,7 @@ Set rsNavWaitingList = objCmd.Execute()
                                                                 <span aria-hidden="true">&times;</span>
                                                         </button>
                                                 </div>
+                                                <div class="signin-spinner"></div>
                                                 <div class="text-center">
                                                         <button type="submit" class="btn btn-block btn-purple"
                                                                 id="btn_signin" name="btn_signin">Sign In</button>

@@ -1,9 +1,10 @@
 <!--#include virtual="/Connections/sql_connection.asp" -->
 <!--#include virtual="/Connections/authnet.asp"-->
 <!--#include virtual="/Connections/chilkat.asp" -->
-<!--#include virtual="/oauth/google-oauth-credentials.inc" -->
+<!--#include virtual="/Connections/google-oauth-credentials.inc" -->
 <!--#include virtual="/functions/hash_extra_key.asp"-->
 <!--#include virtual="/functions/encrypt.asp"-->
+<!--#include virtual="/functions/token.asp"-->
 <!--#include virtual="/functions/salt.asp"-->
 <!--#include virtual="/functions/sha256.asp"-->
 <%
@@ -62,8 +63,8 @@ If Instr(google_aud, google_oauth_clientId) > 0 AND (google_iss = "accounts.goog
 		'Create a new user
 		%>
 		<!--#include virtual="accounts/inc_create_account.asp"-->
-		{ "status":"logged-in" }
 		<%
+		doLogin(var_our_custid)
 	End If
 End If
 ' ==== END OF PAGE ====

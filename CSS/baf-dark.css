@@ -16060,61 +16060,63 @@ footer, #mobilesearch, #accountmenu {
   background-color: #ced4da;
 }
 
-
 .video-thumbnail, .image-thumbnail {
-    display: inline-block;
-    position: relative;
+  display: inline-block;
+  position: relative;
 }
 
-.video-thumbnail .img-thumb, .image-thumbnail .img-thumb{
-	width: 100%
+.video-thumbnail .img-thumb, .image-thumbnail .img-thumb {
+  width: 100%;
 }
 
-.diagonal-line:after{
-     content:     "";
-     display:     block;
-     position:    absolute;
-     width:       100%;
-     height:      100%;
-     top:         0;
-     left:        0;
-     z-index:     -1;
-     background: linear-gradient(to right bottom, white, white 48%, #737373 49%, #737373 51%, white 52%, white) !important;
+.diagonal-line:after {
+  content: "";
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  background: -webkit-gradient(linear, left top, right bottom, from(white), color-stop(48%, white), color-stop(49%, #737373), color-stop(51%, #737373), color-stop(52%, white), to(white)) !important;
+  background: linear-gradient(to right bottom, white, white 48%, #737373 49%, #737373 51%, white 52%, white) !important;
 }
 
-.play-icon-sm{ 
-	width : 20px;
-	position: absolute;
-    top: 12px;
-    left: 5px;
+.play-icon-sm {
+  width: 20px;
+  position: absolute;
+  top: 12px;
+  left: 5px;
 }
 
-.play-icon{ 
-	width: 30px;
-    position: absolute;
-    top: calc(50% - 10px);
-    left: calc(50% - 15px);
-}
-	
-.video-player{
-	max-height:550px;
-	position: absolute;
-	width: 100%;
-	height: 100%;
+.play-icon {
+  width: 30px;
+  position: absolute;
+  top: calc(50% - 10px);
+  left: calc(50% - 15px);
 }
 
-.video-container{
-	position: relative;
-	width: 100%;
-	padding-bottom: 100%;
-	max-width: 550px;
+.video-player {
+  max-height: 550px;
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
-.fancybox-content .video-player{
-	max-height: 100%;
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 100%;
+  max-width: 550px;
 }
 
-#cross-selling .slick-track, #recents .slick-track{margin-left:0}
+.fancybox-content .video-player {
+  max-height: 100%;
+}
+
+#cross-selling .slick-track, #recents .slick-track {
+  margin-left: 0;
+}
 
 @media (max-width: 320px) {
   #instafeed img {
@@ -16140,92 +16142,99 @@ footer, #mobilesearch, #accountmenu {
   }
 }
 
-.fancybox-report{
-	background: transparent !important;
-    border: 0 !important;
-    border-radius: 0 !important;
-    color: #ccc !important;
-    cursor: pointer !important;
-    opacity: .8;
-    padding: 8px !important;
-    position: absolute;
-    left: -15px;
-    top: -44px;
-    z-index: 401;
-	width: 145px !important;
-	height: 35px !important;
+.fancybox-report {
+  background: transparent !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  color: #ccc !important;
+  cursor: pointer !important;
+  opacity: .8;
+  padding: 8px !important;
+  position: absolute;
+  left: -15px;
+  top: -44px;
+  z-index: 401;
+  width: 145px !important;
+  height: 35px !important;
 }
+
 .fancybox-report:hover {
   color: #fff;
-  opacity: 1; }
+  opacity: 1;
+}
 
 .fancybox-slide--html .fancybox-report {
   color: currentColor;
   padding: 10px;
   left: 0;
-  top: 0; }
+  top: 0;
+}
 
 .fancybox-is-scaling .fancybox-report,
 .fancybox-is-zoomable.fancybox-can-pan .fancybox-report {
-  display: none; }
-  
-@media (max-height: 576px){
-	.fancybox-slide--image .fancybox-report {
-		background: rgba(30,30,30,.6) !important;
-		color: #f2f4f6;
-		height: 36px;
-		opacity: 1;
-		padding: 6px;
-		top: 0;
-		width: 36px;
-		height: 37px !important;
-		position: fixed;
-		margin: auto;
-		right: 0;
-		left: 0;
-	}
+  display: none;
 }
 
-.fancybox-report svg{
-	height: 16px !important;
-    width: 16px !important;
-    display: inline-block !important;
-    margin-right: 5px;
-}	
+@media (max-height: 576px) {
+  .fancybox-slide--image .fancybox-report {
+    background: rgba(30, 30, 30, 0.6) !important;
+    color: #f2f4f6;
+    height: 36px;
+    opacity: 1;
+    padding: 6px;
+    top: 0;
+    width: 36px;
+    height: 37px !important;
+    position: fixed;
+    margin: auto;
+    right: 0;
+    left: 0;
+  }
+}
 
-.abcRioButton{width:100% !important;}
+.fancybox-report svg {
+  height: 16px !important;
+  width: 16px !important;
+  display: inline-block !important;
+  margin-right: 5px;
+}
+
+.abcRioButton {
+  width: 100% !important;
+}
 
 apple-pay-button {
-	--apple-pay-button-width: 100%;
-    --apple-pay-button-height: 74px;
-    --apple-pay-button-border-radius: 4px;
-    --apple-pay-button-padding: 0px 10%;
-    --apple-pay-button-box-sizing: border-box;
+  --apple-pay-button-width: 100%;
+  --apple-pay-button-height: 74px;
+  --apple-pay-button-border-radius: 4px;
+  --apple-pay-button-padding: 0px 10%;
+  --apple-pay-button-box-sizing: border-box;
 }
 
-#btn-applepay{
-	width: 100%;
-    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 1px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-    cursor: pointer;
-	background-color: white;
-	border-radius: 4px;
+#btn-applepay {
+  width: 100%;
+  -webkit-box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 1px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+          box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 1px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  cursor: pointer;
+  background-color: white;
+  border-radius: 4px;
 }
 
-.gpay-button.white:hover{
-	background-color: white !important;
+.gpay-button.white:hover {
+  background-color: white !important;
 }
 
-.gpay-button.white.focus{
-	box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 1px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px !important;
-	outline: unset !important;
+.gpay-button.white.focus {
+  -webkit-box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 1px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px !important;
+          box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 1px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px !important;
+  outline: unset !important;
 }
-.gpay-button-fill > .gpay-button.checkout{
-	padding: 9px 20%;
+
+.gpay-button-fill > .gpay-button.checkout {
+  padding: 9px 20%;
 }
 
 .gpay-button.white.checkout.en {
-    background-image: url("/images/google-checkout.svg") !important;
+  background-image: url("/images/google-checkout.svg") !important;
 }
-
 /*# sourceMappingURL=baf-dark.css.map */
-

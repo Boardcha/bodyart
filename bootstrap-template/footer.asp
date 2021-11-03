@@ -153,10 +153,24 @@ end if
 
 </script> 
 
+</script> 
+
 <!--Google Sign-in-->
-<script src="https://apis.google.com/js/platform.js?onload=renderButton" async defer></script>
+<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
 <script>
-    function onSuccess(googleUser) {
+   function init() {
+        gapi.load('auth2', function() {
+            auth2 = gapi.auth2.init({
+                client_id: '534605611929-1n69ud9b72jvjh21okl82g4sjttdjmj8.apps.googleusercontent.com',
+                cookiepolicy: 'single_host_origin',
+                scope: 'profile email'
+            });
+			renderButton();
+            element = document.getElementById('google_sign_in');
+            auth2.attachClickHandler(element, {}, onSignIn, onFailure);
+        });
+    }
+    function onSignIn(googleUser) {
 		var profile = googleUser.getBasicProfile();	
 		var id_token = googleUser.getAuthResponse().id_token;
 		var xhr = new XMLHttpRequest();
@@ -166,6 +180,7 @@ end if
 		xhr.onload = function() {
 		  var json = JSON.parse(xhr.responseText);
 		  if(json.status == "logged-in")
+		    googleUser.disconnect();
 			window.location.href = "/account.asp";
 		};
 		xhr.send("idtoken=" + id_token);
@@ -180,19 +195,12 @@ end if
 		'width': 240,
 		'height': 50,
 		'longtitle': true,
-		'theme': 'dark',
-		'onsuccess': onSuccess,
-		'onfailure': onFailure
+		'theme': 'dark'
 		});
     }
-	function signOut() {
-		var auth2 = gapi.auth2.getAuthInstance();
-		auth2.signOut().then(function () {
-		  console.log('User signed out.');
-		});
-	}	
-</script>
- 
+</script><!--End Google Sign-in-->
+
+
 <% ' ---- ONLY SHOW TO COUNTRIES IN THE EU -----------
 %>
 <!--#include virtual="/functions/inc-eu-country-codes.asp" -->
@@ -210,7 +218,7 @@ end if
         data-close-text="Got it!">
     </script>
 <% end if ' ONLY TO EU COUNTRIES %>
- <script type="text/javascript" src="/js-pages/footer.min.js?v=040221"></script>  
+ <script type="text/javascript" src="/js-pages/footer.min.js?v=102821"></script>  
 <% if request.cookies("adminuser") = "yes" then %>
 <script>
     // Toggle sandbox front end load

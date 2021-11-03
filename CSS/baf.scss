@@ -614,33 +614,6 @@ footer, #mobilesearch, #accountmenu {
     margin-right: 5px;
 }	
 
-.fancybox-is-scaling .fancybox-report,
-.fancybox-is-zoomable.fancybox-can-pan .fancybox-report {
-  display: none; }
-  
-@media (max-height: 576px){
-	.fancybox-slide--image .fancybox-report {
-		background: rgba(30,30,30,.6) !important;
-		color: #f2f4f6;
-		height: 36px;
-		opacity: 1;
-		padding: 6px;
-		top: 0;
-		width: 36px;
-		height: 37px !important;
-		position: fixed;
-		margin: auto;
-		right: 0;
-		left: 0;
-	}
-}
-
-.fancybox-report svg{
-	height: 16px !important;
-    width: 16px !important;
-    display: inline-block !important;
-    margin-right: 5px;
-}	
 
 .abcRioButton{width:100% !important;}
 
@@ -673,5 +646,17 @@ apple-pay-button {
 }
 
 .gpay-button.white.checkout.en {
-    background-image: url("/images/google-checkout.svg") !important;
-}
+  background-image: url("/images/google-checkout.svg") !important;
+} 
+
+
+
+
+
+
+
+
+
+
+    
+

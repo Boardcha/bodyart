@@ -24,25 +24,13 @@ session("custID_account") = ""
 ' put includes below because cookies have now been emptied out
 %>
 <!--#include virtual="cart/generate_guest_id.asp"-->
-<script type="text/javascript">
-$(document).ready(function() {
-	$('#cart_count_text').hide();
-	$('.logged-in').hide();
-	$('.logged-out').show();
-});
-</script>
-
-
-
-
 <div class="display-5 mb-5">
-	Signed out
+	<i class="fa fa-spinner fa-spin fa-2x mr-3"></i>Logging you out...
 </div>
-	<a href="index.asp">Go to Bodyartforms home page</a>
-	<br />
-	<br />
-	<a href="#" data-toggle="modal" data-target="#signin">Log in again</a>
-<br/>
+<br>
+<br>
+<br>
+<br>
 <br/>
 <br/>
 <br/>
@@ -60,3 +48,11 @@ $(document).ready(function() {
 
 
 <!--#include virtual="/bootstrap-template/footer.asp" -->
+<script type="text/javascript">
+	$(document).ready(function() {
+		$('#cart_count_text').hide();
+		$('.logged-in').hide();
+		$('.logged-out').show();
+	});
+	</script>
+	<% response.redirect "/index.asp?status=signout" %>
