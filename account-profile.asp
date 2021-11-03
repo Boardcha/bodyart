@@ -121,7 +121,7 @@ if session("admin_tempcustid") <> "" then %>
 </div><!-- end card -->	
 
 <% '============ DO NOT SHOW UPDATE PASSWORD AREA IF SOMEONE SIGNED IN VIA GOOGLE OAUTH ======= 
-if rsGetUser("google_user_id") = "" then %>
+if rsGetUser("google_user_id") = "" OR ISNULL(rsGetUser("google_user_id")) then %>
 <div class="card card-light mt-5">
 		<div class="card-header">
 				<h5>Update your password</h5>

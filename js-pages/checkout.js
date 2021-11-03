@@ -903,13 +903,13 @@ $("#checkout-newsletter-signup").on("click", function () {
 		$.ajax({
 			method: "post",
 			dataType: "json",
-			url: "/constant-contact/cc-add-contact.asp?email=" + $("#e-mail").val()
+			url: "/klaviyo/klaviyo-subscribe-newsletter.asp?email=" + $("#e-mail").val()
 			})
 	} else {
 		$.ajax({
 			method: "post",
 			dataType: "json",
-			url: "/constant-contact/cc-delete-contact.asp?email=" + $("#e-mail").val()
+			url: "/klaviyo/klaviyo-subscribe-newsletter.asp?email=" + $("#e-mail").val()
 			})		
 	}
   });

@@ -88,7 +88,12 @@
 	'============ Send out a one time use coupon (for new customer accounts)=========================
 	if email_onetime_coupon = "yes" then 
 		google_utmsource = "One time use coupon"
-		mail_to_email = Request("email")
+		If google_signin_email <> "" Then
+			mail_to_email = google_signin_email
+		else
+			mail_to_email = Request("email")
+		end if
+
 		mail_to_name = "New Account Coupon"
 		mail_subject = "10% OFF coupon for registering"
 		mail_body = "<div style=""text-align:center""><img src=""https://www.bodyartforms.com/images/10-percent-off.png"" width=""250px""></div><br/><br/>To show our appreciation for you registering an account at Bodyartforms, here is a one time 10% OFF coupon code <span style=""color:#74498C;font-weight:bold"">" & var_cert_code & "</span> that you can use through " & FormatDateTime(now()+29,2) & ". Simply use the code  <span style=""color:#74498C;font-weight:bold"">" & var_cert_code & "</span> at checkout to receive your discount :)<br/><br/>If you have any questions or need assistance please reply to this e-mail to get in touch with us or call customer service at (877) 223-5005"
@@ -98,7 +103,7 @@
 
 	if email_newsletter_signup_coupon = "yes" then ' Send out a one time use coupon (for newsletter signups)
 		google_utmsource = "Newsletter signup coupon"
-		mail_to_email = request.querystring("email")
+		mail_to_email = var_email
 		mail_to_name = ""
 		mail_subject = "15% OFF Bodyartforms Newsletter Welcome!"
 		mail_body = "<div style=""text-align:center""><img src=""https://www.bodyartforms.com/images/15-percent-off.png"" width=""250px""></div><br/><br/><strong>Hello!</strong><br/><br/>To show our appreciation for signing up for our newsletter at Bodyartforms, here is a one time 15% OFF coupon code <span style=""color:#74498C;font-weight:bold"">" & var_cert_code & "</span> that you can use through " & FormatDateTime(now()+29,2) & ". Simply use the code  <span style=""color:#74498C;font-weight:bold"">" & var_cert_code & "</span> at checkout to receive your discount :)<br/><br/>If you have any questions or need assistance please reply to this e-mail to get in touch with us or call customer service at (877) 223-5005"

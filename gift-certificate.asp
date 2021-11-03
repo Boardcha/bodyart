@@ -13,7 +13,7 @@
 <%
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT ProductDetailID, price FROM ProductDetails WHERE ProductID = 2424 ORDER BY price asc"
+	objCmd.CommandText = "SELECT ProductDetailID, price FROM ProductDetails WHERE ProductID = 2424 and active = 1 ORDER BY price asc"
 	Set rs_getDetails = objCmd.Execute()
 %>
 

@@ -90,29 +90,29 @@ $('#testimonials').slick({
     {
       breakpoint: 4000,
       settings: {
-        slidesToShow: 5,
-        slidesToScroll: 5
+        slidesToShow: 3,
+        slidesToScroll: 3
       }
     },
     {
       breakpoint: 1920,
       settings: {
-        slidesToShow: 5,
-        slidesToScroll: 5
+        slidesToShow: 3,
+        slidesToScroll: 3
       }
     },
     {
       breakpoint: 1600,
       settings: {
-        slidesToShow: 5,
-        slidesToScroll: 5
+        slidesToShow: 3,
+        slidesToScroll: 3
       }
     },
     {
       breakpoint: 1024,
       settings: {
-        slidesToShow: 3,
-        slidesToScroll: 3
+        slidesToShow: 2,
+        slidesToScroll: 2
       }
     },
     {
@@ -144,14 +144,13 @@ $("#homepage-newsletter-signup").on("click", function () {
   $.ajax({
       method: "post",
       dataType: "json",
-      url: "/constant-contact/cc-add-contact.asp?email=" + $('#homepage_newsletter_email').val()
+      url: "/klaviyo/klaviyo-subscribe-newsletter.asp?email=" + $('#homepage_newsletter_email').val()
       })
       .done(function(json) {
-          if (json.action != undefined) {
+          if ($.isEmptyObject(json)) {
               $("#homepage-newsletter-msg").html('<div class="alert alert-success m-0 p-2">Thanks for signing up!</div>').show().delay(5000).fadeOut("slow");
               $("#homepage-newsletter-signup").hide();
-          } 
-          if (json.error_message != undefined) {
+          } else {
               $("#homepage-newsletter-msg").html('<div class="alert alert-danger m-0 p-2">Invalid email</div>').show().delay(5000).fadeOut("slow");
               $("#homepage-newsletter-signup").html('Sign Up!');
               $('#homepage_newsletter_email').show();

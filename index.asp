@@ -146,7 +146,7 @@ Set rsGetTestimonials = DataConn.Execute(SqlString)
 					<div class="p-0 m-0 h5">
 							GET NOTIFIED ABOUT SALES!
 						</div>
-						<div class="small mb-1">Sign up for our newsletter (NO SPAM):</div>
+						<div class="small mb-1">Sign up for our newsletter</div>
 						<div class="input-group">
 								<input type="text" class="form-control bg-lightgrey text-dark border-0 " placeholder="E-mail address" aria-label="E-mail address" type="text" name="homepage_newsletter_email" id="homepage_newsletter_email"  />
 								<div class="input-group-append">
@@ -292,4 +292,4 @@ Wend
 
 			<!--#include virtual="/bootstrap-template/footer.asp" -->
 			<script type="text/javascript" src="/js/slick.min.js"></script>
-			<script type="text/javascript" src="/js-pages/homepage.min.js?v=102221_v2"></script>
+			<script type="text/javascript" src="/js-pages/homepage.min.js?v=110321"></script>

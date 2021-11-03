@@ -13,7 +13,7 @@ else
 end if 
 End Function  
 
-first_date = YEAR(Date()-10) & "-" & Pd(Month(date()-10),2) & "-" & Pd(DAY(date()-10),2) 
+first_date = YEAR(Date()-30) & "-" & Pd(Month(date()-30),2) & "-" & Pd(DAY(date()-30),2) 
 last_date = YEAR(Date()) & "-" & Pd(Month(date()),2) & "-" & Pd(DAY(date()),2) 
 
 ' Authorize.net get batches list

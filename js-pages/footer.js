@@ -290,14 +290,13 @@ $("#footer-newsletter-signup").on("click", function () {
     $.ajax({
         method: "post",
         dataType: "json",
-        url: "/constant-contact/cc-add-contact.asp?email=" + $('#footer_newsletter_email').val()
+        url: "/klaviyo/klaviyo-subscribe-newsletter.asp?email=" + $('#footer_newsletter_email').val()
         })
         .done(function(json) {
-            if (json.action != undefined) {
+            if ($.isEmptyObject(json)) {
                 $("#footer-newsletter-msg").html('<span class="alert alert-success m-0 p-2">Thanks for signing up!</span>').show().delay(5000).fadeOut("slow");
                 $("#footer-newsletter-signup").hide();
-            } 
-            if (json.error_message != undefined) {
+            } else {
                 $("#footer-newsletter-msg").html('<span class="alert alert-danger m-0 p-2">Invalid email</span>').show().delay(5000).fadeOut("slow");
                 $("#footer-newsletter-signup").html('Sign Up!');
                 $('#footer_newsletter_email').show();

@@ -1,5 +1,6 @@
 <%
 ' CREATE NEW CUSTOMER ACCOUNT if they opted in
+' WHEN EDITING THIS PAGE MAKE SURE TO TEST CHECKOUT NEW ACCOUNT CREATION AS WELL AND MAKE SURE IT DOES NOT BREAK CHECKOUT
 ' =================================================================================
 password = request.form("password")
 check = request.form("check")
@@ -14,21 +15,57 @@ End If
 if password <> "" and email <> "" and check = "" then
 	' THe check field is to help prevent against bots
 
-	'Set variable for mailer
-	mailer_type = "account activation"
-	
 	salt = getSalt(32, extraChars)
 	newPass = sha256(salt & password & extra_key)
 	activation_hash = getToken(32, "")
 	'Add new account information into our database
-	If google_firstName <> "" Then firstName = "'" & google_firstName & "'" Else firstName = "NULL"
-	If google_lastName <> "" Then lastName = "'" & google_lastName & "'" Else lastName = "NULL"
-	If google_user_id <> "" Then googleUserId = "'" & google_user_id & "'" Else googleUserId = "NULL"
+	If google_firstName <> "" Then firstName = google_firstName Else firstName = NULL
+	If google_lastName <> "" Then lastName = google_lastName Else lastName = NULL
+	If google_user_id <> "" Then 
+		googleUserId = google_user_id
+		activate_account = 1
+		'Set variable for mailer
+			mailer_type = "new account"
+		' Set extra mailer type
+			email_onetime_coupon = "yes"
+%>
+			<!--#include virtual="/checkout/inc_random_code_generator.asp"-->
+			<!--#include virtual="/includes/inc-dupe-onetime-codes.asp"--> 
+<%
+
+			' Prepare a one time use coupon for creating an account
+			var_cert_code = getPassword(15, extraChars, firstNumber, firstLower, firstUpper, firstOther, latterNumber, latterLower, latterUpper, latterOther)
+
+			' Call function
+			CheckDupe(var_cert_code)
+
+			' Set extra mailer type
+			email_onetime_coupon = "yes"
+
+			set objCmd = Server.CreateObject("ADODB.command")
+			objCmd.ActiveConnection = DataConn
+			objCmd.CommandText = "INSERT INTO TBLDiscounts (DiscountCode, DateExpired, coupon_single_email, DiscountPercent, coupon_single_use, DateAdded, DiscountType, active, dateactive, coupon_assigned, DiscountDescription) VALUES (?, GETDATE()+30, ?, 10, 1, GETDATE(), 'Percentage', 'A', GETDATE()-1, 1, 'New account creation')"
+			objCmd.Parameters.Append(objCmd.CreateParameter("Code",200,1,30,var_cert_code))
+			objCmd.Parameters.Append(objCmd.CreateParameter("Email",200,1,30, email))
+			objCmd.Execute()
+			'===== END IF GOOGLE USER IS CREATED
+
+
+	Else googleUserId = NULL
+		'Set variable for mailer
+			mailer_type = "account activation"
+		activate_account = 0
+	End if
 	If google_signin_email <> "" Then registered_with_social_login = 1 Else registered_with_social_login = 0
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "INSERT INTO customers (email, password_hashed, salt, customer_first, customer_last, registered_with_social_login, google_user_id, activation_hash) VALUES (?, '" & newPass & "', '" & salt & "', " & firstName & ", " & lastName & ", " & registered_with_social_login & ", " & googleUserId & ", '" & activation_hash & "')"
+	objCmd.CommandText = "INSERT INTO customers (email, password_hashed, salt, customer_first, customer_last, registered_with_social_login, google_user_id, activation_hash, active) VALUES (?, '" & newPass & "', '" & salt & "', ?, ?, ?, ?, '" & activation_hash & "', ?)"
 	objCmd.Parameters.Append(objCmd.CreateParameter("email",200,1,50, email))
+	objCmd.Parameters.Append(objCmd.CreateParameter("firstName",200,1,50, firstName))
+	objCmd.Parameters.Append(objCmd.CreateParameter("lastName",200,1,50, lastName))
+	objCmd.Parameters.Append(objCmd.CreateParameter("registered_with_social_login",3,1,10,registered_with_social_login))
+	objCmd.Parameters.Append(objCmd.CreateParameter("googleUserId",200,1,200, googleUserId))
+	objCmd.Parameters.Append(objCmd.CreateParameter("activate_account",3,1,10,activate_account))
 	objCmd.Execute()
 	
 	'Retrieve customer ID number from our database
@@ -188,7 +225,7 @@ if password <> "" and email <> "" and check = "" then
 
 	var_create_account_status = "done"
 
-%>
+%>	
 	<!--#include virtual="/emails/function-send-email.asp"-->
 	<!--#include virtual="/emails/email_variables.asp"-->
 	<!--#include virtual="/accounts/inc_transfer_cart_contents.asp" -->
