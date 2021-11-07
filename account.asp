@@ -196,7 +196,7 @@ For intRecord = 1 To rsGetOrders.PageSize
 	
 	' variable that allows changes to order
 	var_allow_changes = ""
-	if (paymethod = "Visa" OR paymethod = "Mastercard" OR paymethod = "MasterCard" OR paymethod = "Discover" OR paymethod = "American Express") AND (varstatus = "Pending..." OR varstatus = "Review" OR varstatus = "ON HOLD") then
+	if (paymethod = "Visa" OR paymethod = "Mastercard" OR paymethod = "MasterCard" OR paymethod = "Discover" OR paymethod = "American Express" OR paymethod = "GooglePay" OR paymethod = "ApplePay") AND (varstatus = "Pending..." OR varstatus = "Review" OR varstatus = "ON HOLD") then
 		var_allow_changes = "yes"
 	end if
 	

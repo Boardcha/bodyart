@@ -255,7 +255,10 @@ $( document ).ready(function() {
 			  email = shippingInfo.emailAddress;
 			  amount = subTotal;
 			  
-
+			  $('#btn-applepay').hide();
+			  $('#pay-api-processing-message').show();
+			  $('#pay-api-processing-message').html('<div class="alert alert-success mt-2"><i class="fa fa-spinner fa-2x fa-spin"></i> Processing payment ... please wait until payment confirmation screen is displayed.</div>');
+		
 			  // START send payment data to authorize.net to process
 			  $.ajax({
 			  method: "post",
@@ -272,11 +275,13 @@ $( document ).ready(function() {
 						json = JSON.parse(data);
 						if (json.stock_status === "fail") {
 							console.log("stock_status: fail");
+							$('#btn-applepay').show();
 							calcAllTotals();
 							alert("Unfortunately we do not have enough quantity in stock for some of the item(s) in your cart.");
 							reject;
 						}else if (json.flagged === "yes") {
 							console.log("ORDER or USER is FLAGGED !!!");
+							$('#btn-applepay').show();
 							alert("This order can not be processed online. Please contact customer service for assistance.");							
 							reject;
 						} else { // If items are in stock 
@@ -286,6 +291,7 @@ $( document ).ready(function() {
 								console.log("Payment successful");
 							} else {				
 								console.log("Payment declined");
+								$('#btn-applepay').show();
 								alert("Payment declined. " + json.cc_reason);
 								reject;
 								
@@ -293,6 +299,7 @@ $( document ).ready(function() {
 						}			
 					})
 					.fail(function(xmlHttpRequest, textStatus) {
+						$('#btn-applepay').show();
 						alert("Payment declined. Please review your information and try again.");
 						reject;
 					});			

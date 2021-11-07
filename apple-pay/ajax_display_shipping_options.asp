@@ -8,8 +8,7 @@
 country_code = request("country_code")
 zip_code = request("zip")
 
-' Show a $0 option for carts with just a gift certificate
-If var_giftcert <> "yes" and var_other_items = 1 Then
+If var_other_items = 1 Then
 
 	If country_code <> "" Then
 
@@ -90,18 +89,18 @@ If var_giftcert <> "yes" and var_other_items = 1 Then
 		End If
 		'Remove last comma
 		options = Mid(options, 1, Len(options)-1)
-		Response.Write "[" & options & "]"
 		set rsGetShippingOptions = nothing
 	End If ' Only show If country session has been set
 
-Else ' only If gift cert is in cart
+Else ' If no other items
+	If var_giftcert = "yes" Then
+		'NO SHIPPING REQUIRED
+		'Digital gift certificate will be e-mailed to your recipient
+		options = "{""label"": ""Free: NO SHIPPING REQUIRED"", ""amount"": 0, ""detail"": ""Digital gift certificate will be e-mailed to your recipient"", ""identifier"": ""99""}
+	End If
+End If 
 
-					'NO SHIPPING REQUIRED
-					'Digital gift certificate will be e-mailed to your recipient
-
-End If ' only gift cert in cart
-
-
+Response.Write "[" & options & "]"
 DataConn.Close()
 Set DataConn = Nothing
 %>

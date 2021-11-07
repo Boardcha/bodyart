@@ -20,7 +20,6 @@ end if
 %>
 <!--#include virtual="cart/inc_cart_stock_check.asp"-->
 <%
-
 ' If no stock changes have occurred
 if stock_display = "" then 
 	var_stock_fail_json = "success"
@@ -47,7 +46,7 @@ if stock_display = "" then
 
 if cart_status = "not-empty" Then
 'Set array to store all order details (FOR CHECKOUT STORAGE INTO DATABASE)
-	reDim array_details_2(8,0)
+	reDim array_details_2(12,0)
 	Dim array_add_new : array_add_new = 0 
 	
 %>

@@ -153,7 +153,7 @@ Wend
 					product_link = "productdetails.asp?ProductID=" & rs_getCart.Fields.Item("ProductID").Value
 				  end if
 				  %>
-				  <a href="<%= product_link %>"><div class="position-relative"><img  src="https://s3.amazonaws.com/bodyartforms-products/<%=(rs_getCart.Fields.Item("picture").Value)%>" alt="Product photo">
+				  <a href="<%= product_link %>"><div class="position-relative"><img  src="https://bodyartforms-products.bodyartforms.com/<%=(rs_getCart.Fields.Item("picture").Value)%>" alt="Product photo">
 
 					<% ' only display if the item is cheaper than retail 
 
@@ -574,7 +574,7 @@ end if ' show if free sticker cookie has not been set to "no"
 										</div>
 										<% If toggle_checkout_cards = true Then %>
 											<div class="checkout_now" style="display:none">
-												<a class="btn btn-block btn-primary mb-3 checkout_button" href="checkout.asp?type=card" ><h6>CHECKOUT WITH <span class="payment-options">CREDIT CARD
+												<a class="btn btn-block btn-primary mb-2 checkout_button" href="checkout.asp?type=card" ><h6>CHECKOUT WITH <span class="payment-options">CREDIT CARD
 													<br/>
 													<span style="font-size:2em">
 													<i class="fa fa-cc-visa"></i>
@@ -591,7 +591,7 @@ end if ' show if free sticker cookie has not been set to "no"
 
 
 										<% If toggle_checkout_paypal = true Then %>
-											<div class="checkout_paypal"  style="display:none">
+											<div class="checkout_paypal mb-2"  style="display:none">
 												<a class="btn btn-block btn-warning checkout_button" href="checkout.asp?type=paypal">
 													<img style="height:30px" src="/images/paypal.png" />
 												</a>
@@ -599,7 +599,9 @@ end if ' show if free sticker cookie has not been set to "no"
 										<% else %>
 											<div class="alert alert-danger">We're sorry, but our <b>PayPal</b> checkout is temporarily unavailable. As soon as PayPal comes back online, we will accept orders again. Please check back later.</div>
 										<% end if %>
-									
+										<div id="pay-api-processing-message" style="display:none"></div>	
+										
+										
 										<%
 										' === only show afterpay option to USA customers
 										if request.cookies("currency") = "" OR request.cookies("currency") = "USD" then
@@ -690,13 +692,27 @@ end if ' show if free sticker cookie has not been set to "no"
 		updateCurrency();
 </script>
 <% end if %>
+
+<!-- Global variables for Apple & Google Pay -->
+<script>
+	var tax = 0.0;
+	var shippingCost = 0.0;
+	var subTotal = 0.0;
+	var totalAmount = 0.0;
+	var totalDiscount = 0.0; // Gets updated in calcAllTotals()
+	var selectedShippingId = 0;
+	var selectedShippingCompany = "";
+</script>
+
+<!-- Google Pay Javascript -->
+
+
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
 <script type="text/javascript" src="/js-pages/cart.min.js?v=03032020"></script>
-<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=102721"></script>
+<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=110421"></script>
 <!-- ^^^^^^  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE ^^^^^^ -->
 <script type="text/javascript">
-				calcAllTotals();
-
+	calcAllTotals();
 </script>
 <%
 Set rsToggles = Nothing

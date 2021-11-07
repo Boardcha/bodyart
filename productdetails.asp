@@ -31,6 +31,14 @@ objCmd.CommandText = "SELECT * FROM FlatProducts WHERE ProductID = ?"
 objCmd.Parameters.Append(objCmd.CreateParameter("ProductID",3,1,10,ProductID))
 Set rsProductStats = objCmd.Execute()
 
+' Retrieve how many people have this product in their cart (and not on save for later status)
+set objCmd = Server.CreateObject("ADODB.command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "SELECT COUNT(cart_id) as 'currently_in_all_carts' FROM tbl_carts INNER JOIN ProductDetails ON tbl_carts.cart_detailId = ProductDetails.ProductDetailID WHERE cart_save_for_later = 0 AND cart_LastViewed > (GETDATE()- 30) AND  ProductID = ?"
+objCmd.Parameters.Append(objCmd.CreateParameter("ProductID",3,1,10,ProductID))
+Set rsHowManyInCarts = objCmd.Execute()
+
+
 ' ----- BEGIN recently viewed items -----------
 ' Write to the recently viewed cookie to generate list
 if IsNumeric(request.querystring("productid")) then
@@ -680,7 +688,22 @@ var button_addcart = document.getElementById('btn-add-cart');
 		});
 	});
 } // Run after window finishes loading
-</script>	
+</script>
+
+
+<script type="text/javascript">
+// Klaviyo view item push
+	var _learnq = _learnq || [];
+	var item = {
+	  "ProductName": '<%= rsProduct.Fields.Item("title").Value %>',
+	  "ProductID": '<%= rsProduct.Fields.Item("ProductID").Value %>',
+	  "ImageURL": '<%= rsProduct.Fields.Item("largepic").Value %>',
+	  "URL": 'https://bodyartforms.com/productdetails.asp?productid=<%= rsProduct.Fields.Item("ProductID").Value %>',
+	  "Brand": '<%= rsProduct.Fields.Item("brandname").Value %>'
+	};
+	_learnq.push(["track", "Viewed Product", item]);
+
+  </script>
 <% end if %>
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->
@@ -1047,8 +1070,11 @@ end if
 <% end if %>
 </div>
 
-
-
+<% if rsHowManyInCarts("currently_in_all_carts") > 10 then %>
+<div class="text-info font-weight-bold">
+	<%= rsHowManyInCarts("currently_in_all_carts") %> customers have this in their cart
+</div>
+<% end if %>
 
 
 <div class="currency-menu my-2" style="display:none">
@@ -1468,7 +1494,8 @@ end if
 	Wend
 	%>
 	</div>
-	<% end if 'rsRecentlyViewed.EOF %>		
+	<% end if 'rsRecentlyViewed.EOF %>	
+		
 
 	<% end if ' only display if product is active %>
 	
