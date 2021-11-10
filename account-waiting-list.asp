@@ -65,6 +65,8 @@ if session("admin_tempcustid") <> "" then %>
 <% If rsGetUser.EOF or var_flagged = "yes" Then
 %>
 	<div class="alert alert-danger">Not logged in or no account found</div>
+<% elseif rsGetUser("active") = 0 then %>
+	<div class="alert alert-danger"><h5>Your account has not been activated yet.</h5>Please click on the activation link sent to your email to confirm your account registration and access your account.</div>
 <% else %>
 
 

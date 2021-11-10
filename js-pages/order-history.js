@@ -376,3 +376,16 @@ $(document).on('click', '#confirm-start-addons', function(event) {
 	window.location = "/products.asp?new=Yes";
 });  // END confirm order add-ons
 
+// START resend activation link
+$(document).on('click', '#btn-resend-activation-link', function(event) {
+	$.ajax({
+			url: "accounts/ajax-resend-activation-link.asp"
+			})
+			.done(function( msg) {
+				$('#msg-activation-link').html('<div class="alert alert-success p-1 my-2">Activation email has been sent to your email.</div>');
+			})
+			.fail(function(msg) {
+				$('#msg-activation-link').html('<div class="alert alert-danger p-1 my-2">Website error</div>');
+			})	
+});	// END resend activation link
+

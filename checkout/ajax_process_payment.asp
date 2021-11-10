@@ -7,6 +7,7 @@ if request.cookies("OrderAddonsActive") <> "" then
 	var_addons_active = "yes"
 end if
 
+
 ' BEGIN build { for .json return throughout this page}
 %>
 	{
@@ -19,7 +20,6 @@ end if
 %>
 <!--#include virtual="cart/inc_cart_stock_check.asp"-->
 <%
-
 ' If no stock changes have occurred
 if stock_display = "" then 
 	var_stock_fail_json = "success"
@@ -46,7 +46,7 @@ if stock_display = "" then
 
 if cart_status = "not-empty" Then
 'Set array to store all order details (FOR CHECKOUT STORAGE INTO DATABASE)
-	reDim array_details_2(8,0)
+	reDim array_details_2(12,0)
 	Dim array_add_new : array_add_new = 0 
 	
 %>
@@ -66,6 +66,7 @@ if cart_status = "not-empty" Then
 <% if var_addons_active <> "yes" then %>
 <!--#include virtual="functions/hash_extra_key.asp"-->
 <!--#include virtual="accounts/inc_create_cim_account.asp"-->
+<!--#include virtual="/functions/token.asp"-->
 <!--#include virtual="accounts/inc_create_account.asp"-->
 <!--#include virtual="checkout/inc_save_cim_profiles.asp" -->
 <!--#include virtual="accounts/inc_update_cim_profiles.asp" -->
@@ -82,7 +83,7 @@ if cart_status = "not-empty" Then
 %>
 <!--#include virtual="checkout/inc_process_cashorder.asp"--> 
 <!--#include virtual="checkout/inc_process_creditcard.asp"--> 
-<!--#include virtual="checkout/inc_process_googlepay.asp"-->
+<!--#include virtual="checkout/inc_process_googlepay.asp"--> 
 <!--#include virtual="checkout/inc_process_applepay.asp"--> 
 <%
 

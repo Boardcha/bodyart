@@ -153,6 +153,8 @@ end if
 
 </script> 
 
+</script> 
+
 <!--Google Sign-in-->
 <script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
 <script>
@@ -196,8 +198,9 @@ end if
 		'theme': 'dark'
 		});
     }
-</script>
- 
+</script><!--End Google Sign-in-->
+
+
 <% ' ---- ONLY SHOW TO COUNTRIES IN THE EU -----------
 %>
 <!--#include virtual="/functions/inc-eu-country-codes.asp" -->
@@ -215,7 +218,7 @@ end if
         data-close-text="Got it!">
     </script>
 <% end if ' ONLY TO EU COUNTRIES %>
- <script type="text/javascript" src="/js-pages/footer.min.js?v=040221"></script>  
+ <script type="text/javascript" src="/js-pages/footer.min.js?v=110321"></script>  
 <% if request.cookies("adminuser") = "yes" then %>
 <script>
     // Toggle sandbox front end load

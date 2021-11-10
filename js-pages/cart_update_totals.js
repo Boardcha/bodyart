@@ -36,7 +36,7 @@
 
 		$.ajax({
 			type: "post",
-			async: false, 
+			async: false,
 			url: "cart/inc_cart_totals.asp",
 			dataType : "json",
 			data: {shipping_option: shipping_option, page_name: page_name, tax_country: tax_country, tax_state: tax_state, tax_zip: tax_zip, tax_address: tax_address, state_taxed: state_taxed},

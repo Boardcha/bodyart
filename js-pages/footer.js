@@ -129,6 +129,7 @@ $(".btn-cart-load").click(function(){
   
 
     $('#frm-signin').submit(function (e) {
+        $(".signin-spinner").html('<i class="fa fa-spinner fa-2x fa-spin"></i>');
         $(".alert-signin").hide();
 
         // Fetch form to apply custom Bootstrap validation
@@ -150,22 +151,29 @@ $(".btn-cart-load").click(function(){
             }
         })
             .done(function (json, msg) {
+               
                 if (json.status === "logged-in") {
+                    $(".signin-spinner").html('<i class="fa fa-spinner fa-2x fa-spin mr-3"></i>Redirecting to account');
                     window.location = "account.asp";
-				} else if (json.status === "not-active") {
-                    $(".signin-message").html("This account is not active. Please check your inbox for activation link. If you did not receive the email, please check your spam folder.");
-                    $(".alert-signin").show();
-                    $('#btn_signin').removeAttr("disabled");
                 } else {
-                    $(".signin-message").html("User name or password did not match. Please try again.");
+                    if (json.status === "logged-out") {
+                        $(".signin-message").html("User name or password did not match. Please try again.");
+                        $(".signin-spinner").html('');
+                    }
+                    if (json.status === "not-active") {
+                        $(".signin-message").html("Account not activated. Please check your email for the activation link.");
+                        $(".signin-spinner").html('');
+                    }
                     $(".alert-signin").show();
                     $('#btn_signin').removeAttr("disabled");
                 }
             })
             .fail(function () {
                 $(".signin-message").html("No account found");
+                $(".signin-spinner").html('');
                 $(".alert-signin").show();
                 $('#btn_signin').removeAttr("disabled");
+
             })
             }
         form[0].classList.add('was-validated');
@@ -174,6 +182,7 @@ $(".btn-cart-load").click(function(){
     
 	// Check to see if account already exists
 	$("#regEmail").blur(function(){
+        $('#message-create-account').html('<i class="fa fa-spinner fa-2x fa-spin"></i>');
 		var email = $("#regEmail").val();
 		
 		$.ajax({
@@ -183,6 +192,7 @@ $(".btn-cart-load").click(function(){
 		data: {email: email}
 		})
 		.done(function( json, msg ) {
+
 			if (json.duplicate == "yes") {
 				$('#message-create-account').html('<div class="alert alert-danger">A duplicate account has been found. Please <a class="alert-link" href="#" data-toggle="modal" data-target="#signin" data-dismiss="modal">login here</a>. If you have forgotten your password you can use <a class="alert-link" href="#" data-toggle="modal" data-target="#forgotpassword" data-dismiss="modal">this link</a> to retrieve it. Or, you can create a new account below.</div>');
 				$('#btn-create-account').prop('disabled', true);
@@ -203,6 +213,8 @@ $(".btn-cart-load").click(function(){
 		var password = $("#Regpassword").val();
         var confirmPassword = $("#password_confirmation").val();
 
+        $('#message-create-account').html('<i class="fa fa-spinner fa-2x fa-spin"></i>');
+
                 // Check for equality with the password inputs
                 if (password != confirmPassword ) {
                     $('#message-create-account').html('<div class="alert alert-danger">Passwords do not match</div>');
@@ -215,6 +227,7 @@ $(".btn-cart-load").click(function(){
     
 	// Submit form
 	$("#frm-register").submit(function(e) {
+        $('#message-create-account').html('<i class="fa fa-spinner fa-2x fa-spin"></i>');
         // Fetch form to apply custom Bootstrap validation
         var form = $("#frm-register")
 
@@ -277,14 +290,13 @@ $("#footer-newsletter-signup").on("click", function () {
     $.ajax({
         method: "post",
         dataType: "json",
-        url: "/constant-contact/cc-add-contact.asp?email=" + $('#footer_newsletter_email').val()
+        url: "/klaviyo/klaviyo-subscribe-newsletter.asp?email=" + $('#footer_newsletter_email').val()
         })
         .done(function(json) {
-            if (json.action != undefined) {
+            if ($.isEmptyObject(json)) {
                 $("#footer-newsletter-msg").html('<span class="alert alert-success m-0 p-2">Thanks for signing up!</span>').show().delay(5000).fadeOut("slow");
                 $("#footer-newsletter-signup").hide();
-            } 
-            if (json.error_message != undefined) {
+            } else {
                 $("#footer-newsletter-msg").html('<span class="alert alert-danger m-0 p-2">Invalid email</span>').show().delay(5000).fadeOut("slow");
                 $("#footer-newsletter-signup").html('Sign Up!');
                 $('#footer_newsletter_email').show();

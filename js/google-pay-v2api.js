@@ -510,6 +510,10 @@ function processPayment(paymentData) {
 	  email = paymentData.email;
 	  amount = subTotal;
 
+	  $('#btn-googlepay').hide();
+	  $('#pay-api-processing-message').show();
+	  $('#pay-api-processing-message').html('<div class="alert alert-success mt-2"><i class="fa fa-spinner fa-2x fa-spin"></i> Processing payment ... please wait until payment confirmation screen is displayed.</div>');
+		
 	  // START send payment data to authorize.net to process
 	  $.ajax({
 	  method: "post",
@@ -525,10 +529,12 @@ function processPayment(paymentData) {
 			.done(function( json, msg ) {
 				if (json.stock_status === "fail") {
 					console.log("stock_status: fail");
+					$('#btn-googlepay').show();
 					reject("Unfortunately we do not have enough quantity in stock for some of the item(s) in your cart.");
 					calcAllTotals();
 				}else if (json.flagged === "yes") {
 					console.log("ORDER or USER is FLAGGED !!!");
+					$('#btn-googlepay').show();
 					reject("This order can not be processed online. Please contact customer service for assistance.");							
 				} else { // If items are in stock 
 					if (json.cc_approved === "yes") {
@@ -538,11 +544,13 @@ function processPayment(paymentData) {
 					} else {				
 						console.log("Payment declined");
 						console.log("json.errorText: " + json.errorText);
+						$('#btn-googlepay').show();
 						reject("Payment declined. " + json.cc_reason);
 					}				
 				}			
 			})
 			.fail(function() {
+				$('#btn-googlepay').show();
 				reject("Payment declined. Please review your information and try again.");
 			});
     }, 1000);

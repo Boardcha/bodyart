@@ -108,7 +108,7 @@
 			<h5>Gary</h5>
 		</div>
 		<div class="col-6">
-			<img class="img-fluid" src="images/employees/empty-avatar.png" alt="Paty" />
+			<img class="img-fluid" src="images/employees/paty-circle.png" alt="Paty" />
 			<h5>Paty</h5>
 		</div>
 	</div>

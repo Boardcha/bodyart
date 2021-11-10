@@ -1,7 +1,7 @@
 <% @LANGUAGE="VBSCRIPT" %>
 <%
 	page_title = "Order History"
-	page_description = "Your Bodyartforms order history."
+	page_description = "Your Bodyartforms order history"
 	page_keywords = ""
 	
 ' Clear temporary account if admin is viewing
@@ -103,6 +103,12 @@ if session("admin_tempcustid") <> "" then %>
 		<a class="btn btn-outline-secondary" data-toggle="modal" data-target="#signin" href="#">Click here to sign in</a>
 
 	</div>
+<% elseif rsGetUser("active") = 0 then %>
+	<div class="alert alert-danger"><h5 class="mb-0">Your account has not been activated yet.</h5>Please click on the activation link sent to your email to confirm your account registration and access your account.
+	<h6 class="mt-3 mb-0">Didn't receive your activation link via email?</h6>
+	<a id="btn-resend-activation-link" class="btn btn-outline-secondary" href="#">Click here to resend it</a>
+	<div id="msg-activation-link"></div>
+	</div>
 <% else %>
 
 <% If rsGetOrders.eof Then %>
@@ -190,7 +196,7 @@ For intRecord = 1 To rsGetOrders.PageSize
 	
 	' variable that allows changes to order
 	var_allow_changes = ""
-	if (paymethod = "Visa" OR paymethod = "Mastercard" OR paymethod = "MasterCard" OR paymethod = "Discover" OR paymethod = "American Express") AND (varstatus = "Pending..." OR varstatus = "Review" OR varstatus = "ON HOLD") then
+	if (paymethod = "Visa" OR paymethod = "Mastercard" OR paymethod = "MasterCard" OR paymethod = "Discover" OR paymethod = "American Express" OR paymethod = "GooglePay" OR paymethod = "ApplePay") AND (varstatus = "Pending..." OR varstatus = "Review" OR varstatus = "ON HOLD") then
 		var_allow_changes = "yes"
 	end if
 	
@@ -1093,4 +1099,4 @@ By clicking the start button below, you'll be taken to our product search where 
 <% end if   'rsGetUser.EOF %>
 
 <!--#include virtual="/bootstrap-template/footer.asp" -->
-<script type="text/javascript" src="/js-pages/order-history.min.js?v=081020"></script> 
+<script type="text/javascript" src="/js-pages/order-history.min.js?v=102821"></script> 

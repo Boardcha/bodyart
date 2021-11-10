@@ -159,7 +159,7 @@ $(document).ready(function(){
 	localStorage.setItem('detailid', '');
 
 
-	//	$(this).addClass("highlight");
+	//	$(this).addClass("table-success");
 
 
 	$(".sell-info").mousedown(function() {
@@ -185,7 +185,7 @@ $(document).ready(function(){
 		}
 		var previous_detailid = localStorage.detailid;
 		
-		$("#" + current_detailid).addClass("highlight");
+		$("#" + current_detailid).addClass("table-success");
 		$("#" + current_detailid).prependTo(".scanner-table"); // move row to top
 		
 		$("#" + previous_detailid).hide();
@@ -215,20 +215,17 @@ $(document).ready(function(){
 				$("#scan-detail").focus(); // move auto focus back to detail field
 				
 				// Highlight field green for success
-				$("input[name='"+ field_name +"']").removeClass("ajax_input_fail");
-				$("input[name='"+ field_name +"']").addClass("ajax_input_success");
+				$("input[name='"+ field_name +"']").removeClass("alert-danger");
+				$("input[name='"+ field_name +"']").addClass("alert-success");
 
 				setTimeout(function(){
-					$("input[name='"+ field_name +"']").addClass("ajax_input_fadeout");
-					$("input[name='"+ field_name +"']").removeClass("ajax_input_success");}, 3000);					
-					$("input[name='"+ field_name +"']").removeClass("ajax_input_fadeout");
-					
+					$("input[name='"+ field_name +"']").removeClass("alert-success");}, 3000);					
 				//	alert( "success" + msg + "Detail-id: " + detailid + " Qty: " + qtychange);
 			})
 			.fail(function(msg) {
 			// Highlight field red for failure
 			
-				$("input[name='"+ field_name +"']").addClass("ajax_input_fail");
+				$("input[name='"+ field_name +"']").addClass("alert-danger");
 				setTimeout(function(){}, 3000);	
 			
 			//	alert( "error" + msg + "Detail-id: " + detailid + " Qty: " + qtychange);
@@ -246,12 +243,12 @@ $(document).ready(function(){
 			data: {qty: qty, detailid: detailid, bin: bin}
 			})
 			.done(function( msg ) {
-				$(".update-return-text").removeClass("failed-text");
+				$(".update-return-text").removeClass("alert-danger");
 				$(".update-return-text").html("Update successful");
 			})
 			.fail(function(msg) {
 				$(".update-return-text").html("** Update FAILED **");
-				$(".update-return-text").addClass("failed-text");
+				$(".update-return-text").addClass("alert-danger");
 			});  
         return false;
     }); // end form submit

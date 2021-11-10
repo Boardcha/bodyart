@@ -40,14 +40,45 @@
 		end if ' use now credits
 		
 		' Totals area at bottom of email receipts
-		var_email_totals = "Subtotal: " + FormatCurrency(var_subtotal, -1, -2, -2, -2) + "<br/>" + email_coupon_discount + " " + email_preffered_total + " " + email_use_now_credits + " " + email_sales_tax + " " + " " + email_store_credit_used + " " + email_gift_cert_used + "Shipping (" + session("var_email_shipping_option") + "): " + FormatCurrency(session("shipping_cost"), -1, -2, -2, -2) + "<br/><span style=""font-weight: bold; font-size: 1.2em;"">TOTAL: " + FormatCurrency(var_grandtotal, -1, -2, -2, -2) + "</span>"
-	
+		var_email_totals = "Subtotal: " + FormatCurrency(var_subtotal, -1, -2, -2, -2) + "<br/>" + email_coupon_discount + " " + email_preffered_total + " " + email_use_now_credits + " " + email_sales_tax + " " + " " + email_store_credit_used + " " + email_gift_cert_used + "Shipping (" + session("var_email_shipping_option") + "): " + FormatCurrency(session("shipping_cost"), -1, -2, -2, -2) + "<br/><span style='padding-top:5px;font-weight: bold; font-size: 18px'>TOTAL (Paid with " + strCardType + " " + strBilling_cardnumber + ") " + FormatCurrency(var_grandtotal, -1, -2, -2, -2) + " USD</span>"
+
 		For i = 0 to (ubound(array_details_2, 2) - 1)
+		
 		
 			' Do not write to email receipt if it's tax... display it in the totals area above
 			if Instr(1, array_details_2(2,i), "Tax") = 0 Then
 			
-				mail_order_details = mail_order_details & "<tr><td style=""text-align: center; border-bottom: thin solid #A4A4A4; padding: 1%;"">" & array_details_2(1,i) & "</td><td style=""border-bottom: thin solid #A4A4A4; padding: 1%;"">" & array_details_2(2,i) & " " & array_details_2(3,i) & " " & array_details_2(5,i) & "</td><td style=""border-bottom: thin solid #A4A4A4; padding: 1%;"">" & FormatCurrency(array_details_2(4,i),2) & "</td><td style=""border-bottom: thin solid #A4A4A4; padding: 1%;"">" & FormatCurrency(array_details_2(4,i) * array_details_2(1,i),2) & "</td></tr>"
+				'	https://bafthumbs-400.bodyartforms.com
+				'	https://bodyartforms-products.bodyartforms.com
+
+				'====== CHECK IF ITEM IS NOT A FREE ITEM AND IF SO DISPLAY LARGER DETAILS FOR IT =====
+				if array_details_2(12,i) = 0 then
+
+					mail_order_details = mail_order_details & "<tr style='border-bottom: 1px solid rgb(100, 100, 100);'><td style='padding-top:15px;padding-right:15px;' valign='top'><img style='width:200px' src='https://bafthumbs-400.bodyartforms.com/" & array_details_2(9,i) & "'></td>"
+					
+					mail_order_details = mail_order_details & "<td style='padding-top:15px' valign='top'>" & array_details_2(2,i)
+					'==== IF A GAUGE IS FOUND ==================
+					if array_details_2(11,i) <> "" then 
+						mail_order_details = mail_order_details & " <br>" & array_details_2(11,i)
+					end if
+					'==== IF A GAUGE IS FOUND ==================
+					if array_details_2(3,i) <> "" then 
+						mail_order_details = mail_order_details & " <br><b>Gauge</b> " & array_details_2(3,i)
+					end if
+					'==== IF A LENGTH IS FOUND ==================
+					if array_details_2(10,i) <> "" then 
+						mail_order_details = mail_order_details & "&nbsp;&nbsp;&nbsp;&nbsp;<b>Length</b> " & array_details_2(10,i)
+					end if
+					'==== IF PREORDER TEXT ==================
+					if array_details_2(5,i) <> "" then 
+						mail_order_details = mail_order_details & " <br>" & array_details_2(5,i)
+					end if
+					mail_order_details = mail_order_details & "<br><br>Quantity " & array_details_2(1,i) & " @ " & FormatCurrency(array_details_2(4,i)) & "<br><span style='font-weight:bold;font-size:1.1em'>" & FormatCurrency(array_details_2(4,i) * array_details_2(1,i),2) & "</span></td></tr>"
+				
+				'==== if array_details_2(12,i) > 0 IF ITEM IS A FREE ITEM DISPLAY SIMPLIFIED DETAILS
+				else
+					mail_free_items = mail_free_items & array_details_2(1,i) & "&nbsp;&nbsp;|&nbsp;" & array_details_2(2,i) & "&nbsp;" & array_details_2(3,i) & "&nbsp;" & array_details_2(10,i) & "&nbsp;" & array_details_2(11,i) & "<br>"
+				end if
 			
 			end if
 		next
@@ -67,7 +98,7 @@
 
 	if mailer_type = "new account" then 'newly created customer account
 		google_utmsource = "Account registration"
-		mail_to_email = Request("email")
+		mail_to_email = email
 		mail_to_name = "New Account"
 		mail_subject = "Bodyartforms welcome"
 		mail_body = "<div class='column2' style='box-sizing: border-box;display:inline-block;vertical-align: top;margin-bottom:3em'><strong>Hello!</strong><br/><br/>Your account is now active!. You can access your account page at the link below:<br/><a href='https://bodyartforms.com/account.asp' style='color: #475F8D !important; text-decoration: none'>https://bodyartforms.com/account.asp</a><br/><br/><strong>Your username is:</strong> " & mail_to_email & "</div><div class='column2' style='box-sizing: border-box;display:inline-block;color:#0c5460;background-color:#d1ecf1;border-color:1px solid #bee5eb;padding:.75rem 1.25rem;border-radius:.25em'><div style='font-weight:bold;font-size:1.2em'>About our company</div><p>We're a sister owned family business based near Austin, Texas. We've been around since 2001! We have a small close knit group that work hard to make sure you have the best experience possible when you order from us.</p><p>Our motto has always been to give the best customer service possible. If we make a mistake, we'll fix it ASAP. If you have questions or concerns, feel free to get in touch with us via email at service@bodyartforms.com or via phone at our toll free # (877) 223-5005. We're happy to help!</p><div style='font-weight:bold;font-size:1.2em'>What we believe in</div><p>We believe in treating our employees fairly by paying a livable wage, providing health care & retirement benefits, & providing paid vacation/sick time. We also keep a very chill work environment... no bosses breathing down your neck over here!</p>And lastly, we give to charity ... In most years we give over $50,000! We proudly support various causes that are making a difference around the world. The more our company makes, the more profits we donate to charity!</p></div>"
@@ -77,26 +108,33 @@
 	
 	if mailer_type = "account activation" then
 		google_utmsource = "Account activation"
-		mail_to_email = request.form("e-mail")
+		mail_to_email = email
 		mail_to_name = "Account Activation"
-		mail_subject = "Bodyartforms Account Activation"
+		mail_subject = "Bodyartforms Account Activation Link"
 		mail_body = "<div class='column2' style='box-sizing: border-box;display:inline-block;vertical-align: top;margin-bottom:3em'><strong>Hello!</strong><br/><br/>Thank you for registering with Bodyartforms.com. Please click on the below link to activate your account.<br/><br/><a href='https://bodyartforms.com/account-activation.asp?email=" & mail_to_email & "&hash=" & activation_hash & "' style='color: #475F8D !important; text-decoration: none; white-space: nowrap;'>https://bodyartforms.com/account-activation.asp?email=" & mail_to_email & "&hash=" & activation_hash & "</a><br/><br/><br/><br/>If you have any questions or need assistance please reply to this e-mail to get in touch with us or call customer service at (877) 223-5005</div>"
 		
 		Call baf_sendmail()
 	end if ' create new account	
-	if email_onetime_coupon = "yes" then ' Send out a one time use coupon (for new customer accounts)
+
+	'============ Send out a one time use coupon (for new customer accounts)=========================
+	if email_onetime_coupon = "yes" then 
 		google_utmsource = "One time use coupon"
-		mail_to_email = request.form("e-mail")
-		mail_to_name = request.form("shipping-first")
+		If google_signin_email <> "" Then
+			mail_to_email = google_signin_email
+		else
+			mail_to_email = Request("email")
+		end if
+
+		mail_to_name = "New Account Coupon"
 		mail_subject = "10% OFF coupon for registering"
-		mail_body = "<div style=""text-align:center""><img src=""https://www.bodyartforms.com/images/10-percent-off.png"" width=""250px""></div><br/><br/><strong>Hi " & mail_to_name & "!</strong><br/><br/>To show our appreciation for you registering an account at Bodyartforms, here is a one time 10% OFF coupon code <span style=""color:#74498C;font-weight:bold"">" & var_cert_code & "</span> that you can use through " & FormatDateTime(now()+29,2) & ". Simply use the code  <span style=""color:#74498C;font-weight:bold"">" & var_cert_code & "</span> at checkout to receive your discount :)<br/><br/>If you have any questions or need assistance please reply to this e-mail to get in touch with us or call customer service at (877) 223-5005"
+		mail_body = "<div style=""text-align:center""><img src=""https://www.bodyartforms.com/images/10-percent-off.png"" width=""250px""></div><br/><br/>To show our appreciation for you registering an account at Bodyartforms, here is a one time 10% OFF coupon code <span style=""color:#74498C;font-weight:bold"">" & var_cert_code & "</span> that you can use through " & FormatDateTime(now()+29,2) & ". Simply use the code  <span style=""color:#74498C;font-weight:bold"">" & var_cert_code & "</span> at checkout to receive your discount :)<br/><br/>If you have any questions or need assistance please reply to this e-mail to get in touch with us or call customer service at (877) 223-5005"
 		
 		Call baf_sendmail()
 	end if
 
 	if email_newsletter_signup_coupon = "yes" then ' Send out a one time use coupon (for newsletter signups)
 		google_utmsource = "Newsletter signup coupon"
-		mail_to_email = request.querystring("email")
+		mail_to_email = var_email
 		mail_to_name = ""
 		mail_subject = "15% OFF Bodyartforms Newsletter Welcome!"
 		mail_body = "<div style=""text-align:center""><img src=""https://www.bodyartforms.com/images/15-percent-off.png"" width=""250px""></div><br/><br/><strong>Hello!</strong><br/><br/>To show our appreciation for signing up for our newsletter at Bodyartforms, here is a one time 15% OFF coupon code <span style=""color:#74498C;font-weight:bold"">" & var_cert_code & "</span> that you can use through " & FormatDateTime(now()+29,2) & ". Simply use the code  <span style=""color:#74498C;font-weight:bold"">" & var_cert_code & "</span> at checkout to receive your discount :)<br/><br/>If you have any questions or need assistance please reply to this e-mail to get in touch with us or call customer service at (877) 223-5005"
@@ -111,11 +149,17 @@
 		mail_subject = "Bodyartforms order confirmation"
 
 		if pay_method_afterpay <> "yes" then
-			add_ons_link = "<a href=""https://bodyartforms.com/products.asp?new=Yes&addon=yes&id=" & Session("invoiceid") & """><span style=""display:inline-block;padding:.5em;font-family:arial,verdana,sans-serif;font-size:.9em;border-radius:.6em;background-color:#BBDBE6;font-weight:bold;border: #086A87 1px solid;cursor:pointer;color:#000;margin:1em 0"">Forgot something? Click here to add items before your order ships out</span></a><br/>"
+			add_ons_link = "<a href='https://bodyartforms.com/products.asp?new=Yes&addon=yes&id=" & Session("invoiceid") & "'><span style='display:inline-block;padding:10px;font-weight:bold;border:#696986 1px solid;cursor:pointer;color:#000000'>Forgot something? Click here to add items before your order ships out</span></a><br/><br/>"
 		end if
 		
 	
-		mail_body = "<strong>" + session("shipping_first") + ", thanks for your order!</strong><br/>Your order confirmation is below for your records.<br/><br/><table style=""width: 98%""><tr colspan=""2""><span style=""font-weight: bold; font-size: 1.5em;"">INVOICE #" & Session("invoiceid") & "</span><br/>" & add_ons_link & "</tr><tr><td style=""width: 50%; vertical-align:top""><strong><u>Shipping address</u></strong><br/>" + session("shipping_first") + " " + session("shipping_last") + " " + session("shipping_company") + "<br/>" + session("shipping_address1") + " " + session("shipping_address2") + "<br/>" + session("city") + ", " + session("state") + " " + session("shipping_province") + " " + session("shipping_zip") + "<br/>" + session("country") + "</td><td style=""width: 50%; vertical-align:top""><strong><u>Payment method</u></strong><br/>" + strCardType + " " + strBilling_cardnumber + "</td></tr></table><table style=""width: 98%; font-size: .9em;""><tr><td style=""width: 10%; background-color: #D8D8D8; padding: 1%; text-align: center;""><strong>Qty</strong></td><td style=""background-color: #D8D8D8; padding: 1%;""><strong>Description</strong></td><td style=""width: 10%; background-color: #D8D8D8; padding: 1%;""><strong>Price</strong></td><td style=""width: 10%; background-color: #D8D8D8; padding: 1%;""><strong>Line price</strong></td></tr>" + mail_order_details + "</table><table style=""width: 98%;""><tr><td style=""text-align: right; vertical-align: top;"">" + var_email_totals + "</td></tr></table><br/><br/>" + mail_questions_text + ""
+		mail_body = "<div style='text-align:center'><div style='font-family:Arial;font-weight:bold;font-size:26px'>THANKS FOR YOUR ORDER</div>We'll send you another email with your tracking information when your order ships out.<br><b>Invoice #</b> " & Session("invoiceid") & "<br><b>Order date:</b> " & date() & "<br><br>" & add_ons_link & "</div>" & _
+		"<div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>DELIVERY DETAILS</div><br/>" + session("shipping_first") + " " + session("shipping_last") + " " + session("shipping_company") + "<br/>" + session("shipping_address1") + " " + session("shipping_address2") + "<br/>" + session("city") + ", " + session("state") + " " + session("shipping_province") + " " + session("shipping_zip") + "<br/>" + session("country") + "</td></tr></table>" & _
+		"<br/><br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS ORDERED</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
+		if mail_free_items <> "" then 
+			mail_body = mail_body & "<div style='font-weight:bold;padding-top:5px;padding-bottom:5px'>FREE ITEMS</div>" & mail_free_items
+		end if 
+		mail_body = mail_body & "<div style='text-align:right;background-color:#e6e6e6;border-bottom: 1px solid rgb(100, 100, 100);border-top: 1px solid rgb(100, 100, 100);margin-top:20px;margin-bottom:20px;padding:20px'>" & var_email_totals & "</div>"
 		
 		Call baf_sendmail()
 
@@ -127,7 +171,13 @@
 		mail_to_name = session("shipping_first")
 		mail_subject = "Bodyartforms add-ons order confirmation"
 		
-		mail_body = "<strong>" & session("shipping_first") & ", thanks for your order!</strong><br/>Your order add-ons confirmation is below for your records.<br/><br/><table style=""width: 98%""><tr colspan=""2""><span style=""font-weight: bold; font-size: 1.5em;"">INVOICE #" & Session("invoiceid") & "</span></tr><tr><td style=""width: 50%; vertical-align:top""><strong><u>Shipping address</u></strong><br/>" & session("shipping_first") & " " & session("shipping_last") & " " & session("shipping_company") & "<br/>" & session("shipping_address1") & " " & session("shipping_address2") & "<br/>" & session("city") & ", " & session("state") & " " & session("shipping_province") & " " & session("shipping_zip") & "<br/>" & session("country") & "</td><td style=""width: 50%; vertical-align:top""><strong><u>Payment method</u></strong><br/>" & strCardType & " " & strBilling_cardnumber & "</td></tr></table><table style=""width: 98%; font-size: .9em;""><tr><td style=""width: 10%; background-color: #D8D8D8; padding: 1%; text-align: center;""><strong>Qty</strong></td><td style=""background-color: #D8D8D8; padding: 1%;""><strong>Description</strong></td><td style=""width: 10%; background-color: #D8D8D8; padding: 1%;""><strong>Price</strong></td><td style=""width: 10%; background-color: #D8D8D8; padding: 1%;""><strong>Line price</strong></td></tr>" & mail_order_details & "</table><table style=""width: 98%;""><tr><td style=""text-align: right; vertical-align: top;"">" & var_email_totals & "</td></tr></table><br/><br/>" & mail_questions_text & ""
+		mail_body = "<div style='text-align:center'><div style='font-family:Arial;font-weight:bold;font-size:26px'>ADD ONS ORDER CONFIRMATION</div><br><b>Items added to invoice #</b> " & Session("invoiceid") & "<br><b>Order date:</b> " & date() & "<br><br>" & add_ons_link & "</div>" & _
+		"<div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>DELIVERY DETAILS</div><br/>" + session("shipping_first") + " " + session("shipping_last") + " " + session("shipping_company") + "<br/>" + session("shipping_address1") + " " + session("shipping_address2") + "<br/>" + session("city") + ", " + session("state") + " " + session("shipping_province") + " " + session("shipping_zip") + "<br/>" + session("country") + "</td></tr></table>" & _
+		"<br/><br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS ORDERED</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
+		if mail_free_items <> "" then 
+			mail_body = mail_body & "<div style='font-weight:bold;padding-top:5px;padding-bottom:5px'>FREE ITEMS</div>" & mail_free_items
+		end if 
+		mail_body = mail_body & "<div style='text-align:right;background-color:#e6e6e6;border-bottom: 1px solid rgb(100, 100, 100);border-top: 1px solid rgb(100, 100, 100);margin-top:20px;margin-bottom:20px;padding:20px'>" & var_email_totals & "</div>"
 		
 		Call baf_sendmail()
 	end if ' add-ons payment approved
@@ -144,7 +194,12 @@
 		
 		var_invoiceid = Session("invoiceid")
 			
-		mail_body = "<strong>" + var_shipping_first + ", thanks for your order!</strong><br/>Your order confirmation is below for your records.<br/><br/><p>For money order and cash payments, only US funds are accepted.  If payment is sent in any currency other than US funds, your payment will be returned to you.  We cannot accept checks, money grams, or wire transfers.</p><br/><p>We recommend adding insurance or tracking on any payments sent.  We are not responsible for payments lost in shipping.</p><br/><p><strong>For money order payments:</strong><br/>The best place to get a money order is at your bank or post office. Please be sure the money order is in US funds and that the payment is made out to Bodyartforms.  Please also include your invoice # on the money orders FOR line. The address to send payment to is below. After we receive payment your order will ship out the following business day.<br/><br/><p><strong>For cash payments:</strong><br/>Please send US funds wrapped in an extra piece of paper to conceal it in the envelope. The address to send payment to is below. After we receive payment your order will ship out the following business day. <i>Please do not send coins in your envelope. If you do, it may tear the envelope and cause the funds to be lost.</i></p><br/><p><strong>Cancellations and order changes:</strong><br/><p>If you need to cancel your order, simply do not send payment in and it will cancel itself out after 60 days. If you need to make a change to your order, you can place a new order and send payment in for the new order only.</p><p><i>When sending in payment, please be sure to put your full name and mailing address, as well as the invoice #, on the envelope.</i></p><br/><strong>Send payment to:</strong><br/>Bodyartforms<br/>1966 S. Austin Ave.<br/>Georgetown, TX  78626</p><br/><br/><br/><table style=""width: 98%""><tr colspan=""2""><span style=""font-weight: bold; font-size: 1.5em;"">INVOICE # " & Session("invoiceid") & "</span></tr><tr><td style=""width: 50%; vertical-align:top""><strong><u>Shipping address</u></strong><br/>" + var_shipping_first + " " + var_shipping_last + " " + var_shipping_company + "<br/>" + var_shipping_address1 + " " + var_shipping_address2 + "<br/>" + var_shipping_city + ", " + var_shipping_state + "" + var_shipping_province + "  " + var_shipping_zip + "<br/>" + var_shipping_country + "</td><td style=""width: 50%; vertical-align:top""><strong><u>Payment method</u></strong><br/>CASH or MONEY ORDER</td></tr></table><table style=""width: 98%""><tr><td style=""width: 10%; background-color: #D8D8D8; padding: 1%; text-align: center;""><strong>Qty</strong></td><td style=""background-color: #D8D8D8; padding: 1%;""><strong>Description</strong></td><td style=""width: 10%; background-color: #D8D8D8; padding: 1%;""><strong>Price</strong></td><td style=""width: 10%; background-color: #D8D8D8; padding: 1%;""><strong>Line price</strong></td></tr>" + mail_order_details + "</table><table style=""width: 98%;""><tr><td style=""text-align: right; vertical-align: top;"">" + var_email_totals + "</td></tr></table><br/><br/>" + mail_questions_text + ""
+		mail_body = "<strong>" + var_shipping_first + ", thanks for your order!</strong><br/>Your order confirmation is below for your records.<br/><br/><p>For money order and cash payments, only US funds are accepted.  If payment is sent in any currency other than US funds, your payment will be returned to you.  We cannot accept checks, money grams, or wire transfers.</p><br/><p>We recommend adding insurance or tracking on any payments sent.  We are not responsible for payments lost in shipping.</p><br/><p><strong>For money order payments:</strong><br/>The best place to get a money order is at your bank or post office. Please be sure the money order is in US funds and that the payment is made out to Bodyartforms.  Please also include your invoice # on the money orders FOR line. The address to send payment to is below. After we receive payment your order will ship out the following business day.<br/><br/><p><strong>For cash payments:</strong><br/>Please send US funds wrapped in an extra piece of paper to conceal it in the envelope. The address to send payment to is below. After we receive payment your order will ship out the following business day. <i>Please do not send coins in your envelope. If you do, it may tear the envelope and cause the funds to be lost.</i></p><br/><p><strong>Cancellations and order changes:</strong><br/><p>If you need to cancel your order, simply do not send payment in and it will cancel itself out after 60 days. If you need to make a change to your order, you can place a new order and send payment in for the new order only.</p><p><i>When sending in payment, please be sure to put your full name and mailing address, as well as the invoice #, on the envelope.</i></p><br/><strong>Send payment to:</strong><br/>Bodyartforms<br/>1966 S. Austin Ave.<br/>Georgetown, TX  78626</p><br/>" & _
+		"<br/><br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS ORDERED</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
+		if mail_free_items <> "" then 
+			mail_body = mail_body & "<div style='font-weight:bold;padding-top:5px;padding-bottom:5px'>FREE ITEMS</div>" & mail_free_items
+		end if 
+		mail_body = mail_body & "<div style='text-align:right;background-color:#e6e6e6;border-bottom: 1px solid rgb(100, 100, 100);border-top: 1px solid rgb(100, 100, 100);margin-top:20px;margin-bottom:20px;padding:20px'>" & var_email_totals & "</div>"
 		
 		Call baf_sendmail()
 
