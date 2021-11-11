@@ -94,7 +94,7 @@ function setCurrency() {
 		$('#load_temps').load("checkout/inc_store_state_selection.asp", {state:cim_state}, function() {});
 		
 		var page = $("#ajax-shipping-options");
-		page.load("/checkout/ajax_display_shipping_usps.asp", {cim:var_cim_shipping, country:cim_country, zip:cim_zip}, function(status) {
+		page.load("/checkout/ajax_display_shipping_usps.asp", {cim:var_cim_shipping, country:cim_country, zip:cim_zip, address:cim_address, city:cim_city, state:cim_state}, function(status) {
 			$.get("/checkout/ajax_display_shipping_ups.asp", {cim:var_cim_shipping, country:cim_country, address: cim_address, city:cim_city, state:cim_state, zip:cim_zip}, function(html, status) {	
 				page.append(html);
 				triggerShippingSelection();
@@ -148,10 +148,14 @@ function setCurrency() {
 			
 			// set shipping on page load based on country drop down on form
 			var varcountry = $("#shipping-country").val();
-			var varzip = $("#shipping-zip").val();
+			var varzip = $("#shipping-zip").val();	
+			var address = $("input[name='shipping-address']").val() + " " + $("input[name='shipping-address2']").val();
+			var city = $("input[name='shipping-city']").val();
+			var state = $("select[name='shipping-state']").val();
+		
 			setCurrency();
 			var page = $("#ajax-shipping-options");
-			page.load("/checkout/ajax_display_shipping_usps.asp", {country: varcountry, zip:varzip}, function(status) {
+			page.load("/checkout/ajax_display_shipping_usps.asp", {country: varcountry, zip:varzip, address:address, city:city, state:state}, function(status) {
 				$('#shipping-loading').hide();
 				$.get("/checkout/ajax_display_shipping_ups.asp", {country: varcountry}, function(html, status) {	
 					page.append(html);
@@ -704,7 +708,7 @@ function setCurrency() {
 				//	console.log('CIM ' + var_cim_shipping + ', address ' + cim_address + ', state ' + cim_state);
 
 			var page = $("#ajax-shipping-options");
-			page.load("/checkout/ajax_display_shipping_usps.asp", {country:'USA', zip:varzip}, function(status) {
+			page.load("/checkout/ajax_display_shipping_usps.asp", {country:'USA', zip:varzip, address: varaddress, city:varcity, state:varstate}, function(status) {
 				$('#shipping-loading').hide();
 				$.get("/checkout/ajax_display_shipping_ups.asp", {address: varaddress, country:'USA', city:varcity, state:varstate, zip:varzip, add:'yes'}, function(html, status) {	
 					page.append(html);

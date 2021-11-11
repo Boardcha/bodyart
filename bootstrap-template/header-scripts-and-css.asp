@@ -24,6 +24,16 @@
   async type="text/javascript"
   src="//static.klaviyo.com/onsite/js/klaviyo.js?company_id=VnRhsk"
 ></script>
+<% If not rsGetUser.EOF and request.cookies("ID") <> "" then %>
+<script>
+    var _learnq = _learnq || [];
+    _learnq.push(['identify', {
+      '$email' : '<%= rsGetUser("email") %>',
+      '$first_name' : '<%= rsGetUser("customer_first") %>',
+      '$last_name' : '<%= rsGetUser("customer_last") %>'
+    }]);
+</script>
+<% end if %>
 
 
 

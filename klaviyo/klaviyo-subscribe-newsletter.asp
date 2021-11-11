@@ -36,7 +36,8 @@ End If
 		Response.End
 	End If
 	jsonResponseStr = resp.BodyStr
-	Response.Write "<br>Find member result: " &  jsonResponseStr
+	response.write jsonResponseStr
+	'Response.Write "<br>Find member result: " &  jsonResponseStr
 
 	'======= IF MEMBER IS NOT FOUND ... KLAVIYO RETURNS [] AS RESULT ... THEN SEND OUT THE ONE TIME COUPON ================
 	if jsonResponseStr = "[]" then
@@ -94,7 +95,7 @@ End If
 			Response.End
 		End If
 		jsonResponseStr = resp.BodyStr
-		Response.Write "<br>Subscribe member result: " & jsonResponseStr
+		'Response.Write "<br>Subscribe member result: " & jsonResponseStr
 
 	end if '===== If member is not found =======================================================
 

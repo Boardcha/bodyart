@@ -94,6 +94,17 @@ while NOT rsGoogle_GetOrderDetails.eof
 		}
 	  }
 	});
+
+	// Google Universal Analytics purchase behavior analysis tracking
+	window.dataLayer = window.dataLayer || [];
+	window.dataLayer.push({
+	'event':'UA_Checkout_Step_Purchase',
+	  'ecommerce': {
+		'checkout': {
+			'actionField': {'step': 'Purchase'}
+		}
+	  }
+	});
 </script>	
 
 

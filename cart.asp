@@ -307,9 +307,16 @@ end if 'if var_showgifts <> "no" only display on the viewcart page
 if var_other_items = 1 then 
 if request.cookies("OrderAddonsActive") = "" then
 %>
-<div class="card my-5">
-	<div class="card-header p-2">
-		<h5 class="m-0"><i class="fa fa-smile-bts text-secondary mr-2"></i>SELECT YOUR FREE ITEMS</h5>
+<div class="card my-5" style="border-color:#696887">
+	<div class="card-header p-2" style="background-color:#696887">
+	<div class="row">
+		<div class="col-8 text-left">
+			<h5 class="m-0 text-light"><i class="fa fa-chevron-down mr-2"></i>SELECT FREE ITEMS</h5>
+		</div>
+		<div class="col text-right">
+			<a class="btn btn-sm btn-outline-light" href="/free-items.asp" target="_blank" id="btn-view-free-items">See the full list!</a>
+		</div>
+	</div>
 	</div>
 	<div class="card-body py-3">
 			<% 

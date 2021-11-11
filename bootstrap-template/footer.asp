@@ -218,7 +218,7 @@ end if
         data-close-text="Got it!">
     </script>
 <% end if ' ONLY TO EU COUNTRIES %>
- <script type="text/javascript" src="/js-pages/footer.min.js?v=110321"></script>  
+ <script type="text/javascript" src="/js-pages/footer.min.js?v=111021"></script>  
 <% if request.cookies("adminuser") = "yes" then %>
 <script>
     // Toggle sandbox front end load

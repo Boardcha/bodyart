@@ -82,6 +82,14 @@ if var_other_items = 1 then
 			end if
 		end if
 
+		'EXP_estimated_delivery(expedited) and MAX_estimated_delivery(expedited max) variables are set in dhl-delivery-estimate.inc
+		If request("country") = "USA" AND request("address")<>"" AND request("city")<>"" AND request("state")<>"" AND request("zip")<>"" Then%>
+			<!--#include virtual="/dhl/dhl-delivery-estimate.inc"-->		
+		<%
+			EXP_estimated_delivery = getEstimatedDeliveryDate("EXP", request("address"), request("city"), request("state"), request("zip"), "")
+			MAX_estimated_delivery = getEstimatedDeliveryDate("MAX", request("address"), request("city"), request("state"), request("zip"), "")
+		End If
+		
 		sql_force_to_usps = ""
 		'========== ZIP CODES THAT DHL DOES NOT DELIVER TO AND NEED TO BE FORCED TO USPS ========
 		if request("zip") <> "" AND session("shipping-country") = "USA" then
@@ -146,7 +154,16 @@ if var_other_items = 1 then
 						<%= FormatCurrency(rsGetShippingOptions.Fields.Item("price").Value,2) %> - 
 						<%= rsGetShippingOptions.Fields.Item("ShippingName").Value %>
 					</div>
-					<%= rsGetShippingOptions.Fields.Item("ShippingDesc_Public").Value %>
+					<%
+					If EXP_estimated_delivery <> "" AND rsGetShippingOptions("ShippingName") = "DHL Basic mail" Then 
+						estimated_delivery_output = "Estimated delivery date:<br>" & WeekDayName(WeekDay(EXP_estimated_delivery)) & ", " & MonthName(Month(EXP_estimated_delivery)) & " " & Day(EXP_estimated_delivery)
+					ElseIf MAX_estimated_delivery <> "" AND rsGetShippingOptions("ShippingName") = "DHL Expedited Max" Then 
+						estimated_delivery_output = "Estimated delivery date:<br>" & WeekDayName(WeekDay(MAX_estimated_delivery)) & ", " & MonthName(Month(MAX_estimated_delivery)) & " " & Day(MAX_estimated_delivery)
+					Else
+						estimated_delivery_output = rsGetShippingOptions("ShippingDesc_Public") 
+					End If
+					%>
+					<%=estimated_delivery_output%>
 				</div>
 		</label>     
 		<% 

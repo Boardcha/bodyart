@@ -148,13 +148,22 @@ $("#homepage-newsletter-signup").on("click", function () {
       })
       .done(function(json) {
           if ($.isEmptyObject(json)) {
-              $("#homepage-newsletter-msg").html('<div class="alert alert-success m-0 p-2">Thanks for signing up!</div>').show().delay(5000).fadeOut("slow");
-              $("#homepage-newsletter-signup").hide();
-          } else {
-              $("#homepage-newsletter-msg").html('<div class="alert alert-danger m-0 p-2">Invalid email</div>').show().delay(5000).fadeOut("slow");
-              $("#homepage-newsletter-signup").html('Sign Up!');
-              $('#homepage_newsletter_email').show();
-          }
+            $("#homepage-newsletter-msg").html('<span class="alert alert-success m-0 p-2">Thanks for signing up!</span>').show();
+            $("#homepage-newsletter-signup").hide();
+        } 
+        if ($.isArray(json)) {
+            if ((json[0].id) != "") {
+                $("#homepage-newsletter-msg").html('<div class="alert alert-info m-0 p-2">You are already subscribed to our newsletter.</div>').show();
+                $("#homepage-newsletter-signup").hide();
+            }
+        } else {
+            if ((json.detail) != "") {
+                $("#homepage-newsletter-msg").html('<div class="alert alert-danger m-0 p-2">' + json.detail + '</div>').show().delay(5000).fadeOut("slow");
+                $("#homepage-newsletter-signup").html('Sign Up!');
+                $('#homepage_newsletter_email').show();
+            }
+
+        }     
       })
       .fail(function(json) {			
           $("#homepage-newsletter-msg").html('<div class="alert alert-danger">Website ajax error</div>').show();

@@ -656,12 +656,27 @@ window.dataLayer.push({
   }
 });
 
+// Klaviyo view item push
+var _learnq = _learnq || [];
+	var item = {
+	  "ProductName": '<%= rsProduct.Fields.Item("title").Value %>',
+	  "ProductID": '<%= rsProduct.Fields.Item("ProductID").Value %>',
+	  "ImageURL": 'https://bodyartforms-products.bodyartforms.com/<%= rsProduct.Fields.Item("largepic").Value %>',
+	  "URL": 'https://bodyartforms.com/productdetails.asp?productid=<%= rsProduct.Fields.Item("ProductID").Value %>',
+	  "Brand": '<%= rsProduct.Fields.Item("brandname").Value %>'
+	};
+	_learnq.push(["track", "Viewed Product", item]);
+
 
 // Regular Google UA Ecommerce data layer push for GTM - add to cart
 window.onload=function(){
 var button_addcart = document.getElementById('btn-add-cart');
 		button_addcart.addEventListener("click",function(e){
+
 			var qty = document.getElementById("add-qty").value;
+			var_detailid = $('.add-cart:checked').val();
+			var actual_price = $('.add-cart:checked').attr('data-actual-price');
+
 			var variant = document.querySelector("input[name=add-cart]:checked");
 			variant = variant.getAttribute("data-variant");
 			if (document.cookie.indexOf('currency') > -1 ) {
@@ -669,41 +684,42 @@ var button_addcart = document.getElementById('btn-add-cart');
 			} else {
 				var currency = 'USD'
 			}
-		window.dataLayer.push({
-		event: 'ua_add_to_cart',
-		ecommerce: {
-			'currencyCode': currency,
-			add: {
-			products: [{
-				id: '<%= rsProduct.Fields.Item("ProductID").Value %>',
-				name: '<%= rsProduct.Fields.Item("title").Value %>',
-				category: '<%= trim(rsProduct.Fields.Item("jewelry").Value) %>',
-				variant: variant,
-				brand: '<%= rsProduct.Fields.Item("brandname").Value %>',
-				quantity: qty
-				
-			}]
+			window.dataLayer.push({
+			event: 'ua_add_to_cart',
+			ecommerce: {
+				'currencyCode': currency,
+				add: {
+				products: [{
+					id: '<%= rsProduct.Fields.Item("ProductID").Value %>',
+					name: '<%= rsProduct.Fields.Item("title").Value %>',
+					category: '<%= trim(rsProduct.Fields.Item("jewelry").Value) %>',
+					variant: variant,
+					brand: '<%= rsProduct.Fields.Item("brandname").Value %>',
+					quantity: qty
+					
+				}]
+				}
 			}
-		}
-		});
-	});
+			});
+
+			//Klaviyo Add to cart push
+			_learnq.push(["track", "Added to Cart", {
+			"$value": actual_price * qty,
+			"AddedItemProductName": '<%= rsProduct.Fields.Item("title").Value %>',
+			"AddedItemProductID": '<%= rsProduct.Fields.Item("ProductID").Value %>',
+			"AddedItemSKU": var_detailid,
+			"AddedItemImageURL": 'https://bodyartforms-products.bodyartforms.com/<%= rsProduct.Fields.Item("largepic").Value %>',
+			"AddedItemURL": 'https://bodyartforms.com/productdetails.asp?productid=<%= rsProduct.Fields.Item("ProductID").Value %>',
+			"AddedItemPrice": actual_price,
+			"AddedItemQuantity": qty,
+			"CheckoutURL": "https://bodyartforms.com/checkout.asp"
+		}]);	
+
+	}); // listener for click button_addcart
+
 } // Run after window finishes loading
 </script>
 
-
-<script type="text/javascript">
-// Klaviyo view item push
-	var _learnq = _learnq || [];
-	var item = {
-	  "ProductName": '<%= rsProduct.Fields.Item("title").Value %>',
-	  "ProductID": '<%= rsProduct.Fields.Item("ProductID").Value %>',
-	  "ImageURL": '<%= rsProduct.Fields.Item("largepic").Value %>',
-	  "URL": 'https://bodyartforms.com/productdetails.asp?productid=<%= rsProduct.Fields.Item("ProductID").Value %>',
-	  "Brand": '<%= rsProduct.Fields.Item("brandname").Value %>'
-	};
-	_learnq.push(["track", "Viewed Product", item]);
-
-  </script>
 <% end if %>
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->

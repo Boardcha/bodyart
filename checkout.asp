@@ -1211,7 +1211,7 @@ end if
 <% end if %>
 <script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=102721"></script>
 <script type="text/javascript" src="/js-pages/cart.min.js?v=050319" async></script>
-<script type="text/javascript" src="/js-pages/checkout.min.js?v=110321"></script>
+<script type="text/javascript" src="/js-pages/checkout.min.js?v=111121"></script>
 <!-- Start Afterpay Javascript -->
 <!--
 <script src="https://portal.sandbox.afterpay.com/afterpay.js" async></script>-->

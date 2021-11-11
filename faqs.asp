@@ -304,40 +304,25 @@
 					</a>
 					<div id="faqshipping1" class="collapse" aria-labelledby="headshipping1" data-parent="#accordionShipping">
 						<div class="card-body">
-							
-									<ul>
-										<li>
-											<span class="bold">$3.95 DHL Basic mail</span> - Estimated delivery time 7-14 business days
-											<br/> This basic mail shipping will be free if your order is $25 or more!</li>
-										<li>
-											<span class="bold">$4.95 DHL Expedited Max</span> - Estimated delivery time is 3-4 business days after shipment</li>
-											<li>
-													<span class="bold">$4.95 USPS First Class Mail</span> - Estimated delivery time is 7-14 business days after shipment</li>
-													<li>
-															<span class="bold">$7.95 USPS Priority Mail</span> - Estimated delivery time is 2-3 business days after shipment</li>
-										<li>
-											<span class="bold">$13.95 USPS Priority mail (for heavier items) </span>- Estimated delivery time is 2-3 business days after shipment</li>
-										<li>
-											<span class="bold">$23.95 USPS Express mail </span>- Estimated delivery time is 1-2 business days after shipment</li>
-									</ul>
-									<strong>International options</strong> (Please be aware that these are all estimated delivery times below. If a package gets
-									pulled aside by customs in your country it *could* take up to 6-8 weeks to arrive.)
-									<ul>
-										<li>
-												<span class="bold">$4.95 DHL GlobalMail Packet Priority (All countries)</span> - TRACKABLE TO US BORDER ONLY - Estimated delivery time is 10-21 business days
-												<br/> This basic mail shipping will be discounted to $2.95 if your order is $25 or more!
-											</li>
-										<li>
-											<span class="bold">$6.95 Canada DHL GlobalMail Parcel Priority</span> - FULLY TRACKABLE - Estimated delivery time is 10-21 business days
-											<br/> This basic mail shipping will be discounted to $4.95 if your order is $25 or more!
-										</li>
-										<li>
-											<span class="bold">$7.95 All other countries DHL GlobalMail Parcel Priority</span> - FULLY TRACKABLE - Estimated delivery time is 10-21 business days
-											<br/> This basic mail shipping will be discounted to $5.95 if your order is $25 or more!
-										</li>
-										<li>
-											<span class="bold">$31.95 Priority mail international</span> - Estimated delivery time is 10-21 business days</li>
-									</ul>
+								<ul>
+<% 	
+	set objCmd = Server.CreateObject("ADODB.command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "SELECT IDShipping, ShippingAmount, ShippingName, ShippingDesc_Public, ShippingType, ShippingDiscount, DiscountSubtotal, Shipping_NameWebDisplay, FRMSelected, EstimatedShipDays FROM TBL_ShippingMethods ORDER BY CASE WHEN ShippingType = 'USA' THEN 1 WHEN ShippingType = 'Canada' THEN 2 ELSE 3 END ASC, sortorder asc, ShippingAmount ASC"
+	Set rsGetShippingOptions = objCmd.Execute()
+
+	While NOT rsGetShippingOptions.EOF 
+%>									
+			<li>
+				<strong><%= FormatCurrency(rsGetShippingOptions.Fields.Item("ShippingAmount").Value,2) %> - 
+					<%= rsGetShippingOptions("ShippingType") %>&nbsp;<%= rsGetShippingOptions.Fields.Item("ShippingName").Value %></strong><br>
+				<%= rsGetShippingOptions.Fields.Item("ShippingDesc_Public").Value %>
+			</li><br>								
+<%
+rsGetShippingOptions.MoveNext()
+Wend
+%>
+		</ul>
 						</div>
 					</div>
 				</div>
