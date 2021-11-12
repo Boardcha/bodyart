@@ -21,8 +21,8 @@ GetNotes_cmd.Parameters.Append GetNotes_cmd.CreateParameter("param1", 5, 1, -1, 
 Set GetNotes = GetNotes_cmd.Execute
 GetNotes_numRows = 0
 %>
-<% if (GetNotes.Fields.Item("country").Value) <> "USA" then
-shipping = "DHL Global basic ground"
+<% if GetNotes("country") <> "USA" AND GetNotes("country") <> "US" then
+shipping = "DHL GlobalMail Packet Priority"
 else
 shipping = "DHL Basic mail"
 end if

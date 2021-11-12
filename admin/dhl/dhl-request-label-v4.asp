@@ -6,10 +6,10 @@ Response.CharSet = "ISO-8859-1"
 Response.CodePage = 28591
 %>
 <!--#include virtual="/Connections/bodyartforms_sql_ADMIN.asp" -->
-<!--#include virtual="/Connections/dhl-auth-v4.asp"-->
+<!--#include virtual="/dhl/dhl-delivery-estimate.inc"-->
 <!--#include virtual="/functions/random_integer.asp"-->
-
 <%
+
 '==================== REMOVE ALL BASE64 IMAGES FROM DATABASE THAT ARE OVER 1 WEEK OLD ============
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
@@ -90,6 +90,7 @@ objCmd.CommandText = "SELECT top 100 PERCENT " & _
     "DiscountPercent, " & _
     "total_preferred_discount, " & _
     "total_coupon_discount, " & _
+	"CONVERT(VARCHAR(10), GETDATE(), 23) AS date_order_placed, " & _
     "pay_method " & _
     "FROM sent_items AS O " & _
     "INNER JOIN " & _
@@ -97,8 +98,10 @@ objCmd.CommandText = "SELECT top 100 PERCENT " & _
     "FROM TBL_OrderSummary " & _
     "GROUP BY InvoiceID " & _
     ") as d ON O.ID = d.InvoiceID " & _
-    " LEFT OUTER JOIN TBLDiscounts AS C ON O.coupon_code = C.DiscountCode" & _
+    " LEFT JOIN (SELECT DISTINCT DiscountCode, DiscountPercent FROM TBLDiscounts) AS C ON O.coupon_code = C.DiscountCode" & _
     " WHERE "  & sql_where
+	
+
 if request.querystring("single") = "yes" then
     '==== REQUEST SINGLE LABEL TO PRINT
         objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,12, request.querystring("invoiceid") ))
@@ -112,7 +115,7 @@ if rsGetOrder.EOF then
 end if
 
 While NOT rsGetOrder.EOF
-var_packageid = rsGetOrder.Fields.Item("OrderNumber").Value
+var_packageid =  rsGetOrder.Fields.Item("OrderNumber").Value
 
 var_address2 = ""
 if rsGetOrder.Fields.Item("ShipToAddress2").Value <> "" then
@@ -145,6 +148,7 @@ if rsGetOrder.Fields.Item("ShipToCountry").Value <> "USA" AND rsGetOrder.Fields.
 else '===== domestic shipment
     var_email =  """email"":""" & rsGetOrder.Fields.Item("ShipToEmail").Value & ""","
 end if
+
 
 json_dhl_shipments = """orderedProductId"":""" & var_shipping_type & """," & _
     """consigneeAddress"":{" & _
@@ -179,11 +183,27 @@ json_dhl_shipments = """orderedProductId"":""" & var_shipping_type & """," & _
         """declaredValue"": " & rsGetOrder.Fields.Item("OrderValue").Value & "," & _
         """dutiesPaid"": false" & _
     "}"  & _
-"}"
+"}" 
+
 
 json_dhl_customs_info = ""
 json_dhl_line_items = ""
-if rsGetOrder.Fields.Item("ShipToCountry").Value <> "USA" AND rsGetOrder.Fields.Item("ShipToCountry").Value <> "US" then 
+if rsGetOrder.Fields.Item("ShipToCountry").Value = "USA" OR rsGetOrder.Fields.Item("ShipToCountry").Value = "US" Then 'Domestic
+	date_order_placed = date()
+    request_label_page = "yes"
+	address = rsGetOrder.Fields.Item("ShipToAddress1").Value
+	city = rsGetOrder.Fields.Item("ShipToCity").Value 
+    state = rsGetOrder.Fields.Item("ShipToState").Value 
+    zip = rsGetOrder.Fields.Item("ShipToZip").Value 
+
+	If rsGetOrder("shipping_type") = "DHL Basic mail" Then 
+		estimated_delivery_date = getEstimatedDeliveryDate("EXP", address, city, state, zip, date_order_placed)
+	End If	
+	If rsGetOrder("shipping_type") = "DHL Expedited Max" Then 
+		estimated_delivery_date = getEstimatedDeliveryDate("MAX", address, city, state, zip, date_order_placed)
+	End If	
+	
+Else 'International
 
     set objCmd = Server.CreateObject("ADODB.command")
     objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
@@ -309,10 +329,11 @@ else ' === IF SUCCESS
 
     set objCmd = Server.CreateObject("ADODB.command")
     objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
-    objCmd.CommandText = "UPDATE sent_items SET USPS_tracking = ?, dhl_package_id = ?, dhl_base64_shipping_label = ? WHERE ID = ?"
+    objCmd.CommandText = "UPDATE sent_items SET USPS_tracking = ?, dhl_package_id = ?, dhl_base64_shipping_label = ?, estimated_delivery_date = ? WHERE ID = ?"
     objCmd.Parameters.Append(objCmd.CreateParameter("tracking",200,1,500,var_dhl_package_id))
     objCmd.Parameters.Append(objCmd.CreateParameter("dhl_package_id",200,1,1000, var_dhl_package_id))
     objCmd.Parameters.Append(objCmd.CreateParameter("dhl_base64_shipping_label",200,1,-1, dhl_base64_shipping_label))
+	objCmd.Parameters.Append(objCmd.CreateParameter("estimated_delivery_date",200,1,30, estimated_delivery_date))
     objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,12,rsGetOrder.Fields.Item("OrderNumber").Value))
     objCmd.Execute()
 

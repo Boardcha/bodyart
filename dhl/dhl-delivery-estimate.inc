@@ -18,6 +18,12 @@ Function getEstimatedDeliveryDate(shipping_type, address, city, state, zip, str_
 	end if
 	shipment_date = Year(shipment_date) & "-" &  Pd(Month(shipment_date),2) & "-" & Pd(DAY(shipment_date),2) 
 
+	'====== IF REQUEST IS BEING MADE FROM /admin/dhl/dhl-request-label-v4.asp THEN REWRITE VARIABLE TO SHIP OUT TODAY. THE ONLY TIME LABELS ARE EVER REQUESTED IS THE DAY OF SHIPMENT =========
+	if request_label_page = "yes" then 
+		shipment_date = Year(date()) & "-" &  Pd(Month(date()),2) & "-" & Pd(DAY(date()),2)
+	end if
+
+
 	If address = "" Then address = Request("address")
 	If city = "" Then city = Request("city")
 	If state = "" Then state = Request("state")
@@ -110,4 +116,3 @@ Function pd(n, totalDigits)
 End Function 
 '======================================================================================
 %>
-

@@ -261,7 +261,37 @@
 		
 		Call baf_sendmail()
 	end if ' order-shipment-notification
+	
+	if mailer_type = "OUT_FOR_DELIVERY" then 
+		google_utmsource = "Order out for delivery notification"
+		mail_to_email = var_email
+		mail_to_name = var_first
+		mail_subject = "Your Bodyartforms order is out for delivery today!"	
+		mail_body = "Hello " & mail_to_name & ",<br/><br/>This is an automated email to notify you that your order #" & var_invoiceid & " is out for delivery.<br/><br/>" & var_tracking & "<br/><br/>We appreciate your business very much!<br/>If you have any questions or need assistance with your order please reply to this e-mail to get in touch with us. We're here to help Mon - Fri from 9am - 5pm.<br/><br/>Customer service:  (877) 223-5005"
+		
+		Call baf_sendmail()
+	end if 
 
+	if mailer_type = "ORDER_DELIVERED" then 
+		google_utmsource = "Order delivered notification"
+		mail_to_email = var_email
+		mail_to_name = var_first
+		mail_subject = "Your Bodyartforms has been delivered!"	
+		mail_body = "Hello " & mail_to_name & ",<br/><br/>This is an automated email to notify you that your order #" & var_invoiceid & " has been delivered.<br/><br/>" & var_tracking & "<br/><br/>We appreciate your business very much!<br/>If you have any questions or need assistance with your order please reply to this e-mail to get in touch with us. We're here to help Mon - Fri from 9am - 5pm.<br/><br/>Customer service:  (877) 223-5005"
+		
+		Call baf_sendmail()
+	end if 
+
+	if mailer_type = "ORDER_DELAYED" then 
+		google_utmsource = "Order delayed notification"
+		mail_to_email = var_email
+		mail_to_name = var_first
+		mail_subject = "Notification - Your Bodyartforms shipment is delayed"	
+		mail_body = "Hello " & mail_to_name & ",<br/><br/>This is an automated email to notify you that your order #" & var_invoiceid & " is delayed from the original delivery estimate date, " & var_estimated_delivery_date & ".<br/><br/>" & var_tracking & "<br/><br/>We're very sorry for any inconvenience!<br/>If you have any questions or need assistance with your order please reply to this e-mail to get in touch with us. We're here to help Mon - Fri from 9am - 5pm.<br/><br/>Customer service:  (877) 223-5005"
+		
+		Call baf_sendmail()
+	end if 
+	
 	if mailer_type = "cancelled_order" then ' front facing order cancellation
 		google_utmsource = "Cancelled order receipt"
 		mail_to_email = rsGetOrder.Fields.Item("email").Value
