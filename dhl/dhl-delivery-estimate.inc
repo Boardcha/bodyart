@@ -20,7 +20,7 @@ Function getEstimatedDeliveryDate(shipping_type, address, city, state, zip, str_
 
 	'====== IF REQUEST IS BEING MADE FROM /admin/dhl/dhl-request-label-v4.asp THEN REWRITE VARIABLE TO SHIP OUT TODAY. THE ONLY TIME LABELS ARE EVER REQUESTED IS THE DAY OF SHIPMENT =========
 	if request_label_page = "yes" then 
-		shipment_date = Year(date()) & "-" &  Pd(Month(date()),2) & "-" & Pd(DAY(date()),2)
+		shipment_date = Year(date_order_placed) & "-" &  Pd(Month(date_order_placed),2) & "-" & Pd(DAY(date_order_placed),2)
 	end if
 
 
@@ -29,11 +29,11 @@ Function getEstimatedDeliveryDate(shipping_type, address, city, state, zip, str_
 	If state = "" Then state = Request("state")
 	If zip = "" Then zip = Request("zip")
 
-	json_dhl_shipments = """pickup"":""" & dhl_production_pickup_num &"""," & _
+	json_dhl_estimated_date = """pickup"":""" & dhl_production_pickup_num &"""," & _
 	"""distributionCenter"":""" & dhl_production_distribution_center & ""","  & _
 	"""orderedProductId"":""" & shipping_type & """," & _	
 	"""consigneeAddress"":{" & _
-		"""name"":""Consignee""," & _
+		"""name"":""Bodyartforms""," & _
 		"""address1"":""" & address & """," & _
 		"""address2"":""""," & _
 		"""city"":""" & city & """," & _
@@ -79,7 +79,7 @@ Function getEstimatedDeliveryDate(shipping_type, address, city, state, zip, str_
 	success = sbAuthHeaderVal.Append(db_dhl_access_token)
 	rest.Authorization = sbAuthHeaderVal.GetAsString()
 
-	ResponseGetEstimates = rest.FullRequestString("POST","/shipping/v4/products", "{" & json_dhl_shipments & json_dhl_customs_info & "}")
+	ResponseGetEstimates = rest.FullRequestString("POST","/shipping/v4/products", "{" & json_dhl_estimated_date & json_dhl_customs_info & "}")
 
 	set JsonEstimates = Server.CreateObject("Chilkat_9_5_0.JsonObject")
 	JsonEstimates.EmitCompact = 0

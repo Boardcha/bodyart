@@ -33,7 +33,7 @@ guest_extra_key = "zqL)E5fZ8uB%5;yU2~HD" 'Static stored value just for extra sec
 		' Added this line on 6/27/17 to attempt to fix a 500 error    /cart/inc_cart_main.asp Line 26 Incorrect syntax near the keyword 'DEFAULT' 
 		var_guest_customer_id = guest_session
 
-	else
+	end if ' If no cookie is set request.cookies("cartSessionid") = ""
 	
 		'if session cookie is already set then do a compare hash to database to verify before retrieving userID variable
 
@@ -58,17 +58,19 @@ guest_extra_key = "zqL)E5fZ8uB%5;yU2~HD" 'Static stored value just for extra sec
 			
 			if hashed_compare_database = hashed_compare_cookies then
 				var_guest_customer_id = rsGetGuestUser.Fields.Item("guest_unique_id").Value
-			'	response.write "Successful match: " & var_guest_customer_id
+				'response.write "Successful match: " & var_guest_customer_id
 			end if
 		
 		rsGetGuestUser.movenext()
 		wend
 		
 	
-	end if ' If no cookie is set request.cookies("cartSessionid") = ""
-	
 end if	' If customer is NOT registered 
 
+'response.write "<br>guest_session: " & guest_session
+'response.write "<br>hashed_compare_database: " & hashed_compare_database
+'response.write "<br>hashed_compare_cookies: " & hashed_compare_cookies
+'response.write "<br>var_guest_customer_id: " & var_guest_customer_id
 ' Assign user ID for storing to tbl_carts
 if Request.Cookies("ID") = "" then 
 	session("guestID") = var_guest_customer_id ' used to transfer cart on signin_transfer page

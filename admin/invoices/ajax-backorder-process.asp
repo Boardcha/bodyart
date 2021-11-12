@@ -52,7 +52,7 @@ objCmd.CommandText = "SELECT * FROM sent_items WHERE ID = ?"
 objCmd.Parameters.Append(objCmd.CreateParameter("invoice",3,1,12,var_invoice))
 Set rsGetOrder = objCmd.Execute()
 
-if rsGetOrder.Fields.Item("country").Value <> "USA" AND GetNotes("country") <> "US" then
+if rsGetOrder("country") <> "USA" AND rsGetOrder("country") <> "US" then
 	shipping = "DHL GlobalMail Packet Priority"
 else
 	shipping = "DHL Basic mail"

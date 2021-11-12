@@ -10,7 +10,7 @@ if lCase(request("move_to_id")) = "new" then
 		objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,15,request("invoiceid")))
 		Set rsGetOldInvoice = objCmd.Execute()
 
-		if rsGetOldInvoice.Fields.Item("country").Value <> "USA"  AND GetNotes("country") <> "US"  then
+		if rsGetOldInvoice("country") <> "USA"  AND rsGetOldInvoice("country") <> "US"  then
 			shipping = "DHL GlobalMail Packet Priority"
 		else
 			shipping = "DHL Basic mail"
