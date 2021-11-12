@@ -101,7 +101,7 @@ while NOT rsGoogle_GetOrderDetails.eof
 	'event':'UA_Checkout_Step_Purchase',
 	  'ecommerce': {
 		'checkout': {
-			'actionField': {'step': 'Purchase'}
+			'actionField': {'step': 3}
 		}
 	  }
 	});
