@@ -28,6 +28,7 @@ If var_giftcert = "yes"  Then
 			SET objRS = Nothing 
 		  END IF
 		  SET rsCertCheckDupe = Nothing 
+		  CheckDupe = var_cert_code
 	End function 
 
 end if

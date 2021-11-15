@@ -60,7 +60,7 @@ If Not rsGetUser.EOF Then
 var_cert_code = getPassword(15, extraChars, firstNumber, firstLower, firstUpper, firstOther, latterNumber, latterLower, latterUpper, latterOther)
 
 ' Call function
-CheckDupe(var_cert_code)
+var_cert_code = CheckDupe(var_cert_code)
 
 ' Set extra mailer type
 email_onetime_coupon = "yes"

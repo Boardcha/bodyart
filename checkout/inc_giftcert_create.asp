@@ -5,7 +5,7 @@ If var_giftcert = "yes"  Then
 		var_cert_code = strRandomCode
 	
 		' Call function
-		CheckDupe(var_cert_code)
+		var_cert_code = CheckDupe(var_cert_code)
 
 		' Set array
 		certificate_array =split(rs_getCart.Fields.Item("cart_preorderNotes").Value,"{}")

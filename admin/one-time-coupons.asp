@@ -16,7 +16,7 @@ For i = 1 To request.form("qty")
 		var_cert_code = getPassword(15, extraChars, firstNumber, firstLower, firstUpper, firstOther, latterNumber, latterLower, latterUpper, latterOther)
 	
 		' Call function
-		CheckDupe(var_cert_code)
+		var_cert_code = CheckDupe(var_cert_code)
 		
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn

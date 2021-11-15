@@ -26,5 +26,6 @@
 			SET objRS = Nothing 
 		  END IF
 		  SET rsPhotoCheckDupe = Nothing 
+		  CheckDupe = var_new_filename
 	End function 
 %>

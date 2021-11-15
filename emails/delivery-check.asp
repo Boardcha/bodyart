@@ -123,7 +123,7 @@ Function getDeliveryStatus(trackingNumber)
 	set JsonTracking = Server.CreateObject("Chilkat_9_5_0.JsonObject")
 	JsonTracking.EmitCompact = 0
 	JsonTracking.Load(ResponseGetTrack)
-	'Response.Write "<pre>" & Server.HTMLEncode( JsonTracking.Emit()) & "</pre>"
+	Response.Write "<pre>" & Server.HTMLEncode( JsonTracking.Emit()) & "</pre>"
 
 	If JsonTracking.IntOf("packages") <> "" Then 
 

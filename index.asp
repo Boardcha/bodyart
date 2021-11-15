@@ -35,17 +35,17 @@ Set rsGetTestimonials = DataConn.Execute(SqlString)
 	<% While NOT rsGetSliders.EOF %>
 		<a class="homepage-graphic" href="<%=rsGetSliders("url")%>" id="<%=rsGetSliders("slider_name")%>">
 			<picture>
-				<source media="(max-width: 550px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img550x350")%>">
-				<source media="(max-width: 850px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img850x350")%>">
-				<source media="(max-width: 1024px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img1024x350")%>">
-				<source media="(max-width: 1600px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img1600x350")%>">
-				<source media="(min-width: 1920px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img1920x350")%>">
-					<img class="img-fluid hero-slider" src="<%=rsGetSliders("img1600x350")%>" 
-				srcset="https://sliders.bodyartforms.com/<%=rsGetSliders("img1920x350")%> 1920w,
-				https://sliders.bodyartforms.com/<%=rsGetSliders("img1600x350")%> 1600w,
-				https://sliders.bodyartforms.com/<%=rsGetSliders("img1024x350")%> 1024w,
-				https://sliders.bodyartforms.com/<%=rsGetSliders("img850x350")%> 850w,
-				https://sliders.bodyartforms.com/<%=rsGetSliders("img550x350")%> 550w"
+				<source media="(max-width: 550px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=Server.UrlEncode(rsGetSliders("img550x350"))%>">
+				<source media="(max-width: 850px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=Server.UrlEncode(rsGetSliders("img850x350"))%>">
+				<source media="(max-width: 1024px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=Server.UrlEncode(rsGetSliders("img1024x350"))%>">
+				<source media="(max-width: 1600px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=Server.UrlEncode(rsGetSliders("img1600x350"))%>">
+				<source media="(min-width: 1920px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/<%=Server.UrlEncode(rsGetSliders("img1920x350"))%>">
+					<img class="img-fluid hero-slider" src="<%=Server.UrlEncode(rsGetSliders("img1600x350"))%>" 
+				srcset="https://sliders.bodyartforms.com/<%=Server.UrlEncode(rsGetSliders("img1920x350"))%> 1920w,
+				https://sliders.bodyartforms.com/<%=Server.UrlEncode(rsGetSliders("img1600x350"))%> 1600w,
+				https://sliders.bodyartforms.com/<%=Server.UrlEncode(rsGetSliders("img1024x350"))%> 1024w,
+				https://sliders.bodyartforms.com/<%=Server.UrlEncode(rsGetSliders("img850x350"))%> 850w,
+				https://sliders.bodyartforms.com/<%=Server.UrlEncode(rsGetSliders("img550x350"))%> 550w"
 				sizes="100vw"
 				alt="<%=rsGetSliders("slider_name")%>" />
 			</picture>

@@ -142,7 +142,7 @@ var_create_neworder = ""
                         var_cert_code = strRandomCode
         
                         '======= Call function to check for duplicates
-                        CheckDupe(var_cert_code)
+                        var_cert_code = CheckDupe(var_cert_code)
 
 
                         set objCmd = Server.CreateObject("ADODB.command")
