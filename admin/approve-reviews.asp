@@ -16,7 +16,7 @@ bootstrapped = "yes"
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
 objCmd.Prepared = true
-objCmd.CommandText = "SELECT TOP (100) PERCENT TBLReviews.ReviewID, review_rating, TBLReviews.email, jewelry.title, jewelry.ProductID, TBLReviews.review, TBLReviews.name, TBLReviews.status, TBLReviews.customer_ID, TBLReviews.ReviewOrderDetailID, jewelry.picture, TBLReviews.DetailID, ProductDetails.Gauge, ProductDetails.Length, ProductDetails.ProductDetail1, customers.customer_first, customers.customer_last, tblreviews.date_submitted, cs_flagged, InvoiceID FROM jewelry INNER JOIN TBLReviews ON jewelry.ProductID = TBLReviews.ProductID INNER JOIN ProductDetails ON TBLReviews.DetailID = ProductDetails.ProductDetailID INNER JOIN customers ON TBLReviews.customer_ID = customers.customer_ID INNER JOIN TBL_OrderSummary ON TBLReviews.ReviewOrderDetailID = TBL_OrderSummary.OrderDetailID WHERE (TBLReviews.status = N'pending') ORDER BY ReviewID ASC"
+objCmd.CommandText = "SELECT TOP (100) PERCENT TBLReviews.ReviewID, TBLReviews.review_edited, TBLReviews.customer_edit_date, review_rating, TBLReviews.email, jewelry.title, jewelry.ProductID, TBLReviews.review, TBLReviews.name, TBLReviews.status, TBLReviews.customer_ID, TBLReviews.ReviewOrderDetailID, jewelry.picture, TBLReviews.DetailID, ProductDetails.Gauge, ProductDetails.Length, ProductDetails.ProductDetail1, customers.customer_first, customers.customer_last, tblreviews.date_submitted, cs_flagged, InvoiceID FROM jewelry INNER JOIN TBLReviews ON jewelry.ProductID = TBLReviews.ProductID INNER JOIN ProductDetails ON TBLReviews.DetailID = ProductDetails.ProductDetailID INNER JOIN customers ON TBLReviews.customer_ID = customers.customer_ID INNER JOIN TBL_OrderSummary ON TBLReviews.ReviewOrderDetailID = TBL_OrderSummary.OrderDetailID WHERE (TBLReviews.status = N'pending') ORDER BY ReviewID ASC"
 set rsGetReviews = Server.CreateObject("ADODB.Recordset")
 rsGetReviews.CursorLocation = 3 'adUseClient
 rsGetReviews.Open objCmd
@@ -52,11 +52,12 @@ end select
 
 rsGetReviews.AbsolutePage = intPage '======== PAGING
 For intRecord = 1 To rsGetReviews.PageSize 
+	If Not IsNull(rsGetReviews("customer_edit_date")) Then review_edited = true Else review_edited = false
 %>
 
     <div class="col-12 col-xl-3 col-break1600-3 col-break1900-2 my-3 px-1 px-md-2" id="column_<%= rsGetReviews.Fields.Item("ReviewID").Value %>">
    <div class="card bg-light">
-    <div class="card-heaader p-2">
+    <div class="card-heaader px-2 pb-0">
         <a href="/productdetails.asp?ProductID=<%=(rsGetReviews.Fields.Item("ProductID").Value)%>" target="_blank"><img class="pull-left mr-2" style="height:50px;width:50px" src='http://bodyartforms-products.bodyartforms.com/<%=(rsGetReviews.Fields.Item("picture").Value)%>'   /></a> 
         <div><%=(rsGetReviews.Fields.Item("title").Value)%></div>
         <div class="font-weight-bold">
@@ -66,13 +67,23 @@ For intRecord = 1 To rsGetReviews.PageSize
             <% 	for i = 1 to rsGetReviews.Fields.Item("review_rating").Value %>
                  <i class="fa fa-star fa-lg"></i>
              <% next %>
-           </span> - <%= rsGetReviews.Fields.Item("date_submitted").Value %>
+           </span> 
+		   - <%
+		   If review_edited Then 
+				Response.Write rsGetReviews("customer_edit_date") %>
+				<div class="alert alert-info p-1 mt-2"><strong>Original review:</strong><br>
+                    <%=Server.HTMLEncode(rsGetReviews("review"))%>
+                </div>
+                <strong>Edited review:</strong>
+		   <%Else 
+				Response.Write rsGetReviews("date_submitted") 
+		   End If
+		   %>	
     </div> 
-    <div class="card-body p-2">
-        <form class="frm-reviews" name="frm-reviews" data-id="<%= rsGetReviews.Fields.Item("ReviewID").Value %>">
+    <div class="card-body px-2 py-1">
+        <form class="frm-reviews" name="frm-reviews" data-id="<%= rsGetReviews.Fields.Item("ReviewID").Value %>" data-edited="<%If review_edited Then Response.Write "yes"%>">
             
-              <textarea name="Review" cols="40" rows="5" class="form-control form-control-sm mb-2" id="Review"><%=(rsGetReviews.Fields.Item("review").Value)%>
-              </textarea>
+              <textarea name="Review" cols="40" rows="5" class="form-control form-control-sm mb-2" id="Review"><%If review_edited Then Response.Write rsGetReviews("review_edited") Else Response.Write rsGetReviews("review") %></textarea>
             
               <select name="vote" class="form-control form-control-sm" >
                          <option value="accepted" selected="selected">Accept</option>
@@ -156,11 +167,12 @@ DataConn.Close()
 	
 	$('.frm-reviews').submit(function(e) {
         var reviewid = $(this).attr('data-id');
+		var review_edited = $(this).attr('data-edited');
         console.log(reviewid);
 		$.ajax({
 		method: "post",
 		url: "customers/ajax-accept-jewelry-review.asp",
-		data: $(this).serialize()
+		data: $(this).serialize() + "&review-edited=" + review_edited
 		})
 		.done(function(msg) {
 			$('#column_' + reviewid ).fadeOut( "slow", function() {

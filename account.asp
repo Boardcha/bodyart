@@ -349,7 +349,7 @@ If rsGetOrderTotals.Fields.Item("subtotal").Value + rsGetOrderTotals.Fields.Item
 <%
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT TOP (100) PERCENT TBL_OrderSummary.InvoiceID AS ID, TBL_OrderSummary.OrderDetailID, TBL_OrderSummary.qty, jewelry.title, ProductDetails.ProductDetail1, TBL_OrderSummary.returned, TBL_OrderSummary.item_price, TBL_OrderSummary.backorder, TBL_OrderSummary.ProductReviewed, TBL_OrderSummary.ProductPhotographed, TBL_OrderSummary.PreOrder_Desc, ProductDetails.Gauge, ProductDetails.Length, ProductDetails.free, jewelry.picture, TBL_PhotoGallery.status, TBLReviews.status AS ReviewStatus, TBLReviews.review_rating, jewelry.jewelry, TBL_PhotoGallery.PhotoID, ISNULL(TBL_OrderSummary.notes,'') as notes, ProductDetails.ProductDetailID, ProductDetails.ProductID, title + ' ' + Gauge + ' ' + Length + ' ' + ProductDetail1 as 'concat-title' FROM  dbo.TBL_OrderSummary INNER JOIN dbo.ProductDetails ON dbo.TBL_OrderSummary.DetailID = dbo.ProductDetails.ProductDetailID INNER JOIN dbo.jewelry ON dbo.ProductDetails.ProductID = dbo.jewelry.ProductID FULL OUTER JOIN dbo.TBLReviews ON dbo.TBL_OrderSummary.OrderDetailID = dbo.TBLReviews.ReviewOrderDetailID FULL OUTER JOIN dbo.TBL_PhotoGallery ON dbo.TBL_OrderSummary.OrderDetailID = dbo.TBL_PhotoGallery.OrderDetailID WHERE TBL_OrderSummary.InvoiceID = ? ORDER BY OrderDetailID ASC"
+objCmd.CommandText = "SELECT TOP (100) PERCENT TBL_OrderSummary.InvoiceID AS ID, TBL_OrderSummary.OrderDetailID, TBL_OrderSummary.qty, jewelry.title, ProductDetails.ProductDetail1, TBL_OrderSummary.returned, TBL_OrderSummary.item_price, TBL_OrderSummary.backorder, TBL_OrderSummary.ProductReviewed, TBL_OrderSummary.ProductPhotographed, TBL_OrderSummary.PreOrder_Desc, ProductDetails.Gauge, ProductDetails.Length, ProductDetails.free, jewelry.picture, TBL_PhotoGallery.status, TBLReviews.status AS ReviewStatus, TBLReviews.review_rating, TBLReviews.review, TBLReviews.review_edited, jewelry.jewelry, TBL_PhotoGallery.PhotoID, ISNULL(TBL_OrderSummary.notes,'') as notes, ProductDetails.ProductDetailID, ProductDetails.ProductID, title + ' ' + Gauge + ' ' + Length + ' ' + ProductDetail1 as 'concat-title' FROM  dbo.TBL_OrderSummary INNER JOIN dbo.ProductDetails ON dbo.TBL_OrderSummary.DetailID = dbo.ProductDetails.ProductDetailID INNER JOIN dbo.jewelry ON dbo.ProductDetails.ProductID = dbo.jewelry.ProductID FULL OUTER JOIN dbo.TBLReviews ON dbo.TBL_OrderSummary.OrderDetailID = dbo.TBLReviews.ReviewOrderDetailID FULL OUTER JOIN dbo.TBL_PhotoGallery ON dbo.TBL_OrderSummary.OrderDetailID = dbo.TBL_PhotoGallery.OrderDetailID WHERE TBL_OrderSummary.InvoiceID = ? ORDER BY OrderDetailID ASC"
 objCmd.Parameters.Append(objCmd.CreateParameter("InvoiceID",3,1,10,rsGetOrders.Fields.Item("ID").Value))
 Set rsGetOrderDetails = objCmd.Execute()
 
@@ -374,16 +374,16 @@ While not rsGetOrderDetails.eof
 
 	'    JEWELRY REVIEWS	
 	if rsGetOrderDetails.Fields.Item("ProductReviewed").Value = "N" then
-		var_review_info = "<button class=""btn btn-light btn-sm btn-update-attributes btn-clear-forms btn-review-modal review-phase1-" & rsGetOrderDetails.Fields.Item("OrderDetailID").Value & """ type=""button"" data-orderitemid=""" & rsGetOrderDetails.Fields.Item("OrderDetailID").Value &""" data-title=""" & rsGetOrderDetails.Fields.Item("concat-title").Value &""" data-toggle=""modal"" data-target=""#reviewModal""><i class=""fa fa-star-half-o fa-lg""></i></button>"	
+		var_review_info = "<button class=""btn btn-light btn-sm btn-update-attributes btn-clear-forms btn-review-modal review-phase1-" & rsGetOrderDetails.Fields.Item("OrderDetailID").Value & """ type=""button"" data-orderitemid=""" & rsGetOrderDetails.Fields.Item("OrderDetailID").Value &""" data-title=""" & rsGetOrderDetails.Fields.Item("concat-title").Value &""" data-action='Rate & Review' data-reward='Earn 1 point for each accepted review!' data-orig-review='' data-toggle=""modal"" data-target=""#reviewModal""><i class=""fa fa-star-half-o fa-lg""></i></button>"	
 	end if
 	if rsGetOrderDetails.Fields.Item("ReviewStatus").Value = "pending" then
-		var_review_info = "<span class=""btn btn-sm alert-success""><i class=""fa fa-star-half-o fa-lg""></i></span>"
+		var_review_info = "<span title=""Pending"" class=""btn btn-sm alert-success""><i class=""fa fa-star-half-o fa-lg""></i></span>"
 	end if
 	if rsGetOrderDetails.Fields.Item("ReviewStatus").Value = "rejected" then
-			var_review_info = "<button class=""btn btn-danger btn-sm btn-update-attributes btn-clear-forms btn-review-modal review-phase1-" & rsGetOrderDetails.Fields.Item("OrderDetailID").Value & """ type=""button"" data-orderitemid=""" & rsGetOrderDetails.Fields.Item("OrderDetailID").Value &""" data-title=""" & rsGetOrderDetails.Fields.Item("concat-title").Value &""" data-toggle=""modal"" data-target=""#reviewModal""><i class=""fa fa-star-half-o fa-lg""></i></button>"
+			var_review_info = "<button class=""btn btn-danger btn-sm btn-update-attributes btn-clear-forms btn-review-modal review-phase1-" & rsGetOrderDetails.Fields.Item("OrderDetailID").Value & """ type=""button"" data-orderitemid=""" & rsGetOrderDetails.Fields.Item("OrderDetailID").Value &""" data-title=""" & rsGetOrderDetails.Fields.Item("concat-title").Value &""" data-action='Rate & Review'  data-reward='Earn 1 point for each accepted review!' data-orig-review='' data-toggle=""modal"" data-target=""#reviewModal""><i class=""fa fa-star-half-o fa-lg""></i></button>"
 	end if ' for review
 	if rsGetOrderDetails.Fields.Item("ReviewStatus").Value = "accepted" then
-		var_review_info = ""
+		var_review_info = "<button class=""btn btn-light btn-sm alert-success btn-update-attributes btn-clear-forms btn-review-modal review-phase1-" & rsGetOrderDetails.Fields.Item("OrderDetailID").Value & """ type=""button"" data-edit=""yes"" data-orderitemid=""" & rsGetOrderDetails.Fields.Item("OrderDetailID").Value &""" data-title=""" & rsGetOrderDetails.Fields.Item("concat-title").Value &""" data-action='Edit Your Review'  data-reward='' data-orig-review='<strong>Your original review:</strong>' data-toggle=""modal"" data-target=""#reviewModal""><i class=""fa fa-star fa-lg""></i></button>"	
 	end if
 	
 	'    PHOTO REVIEWS
@@ -420,7 +420,7 @@ While not rsGetOrderDetails.eof
 						<a href="/productdetails.asp?ProductID=<%= rsGetOrderDetails.Fields.Item("ProductID").Value %>" target="_self">
 				<img class="img-fluid" src="https://bafthumbs-400.bodyartforms.com/<%= rsGetOrderDetails.Fields.Item("picture").Value %>" alt="Product photo"></a>
 				<div class="position-absolute order-img-icons p-0 m-0">
-						<%= var_review_info %>
+						<span class="review-info-<%=rsGetOrderDetails.Fields.Item("OrderDetailID").Value%>"><%= var_review_info %></span>
 						<%= var_photo_info %>
 					</div>
 			</div>
@@ -961,7 +961,7 @@ By clicking the start button below, you'll be taken to our product search where 
 		<div class="modal-body">
 			<div id="review-body">
 			<h6 class="title"></h6>
-						Earn 1 point for each accepted review!
+						<div id="review-reward">Earn 1 point for each accepted review!</div>
 						<div class="container">
 								
 							<div class="form-check form-check-inline starrating d-flex justify-content-center flex-row-reverse">
@@ -976,14 +976,18 @@ By clicking the start button below, you'll be taken to our product search where 
 								</div>
 							</div>
 						
-					  </div>	
+					  </div>
+					  <div id="orig-review"></div>	
 					<div class="form-group">
-					<textarea class="form-control" name="review" id="text-review" minlength="10" maxlength="2000" rows="7" placeholder="Type your review here" required></textarea>
+					<textarea class="form-control" name="review" id="text-review" minlength="10" maxlength="2000" rows="7" placeholder="Type your review here" required>
+					
+					</textarea>
 					<div class="invalid-feedback">
 						Text review is required
 				</div>
 				</div>
 				<input type="hidden" value="" name="order_detail_id" id="review_order_detail_id">
+				<input type="hidden" value="" name="review_edit" id="review_edit">
 			</div>
 			<div id="message-review-modal" class="modal-message"></div>
 		</div>
@@ -1099,4 +1103,4 @@ By clicking the start button below, you'll be taken to our product search where 
 <% end if   'rsGetUser.EOF %>
 
 <!--#include virtual="/bootstrap-template/footer.asp" -->
-<script type="text/javascript" src="/js-pages/order-history.min.js?v=102821"></script> 
+<script type="text/javascript" src="/js-pages/order-history.min.js?v=111521"></script> 

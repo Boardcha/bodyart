@@ -2,8 +2,6 @@
 <!--#include virtual="/Connections/bodyartforms_sql_ADMIN.asp" -->
 
 <%
-
-
 	var_status = "accepted"
 	' Set variable if it's anything besides accepted
 	if Request.Form("vote") <> "accepted" then
@@ -25,12 +23,14 @@
 'IF APPROVED
 if Request.Form("vote") = "accepted" then
 
-    ' Give 1 point to customer
-    set objCmd = Server.CreateObject("ADODB.Command")
-    objCmd.ActiveConnection = DataConn
-    objCmd.CommandText = "UPDATE customers SET Points = Points + 1 WHERE customer_ID = ?" 
-    objCmd.Parameters.Append(objCmd.CreateParameter("@GetCustomerID",3,1,20,Request.Form("customer-id")))
-    objCmd.Execute()
+	If Request.Form("review-edited") <> "yes" Then
+		' Give 1 point to customer if this is not editing
+		set objCmd = Server.CreateObject("ADODB.Command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "UPDATE customers SET Points = Points + 1 WHERE customer_ID = ?" 
+		objCmd.Parameters.Append(objCmd.CreateParameter("@GetCustomerID",3,1,20,Request.Form("customer-id")))
+		objCmd.Execute()
+	End If
 
 else ' IF REJECTED
 
