@@ -189,6 +189,22 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 		});
 	});	
 
+
+	// Add add-ons like salves, jewelry, etc to cart
+	$('.add-cart-addon').click(function(){
+		item_detailid = $(this).attr("data-detailid");
+
+		$.ajax({
+			type: "post",
+			url: "/cart/ajax_cart_add_item.asp?qty=1&DetailID=" + item_detailid,
+			data: {item_detailid: item_detailid},
+			success: function(){
+				$('#btn_' + item_detailid).html('<i class="fa fa-spinner fa-spin"></i> Adding...');
+				location.reload();
+			}	
+		});
+	});	
+
 	// Update items in cart
 		$(".qty_change").change(function() {
 			// remove stock notice if it's displaying

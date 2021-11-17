@@ -1,31 +1,28 @@
 <%
 if request.form("page_name") = "cart.asp" or request.form("page_name") = "cart.asp?usecredit=yes" or request.form("page_name") = "cart.asp?remove_coupon=yes" or Request.ServerVariables("URL") = "/cart.asp" or Request.ServerVariables("URL") = "/cart2.asp" then
-DiscountSubtotal = 25
+DiscountSubtotal = 50
 
 ' THIS CODE SHOULD BE ALMOST IDENTICAL TO /checkout/ajax-display-shipping-usps.asp
 
 
 ' INTERNATIONAL -----------------------------
 if strcountryName <> "US" AND strcountryName <> "CA" AND strcountryName <> "" then
-	var_shipping_goal = "$3.55"
 	var_country = "International"
 	sql_price = "ShippingAmount AS price"
 	
 	if CCur(var_subtotal_after_discounts) >= CCur(DiscountSubtotal) then
-		sql_price = "(ShippingAmount - ShippingDiscount) AS price"
+		sql_price = "(ShippingAmount) AS price"
 	end if
 	
 end if
 
 ' CANADA -----------------------------
 if strcountryName = "CA" then
-	var_shipping_goal = "$2.55"
-
 	var_country = "Canada"
 	sql_price = "ShippingAmount AS price" 
 
 	if CCur(var_subtotal_after_discounts) >= CCur(DiscountSubtotal) then
-		sql_price = "(ShippingAmount - ShippingDiscount) AS price"
+		sql_price = "(ShippingAmount) AS price"
 	end if
 
 end if

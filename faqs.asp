@@ -305,6 +305,9 @@
 					<div id="faqshipping1" class="collapse" aria-labelledby="headshipping1" data-parent="#accordionShipping">
 						<div class="card-body">
 								<ul>
+									<li>
+										<strong>Free DHL Basic Mail shipping for orders that reach $50 in the domestic USA</strong>
+									</li><br>
 <% 	
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn

@@ -1,7 +1,7 @@
 <%@LANGUAGE="VBSCRIPT"%>
 	<%
 	page_title = "Body jewelry | Bodyartforms gauges, septum rings, nose rings & more"
-	page_description = "Body jewelry at great prices & HUGE selection of body jewelry! Free jewelry on orders over $30, free o-rings with every order, free basic mail shipping on orders over $25."
+	page_description = "Body jewelry at great prices & HUGE selection of body jewelry! Free jewelry on orders over $30, free o-rings with every order, free basic mail shipping on orders over $50."
 	page_keywords = "body jewelry, body piercing jewelry"
 	var_extra_head_inc = "homepage"
 %>

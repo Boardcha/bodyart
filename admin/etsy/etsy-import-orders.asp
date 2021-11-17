@@ -93,7 +93,7 @@ jsonResponse.I = i
     var_shipping_rate = jsonResponse.StringOf("results[i].total_shipping_cost") 
     var_order_tax = jsonResponse.StringOf("results[i].total_tax_cost") 
 
-    if var_shipping_rate = 3.95 then
+    if var_shipping_rate = 4.95 then
 
     var_shipping_type = "DHL Basic mail"
     
@@ -101,13 +101,9 @@ jsonResponse.I = i
     
     var_shipping_type = "DHL Basic mail"
     
-    elseif var_shipping_rate = 4.95 then
-    
-    var_shipping_type = "DHL Expedited Max"
-    
     elseif var_shipping_rate = 5.95 then
     
-    var_shipping_type = "USPS First Class Mail"
+    var_shipping_type = "DHL Expedited Max"
     
     elseif var_shipping_rate = 7.95 then
     
@@ -117,7 +113,7 @@ jsonResponse.I = i
     
     var_shipping_type = "USPS Express mail"
     
-    elseif var_shipping_rate = 8.95 then
+    elseif var_shipping_rate = 7.99 then
     
     var_shipping_type = "DHL GlobalMail Parcel Priority"
     

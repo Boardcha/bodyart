@@ -96,7 +96,7 @@ end if
 
 'response.write var_totalvalue_certs_incart
 ' have to subtract Session("GiftCertAmount") * 2 so that it doesn't count AGAINST the customer
-var_shipping_AmountNeeded = FormatNumber((25 - var_subtotal_after_discounts), -1, -2, -2, -2)
+var_shipping_AmountNeeded = FormatNumber((50 - var_subtotal_after_discounts), -1, -2, -2, -2)
 ' do not show 
 
 'response.write var_shipping_AmountNeeded & " , " & var_totalvalue_certs_incart

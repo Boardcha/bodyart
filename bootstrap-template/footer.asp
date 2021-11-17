@@ -15,7 +15,7 @@ end if
     <div class="row">
         <div class="col-12 col-md-3 text-center p-2">
                 <i class="fa fa-shipping-fast fa-lg"></i>
-            <h5 class="p-0 m-0">FREE SHIPPING</h5><span class="small">Over $25 in USA</span></div>
+            <h5 class="p-0 m-0">FREE SHIPPING</h5><span class="small">Over $50 in USA</span></div>
         <div class="col-12 col-md-3 text-center p-2">
                 <i class="fa fa-undo-alt fa-lg"></i>
             <h5 class="p-0 m-0">QUICK RETURNS</h5><span class="small">We want happy customers!</span></div>

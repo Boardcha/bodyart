@@ -58,7 +58,7 @@ Do While i < count_i
 	If jsonResponse.IntOf("results[i].total_tax_cost.divisor") > 0 Then var_order_tax = jsonResponse.IntOf("results[i].total_tax_cost.amount") / jsonResponse.IntOf("results[i].total_tax_cost.divisor")
 		
 	
-    if var_shipping_rate = 3.95 then
+    if var_shipping_rate = 4.95 then
 
     var_shipping_type = "DHL Basic mail"
     
@@ -66,13 +66,9 @@ Do While i < count_i
     
     var_shipping_type = "DHL Basic mail"
     
-    elseif var_shipping_rate = 4.95 then
-    
-    var_shipping_type = "DHL Expedited Max"
-    
     elseif var_shipping_rate = 5.95 then
     
-    var_shipping_type = "USPS First Class Mail"
+    var_shipping_type = "DHL Expedited Max"
     
     elseif var_shipping_rate = 7.95 then
     
@@ -82,7 +78,7 @@ Do While i < count_i
     
     var_shipping_type = "USPS Express mail"
     
-    elseif var_shipping_rate = 8.95 then
+    elseif var_shipping_rate = 7.99 then
     
     var_shipping_type = "DHL GlobalMail Parcel Priority"
     

@@ -447,9 +447,6 @@ end if ' show if free sticker cookie has not been set to "no"
 </div><!-- end freebies card -->
 <% end if ' do not show free gifts if add-on feature is active. customer adding items to already placed order %>
 
-
-
-
 <% end if ' Only display if there's not just one gift certificate in the cart%>
 			</div><!-- end cart items container -->
 	</div><!-- end items column-->
@@ -562,9 +559,18 @@ end if ' show if free sticker cookie has not been set to "no"
 											<% ' do not show free shipping notice if order is heavy 
 											if session("weight") <= 32 and strcountryName = "US" and var_other_items = 1 and request.cookies("OrderAddonsActive") = "" then
 											%>
-												<div class="cart_shipping_amountLeft text-center text-success p-1 mt-1 font-weight-bold" <% if var_shipping_AmountNeeded <= 0 then %>style="display:none"<% end if %>>
+												<div class="cart_shipping_amountLeft text-center text-success p-1 mt-1" <% if var_shipping_AmountNeeded <= 0 then %>style="display:none"<% end if %>>
 													<i class="fa fa-shipping-fast fa-lg mr-2"></i>
-													Only <span class="shipping_amount_left"><%= FormatCurrency(var_shipping_AmountNeeded, -1, -2, -2, -2) %></span> away from <%= var_shipping_goal %> SHIPPING
+													<span class="font-weight-bold">Only <span class="shipping_amount_left"><%= FormatCurrency(var_shipping_AmountNeeded, -1, -2, -2, -2) %></span> away from <%= var_shipping_goal %> SHIPPING</span>
+
+													<%
+													'===== FREE SHIPPING THRESHOLD CHANGE NOTICE FROM $25 TO $25. WILL DISPLAY FOR ONE MONTH =======
+													if now() < cDate("12/16/2021 11:00:00 PM") then %>
+													
+													<div class="text-success small">Our free shipping threshold has recently changed from $25 to $50</div>
+													<button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#freeshipping"
+													data-dismiss="modal" >Click here for more info</button>
+													<% end if %>
 												</div>
 											<% end if ' free shipping notice only showing if order is not heavy
 											%>	
@@ -607,7 +613,7 @@ end if ' show if free sticker cookie has not been set to "no"
 											<div class="alert alert-danger">We're sorry, but our <b>PayPal</b> checkout is temporarily unavailable. As soon as PayPal comes back online, we will accept orders again. Please check back later.</div>
 										<% end if %>
 										<div id="pay-api-processing-message" style="display:none"></div>	
-										
+										<div id="btn-googlepay" class="mb-3 checkout_button" style="width: 100%; height: 45px; display: none;"></div>
 										
 										<%
 										' === only show afterpay option to USA customers
@@ -625,6 +631,36 @@ end if ' show if free sticker cookie has not been set to "no"
 									</div>
 						</div><!-- end card footer for totals -->
 					  </div><!-- end card for totals -->
+<% 
+'===== CHECK STOCK ON PRODUCTS BEING OFFERED AS ADDONS AT CHECKOUT
+set objCmd = Server.CreateObject("ADODB.command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "SELECT qty, title, picture, ProductDetailID, price, jewelry.ProductID FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID WHERE qty >= 10 and (jewelry.ProductID = 28568 OR jewelry.ProductID = 20662)"
+set rsGetAddOns = objCmd.Execute()
+
+if NOT rsGetAddOns.eof then
+%>
+						<div class="text-center mb-2 mt-3"><h5>Need aftercare salve?</h5></div>
+						<div class="row mb-3 mx-0 p-0">
+					<%					
+					while NOT rsGetAddOns.eof
+					%>
+					<div class="col-6">
+						<a href="/productdetails.asp?ProductID=<%= rsGetAddOns("ProductID") %>"><img class="img-fluid text-left pull-left rounded-circle mr-2 mb-2" src="https://bodyartforms-products.bodyartforms.com/<%= rsGetAddOns("picture") %>"></a>
+						<button class="btn btn-sm btn-purple add-cart-addon" data-detailid="<%= rsGetAddOns("ProductDetailID") %>" id="btn_<%= rsGetAddOns("ProductDetailID") %>">Add to cart</button>
+						<br>
+						<%= rsGetAddOns("title") %><br>
+						<%= FormatCurrency(rsGetAddOns("price"),2) %>
+						
+						
+					</div>
+					<%
+					rsGetAddOns.movenext()
+					Wend
+					%>
+						</div><!-- addons row -->
+<% end if ' if NOT rsGetAddOns.eof
+%>
 									<% ' Display if ANY autoclavable items are found on the order 
 									if var_autoclavable = 1 and var_sterilization_added = 0 and toggle_autoclave = true then
 									%>
@@ -681,6 +717,32 @@ end if ' show if free sticker cookie has not been set to "no"
                 </div>
         </div>	
 
+				<!-- FREE SHIPPING NOTICE CHANGING FROM $25 TO $50 -->
+				<div class="modal fade" id="freeshipping" tabindex="-1" role="dialog"                 aria-hidden="true">
+					<div class="modal-dialog" role="document">
+							<div class="modal-content">
+									<div class="modal-header">
+										<h5 class="modal-title">Free Shipping Threshold Increase</h5>
+										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+											<span aria-hidden="true">&times;</span>
+										</button>
+									</div>
+									<div class="modal-body">
+										<p>You've probably heard about the shipping crisis in the news. Both the cost of shipping and shipping supplies have skyrocketed. We've been riding out the storm as long as possible, but the costs have mounted so much for us that we have had to make some tough decisions regarding our shipping rates.</p>
+										<p>Being able to offer free shipping to ya'll is important to us, and to do that sustainably we need to raise the threshold to $50.  Another change is eliminating the discount on international shipping, so the price on that will rise by $2, and three of our domestic options will be going up by $1.</p>
+										<p>These are not changes we're making lightly. For the better part of two decades, we've held our free shipping amount at $25, and for the last two years we have maintained the same low shipping rates across the board. We maintained those standards throughout the pandemic, even as we've watched other websites raise their free shipping thresholds to $70+ or eliminate it entirely. The changes we are making now are something we've been discussing and crunching the numbers on for some time.</p>
+										<p>We know folks are strapped, things are still tough, and we haven't fully recovered from the pandemic, but adopting these new standards will help us keep your orders flowing in the quickest, most sustainable way going forward.</p>
+										<p>Please let us know if you have any feedback at all regarding these changes. We value all the thoughts and conversations we have with you!!</p>
+										P.S. We are keeping all of our free gift selections at the $30, $50, $75, $100, and $150. We've added a bunch of fun new options in there in the last month or two. 
+									</div>  
+									<div class="modal-footer">
+										<div class="d-inline-block text-right w-50">
+											<button type="button" class="btn btn-secondary close-bo" data-dismiss="modal">Close</button>
+										</div>
+									</div>  
+							</div>
+					</div>
+			</div>	
 	<%
 	End If 'End Of cart show if not empty
 	%>
@@ -712,11 +774,12 @@ end if ' show if free sticker cookie has not been set to "no"
 </script>
 
 <!-- Google Pay Javascript -->
-
+<script src="/js/google-pay-v2api.js?ver=1"></script>
+<script async src="https://pay.google.com/gp/p/js/pay.js" onload="onGooglePayLoaded()"></script>
 
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
 <script type="text/javascript" src="/js-pages/cart.min.js?v=03032020"></script>
-<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=110421"></script>
+<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=111721"></script>
 <!-- ^^^^^^  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE ^^^^^^ -->
 <script type="text/javascript">
 	calcAllTotals();

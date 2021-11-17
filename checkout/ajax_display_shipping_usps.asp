@@ -48,7 +48,7 @@ if var_other_items = 1 then
 		<%
 		end if 
 
-		DiscountSubtotal = 25
+		DiscountSubtotal = 50
 
 		' INTERNATIONAL -----------------------------
 		if session("shipping-country") <> "USA" AND session("shipping-country") <> "Canada" then

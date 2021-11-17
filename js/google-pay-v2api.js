@@ -41,7 +41,7 @@ const tokenizationSpecification = {
   type: 'PAYMENT_GATEWAY',
   parameters: {
     'gateway': 'authorizenet',
-    'gatewayMerchantId': '483223' // sandbox: 483223 / production: 663980
+    'gatewayMerchantId': '663980' // sandbox: 483223 / production: 663980
   }
 };
 
@@ -113,7 +113,8 @@ function getGooglePaymentDataRequest() {
   paymentDataRequest.merchantInfo = {
     // @todo a merchant ID is available for a production environment after approval by Google
     // See {@link https://developers.google.com/pay/api/web/guides/test-and-deploy/integration-checklist|Integration checklist}
-    merchantId: '8265006',
+    //merchantId: '8265006',  // This is the sandbox merchantId
+    merchantId: 'BCR2DN6T7OWLBOBS', // Production
     merchantName: 'Bodyartforms'
   };
 
@@ -135,10 +136,11 @@ function getGooglePaymentDataRequest() {
 function getGooglePaymentsClient() {
   if ( paymentsClient === null ) {
     paymentsClient = new google.payments.api.PaymentsClient({
-      environment: "TEST",
+      environment: "PRODUCTION", // TEST used for sandbox
       merchantInfo: {
         merchantName: "Bodyartforms",
-        merchantId: "8265006"
+        merchantId: "BCR2DN6T7OWLBOBS" // Production
+        //merchantId: '8265006'  // This is the sandbox merchantId
       },
       paymentDataCallbacks: {
         onPaymentAuthorized: onPaymentAuthorized,
@@ -280,7 +282,7 @@ function onGooglePayLoaded() {
 function addGooglePayButton() {
   const paymentsClient = getGooglePaymentsClient();
   const button = paymentsClient.createButton({
-	buttonColor: 'white',
+	buttonColor: 'black',
 	buttonType: 'checkout',
 	buttonSizeMode: 'fill',
 	onClick: onGooglePaymentButtonClicked,

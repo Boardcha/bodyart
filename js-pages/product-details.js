@@ -114,7 +114,7 @@ function refreshMenu() {
             e.preventDefault()
             e.stopPropagation()
 						console.log("invalid form elements");
-						$(".add-cart-message").show().html("<div class='alert alert-danger my-2 p-1'>Quantity &amp; item selection required</div>");
+						$(".add-cart-message").show().html("<div class='alert alert-danger my-2 p-1 font-weight-bold'>Quantity &amp; item selection required</div>");
 						$(".add-cart-message").delay(3000).fadeOut("slow");
 						form[0].classList.add('was-validated');
         } else {

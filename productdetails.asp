@@ -34,7 +34,7 @@ Set rsProductStats = objCmd.Execute()
 ' Retrieve how many people have this product in their cart (and not on save for later status)
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT COUNT(cart_id) as 'currently_in_all_carts' FROM tbl_carts INNER JOIN ProductDetails ON tbl_carts.cart_detailId = ProductDetails.ProductDetailID WHERE cart_save_for_later = 0 AND cart_LastViewed > (GETDATE()- 30) AND  ProductID = ?"
+objCmd.CommandText = "SELECT COUNT(cart_id) as 'currently_in_all_carts' FROM tbl_carts INNER JOIN ProductDetails ON tbl_carts.cart_detailId = ProductDetails.ProductDetailID WHERE cart_save_for_later = 0 AND cart_LastViewed > (GETDATE()- 30) AND ProductID = ?"
 objCmd.Parameters.Append(objCmd.CreateParameter("ProductID",3,1,10,ProductID))
 Set rsHowManyInCarts = objCmd.Execute()
 
@@ -1041,8 +1041,8 @@ var button_addcart = document.getElementById('btn-add-cart');
 							<% end if 	' 	other_fields_found = "" %>			
 							</div>
 							<% end if %>
+							<div class="add-cart-message" style="display:none"></div>
 							<button class="btn btn-lg btn-purple my-2 add_to_cart btn-block-mobile px-5" type="button"  id="btn-add-cart"><i class="fa fa-shopping-cart fa-lg mr-3"></i>Add to cart</button>
-								<div class="add-cart-message" style="display:none"></div>
 				
 							
 	
@@ -1553,7 +1553,7 @@ end if
 <% end if %>
 <script src="/js/jquery.fancybox.min.js"></script>
 <script type="text/javascript" src="/js/slick.min.js"></script>
-<script type="text/javascript" src="/js-pages/product-details.min.js?v=101821" ></script>
+<script type="text/javascript" src="/js-pages/product-details.min.js?v=111721" ></script>
 
 <!-- Start Afterpay Javascript -->
 <!--

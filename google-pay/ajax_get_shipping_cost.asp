@@ -10,7 +10,7 @@ shipping_id = request("shipping_id")
 
 If shipping_id <> "" Then
 
-	DiscountSubtotal = 25
+	DiscountSubtotal = 50
 
 	sql_price = "ShippingAmount AS price"	
 	If CCur(var_subtotal_after_discounts) >= CCur(DiscountSubtotal) Then

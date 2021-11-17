@@ -144,7 +144,7 @@
 				Cookies.set('orings', '', { expires: 30});
 			
 				// Show/hide amount needed for discounted shipping
-				if(json.subtotal_after_discounts <= 25) {
+				if(json.subtotal_after_discounts <= 50) {
 					$('.cart_shipping_amountLeft').show();
 				} 
 				else {

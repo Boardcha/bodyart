@@ -12,7 +12,7 @@ If var_other_items = 1 Then
 
 	If country_code <> "" Then
 
-		DiscountSubtotal = 25
+		DiscountSubtotal = 50
 
 		' INTERNATIONAL -----------------------------
 		If country_code <> "US" AND country_code <> "CA" Then

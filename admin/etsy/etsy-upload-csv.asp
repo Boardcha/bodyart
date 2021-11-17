@@ -87,7 +87,7 @@ Set Upload = Server.CreateObject("Persits.Upload")
         var_shipping_rate = rsGetOrders.Fields.Item("Amount - Order Shipping").Value
         var_order_tax = rsGetOrders.Fields.Item("Amount - Order Tax").Value
 
-        if var_shipping_rate = 3.95 then
+        if var_shipping_rate = 4.95 then
 
         var_shipping_type = "DHL Basic mail"
         
@@ -95,13 +95,9 @@ Set Upload = Server.CreateObject("Persits.Upload")
         
         var_shipping_type = "DHL Basic mail"
         
-        elseif var_shipping_rate = 4.95 then
-        
-        var_shipping_type = "DHL Expedited Max"
-        
         elseif var_shipping_rate = 5.95 then
         
-        var_shipping_type = "USPS First Class Mail"
+        var_shipping_type = "DHL Expedited Max"
         
         elseif var_shipping_rate = 7.95 then
         
@@ -111,7 +107,7 @@ Set Upload = Server.CreateObject("Persits.Upload")
         
         var_shipping_type = "USPS Express mail"
         
-        elseif var_shipping_rate = 8.95 then
+        elseif var_shipping_rate = 7.99 then
         
         var_shipping_type = "DHL GlobalMail Parcel Priority"
         
