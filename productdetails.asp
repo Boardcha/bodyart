@@ -1086,9 +1086,15 @@ end if
 <% end if %>
 </div>
 
-<% if rsHowManyInCarts("currently_in_all_carts") > 10 then %>
+<% if rsHowManyInCarts("currently_in_all_carts") > 10 then 
+	if rsHowManyInCarts("currently_in_all_carts") >= 50 then
+		var_display_currently_in_carts = 50
+	else
+		var_display_currently_in_carts = rsHowManyInCarts("currently_in_all_carts")
+	end if
+%>
 <div class="text-info font-weight-bold">
-	<%= rsHowManyInCarts("currently_in_all_carts") %> customers have this in their cart
+	<%= var_display_currently_in_carts %> customers have this in their cart
 </div>
 <% end if %>
 

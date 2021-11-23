@@ -91,6 +91,8 @@ Set rsOrderOver150 = objcmd.Execute()
 					<a href="/admin/one-time-coupons.asp">One time use coupons</a>
 					<br/>
 					<a href="/admin/Gallery_EditPhoto.asp">Move gallery photo</a>
+					<br><br>
+					<a href="/admin/invoice.asp?create-empty-order=yes">Create Empty Invoice</a>
 					<h5 class="mt-3">Research</h5>
 					<a href="/admin/edits_logs.asp">Edit logs</a><br/>
 				</div>

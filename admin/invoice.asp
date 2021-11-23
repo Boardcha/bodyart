@@ -18,7 +18,31 @@ if Request.Form("invoice_num") <> "" then
 elseif Request.querystring("ID") <> "" then
 	var_invoiceid = Request.querystring("ID")
 else
-	var_invoiceid = 0
+	if request.querystring("create-empty-order") = "yes" then
+		'==== CREATE EMPTY ORDER, Use the word "Empty" as a way to track the newest order ==========
+		set objCmd = Server.CreateObject("ADODB.Command")
+		objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
+		objCmd.CommandText = "INSERT INTO sent_items (shipped, date_order_placed, ship_code, pay_method) VALUES ('Pending...', '" & now() & "', 'paid', 'Empty')"
+		objCmd.Execute() 
+
+		'===== RETRIEVE NEWEST EMPTY ORDER =================
+		Set objCmd = Server.CreateObject ("ADODB.Command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "SELECT TOP(1) ID FROM sent_items WHERE pay_method = 'Empty' ORDER BY ID DESC" 
+		Set rsGetEmptyOrder = objCmd.Execute()
+
+		var_invoiceid = rsGetEmptyOrder("ID")
+
+		'==== RESET EMPTY PAY METHOD TO BLANK ==========
+		set objCmd = Server.CreateObject("ADODB.Command")
+		objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
+		objCmd.CommandText = "UPDATE sent_items SET pay_method = '' WHERE ID = ?"
+		objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,12, var_invoiceid))
+		objCmd.Execute() 
+
+	else
+		var_invoiceid = 0
+	end if
 end if
 
 if Request.Form("TransID") <> "" then

@@ -11,11 +11,9 @@ Set rsGetNotice = objcmd.Execute()
 %>
 <html>
     <head>
+        <title>Shipping Notice</title>
             <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="stylesheet" type="text/css" href="/CSS/redactor.css" />
-<script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="/js/redactor.js"></script>
-<script type="text/javascript" src="/js/redactor-plugin-source.js"></script>
 </head>
 <body>
 <!--#include file="admin_header.asp"-->
@@ -30,8 +28,10 @@ Set rsGetNotice = objcmd.Execute()
 <select class="form-control my-2" name="country">
        <option value="<%= rsGetNotice.Fields.Item("country").Value %>" selected><%= rsGetNotice.Fields.Item("country").Value %></option> 
        <option value="">NONE - No notice</option>
-   <option value="USA">USA</option>
+    <option value="USA">USA</option>
     <option value="Canada">Canada</option>
+    <option value="Australia">Australia</option>
+    <option value="International">International</option>
 </select>   
    <button type="submit" class="btn btn-purple my-4">Save</button>
        </form>
@@ -50,6 +50,9 @@ Set rsGetNotice = objcmd.Execute()
 
 </body>
 </html>
+<script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="/js/redactor.js"></script>
+<script type="text/javascript" src="/js/redactor-plugin-source.js"></script>
 <script type="text/javascript">
     $("#description").redactor({
         buttons: ['html', 'bold', 'italic', 'underline'],

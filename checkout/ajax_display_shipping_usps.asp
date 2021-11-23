@@ -25,12 +25,12 @@ if var_other_items = 1 then
 
 		if session("shipping-country") <> "" then
 
-		if rsGetNotice.Fields.Item("country").Value = session("shipping-country")  then %>
+		if rsGetNotice.Fields.Item("country").Value = session("shipping-country") OR (rsGetNotice.Fields.Item("country").Value = "International" AND session("shipping-country") <> "USA")  then %>
 		<div class="alert alert-warning w-100">
 				<%= rsGetNotice.Fields.Item("shipping_notice").Value %>
 		</div>
 		<%
-		End If ' weight notice
+		End If ' shipping notice
 
 		if session("shipping-country") <> "USA"  then 
 		%>

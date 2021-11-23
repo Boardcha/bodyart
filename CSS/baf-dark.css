@@ -16220,11 +16220,15 @@ apple-pay-button {
   border-radius: 4px;
 }
 
-.gpay-button.white:hover {
+.gpay-button.black {
   background-color: white !important;
 }
 
-.gpay-button.white.focus {
+.gpay-button.black:hover {
+  background-color: white !important;
+}
+
+.gpay-button.black.focus {
   -webkit-box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 1px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px !important;
           box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 1px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px !important;
   outline: unset !important;
@@ -16234,7 +16238,7 @@ apple-pay-button {
   padding: 9px 20%;
 }
 
-.gpay-button.white.checkout.en {
+.gpay-button.black.checkout.en {
   background-image: url("/images/google-checkout.svg") !important;
 }
 /*# sourceMappingURL=baf-dark.css.map */
