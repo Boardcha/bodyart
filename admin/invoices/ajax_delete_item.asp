@@ -23,6 +23,15 @@
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "UPDATE ProductDetails SET qty = qty + " & rsUpdate.Fields.Item("qty").Value & ", active = 1 WHERE ProductDetailID = " & rsUpdate.Fields.Item("DetailID").Value
 	objCmd.Execute()
+
+			
+	'Write info to edits log	
+	set objCmd = Server.CreateObject("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (?, " & rsUpdate("DetailID") & ",'Automated - Added " & rsUpdate("qty") & " to qty by deleting item from invoice page','" & now() & "')"
+	objCmd.Parameters.Append(objCmd.CreateParameter("user_id",3,1,15, rsGetUser.Fields.Item("user_id").Value ))
+	objCmd.Execute()
+	Set objCmd = Nothing
 	
 	' Reactive main product listing
 	set objCmd = Server.CreateObject("ADODB.command")

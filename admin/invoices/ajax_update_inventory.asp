@@ -19,13 +19,30 @@ While NOT rsUpdate.EOF
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn  
 		objCmd.CommandText = "UPDATE jewelry SET active = 1 FROM jewelry INNER JOIN ProductDetails ON jewelry.ProductID = ProductDetails.ProductID WHERE ProductDetailID = " & rsUpdate.Fields.Item("DetailID").Value
-		objCmd.Execute()		
+		objCmd.Execute()
+		
+		'Write info to edits log	
+		set objCmd = Server.CreateObject("ADODB.Command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (?, " & rsUpdate("DetailID") & ",'Automated - Added " & rsUpdate("qty") & " to qty using add quantities button on invoice page','" & now() & "')"
+		objCmd.Parameters.Append(objCmd.CreateParameter("user_id",3,1,15, rsGetUser.Fields.Item("user_id").Value ))
+		objCmd.Execute()
+		Set objCmd = Nothing
 		
 	else
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn
 		objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - " & rsUpdate.Fields.Item("qty").Value & ", DateLastPurchased = '"& date() &"' WHERE ProductDetailID = " & rsUpdate.Fields.Item("DetailID").Value
 		objCmd.Execute()
+
+			
+		'Write info to edits log	
+		set objCmd = Server.CreateObject("ADODB.Command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (?, " & rsUpdate("DetailID") & ",'Automated - Deducted " & rsUpdate("qty") & " from qty using deduct quantities button on invoice page','" & now() & "')"
+		objCmd.Parameters.Append(objCmd.CreateParameter("user_id",3,1,15, rsGetUser.Fields.Item("user_id").Value ))
+		objCmd.Execute()
+		Set objCmd = Nothing
 
 	end if
 	

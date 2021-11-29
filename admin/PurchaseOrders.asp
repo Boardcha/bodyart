@@ -26,7 +26,7 @@ Dim rsGetPurchaseOrders_numRows
 
 Set rsGetPurchaseOrders_cmd = Server.CreateObject ("ADODB.Command")
 rsGetPurchaseOrders_cmd.ActiveConnection = MM_bodyartforms_sql_STRING
-rsGetPurchaseOrders_cmd.CommandText = "SELECT * FROM dbo.TBL_PurchaseOrders where po_hide = 0 ORDER BY Received ASC, PurchaseOrderID DESC" 
+rsGetPurchaseOrders_cmd.CommandText = "SELECT * FROM dbo.TBL_PurchaseOrders where po_hide = 0 AND po_internal_bulk_pull = 0 ORDER BY Received ASC, PurchaseOrderID DESC" 
 rsGetPurchaseOrders_cmd.Prepared = true
 rsGetPurchaseOrders_cmd.Parameters.Append rsGetPurchaseOrders_cmd.CreateParameter("param1", 200, 1, 1, rsGetPurchaseOrders__MMColParam) ' adVarChar
 

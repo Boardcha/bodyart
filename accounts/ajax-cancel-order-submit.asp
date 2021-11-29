@@ -66,6 +66,13 @@ if not rsGetOrder.eof then
 				objCmd.CommandText = "UPDATE jewelry SET active = 1 FROM jewelry INNER JOIN ProductDetails ON jewelry.ProductID = ProductDetails.ProductID WHERE ProductDetailID = " & rsUpdate.Fields.Item("DetailID").Value
 				objCmd.Execute()
 
+				'Write info to edits log	
+				set objCmd = Server.CreateObject("ADODB.Command")
+				objCmd.ActiveConnection = DataConn
+				objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (28, " & rsUpdate("DetailID") & ",'Automated - Added " & rsUpdate("qty") & " to qty from customer cancelling order on front end','" & now() & "')"
+				objCmd.Execute()
+				Set objCmd = Nothing
+
 			rsUpdate.MoveNext()
 		Wend
 		

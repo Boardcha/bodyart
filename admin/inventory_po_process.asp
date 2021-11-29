@@ -23,6 +23,14 @@ For i=1 to Request.Form("total")
 	objCmd.CommandText = "UPDATE ProductDetails SET qty=qty + " & Request.Form("qtyadd_" & i) & ", DateRestocked = '" & date() & "' WHERE ProductDetailID = " & Request.Form("detailID_" & i)
 	objCmd.Execute()
 	Set objCmd = Nothing
+
+	'Write info to edits log	
+	set objCmd = Server.CreateObject("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (?, " & Request.Form("detailID_" & i) & ",'Automated - Added " & Request.Form("qtyadd_" & i) & " from purchase order put in stock','" & now() & "')"
+	objCmd.Parameters.Append(objCmd.CreateParameter("user_id",3,1,15, rsGetUser.Fields.Item("user_id").Value ))
+	objCmd.Execute()
+	Set objCmd = Nothing
 	
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn  

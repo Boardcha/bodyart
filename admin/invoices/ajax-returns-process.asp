@@ -164,6 +164,16 @@ If IsNumeric(item) Then
 			if rsCheckStockLevels.Fields.Item("d_active").Value = 0 or rsCheckStockLevels.Fields.Item("p_active").Value = 0 then
 				var_active_status = var_active_status & " " & rsCheckStockLevels.Fields.Item("title").Value & "<br/>"
 			end if 
+
+
+			'Write info to edits log	
+			set objCmd = Server.CreateObject("ADODB.Command")
+			objCmd.ActiveConnection = DataConn
+			objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, product_id, detail_id, description, edit_date) VALUES (?," & rsGetOrderItems("ProductID") & "," & rsGetOrderItems("DetailID") & ",'Automated - Added " & request.form(item) & " back into stock from return','" & now() & "')"
+			objCmd.Parameters.Append(objCmd.CreateParameter("user_id",3,1,15, rsGetUser.Fields.Item("user_id").Value ))
+			objCmd.Execute()
+			Set objCmd = Nothing
+
 		set rsCheckStockLevels = nothing
 	end if
 end if
