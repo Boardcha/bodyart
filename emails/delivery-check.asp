@@ -1,4 +1,6 @@
 <!--#include virtual="/Connections/sql_connection.asp" -->
+<% Response.Buffer = False %>
+<!--#include virtual="/Connections/dhl-auth-v4.asp"-->
 <!--#include virtual="/emails/function-send-email.asp"-->
 <%
 '=== CHECK ORDERS WILL BE DELIVERED TODAY ===
@@ -15,14 +17,7 @@ While Not rsDeliveringToday.EOF
 		'rsDeliveringToday("email")
 		var_first = rsDeliveringToday("customer_first")
 		var_invoiceid = rsDeliveringToday("ID")
-		If instr(rsDeliveringToday("shipping_type"), "DHL") > 0 then
 			var_tracking = "Your tracking # is <strong>" & rsDeliveringToday("USPS_tracking") & "</strong>. If you have an account on our website, you can track your package by going to your order history and pressing the Track Order button. Or, you can track your package by going directly to <a href=""https://bodyartforms.com/dhl-tracker.asp?tracking=" & rsDeliveringToday("USPS_tracking") & """>this link</a>."		
-		Else
-			var_tracking = "Your tracking # is <strong>" & rsDeliveringToday("USPS_tracking") & "</strong>. If you have an account on our website, you can track your package by going to your order history and pressing the Track Order button. Or, you can track your package by going directly to <a href=""https://www.usps.com/manage/welcome.htm"">USPS.com</a>"
-		End if
-		If instr(rsDeliveringToday("shipping_type"), "UPS") then
-			var_tracking = "Your tracking # is <strong>" & rsDeliveringToday("UPS_tracking") & "</strong>. If you have an account on our website, you can track your package by going to your order history and pressing the Track Order button. Or, you can track your package by going directly to <a href=""https://www.ups.com/tracking.html"">UPS.com</a>"
-		End if		
 		%>
 		<!--#include virtual="/emails/email_variables.asp"-->
 		<%
@@ -75,14 +70,7 @@ While Not rsDelayed.EOF
 	var_first = rsDelayed("customer_first")
 	var_invoiceid = rsDelayed("ID")
 	var_estimated_delivery_date = rsDelayed("estimated_delivery_date")
-	If instr(rsDelayed("shipping_type"), "DHL") > 0 then
-		var_tracking = "Your tracking # is <strong>" & rsDelayed("USPS_tracking") & "</strong>. If you have an account on our website, you can track your package by going to your order history and pressing the Track Order button. Or, you can track your package by going directly to <a href=""https://bodyartforms.com/dhl-tracker.asp?tracking=" & rsDelayed("USPS_tracking") & """>this link</a>."		
-	Else
-		var_tracking = "Your tracking # is <strong>" & rsDelayed("USPS_tracking") & "</strong>. If you have an account on our website, you can track your package by going to your order history and pressing the Track Order button. Or, you can track your package by going directly to <a href=""https://www.usps.com/manage/welcome.htm"">USPS.com</a>"
-	End if
-	If instr(rsDelayed("shipping_type"), "UPS") then
-		var_tracking = "Your tracking # is <strong>" & rsDelayed("UPS_tracking") & "</strong>. If you have an account on our website, you can track your package by going to your order history and pressing the Track Order button. Or, you can track your package by going directly to <a href=""https://www.ups.com/tracking.html"">UPS.com</a>"
-	End if		
+		var_tracking = "Your tracking # is <strong>" & rsDelayed("USPS_tracking") & "</strong>. If you have an account on our website, you can track your package by going to your order history and pressing the Track Order button. Or, you can track your package by going directly to <a href=""https://bodyartforms.com/dhl-tracker.asp?tracking=" & rsDelayed("USPS_tracking") & """>this link</a>."			
 	%>
 	<!--#include virtual="/emails/email_variables.asp"-->
 	<%
@@ -115,7 +103,7 @@ Function getDeliveryStatus(trackingNumber)
 	success = rest.AddQueryParam("pickup", "5351961")
 
 	set sbAuthHeaderVal = Server.CreateObject("Chilkat_9_5_0.StringBuilder")
-	success = sbAuthHeaderVal.Append("Bearer ")
+	success = sbAuthHeaderVal.Append("Bearer")
 	success = sbAuthHeaderVal.Append(db_dhl_access_token)
 	rest.Authorization = sbAuthHeaderVal.GetAsString()
 

@@ -163,8 +163,6 @@ if var_other_items = 1 then
 						Session("MAX_checkout_estimated_delivery") = MAX_estimated_delivery
 					Else
 						estimated_delivery_output = rsGetShippingOptions("ShippingDesc_Public") 
-						Session("EXP_checkout_estimated_delivery") = ""
-						Session("MAX_checkout_estimated_delivery") = ""
 					End If
 					%>
 					<%=estimated_delivery_output%>
