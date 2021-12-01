@@ -5,8 +5,18 @@
  * @see {@link https://developers.google.com/pay/api/web/reference/request-objects#PaymentDataRequest|apiVersion in PaymentDataRequest}
  */
 
+const environment = "PRODUCTION"; //PRODUCTION, or TEST (used for sandbox)
 
-const baseRequest = {
+// ONLY, CHANGE ABOVE LINE to SWITCH BETWEEN PRODUCTION AND LIVE
+if (environment == "TEST"){
+	var merchantInfo = {merchantName: "Bodyartforms", merchantId: '8265006'};  // This is the sandbox merchantInfo
+	var authMerchantId = '483223'; // Authorize.net sandbox
+}else{
+	var merchantInfo = {merchantName: "Bodyartforms", merchantId: "BCR2DN6T7OWLBOBS"}; //  This is the Production merchantInfo 
+	var authMerchantId = '663980'; // Authorize.net production
+}	
+
+baseRequest = {
   apiVersion: 2,
   apiVersionMinor: 0
 };
@@ -41,7 +51,7 @@ const tokenizationSpecification = {
   type: 'PAYMENT_GATEWAY',
   parameters: {
     'gateway': 'authorizenet',
-    'gatewayMerchantId': '663980' // sandbox: 483223 / production: 663980
+    'gatewayMerchantId': authMerchantId
   }
 };
 
@@ -110,14 +120,7 @@ function getGooglePaymentDataRequest() {
   const paymentDataRequest = Object.assign({}, baseRequest);
   paymentDataRequest.allowedPaymentMethods = [cardPaymentMethod];
   paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
-  paymentDataRequest.merchantInfo = {
-    // @todo a merchant ID is available for a production environment after approval by Google
-    // See {@link https://developers.google.com/pay/api/web/guides/test-and-deploy/integration-checklist|Integration checklist}
-    //merchantId: '8265006',  // This is the sandbox merchantId
-    merchantId: 'BCR2DN6T7OWLBOBS', // Production
-    merchantName: 'Bodyartforms'
-  };
-
+  paymentDataRequest.merchantInfo = merchantInfo;
   paymentDataRequest.callbackIntents = ["SHIPPING_ADDRESS",  "SHIPPING_OPTION", "PAYMENT_AUTHORIZATION"];
   paymentDataRequest.shippingAddressRequired = true;
   paymentDataRequest.shippingAddressParameters = getGoogleShippingAddressParameters();
@@ -136,12 +139,8 @@ function getGooglePaymentDataRequest() {
 function getGooglePaymentsClient() {
   if ( paymentsClient === null ) {
     paymentsClient = new google.payments.api.PaymentsClient({
-      environment: "PRODUCTION", // TEST used for sandbox
-      merchantInfo: {
-        merchantName: "Bodyartforms",
-        merchantId: "BCR2DN6T7OWLBOBS" // Production
-        //merchantId: '8265006'  // This is the sandbox merchantId
-      },
+      environment: environment,
+      merchantInfo: merchantInfo,
       paymentDataCallbacks: {
         onPaymentAuthorized: onPaymentAuthorized,
         onPaymentDataChanged: onPaymentDataChanged
@@ -185,8 +184,9 @@ function onPaymentDataChanged(intermediatePaymentData) {
 
   return new Promise(function(resolve, reject) {
     let shippingAddress = intermediatePaymentData.shippingAddress;
+	let address1 = intermediatePaymentData.shippingAddress.address1 + intermediatePaymentData.shippingAddress.address2 + intermediatePaymentData.shippingAddress.address3;
     let shippingOptionData = intermediatePaymentData.shippingOptionData;
-	let shippingOptions = getShippingOptions(shippingAddress.countryCode, shippingAddress.postalCode);
+	let shippingOptions = getShippingOptions(shippingAddress.countryCode, shippingAddress.postalCode, address1, shippingAddress.administrativeArea, shippingAddress.locality);
     let paymentDataRequestUpdate = {};
     if (intermediatePaymentData.callbackTrigger == "INITIALIZE" || intermediatePaymentData.callbackTrigger == "SHIPPING_ADDRESS") {
 	  console.log(getShippingOptions(shippingAddress.countryCode, shippingAddress.postalCode));
@@ -194,16 +194,33 @@ function onPaymentDataChanged(intermediatePaymentData) {
 	  let defaultShippingOptionId = paymentDataRequestUpdate.newShippingOptionParameters.defaultSelectedOptionId;	  
       paymentDataRequestUpdate.newTransactionInfo = calculateNewTransactionInfo(defaultShippingOptionId, intermediatePaymentData);
 	  selectedShippingCompany = getSelectedShippingCompany(getObjectByValue(shippingOptions.shippingOptions, "id", defaultShippingOptionId)[0].label);
+	  if(defaultShippingOptionId == "-1")
+		 paymentDataRequestUpdate.error =  getGoogleUnserviceableAddressError();
     }
     else if (intermediatePaymentData.callbackTrigger == "SHIPPING_OPTION") {
       paymentDataRequestUpdate.newTransactionInfo = calculateNewTransactionInfo(shippingOptionData.id, intermediatePaymentData);
 	  selectedShippingCompany = getSelectedShippingCompany(getObjectByValue(shippingOptions.shippingOptions, "id", shippingOptionData.id)[0].label);
+	  if(shippingOptionData.id == "-1")
+		 paymentDataRequestUpdate.error =  getGoogleUnserviceableAddressError();	  
     }
 	console.log(paymentDataRequestUpdate);
     resolve(paymentDataRequestUpdate);
   });
 }
 
+/**
+ * Provide Google Pay API with a payment data error.
+ *
+ * @see {@link https://developers.google.com/pay/api/web/reference/response-objects#PaymentDataError|PaymentDataError}
+ * @returns {object} payment data error, suitable for use as error property of PaymentDataRequestUpdate
+ */
+function getGoogleUnserviceableAddressError() {
+  return {
+    reason: "SHIPPING_ADDRESS_UNSERVICEABLE",
+    message: "Cannot ship to the selected address",
+    intent: "SHIPPING_ADDRESS"
+  };
+}
 
 /**
  * Helper function to create a new TransactionInfo object.
@@ -426,14 +443,14 @@ var getObjectByValue = function (array, key, value) {
 /**
  * Pull shipping options from DB
 */
-function getShippingOptions(countryCode, zipCode){
+function getShippingOptions(countryCode, zipCode, address1, administrativeArea, locality){
 	let shippingOptions = [];
 	$.ajax({
 		method: "post",
 		//dataType: "json",
 		async: false,
 		url: "/google-pay/ajax_display_shipping_options.asp",
-		data: {country_code: countryCode, zip_code: zipCode},
+		data: {country_code: countryCode, zip_code: zipCode, address: address1, state: administrativeArea, city: locality},
 		success: function( data ) {
 			data = JSON.parse(data);
 			selectedShippingId = data[0].id;

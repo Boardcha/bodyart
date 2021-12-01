@@ -157,10 +157,14 @@ if var_other_items = 1 then
 					<%
 					If EXP_estimated_delivery <> "" AND rsGetShippingOptions("ShippingName") = "DHL Basic mail" Then 
 						estimated_delivery_output = "Estimated delivery date:<br>" & WeekDayName(WeekDay(EXP_estimated_delivery)) & ", " & MonthName(Month(EXP_estimated_delivery)) & " " & Day(EXP_estimated_delivery)
+						Session("EXP_checkout_estimated_delivery") = EXP_estimated_delivery 
 					ElseIf MAX_estimated_delivery <> "" AND rsGetShippingOptions("ShippingName") = "DHL Expedited Max" Then 
 						estimated_delivery_output = "Estimated delivery date:<br>" & WeekDayName(WeekDay(MAX_estimated_delivery)) & ", " & MonthName(Month(MAX_estimated_delivery)) & " " & Day(MAX_estimated_delivery)
+						Session("MAX_checkout_estimated_delivery") = MAX_estimated_delivery
 					Else
 						estimated_delivery_output = rsGetShippingOptions("ShippingDesc_Public") 
+						Session("EXP_checkout_estimated_delivery") = ""
+						Session("MAX_checkout_estimated_delivery") = ""
 					End If
 					%>
 					<%=estimated_delivery_output%>

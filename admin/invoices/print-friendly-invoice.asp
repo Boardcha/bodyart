@@ -157,14 +157,13 @@ Set rsGetOrderDetails = Nothing
 
 <table class="table-wrapper">
 <td class="thank-you-area">
+	<div class="qr-code" style="">
+		<img src="/images/qr-codes/qr-return-policy.svg" style="width:100px;height:100;text-align: left;" />
 	<div class="thank-you">
-		THANK YOU for ordering with us!
+		Scan this QR code to view our return policy or if you have an order issue
 	</div>
 	<div class="our-promise">
-		We stand behind our products and service...and we want you to be 100% happy with your purchase. If you aren't, we're here to help make it right. 
-	</div>
-	<div class="thank-you">
-		Text BODYART to 22828 to get notified about sales via our newsletter
+		We want you to be 100% satisfied with your order! For order issues email us at help@bodyartforms.com or call (877) 223-5005.
 	</div>
 </td>
 <td class="wrapper-totals">
@@ -253,40 +252,9 @@ Set rsGetOrderDetails = Nothing
 <% 
 if ReturnMailer <> "yes" then %>
 
-<div class="policies">
-	<strong>Something is wrong with my order. What do I do?</strong>
-	<br/>
-	First off, we're very sorry that something was wrong on your order! And we'll work as quickly as possible to fix it. Any item that has arrived damaged or incorrect is eligible for a replacement at no additional shipping cost, even if it's not in its sealed bag.
-	<br/>
-	<br/><strong>Returns</strong>
-	<br/>
-	We want you to be 100% satisfied with your order. We take returns up to 30 days after you receive your order.
-		<ul>
-			<li>
-			For safety, ALL body jewelry &amp; earrings come in a sealed baggie. As long as it is still in the untampered sealed baggie we can take it back. Please be sure to measure and inspect all jewelry before breaking the seal.
-			</li>
-			<li>Shipping costs for returns are the responsibility of the customer unless the item(s) arrived damaged or incorrect. </li>
-			<li>
-			Necklaces, finger rings, bracelets, & clothing can be return for ANY reason, even out of the sealed baggies, as long as the item is still in its original condition. 
-			</li>
-		</ul>
-<strong>For any and all concerns, returns, questions, or comments, you can contact us at service@bodyartforms.com</strong>	
-</div>
-
 <% else 'DOES have a return mailer 
 %>
-<div class="policies">
-	<strong>What do I do with my incorrect items?</strong>
-	<br/>
-	<ul>
-		<li>
-			If you DID receive a return mailer,  please send the defective/wrong product(s) back to us in the provided mailer (postage provided).
-		</li>
-		<li>
-			If you did NOT receive a return envelope with this shipment then don't worry about sending your items back.
-		</li>
-		</ul>
-</div>
+
   <% end if ' DOES have a return mailer 
 %>
 

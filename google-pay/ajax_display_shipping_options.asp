@@ -6,7 +6,10 @@
 <% 
 
 country_code = request("country_code")
-zip_code = request("zip")
+zip_code = request("zip_code")
+address= request("address")
+city = request("city")
+state = request("state")
 
 If var_other_items = 1 Then
 
@@ -71,15 +74,36 @@ If var_other_items = 1 Then
 
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "SELECT * FROM TBL_Countries WHERE Country_UPSCode = ?"
+		objCmd.Parameters.Append(objCmd.CreateParameter("country_code",200,1,30,country_code))
+		Set rsCountry = objCmd.Execute()
+		
+		set objCmd = Server.CreateObject("ADODB.command")
+		objCmd.ActiveConnection = DataConn
 		objCmd.CommandText = "SELECT IDShipping, " & sql_price & ", ShippingName, ShippingDesc_Public, ShippingWeight, ShippingType, ShippingDiscount, DiscountSubtotal, est_days_min, est_days_max, Shipping_ActualPrice, Shipping_NameWebDisplay, FRMSelected, EstimatedShipDays FROM dbo.TBL_ShippingMethods WHERE (" & session("weight") &" >= ShippingWeightMIN AND " & session("weight") &" <= ShippingWeight) AND ShippingType = ? " & sql_force_to_usps & " ORDER BY sortorder asc, price ASC"
 		objCmd.Parameters.Append(objCmd.CreateParameter("Country",200,1,30,var_country))
 		Set rsGetShippingOptions = objCmd.Execute()
 
+		'EXP_estimated_delivery(expedited) and MAX_estimated_delivery(expedited max) variables are set in dhl-delivery-estimate.inc
 
+		If country_code = "US" AND city <> "" AND address <> "" AND state <> "" AND zip_code <> "" Then%>
+			<!--#include virtual="/dhl/dhl-delivery-estimate.inc"-->		
+		<%
+			EXP_estimated_delivery = getEstimatedDeliveryDate("EXP", address, city, state, zip_code, "")
+			MAX_estimated_delivery = getEstimatedDeliveryDate("MAX", address, city, state, zip_code, "")		
+		End If
+		
 		While NOT rsGetShippingOptions.EOF 
 			If rsGetShippingOptions("ShippingName").Value <> "ONLY gift certificate" Then
 				i = i + 1
-				options = options & "{""id"": """ & rsGetShippingOptions("IDShipping") & """, ""label"": ""$" & rsGetShippingOptions("price") & ": " & rsGetShippingOptions("ShippingName") & """, ""description"": """ & Replace(Replace(rsGetShippingOptions("ShippingDesc_Public"), "<br>", ". "), vbCrlf, "") & """},"
+				If EXP_estimated_delivery <> "" AND rsGetShippingOptions("ShippingName") = "DHL Basic mail" Then 
+					estimated_delivery_output = "Estimated delivery date: " & WeekDayName(WeekDay(EXP_estimated_delivery)) & ", " & MonthName(Month(EXP_estimated_delivery)) & " " & Day(EXP_estimated_delivery)
+				ElseIf MAX_estimated_delivery <> "" AND rsGetShippingOptions("ShippingName") = "DHL Expedited Max" Then 
+					estimated_delivery_output = "Estimated delivery date: " & WeekDayName(WeekDay(MAX_estimated_delivery)) & ", " & MonthName(Month(MAX_estimated_delivery)) & " " & Day(MAX_estimated_delivery)
+				Else
+					estimated_delivery_output = Replace(Replace(rsGetShippingOptions("ShippingDesc_Public"), "<br>", ". "), vbCrlf, "")
+				End If	
+				options = options & "{""id"": """ & rsGetShippingOptions("IDShipping") & """, ""label"": ""$" & rsGetShippingOptions("price") & ": " & rsGetShippingOptions("ShippingName") & """, ""description"": """ & estimated_delivery_output & """},"
 				'Example: {"id": "0", "label": "Free: Paid on original order", "description": ""}
 			End If ' If <> "ONLY gift certificate"
 			rsGetShippingOptions.MoveNext()
@@ -89,6 +113,12 @@ If var_other_items = 1 Then
 		End If
 		'Remove last comma
 		options = Mid(options, 1, Len(options)-1)
+		
+		'OVERWRITE OPTIONS IF WE DON'T SHIP TO THE COUNTRY
+		If rsCountry.EOF Then options = "{""id"": ""-1"", ""label"": ""WE CAN NOT SHIP TO " & country_code & """, ""description"": """"}"
+		If Not rsCountry.EOF Then 
+			if rsCountry("Display") = 0 Then options = "{""id"": ""-1"", ""label"": ""WE CAN NOT SHIP TO " & country_code & """, ""description"": """"}"
+		End If
 		set rsGetShippingOptions = nothing
 	End If ' Only show If country session has been set
 

@@ -158,7 +158,7 @@ end if '==== rsGetItems.eof
         <%
         end if
         
-         if rsGetItems.Fields.Item("ID_Description").Value <> "Main" AND rsGetItems.Fields.Item("ID_Description").Value <> "Free" then %>
+         if rsGetItems.Fields.Item("ID_Description").Value <> "Main" AND rsGetItems.Fields.Item("ID_Description").Value <> "Free" AND rsGetItems.Fields.Item("BinNumber_Detail").Value = 0  then %>
                 <span class="mr-1 border-secondary border-right">
                     <%= rsGetItems.Fields.Item("ID_Description").Value %>
                 </span>
@@ -180,12 +180,22 @@ end if '==== rsGetItems.eof
                 </span>
            
         <%
-        End if
+        End if '--- if bin # is not zero
     
                 
-        if rsGetItems.Fields.Item("customorder").Value <> "yes" then %>   
-            <%= rsGetItems.Fields.Item("location").Value %> 
-            <% ' ===== If pick random colored sticker, show customer name 
+        if rsGetItems.Fields.Item("customorder").Value <> "yes" then 
+            If rsGetItems.Fields.Item("BinNumber_Detail").Value <> 0 then
+        '==== Show detail id for items in limited bins
+            %>   
+            <%= rsGetItems.Fields.Item("ProductDetailID").Value %> 
+            <% else 
+            '===== regular stock item location
+            %>
+            <%= rsGetItems.Fields.Item("location").Value %>
+            
+            <% end if
+            
+            ' ===== If pick random colored sticker, show customer name 
             if rsGetItems.Fields.Item("ProductDetailID").Value = "72198" then %>   
                  (<%= rsGetOrder.Fields.Item("customer_first").Value %>)
             <% end if %>

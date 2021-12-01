@@ -614,7 +614,6 @@ end if ' show if free sticker cookie has not been set to "no"
 										<% end if %>
 										<div id="pay-api-processing-message" style="display:none"></div>	
 										<div id="btn-googlepay" class="mb-3 checkout_button" style="width: 100%; height: 45px; display: none;"></div>
-										
 										<%
 										' === only show afterpay option to USA customers
 										if request.cookies("currency") = "" OR request.cookies("currency") = "USD" then
@@ -761,7 +760,7 @@ if NOT rsGetAddOns.eof then
 		updateCurrency();
 </script>
 <% end if %>
-
+ 
 <!-- Global variables for Apple & Google Pay -->
 <script>
 	var tax = 0.0;

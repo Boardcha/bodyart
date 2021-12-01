@@ -53,7 +53,7 @@ end if
   <table class="table table-sm table-hover table-striped" id="details-table">
     <thead class="thead-dark">
 	<tr>
-      <th colspan="5"><form name="form1" method="post" action="inventory_clearance.asp?UpdateAll=yes">
+      <th colspan="8"><form name="form1" method="post" action="inventory_clearance.asp?UpdateAll=yes">
         Set all items to inactive &nbsp;&nbsp;&nbsp;
             <button class="btn btn-sm btn-secondary" type="submit">Go <i class="fa fa-lg fa-angle-double-right"></i></button>
             </form>
@@ -61,10 +61,13 @@ end if
     </tr>
     <tr>
       <th>Product</th>
+	  <th>Brand</th>
 	  <th>Code</th>
 	  <th>Bin</th>
 	  <th>Section</th>
 	  <th>Location</th>
+	  <th>Discount</th>
+	  <th>Added</th>
     </tr>
 	</thead>
         <% 
@@ -74,7 +77,11 @@ Repeat1__index = 0
 While ((Repeat1__numRows <> 0) AND (NOT rsCheck.EOF)) 
 %>
     <tr>
-           <td><a href="product-edit.asp?ProductID=<%=(rsCheck.Fields.Item("ProductID").Value)%>&info=less"><%=(rsCheck.Fields.Item("title").Value)%> - <%=(rsCheck.Fields.Item("Gauge").Value)%> <%=(rsCheck.Fields.Item("Length").Value)%> <%=(rsCheck.Fields.Item("ProductDetail1").Value)%></a></td>
+           <td>
+			<a href="product-edit.asp?ProductID=<%=(rsCheck.Fields.Item("ProductID").Value)%>&info=less">
+				<img class="mr-2" style="width:90px;height:90px" src="https://bodyartforms-products.bodyartforms.com/<%= rsCheck("picture") %>" alt="Product photo">
+				<%=(rsCheck.Fields.Item("title").Value)%> - <%=(rsCheck.Fields.Item("Gauge").Value)%> <%=(rsCheck.Fields.Item("Length").Value)%> <%=(rsCheck.Fields.Item("ProductDetail1").Value)%></a></td>
+		   <td><%= rsCheck("brandname") %></td>
 			<td>
 				<%=(rsCheck.Fields.Item("detail_code").Value)%>
 			</td>
@@ -87,6 +94,8 @@ While ((Repeat1__numRows <> 0) AND (NOT rsCheck.EOF))
 			<td>
 				<%=(rsCheck.Fields.Item("location").Value)%>
 			</td>
+			<td><%= rsCheck("SaleDiscount") %>%</td>
+			<td><%= FormatDateTime(rsCheck("date_added"),vbShortDate) %></td>
     </tr>
     <% 
   Repeat1__index=Repeat1__index+1
