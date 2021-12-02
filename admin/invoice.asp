@@ -492,7 +492,7 @@ if not rsGetOrder.eof then
 			<div class="mt-3" id="tracking_display" style="display:none"></div>
 
 </div>
-	<div class="col-sm pl-4 small"> 
+	<div class="col-sm pl-4 small disable-fields"> 
 			<div class="container w-100">
 					<div class="row">
 						<div class="col-8 p-0 h4">Billing information</div>
@@ -599,14 +599,15 @@ if not rsGetOrder.eof then
 	</div><!-- row -->
 	</div><!-- container -->	
 
-<div style="height:30px"></div>
+<div class="mt-4 disable-fields">
 	<button type="button" class="btn btn-sm btn-secondary" data-toggle="modal" data-target="#modal-add-product">
 			Add product(s) to order
 	  </button>
 	  <button class="btn btn-secondary btn-sm ml-3  btn_returns" data-toggle="modal" data-target="#modal-returns">Returns</button>
 	  <button class="btn btn-sm btn-secondary ml-3 mr-0 btn-update-reship-modal" data-toggle="modal" data-target="#modal-reship-items" data-invoiceid="<%= rsGetOrder.Fields.Item("ID").Value %>">Reship items</button>
 	  <i class="fa fa-lg fa-information text-secondary pointer" data-toggle="modal" data-target="#modal-reship-info"></i>
-<table class="table table-striped table-hover small mt-2 ajax-update">
+</div>
+<table class="table table-striped table-hover small mt-2 ajax-update disable-fields">
 <thead class="thead-dark">
 	<tr>
 		<th scope="col">
@@ -834,8 +835,8 @@ end if
 
 		</td>
 		<td style="white-space: nowrap">
-			<span class="input_move" name="input_move_<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>"><span><span class="btn btn-sm p-0 px-1 border-0  btn-secondary d-inline-block font-weight-bold copyid" name="copy_<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>" data-id="<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>" data-qty_instock="<%= rsGetOrderItems.Fields.Item("stock_qty").Value %>" data-qty="<%= rsGetOrderItems.Fields.Item("qty").Value %>">C</span>
-			<span class=" btn btn-sm btn-secondary font-weight-bold p-0 px-1 border-0  d-inline-block moveid" name="move_<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>" data-id="<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>">M</span>
+			<span class="input_move" name="input_move_<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>"><span><button class="btn btn-sm p-0 px-1 border-0  btn-secondary d-inline-block font-weight-bold copyid" name="copy_<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>" data-id="<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>" data-qty_instock="<%= rsGetOrderItems.Fields.Item("stock_qty").Value %>" data-qty="<%= rsGetOrderItems.Fields.Item("qty").Value %>">C</button>
+			<button class=" btn btn-sm btn-secondary font-weight-bold p-0 px-1 border-0  d-inline-block moveid" name="move_<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>" data-id="<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>">M</button>
 		</td>
 	</tr>
 
@@ -918,7 +919,7 @@ copy_totals = "Subtotal: &nbsp;&nbsp;&nbsp;" & FormatCurrency(SumLineItem, -1, -
 </tbody>
 </table>
 
-<table class="table table-hover small">
+<table class="table table-hover small disable-fields">
 		<tbody>
 			<tr>
 					<td class="border-0" style="width:60%">
@@ -989,7 +990,7 @@ For i = 0 to UBound(arrTotals, 2)
 					</div>
 						<% end if %>
 			<% if arrTotals(1,i) = "total_returns" then %>
-				<button class="btn btn-sm btn-secondary mr-3 update_inventory " data-type="deduct">Deduct quantities</button>
+				<button class="btn btn-sm btn-secondary mr-3 update_inventory" data-type="deduct">Deduct quantities</button>
 				<button class="btn btn-sm btn-secondary update_inventory" data-type="add">Add quantities</button>
 				<span id="confirm_inv_updates" class="alert alert-success p-2 ml-3 font-weight-bold" style="display:none">Inventory has been updated</span>
 			<% end if %>
@@ -1441,6 +1442,11 @@ end if ' if not rsGetOrder.eof then
 		$('.bo_orange_' + <%= request.querystring("bo_item") %>).trigger('click');
 	</script>
 <% end if %>
+<script type="text/javascript">
+	<% If var_access_level = "Packaging" OR var_access_level = "Photography" then  %>
+			$('.disable-fields select, .disable-fields input, .disable-fields textarea, .disable-fields button').attr("disabled", true);
+	<% end if %>
+</script>
 <%
 DataConn.Close()
 %>

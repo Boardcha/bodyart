@@ -1751,6 +1751,12 @@ end if
 <script type="text/javascript" src="scripts/product-edit-version2.js?v=102121"></script>
 
 </html>
+<% If var_access_level = "Packaging" then  %>
+	<script type="text/javascript">
+			$('.ajax-update select, .ajax-update input, .ajax-update textarea').attr("disabled", true);
+			$(".ajax-update select").prop('disabled',true).trigger('chosen:updated').prop('disabled',true)
+	</script>
+<% end if %>
 <%
 Set rs_getuser = Nothing
 Set rs_getdetails = Nothing

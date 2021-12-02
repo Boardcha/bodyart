@@ -20,7 +20,7 @@ var_bo_reason = Request.Form("bo_reason")
 ' Set item to backorder status (and not on review)
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "UPDATE TBL_OrderSummary SET backorder = 1, BackorderReview = 'N' WHERE OrderDetailID = ?"
+objCmd.CommandText = "UPDATE TBL_OrderSummary SET backorder = 1, backorder_tracking = 1, BackorderReview = 'N' WHERE OrderDetailID = ?"
 objCmd.Parameters.Append(objCmd.CreateParameter("orderdetailid",3,1,20, orderdetailid))
 objCmd.Execute()
 

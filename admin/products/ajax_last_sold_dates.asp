@@ -17,9 +17,21 @@ if request.form("detailid") <> "" then
 
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT TOP (20) sent_items.ID, date_order_placed, qty FROM TBL_OrderSummary INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID WHERE (sent_items.ship_code = N'paid') AND (TBL_OrderSummary.DetailID = ?) ORDER BY sent_items.date_order_placed DESC"
+	objCmd.CommandText = "SELECT TOP (20) sent_items.ID, date_order_placed, qty, preorder, shipped FROM TBL_OrderSummary INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID WHERE (sent_items.ship_code = N'paid') AND (TBL_OrderSummary.DetailID = ?) ORDER BY sent_items.date_order_placed DESC"
 	objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,10,request.form("detailid")))
 	Set rsGetInvoicesSold = objCmd.Execute()
+
+	set objCmd = Server.CreateObject("ADODB.command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "SELECT SUM(TBL_OrderSummary.qty) as 'total_on_hold' FROM TBL_OrderSummary INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID WHERE (sent_items.ship_code = N'paid') AND date_order_placed > '1/1/2021' AND preorder = 1 AND TBL_OrderSummary.DetailID = ? AND  ((sent_items.shipped = N'PRE-ORDER REVIEW') OR (sent_items.shipped = N'PRE-ORDER APPROVED') OR (sent_items.shipped = N'ON ORDER'))"
+	objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,10, request.form("detailid")))
+	Set rsGetTotal_PreOrderItemsOnHold = objCmd.Execute()
+
+	set objCmd = Server.CreateObject("ADODB.command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "SELECT TOP(20) sent_items.id, TBL_OrderSummary.DetailID, sent_items.shipped, TBL_OrderSummary.qty, sent_items.date_order_placed, sent_items.ship_code, sent_items.ID FROM TBL_OrderSummary INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID WHERE (sent_items.ship_code = N'paid') AND date_order_placed > '1/1/2021' AND preorder = 1 AND TBL_OrderSummary.DetailID = ? AND  ((sent_items.shipped = N'PRE-ORDER REVIEW') OR (sent_items.shipped = N'PRE-ORDER APPROVED') OR (sent_items.shipped = N'ON ORDER'))"
+	objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,10, request.form("detailid")))
+	Set rsGet_PreOrderItemsOnHold = objCmd.Execute()
 
 end if
 %>
@@ -47,22 +59,28 @@ If Not rsGetDatesSold.EOF Then
 	  total = total + rsGetDatesSold.Fields.Item("qty_sold").Value 
 	  rsGetDatesSold.MoveNext()
 	Wend%>
-	<tr>
-		<td class="pt-3 py-0" colspan="2">
-			(<%=total%>) sales in last 6 months.
-		</td>
-	</tr>	
+</table>
+			<span class="badge badge-info" style="font-size:100%!important"><%=total%></span> sales in last 6 months
+			<% if NOT rsGetTotal_PreOrderItemsOnHold.EOF then %>
+			<div class="bg-dark text-light font-weight-bold p-1 my-2">Pre-Orders</div>
+			<div>
+				<span class="badge badge-info" style="font-size:100%!important"><%= rsGetTotal_PreOrderItemsOnHold("total_on_hold") %></span> on hold for pre-orders
+			</div>
+			<% while not rsGet_PreOrderItemsOnHold.eof %>
+				<a class="mr-3" href='invoice.asp?ID=<%= rsGet_PreOrderItemsOnHold("ID") %>' target='_blank' ><%= rsGet_PreOrderItemsOnHold("ID") %></a>
+			<% rsGet_PreOrderItemsOnHold.movenext()
+			wend
+			end if %>
+
 <%Else%>
-	<tr>
-		<td class="pt-3 py-0" colspan="2">
+		<div class="pt-3 py-0">
 			No sales in last 6 months.
-		</td>
-	</tr>
+		</div>
 <%
 End If	
 %>
 
-<table class="table table-sm">
+<table class="table table-sm mt-4">
 	<thead class="thead-dark">
 	  <tr>
 		<th class="py-0" scope="col">Date sold</th>

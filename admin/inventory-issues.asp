@@ -29,7 +29,17 @@ rsGetRecords.Open objCmd
 <% If Session("SubAccess") <> "N" then ' DISPLAY ONLY TO PEOPLE WHO HAVE ACCESS TO THIS PAGE %>
 
 <% If NOT rsGetRecords.EOF Then %>
-<h5 class="mt-3 mb-2"><%= rsGetRecords.RecordCount %> reported issue</h5>
+<h5 class="mt-3 mb-2"><%= rsGetRecords.RecordCount %> reported issues</h5>
+
+<div class="card my-3">
+    <div class="card-header h5">
+      Alter label queries
+    </div>
+    <div class="card-body">
+      <!--#include file="labels/inc-update-label-queries.asp" -->
+    </div>
+  </div> 
+
 <table class="table table-striped table-hover">
 	<thead class="thead-dark">
 		<tr>
