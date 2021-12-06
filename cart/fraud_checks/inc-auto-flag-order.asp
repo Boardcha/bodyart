@@ -24,14 +24,6 @@ if not rs_getFlaggedOrders.eof and var_total_orders > 6  then
 	objCmd.CommandText = "UPDATE sent_items SET shipped = 'FLAGGED', our_notes = 'Website trip auto-flagged this order. More than 6 orders were attempted to be placed within a 12 hour period.' WHERE ID = ?"
 	objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, rs_getFlaggedOrders.Fields.Item("ID").Value))
 	objCmd.Execute()
-	
-	Session.Abandon ' Clear entire session
-	
-	' Remove all cookies
-	For Each cookie in Response.Cookies
-		Response.Cookies(cookie) = ""
-		Response.Cookies(cookie).Expires = DateAdd("d",-1,now())
-	Next
 %>
 <!--#include virtual="/emails/function-send-email.asp"-->
 <!--#include virtual="/emails/email_variables.asp"-->

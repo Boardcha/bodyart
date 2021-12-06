@@ -1043,6 +1043,11 @@ var button_addcart = document.getElementById('btn-add-cart');
 							<% end if %>
 							<div class="add-cart-message" style="display:none"></div>
 							<button class="btn btn-lg btn-purple my-2 add_to_cart btn-block-mobile px-5" type="button"  id="btn-add-cart"><i class="fa fa-shopping-cart fa-lg mr-3"></i>Add to cart</button>
+							<% if now() < cDate("12/13/2021 11:00:00 PM") then %>
+							<div class="alert alert-light border-success">
+								<span class="font-weight-bold mr-4">USA Customers!</span>Place your order by Dec 15th and ship with DHL to get it in time for Christmas.
+							</div>
+							<% end if %>
 				
 							
 	

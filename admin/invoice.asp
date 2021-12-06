@@ -923,7 +923,8 @@ copy_totals = "Subtotal: &nbsp;&nbsp;&nbsp;" & FormatCurrency(SumLineItem, -1, -
 		<tbody>
 			<tr>
 					<td class="border-0" style="width:60%">
-							<button class="btn btn-sm btn-secondary mr-4" id="create_new_order">Create new empty order</button>
+						<button class="btn btn-sm btn-secondary mr-4" id="duplicate_order" data-invoiceid="<%= rsGetOrder("ID") %>" data-email="<%= rsGetOrder("email") %>">Duplicate order <span id="msg-duplicate-order"></span></button>	
+						<button class="btn btn-sm btn-secondary mr-4" id="create_new_order">Create new empty order</button>
 							<span class="move-copy-productid form-inline" style="display:none">
 							<div class="mt-2">
 							<span id="move-copy-text"></span> to invoice # <input class="form-control form-control-sm" type="text" size="20" name="toggle-productid" placeholder="Invoice # or new">
@@ -1039,7 +1040,7 @@ copy_order_header = "Invoice # " & rsGetOrder.Fields.Item("ID").Value & "&nbsp;&
 %>
 </tbody>
 </table>
-<button class="btn btn-sm btn-secondary d-inline-block" id="copy-order" data-clipboard-text="<%= copy_order_header %>&#10;<%= replace(copy_order_details, """", " inch") %>&#10;&#10;<%= copy_totals %>"> <i class="fa fa-content-copy"></i> Copy order</button>
+<button class="btn btn-sm btn-secondary d-inline-block" id="copy-order" data-clipboard-text="<%= copy_order_header %>&#10;<%= replace(copy_order_details, """", " inch") %>&#10;&#10;<%= copy_totals %>"> <i class="fa fa-content-copy"></i> Copy order to clipboard</button>
 </div><!-- main container -->
 
 <div style="height:100px"></div>
@@ -1436,7 +1437,7 @@ end if ' if not rsGetOrder.eof then
 
 </body>
 </html>
-<script type="text/javascript" src="scripts/invoices.js?v=072221"></script>
+<script type="text/javascript" src="scripts/invoices.js?v=120621"></script>
 <% if request.querystring("bo_item") <> "" then %>
 	<script type="text/javascript">
 		$('.bo_orange_' + <%= request.querystring("bo_item") %>).trigger('click');

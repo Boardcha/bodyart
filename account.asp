@@ -98,7 +98,13 @@ if session("admin_tempcustid") <> "" then %>
 <!--#include virtual="/accounts/inc-account-navigation.asp" -->
 <% If rsGetUser.EOF or var_flagged = "yes" Then
 %>
-	<div class="alert alert-danger">Not logged in or no account found
+	<div class="alert alert-danger">
+		<% if var_flagged = "yes" then %>
+		This account is on flagged status
+		<a class="btn btn-outline-secondary" href="contact.asp">Click here to contact our support team</a>
+		<% else %>
+		Not logged in or no account found
+		<% end if %>
 		<br/><br/>
 		<a class="btn btn-outline-secondary" data-toggle="modal" data-target="#signin" href="#">Click here to sign in</a>
 

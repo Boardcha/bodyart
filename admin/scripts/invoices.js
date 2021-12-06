@@ -379,7 +379,8 @@ localStorage["move_details"] = "" // set initial value to nothing
 localStorage["copy_details"] = "" // set initial value to nothing
 	
 	// Copy button
-	$(".copyid").click(function(){		
+	$(".copyid").click(function(){	
+		console.log("copy item");	
 		var id = $(this).attr("data-id");
 		var qty = parseInt($(this).attr("data-qty"));
 		var qty_instock = parseInt($(this).attr("data-qty_instock"));
@@ -387,8 +388,8 @@ localStorage["copy_details"] = "" // set initial value to nothing
 		$('#move-copy-text').html("Copy");		
 		$('.move-copy-productid').removeClass("move-detail");
 		$('.move-copy-productid').addClass("copy-detail");
-		$("span[name=copy_" + id + "]").toggleClass('btn-success');
-		$("span[name^=move_]").removeClass('btn-success');
+		$("button[name=copy_" + id + "]").toggleClass('btn-success');
+		$("button[name^=move_]").removeClass('btn-success');
 		
 		if (qty_instock < qty){
 			alert("WARNING: We only have " + qty_instock + " in stock. Invoice has " + qty + " ordered. You can still copy the item, but please double check stock levels.")
@@ -412,14 +413,15 @@ localStorage["copy_details"] = "" // set initial value to nothing
 	}); // Copy button
 	
 	// Move button
-	$(".moveid").click(function(){		
+	$(".moveid").click(function(){
+		console.log("move item");		
 		var id = $(this).attr("data-id");
 		$('.move-copy-productid').show();
 		$('#move-copy-text').html("Move");
 		$('.move-copy-productid').removeClass("copy-detail");
 		$('.move-copy-productid').addClass("move-detail");
-		$("span[name=move_" + id + "]").toggleClass('btn-success');		
-		$("span[name^=copy_]").removeClass('btn-success');
+		$("button[name=move_" + id + "]").toggleClass('btn-success');		
+		$("button[name^=copy_]").removeClass('btn-success');
 		
 		if ($(".btn-success")[0]){} // if class if found do nothing 		
 		else { // if it's not found then hide span input box
@@ -873,6 +875,27 @@ localStorage["copy_details"] = "" // set initial value to nothing
 
 			});
 	});	
+
+	// BEGIN Duplicate invoice
+	$(document).on("click", "#duplicate_order", function(){
+		var invoiceid = $(this).attr("data-invoiceid");
+		var email = $(this).attr("data-email");
+		$('#msg-duplicate-order').html('<i class="fa fa-spinner fa-spin"></i>');
+
+		$.ajax({
+		dataType: "json",
+		method: "post",
+		url: "invoices/ajax-duplicate-invoice.asp",
+		data: {invoiceid: invoiceid, email: email}
+		})
+		.done(function(json, msg ) {
+			$('#msg-duplicate-order').html('<i class="fa fa-spinner fa-spin mr-3"></i>Transferring to new invoice...');
+			window.location.replace("?id=" + json.new_invoiceid);
+		})
+		.fail(function(json, msg) {
+			$('#msg-duplicate-order').html(' -- ERROR');
+		});
+	}); // END Duplicate invoice
 
 	new Clipboard('#copy-order'); // Copies order to clipboard
 

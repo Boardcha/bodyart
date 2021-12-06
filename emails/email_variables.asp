@@ -52,7 +52,7 @@
 				'	https://bodyartforms-products.bodyartforms.com
 
 				'====== CHECK IF ITEM IS NOT A FREE ITEM AND IF SO DISPLAY LARGER DETAILS FOR IT =====
-				if array_details_2(12,i) = 0 then
+				if array_details_2(4,i) > 0 then
 
 					mail_order_details = mail_order_details & "<tr style='border-bottom: 1px solid rgb(100, 100, 100);'><td style='padding-top:15px;padding-right:15px;' valign='top'><img style='width:200px' src='https://bafthumbs-400.bodyartforms.com/" & array_details_2(9,i) & "'></td>"
 					
@@ -74,16 +74,14 @@
 						mail_order_details = mail_order_details & " <br>" & array_details_2(5,i)
 					end if
 					mail_order_details = mail_order_details & "<br><br>Quantity " & array_details_2(1,i) & " @ " & FormatCurrency(array_details_2(4,i)) & "<br><span style='font-weight:bold;font-size:1.1em'>" & FormatCurrency(array_details_2(4,i) * array_details_2(1,i),2) & "</span></td></tr>"
-				
-				'==== if array_details_2(12,i) > 0 IF ITEM IS A FREE ITEM DISPLAY SIMPLIFIED DETAILS
-				else
+				end if
+				'====  IF ITEM IS A FREE ITEM DISPLAY SIMPLIFIED DETAILS
+				if array_details_2(12,i) > 0 and array_details_2(4,i) <= 0 then
 					mail_free_items = mail_free_items & array_details_2(1,i) & "&nbsp;&nbsp;|&nbsp;" & array_details_2(2,i) & "&nbsp;" & array_details_2(3,i) & "&nbsp;" & array_details_2(10,i) & "&nbsp;" & array_details_2(11,i) & "<br>"
 				end if
-			
 			end if
 		next
 	end if ' order details build-out
-	
 
 	if done_mailing_certs = "no" then ' gift certificate creation / receipt
 		google_utmsource = "Gift certificate received"
