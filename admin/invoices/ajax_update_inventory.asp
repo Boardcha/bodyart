@@ -24,7 +24,7 @@ While NOT rsUpdate.EOF
 		'Write info to edits log	
 		set objCmd = Server.CreateObject("ADODB.Command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (?, " & rsUpdate("DetailID") & ",'Automated - Added " & rsUpdate("qty") & " to qty using add quantities button on invoice page','" & now() & "')"
+		objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (?, " & rsUpdate("DetailID") & ",'Automated - Added " & rsUpdate("qty") & " to qty using add quantities button on invoice # " & request("invoiceid") &  "','" & now() & "')"
 		objCmd.Parameters.Append(objCmd.CreateParameter("user_id",3,1,15, rsGetUser.Fields.Item("user_id").Value ))
 		objCmd.Execute()
 		Set objCmd = Nothing
@@ -39,7 +39,7 @@ While NOT rsUpdate.EOF
 		'Write info to edits log	
 		set objCmd = Server.CreateObject("ADODB.Command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (?, " & rsUpdate("DetailID") & ",'Automated - Deducted " & rsUpdate("qty") & " from qty using deduct quantities button on invoice page','" & now() & "')"
+		objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (?, " & rsUpdate("DetailID") & ",'Automated - Deducted " & rsUpdate("qty") & " from qty using deduct quantities button on invoice # " & request("invoiceid") &  "','" & now() & "')"
 		objCmd.Parameters.Append(objCmd.CreateParameter("user_id",3,1,15, rsGetUser.Fields.Item("user_id").Value ))
 		objCmd.Execute()
 		Set objCmd = Nothing
