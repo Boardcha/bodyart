@@ -327,7 +327,7 @@ If var_access_level = "Packaging" or var_access_level = "Admin" or var_access_le
 
 
 <% ' START Social Media
-If var_access_level = "Inventory" and (user_name = "Charles" or var_access_level = "Admin") then  %>
+If var_access_level = "Social Media" or var_access_level = "Admin" then  %>
 	<li class="nav-item dropdown position-static border-right border-secondary">
 		<a class="nav-link" href="#" id="SocialDropdown"
 				role="button" data-toggle="dropdown" aria-haspopup="true"

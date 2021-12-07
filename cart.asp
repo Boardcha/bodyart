@@ -634,7 +634,7 @@ end if ' show if free sticker cookie has not been set to "no"
 '===== CHECK STOCK ON PRODUCTS BEING OFFERED AS ADDONS AT CHECKOUT
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT qty, title, picture, ProductDetailID, price, jewelry.ProductID FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID WHERE qty >= 10 and (jewelry.ProductID = 28568 OR jewelry.ProductID = 20662)"
+objCmd.CommandText = "SELECT qty, title, picture, ProductDetailID, price, jewelry.ProductID FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID WHERE qty >= 10 and (jewelry.ProductID = 28568 OR jewelry.ProductID = 20687)"
 set rsGetAddOns = objCmd.Execute()
 
 if NOT rsGetAddOns.eof then

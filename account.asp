@@ -52,7 +52,33 @@ If Not rsGetUser.EOF Or Not rsGetUser.BOF Then ' Only run this info if a match w
 	
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT * FROM sent_items WHERE ship_code = 'paid' AND customer_ID = ? ORDER BY ID DESC"
+	strSQL = "SELECT * FROM sent_items WHERE ship_code = 'paid' AND customer_ID = ? ORDER BY ID DESC"
+		if Request("keywords") <> "" Then 
+			keywords = Replace(Request("keywords"), """","")
+			arrKeyword = Split(keywords, " ")
+			For i=0 to UBound(arrKeyword)
+				subQuery1 = "AND (JEW.title LIKE '%" & arrKeyword(i) & "%' " &_
+				"OR JEW.brandname LIKE '%" & arrKeyword(i) & "%' " &_
+				"OR JEW.material LIKE '%" & arrKeyword(i) & "%' " &_
+				"OR PRD.Gauge LIKE '%" & arrKeyword(i) & "%' " &_
+				"OR PRD.Length LIKE '%" & arrKeyword(i) & "%' " &_
+				"OR PRD.ProductDetail1 LIKE '%" & arrKeyword(i) & "%') "
+
+				subQuery_build = subQuery1 & subQuery_build
+
+				'response.write "<br>===================<br>" & subQuery_build & "<br>===================<br>"
+			Next
+			'Remove first "OR" from subQuery1
+			subQuery1 = Mid(subQuery1, 5)
+			strSQL = "SELECT * FROM sent_items SNT INNER JOIN TBL_OrderSummary ORS ON SNT.ID = ORS.InvoiceID " & _
+			"INNER JOIN ProductDetails PRD ON ORS.DetailID = PRD.ProductDetailID " & _
+			"INNER JOIN jewelry JEW ON PRD.ProductID = JEW.ProductID " & _
+			"WHERE SNT.ship_code = 'paid' AND SNT.customer_ID = ? " & _
+			"" & subQuery_build & " ORDER BY SNT.ID DESC"
+			'Response.Write strSQL
+			'Response.End
+		End If 
+	objCmd.CommandText = strSQL
 	'  AND date_order_placed > DATEADD(year, -3, GETDATE())'
 	objCmd.Parameters.Append(objCmd.CreateParameter("CustomerID",3,1,10,rsGetUser.Fields.Item("customer_ID").Value))
 	
@@ -83,7 +109,6 @@ If Not rsGetUser.EOF Or Not rsGetUser.BOF Then ' Only run this info if a match w
 End if ' Only run this info if a match was found
 
 %>
-
 <div class="display-5">
 		Order History
 	</div>
@@ -98,13 +123,15 @@ if session("admin_tempcustid") <> "" then %>
 <!--#include virtual="/accounts/inc-account-navigation.asp" -->
 <% If rsGetUser.EOF or var_flagged = "yes" Then
 %>
-	<div class="alert alert-danger">
-		<% if var_flagged = "yes" then %>
-		This account is on flagged status
-		<a class="btn btn-outline-secondary" href="contact.asp">Click here to contact our support team</a>
-		<% else %>
-		Not logged in or no account found
-		<% end if %>
+<div class="alert alert-danger">
+	<% if var_flagged = "yes" then %>
+	This account is on flagged status
+	<a class="btn btn-outline-secondary" href="contact.asp">Click here to contact our support team</a>
+	<% else %>
+	Not logged in or no account found
+	<% end if %>
+</div>
+	<div class="alert alert-danger">Not logged in or no account found
 		<br/><br/>
 		<a class="btn btn-outline-secondary" data-toggle="modal" data-target="#signin" href="#">Click here to sign in</a>
 
@@ -116,13 +143,20 @@ if session("admin_tempcustid") <> "" then %>
 	<div id="msg-activation-link"></div>
 	</div>
 <% else %>
-
+	<form class="form-inline mb-2" action="account.asp" method="get">
+		<input class="form-control bg-lightgrey border-secondary text-dark mr-2" style="width: auto !important;" name="keywords" id="desktop-keywords" type="search" placeholder="Search order history">
+		<button class="btn btn-sm my-2 text-light border-none bg-dark" type="submit" name="btn-search"><i class="fa fa-search"></i></button>
+	</form>
+	<%if Request("keywords") <> "" Then%>
+			 <%= Request("keywords") %> found in <%= total_records %> order(s)<a class="filter-delete text-danger  mr-lg-0" href="/account.asp" data-filter="jewelry" data-value="beads"><i class="fa fa-times mx-2"></i>Clear search</a>
+	<%End If%>
 <% If rsGetOrders.eof Then %>
-	<h6>
-		No orders found
-	</h6>
+	<%if Request("keywords") = "" Then%>
+		<h6>No orders found.</h6>
+	<%else%>
+		<h6>No search results found matching: <%=Request("keywords")%> </h6>
+	<%End If%>
 <% else %>
-
 <!--#include virtual="/accounts/inc-orders-paging.asp" -->
 
 <% 
@@ -227,7 +261,7 @@ objCmd.Parameters.Append(objCmd.CreateParameter("InvoiceID",3,1,10,rsGetOrders.F
 Set rsGetOrderTotals = objCmd.Execute()
 %>
 
-<div class="card border-secondary my-5">
+<div class="card border-secondary my-3">
 		<div class="card-header px-0 py-1">
 			<div class="container-fluid">
 				<div class="row">
@@ -435,7 +469,7 @@ While not rsGetOrderDetails.eof
 			<% end if %>
 			<%= var_bo_text %>
 			<div class="small font-weight-bold"><span class="pr-3">Qty <%= rsGetOrderDetails.Fields.Item("qty").Value %></span><%=FormatCurrency((rsGetOrderDetails.Fields.Item("item_price").Value)*(rsGetOrderDetails.Fields.Item("qty").Value),2)%></div>
-			<div class="small">
+			<div class="small item-info">
 			<%=(rsGetOrderDetails.Fields.Item("Gauge").Value)%>&nbsp;<%=(rsGetOrderDetails.Fields.Item("Length").Value)%>&nbsp;<%=(rsGetOrderDetails.Fields.Item("ProductDetail1").Value)%>&nbsp;<%=(rsGetOrderDetails.Fields.Item("title").Value)%>
 		</div>
 			
@@ -1110,3 +1144,21 @@ By clicking the start button below, you'll be taken to our product search where 
 
 <!--#include virtual="/bootstrap-template/footer.asp" -->
 <script type="text/javascript" src="/js-pages/order-history.min.js?v=111521"></script> 
+
+<%if Request("keywords") <> "" Then%>
+	<script>	
+		// Highlight keywords on Search result
+		$(document).ready(function() {
+		  var keyWord = "<%=keywords%>";
+		  var arrKeyword = keyWord.split(" ");
+		  for(var i=0; i< arrKeyword.length; i++) {
+			  var replaceD = "<span class='bg-warning rounded font-weight-bold px-2'>" + arrKeyword[i] + "</span>";
+			  $("div.item-info").each(function() {
+				var html = $(this).html();
+				html = html.replace(new RegExp(arrKeyword[i], "ig") , replaceD);
+				$(this).html(html);
+			  });
+		  }
+		})
+	</script>
+<%End If%>

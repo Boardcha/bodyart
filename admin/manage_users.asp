@@ -48,8 +48,9 @@ bootstrapped = "yes"
 					<option value="Customer service">Customer service</option>
 					<option value="Inventory">Inventory</option>
 					<option value="Packaging">Packaging</option>
-					<option value="Photography">Photography -- not working</option>
-					<option value="Pre-orders">Pre-orders -- not working</option>
+					<option value="Photography">Photography</option>
+					<option value="Pre-orders">Pre-orders</option>
+					<option value="Social Media">Social Media</option>
 					<option value="Admin">Admin</option>
 				</select>
 			</td>

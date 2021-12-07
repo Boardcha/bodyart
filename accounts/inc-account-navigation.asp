@@ -26,6 +26,7 @@ elseif Request.ServerVariables("URL") = "/account-waiting-list.asp" then
 	active_waiting = "btn-info"
 end if 
 %>
+<% if Not rsGetUser.EOF then %>
 <% if rsGetUser("active") = True then %>
 <ul class="nav nav-pills my-3" id="account-tabs">
 		<li class="nav-item m-1">
@@ -62,3 +63,4 @@ end if
 		
 </ul>
 <% end if '===== only show navigation if account is active %>
+<% end if %>

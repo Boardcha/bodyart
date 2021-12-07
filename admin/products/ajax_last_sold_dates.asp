@@ -17,7 +17,7 @@ if request.form("detailid") <> "" then
 
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT TOP (20) sent_items.ID, date_order_placed, qty, preorder, shipped FROM TBL_OrderSummary INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID WHERE (sent_items.ship_code = N'paid') AND (TBL_OrderSummary.DetailID = ?) ORDER BY sent_items.date_order_placed DESC"
+	objCmd.CommandText = "SELECT TOP (20) sent_items.ID, date_order_placed, qty, preorder, shipped FROM TBL_OrderSummary INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID WHERE (sent_items.ship_code = N'paid' OR shipped = 'Cancelled') AND (TBL_OrderSummary.DetailID = ?) ORDER BY sent_items.date_order_placed DESC"
 	objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,10,request.form("detailid")))
 	Set rsGetInvoicesSold = objCmd.Execute()
 
