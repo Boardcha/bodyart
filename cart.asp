@@ -454,8 +454,8 @@ end if ' show if free sticker cookie has not been set to "no"
 			<div class="sticky-top" style="z-index:100">
 				<div class="card bg-light mb-2">
 					
-						<div class="card-body text-left py-2">
-										<% if preorder_in_order = "yes" then %>
+								<div class="card-body text-left py-2">
+									<% if preorder_in_order = "yes" then %>
 										<div class="alert alert-warning p-2">
 											<strong>Your order contains custom made (PRE-ORDER) items.</strong>
 											<br/>
@@ -463,129 +463,131 @@ end if ' show if free sticker cookie has not been set to "no"
 										</div>	  			
 									<% end if ' if a pre-order is found in the order
 									%>
+									
+									
 									<% if Request.Cookies("ID") <> "" then ' if customer is logged in %>
-									<% if (rsGetUser.Fields.Item("credits").Value) <> 0 AND session("usecredit") <> "yes" then %>
-										  <a class="btn btn-sm btn-outline-secondary my-2 d-block" href="cart.asp?usecredit=yes">Press to use your <%= FormatCurrency(TotalCredits,2) %> store credit</a>
-									<% end if 'if customer has a credit to be able to use
+										<% if (rsGetUser.Fields.Item("credits").Value) <> 0 AND session("usecredit") <> "yes" then %>
+											  <a class="btn btn-sm btn-outline-secondary my-2 d-block" href="cart.asp?usecredit=yes">Press to use your <%= FormatCurrency(TotalCredits,2) %> store credit</a>
+										<% end if 'if customer has a credit to be able to use
 									end if %>
 
-									<% if var_display_coupon_code <> "" AND session("textCouponBox") <> "Certificate" then  %>
-									<div class="btn btn-sm btn-block btn-outline-info coupon-shortcut mt-2 font-weight-bold">Press to get <%= var_display_coupon_amount %>% OFF your order!
-									</div>
-									<% end if %>
-									<% 'Only display coupon/cert field if either one of them can still be entered in
-									if Session("GiftCertAmount") = 0 or Session("CouponCode") = "" then %>
-									<form action="cart.asp" id="frm-coupon" method="post">
+									<form id="frm-coupon" action="">
 											<div class="input-group input-group-sm my-2">
-													<input class="form-control" placeholder="<%= session("textCouponBox") %> code:" name="coupon_code" id="coupon_code" type="text" value="<% if var_display_coupon_code <> "" AND session("textCouponBox") <> "Certificate" then  %><%= var_display_coupon_code %><% end if %>" />
+													<input class="form-control" placeholder="Coupon or certificate code:" name="coupon_code" id="coupon_code" type="text" value="<% if var_display_coupon_code <> "" then  %><%= var_display_coupon_code %><% end if %>" />
 												<div class="input-group-append">
-														<input class="btn btn-secondary" type="submit" value="Apply">
+														<button id="btn-apply-coupon" class="btn btn-secondary" type="submit">Apply</button>
 												</div>
 											</div>
 									</form>
-									<% end if 'if a giftcert or coupon is found
-									%>
-									<% 
-									if discounts_applied = "yes" and Request.Form("coupon_code") <> "" then
-									 %> 
-										<div class="alert alert-success p-1"><%= Valid_type %> APPLIED
-										</div>
-									<% end if %>
-									<%
-									if discounts_applied = "no" and Request.Form("coupon_code") <> ""  then
-									 %> 
-										<div class="alert alert-danger p-1"><%= Valid_type %> NOT VALID</div>
-									<% end if %>
-										<div class="row">	
-											<div class="col-7">Subtotal</div><div class="col-5">$<span class="cart_subtotal"><%= FormatNumber((var_subtotal), -1, -2, -2, -2) %></span></div>
-										</div>		
-										<% if Session("CouponCode") <> "" then %>
-										<div class="row">
-											<div class="col-7">Coupon</div><div class="col-5">- $<span class="cart_coupon-amt"><%= FormatNumber(var_couponTotal, -1, -2, -2, -2) %></span></div>
-										</div>
-										<% 
-										end if 
-										%>
-										<% if Request.Cookies("ID") <> "" then 
-										%>
-										 <% if TotalSpent > 275 AND Session("CouponCode") = "" then %>
-											<div class="row">
-											<div class="col-7">Your 10% discount</div><div class="col-5">- <span class="cart_prefferred_discount"><%= FormatCurrency(total_preferred_discount, -1, -2, -2, -2) %></span>
-											</div></div>
-										<% 
-										end if ' if preferred customer 
-										%>
-										<%
-										 end if ' if customer is logged in
+									<div id="spinner-apply-coupon" style="display:none" class="mb-3"><i class="fa fa-spinner fa-spin fa-lg ml-3"></i> Applying coupon...</div>
+									<div id="processing-message"></div>
+									<div id="coupon-applied">
+										<% if var_display_coupon_code <> "" then %>
+											<div class="btn btn-sm btn-block btn-outline-info coupon-shortcut mt-2 font-weight-bold">Press to get <%= var_display_coupon_amount %>% OFF your order!</div>
+										<% end if %>	
+										<% if Request.Cookies("ID") <> "" then %>
+											<% if TotalSpent > 275 AND Session("CouponCode") = "" then %>
+												<div class="row">
+													<div class="col-7">Your 10% discount</div><div class="col-5">- <span class="cart_prefferred_discount"><%= FormatCurrency(total_preferred_discount, -1, -2, -2, -2) %></span></div>
+												</div>
+											<% end if ' if preferred customer 
+											%>
+										<% end if ' if customer is logged in
+										%>	
 										
-										%>
-										<% 
-										if Session("GiftCertAmount") <> 0 then 
-										%>
+										<%
+										if discounts_applied = "yes" and Request("coupon_code") <> "" then
+										%> 
+											<div class="alert alert-success p-1"><%= Valid_type %> APPLIED</div>
+										<% end if %>
+
+										<%
+										if discounts_applied = "no" and Request("coupon_code") <> ""  then %> 
+											<div class="alert alert-danger p-1"><%= Valid_type %> NOT VALID</div>
+										<% end if %>
+										
+										<% if Session("CouponCode") <> "" then %>
+											<div class="row">
+												<div class="col-7">Coupon</div><div class="col-5">- $<span class="cart_coupon-amt"><%= FormatNumber(var_couponTotal, -1, -2, -2, -2) %></span></div>
+											</div>
+										<% end if %>
+
+										<% if Session("GiftCertAmount") <> 0 then %>
 											<div id="row_gift_cert">
 												<div class="row">
-											<div class="col-7">Gift certificate</div><div class="col-5">- <span id="cart_gift-cert"><%= FormatCurrency(Session("GiftCertAmount"), -1, -2, -2, -2) %></span></div>
-										</div>
+													<div class="col-7">Gift certificate</div><div class="col-5">- <span id="cart_gift-cert"><%= FormatCurrency(Session("GiftCertAmount"), -1, -2, -2, -2) %></span></div>
+												</div>
 											</div>
 										<% ' if there is a gift certificate found
 										end if 
-										%>
-										<div id="row_use_now_credits">
-											<div class="row">
+										%>										
+									</div>
+									
+									<div class="row">	
+										<div class="col-7">Subtotal</div><div class="col-5">$<span class="cart_subtotal"><%= FormatNumber((var_subtotal), -1, -2, -2, -2) %></span></div>
+									</div>										
+									
+									<div id="row_use_now_credits">
+										<div class="row">
 											<div class="col-7">Order credits</div><div class="col-5">- <span id="use_now_amount"><%= FormatCurrency(credit_now,2) %></span></div>
 										</div>
-										</div>
-										<% if session("usecredit") = "yes" then %>
-										<div id="row_store_credit">
-											<div class="row">
-										<div class="col-7">Store credit</div><div class="col-5">- <span id="store_credit_amt"><%= FormatCurrency(session("storeCredit_used"),2) %></span><span title="Remove store credit" id="remove-credit" class="text-danger ml-3 pointer" data-type="store-credit"><i class="fa fa-trash-alt"></i></span>
-										</div>
-									</div>	
+									</div>
+									<% if session("usecredit") = "yes" then %>
+									<div id="row_store_credit">
+										<div class="row">
+											<div class="col-7">Store credit</div><div class="col-5">- <span id="store_credit_amt"><%= FormatCurrency(session("storeCredit_used"),2) %></span><span title="Remove store credit" id="remove-credit" class="text-danger ml-3 pointer" data-type="store-credit"><i class="fa fa-trash-alt"></i></span>
+											</div>
+										</div>	
 									</div>
 									<% end if 'if customer has a credit to be able to use %>	
-										<% 
-										if Request.ServerVariables("URL") = "/cart.asp" or Request.ServerVariables("URL") = "/cart2.asp" then
-												est_shipping = "Est shipping"
-											else
-												est_shipping = "Shipping"
-											end if
-										%>
-											<div class="row">
-											   <div class="col-7"><%= est_shipping %></div><div class="col-5 cart_shipping"><%= var_shipping_cost_friendly %></div>
-											</div>
-											<div class="row">
-												<div class="col-7">Tax</div><div class="col-5 small">Calculated on next screen</div>
-											</div>
-											<% ' do not show free shipping notice if order is heavy 
-											if session("weight") <= 32 and strcountryName = "US" and var_other_items = 1 and request.cookies("OrderAddonsActive") = "" then
-											%>
-												<div class="cart_shipping_amountLeft text-center text-success p-1 mt-1" <% if var_shipping_AmountNeeded <= 0 then %>style="display:none"<% end if %>>
-													<i class="fa fa-shipping-fast fa-lg mr-2"></i>
-													<span class="font-weight-bold">Only <span class="shipping_amount_left"><%= FormatCurrency(var_shipping_AmountNeeded, -1, -2, -2, -2) %></span> away from <%= var_shipping_goal %> SHIPPING</span>
+								
+								
+									<% 
+									if Request.ServerVariables("URL") = "/cart.asp" or Request.ServerVariables("URL") = "/cart2.asp" then
+											est_shipping = "Est shipping"
+										else
+											est_shipping = "Shipping"
+										end if
+									%>
+									
+									<div class="row">
+										   <div class="col-7"><%= est_shipping %></div><div class="col-5 cart_shipping"><%= var_shipping_cost_friendly %></div>
+									</div>
+									<div class="row">
+										<div class="col-7">Tax</div><div class="col-5 small">Calculated on next screen</div>
+									</div>
+									
+									<% ' do not show free shipping notice if order is heavy 
+									if session("weight") <= 32 and strcountryName = "US" and var_other_items = 1 and request.cookies("OrderAddonsActive") = "" then
+									%>
+										<div class="cart_shipping_amountLeft text-center text-success p-1 mt-1" <% if var_shipping_AmountNeeded <= 0 then %>style="display:none"<% end if %>>
+												<i class="fa fa-shipping-fast fa-lg mr-2"></i>
+												<span class="font-weight-bold">Only <span class="shipping_amount_left"><%= FormatCurrency(var_shipping_AmountNeeded, -1, -2, -2, -2) %></span> away from <%= var_shipping_goal %> SHIPPING</span>
 
-													<%
-													'===== FREE SHIPPING THRESHOLD CHANGE NOTICE FROM $25 TO $25. WILL DISPLAY FOR ONE MONTH =======
-													if now() < cDate("12/16/2021 11:00:00 PM") then %>
-													
-													<div class="text-success small">Our free shipping threshold has recently changed from $25 to $50</div>
-													<button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#freeshipping"
-													data-dismiss="modal" >Click here for more info</button>
-													<% end if %>
-												</div>
-											<% end if ' free shipping notice only showing if order is not heavy
-											%>	
-										</div><!-- end card body -->
-										<div class="card-footer">
+												<%
+												'===== FREE SHIPPING THRESHOLD CHANGE NOTICE FROM $25 TO $25. WILL DISPLAY FOR ONE MONTH =======
+												if now() < cDate("12/16/2021 11:00:00 PM") then %>
 												
-											<!--#include virtual="cart/inc_cart_grandtotal.asp"-->
-													<h4>TOTAL <% if strcountryName <> "US" then %> (USD)<% end if %>$<span class="cart_grand-total"><%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %></span></h4>
-											<div class="row_convert_total" style="display:none">
+												<div class="text-success small">Our free shipping threshold has recently changed from $25 to $50</div>
+												<button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#freeshipping"
+												data-dismiss="modal" >Click here for more info</button>
+												<% end if %>
+										</div>
+									<% end if ' free shipping notice only showing if order is not heavy
+									%>	
+								</div><!-- end card body -->
+								
+								<div class="card-footer">
+												
+									<!--#include virtual="cart/inc_cart_grandtotal.asp"-->
+									<h4>TOTAL <% if strcountryName <> "US" then %> (USD)<% end if %>$<span class="cart_grand-total"><%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %></span></h4>
+										<div class="row_convert_total" style="display:none">
 												<div class="alert alert-success p-2">
 													<div><h6><img class="mr-2" style="width:20px;height:20px" src="/images/icons/<%= currency_img %>">ESTIMATE <span class="exchange-price"><span class="currency-type"></span> <span class="convert-total convert-price" data-price=""></span></span></h6></div>
 														<span class="exchange-price"><span class="currency-type bold"></span> <span class="convert-total convert-price bold" data-price=""></span> is a close estimate</span>. The total billed will be for <span class="bold">$<span class="cart_grand-total"><%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %></span> in US Dollars</span> and your bank will convert to the most current exchange rate.
 												</div>
 										</div>
-										<% If toggle_checkout_cards = true Then %>
+									<% If toggle_checkout_cards = true Then %>
 											<div class="checkout_now" style="display:none">
 												<a class="btn btn-block btn-primary mb-2 checkout_button" href="checkout.asp?type=card" ><h6>CHECKOUT WITH <span class="payment-options">CREDIT CARD
 													<br/>
@@ -598,31 +600,30 @@ end if ' show if free sticker cookie has not been set to "no"
 												</h6>
 												</a>
 											</div>
-										<% else %>
+									<% else %>
 											<div class="alert alert-danger">We're sorry, but our <b>credit card</b> checkout is temporarily unavailable. As soon as our payment processor comes back online, we will accept orders again. Please check back later.</div>
-										<% end if %>										
+									<% end if %>										
 
-
-										<% If toggle_checkout_paypal = true Then %>
-											<div class="checkout_paypal mb-2"  style="display:none">
-												<a class="btn btn-block btn-warning checkout_button" href="checkout.asp?type=paypal">
-													<img style="height:30px" src="/images/paypal.png" />
-												</a>
-											</div>
-										<% else %>
-											<div class="alert alert-danger">We're sorry, but our <b>PayPal</b> checkout is temporarily unavailable. As soon as PayPal comes back online, we will accept orders again. Please check back later.</div>
-										<% end if %>
-										<div id="pay-api-processing-message" style="display:none"></div>	
-										<div id="btn-googlepay" class="mb-3 checkout_button" style="width: 100%; height: 45px; display: none;"></div>
-										<%
-										' === only show afterpay option to USA customers
-										if request.cookies("currency") = "" OR request.cookies("currency") = "USD" then
-											afterpay_display = ""
-										else
-											afterpay_display = "display:none"
-										end if
-										%>
-										<div id="REMOVE-GO-LIVE" style="display:none">
+									<% If toggle_checkout_paypal = true Then %>
+										<div class="checkout_paypal mb-2"  style="display:none">
+											<a class="btn btn-block btn-warning checkout_button" href="checkout.asp?type=paypal">
+												<img style="height:30px" src="/images/paypal.png" />
+											</a>
+										</div>
+									<% else %>
+										<div class="alert alert-danger">We're sorry, but our <b>PayPal</b> checkout is temporarily unavailable. As soon as PayPal comes back online, we will accept orders again. Please check back later.</div>
+									<% end if %>
+									<div id="pay-api-processing-message" style="display:none"></div>	
+									<div id="btn-googlepay" class="mb-3 checkout_button" style="width: 100%; height: 45px; display: none;"></div>
+									<%
+									' === only show afterpay option to USA customers
+									if request.cookies("currency") = "" OR request.cookies("currency") = "USD" then
+										afterpay_display = ""
+									else
+										afterpay_display = "display:none"
+									end if
+									%>
+									<div id="REMOVE-GO-LIVE" style="display:none">
 										<div class="afterpay_option" style="<%= afterpay_display %>">
 											<a class="btn btn-block btn-outline-secondary pb-1  mt-3 " style="display:none" id="btn-afterpay-checkout" href="checkout.asp?type=afterpay"><span class="afterpay-widget"></span></a>
 											<div class="mt-3" style="display:none" id="afterpay-displayonly"><span class="afterpay-widget-nonactive"></span></div>
@@ -777,7 +778,7 @@ if NOT rsGetAddOns.eof then
 <script async src="https://pay.google.com/gp/p/js/pay.js" onload="onGooglePayLoaded()"></script>
 
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
-<script type="text/javascript" src="/js-pages/cart.min.js?v=03032020"></script>
+<script type="text/javascript" src="/js-pages/cart.min.js?v=03032022"></script>
 <script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=111721"></script>
 <!-- ^^^^^^  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE ^^^^^^ -->
 <script type="text/javascript">
