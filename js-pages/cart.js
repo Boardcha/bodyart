@@ -428,3 +428,27 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 				window.location = "/cart.asp?updateditem=yes";
 			}) 	
 	});
+	
+	// APPLY COUPON OR CERTIFICATE CODE
+	$('#frm-coupon').submit(function(e) {
+		var coupon_code = $('#coupon_code').val();
+		if(coupon_code !=""){
+			$('#coupon-applied').html('');
+			$('#processing-message').show();
+			$('#processing-message').html('<div class="alert alert-success mt-2"><i class="fa fa-spinner fa-2x fa-spin"></i> Please wait ... Applying coupon</div>');		
+			$.ajax({
+			  url: "/cart/ajax-cart-apply-coupon.asp",
+			  type: 'POST',
+			  data: {
+				 coupon_code: coupon_code
+			  }
+			}).done(function( data, msg ) {
+				$('#coupon-applied').html(data);
+				calcAllTotals();
+				$('#processing-message').html('');
+			}).fail(function() {
+				$('#processing-message').html('');
+			});
+	    }
+	   e.preventDefault();
+	}); 
