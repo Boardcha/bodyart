@@ -145,6 +145,10 @@ rsGetCountries_numRows = rsGetCountries_numRows + Repeat1__numRows
       <td><input name="Country_UPSCode" type="text" class="form-control form-control-sm" id="Country_UPSCode" size="4" maxlength="4"></td>
     </tr>
     <tr>
+      <td>International Tracking URL</td>
+      <td><input name="international_tracking_url" type="text" class="form-control form-control-sm" id="international_tracking_url" size="10"></td>
+    </tr>		
+    <tr>
       <td>Display in country drop down</td>
       <td><input type="radio" name="Display" value="1">
       Yes 
@@ -176,8 +180,8 @@ If (CStr(Request("MM_insert")) = "FRM_AddCompany") Then
   MM_editConnection = MM_bodyartforms_sql_STRING
   MM_editTable = "dbo.TBL_Countries"
   MM_editRedirectUrl = "countries-manage.asp"
-  MM_fieldsStr  = "country|value|ShippingType|value|Country_UPSCode|value|Display|value|origin_toggle|value"
-  MM_columnsStr = "Country|',none,''|CountryType|',none,''|Country_UPSCode|',none,''|Display|',none,''|origin_toggle|',none,''"
+  MM_fieldsStr  = "country|value|ShippingType|value|Country_UPSCode|value|Display|value|origin_toggle|value|international_tracking_url|value"
+  MM_columnsStr = "Country|',none,''|CountryType|',none,''|Country_UPSCode|',none,''|Display|',none,''|origin_toggle|',none,''|international_tracking_url|',none,''"
 
   ' create the MM_fields and MM_columns arrays
   MM_fields = Split(MM_fieldsStr, "|")
@@ -290,6 +294,11 @@ rsEditCountry_numRows = 0
       <td><input name="Country_UPSCode" type="text" class="form-control form-control-sm" id="Country_UPSCode" value="<%=(rsEditCountry.Fields.Item("Country_UPSCode").Value)%>" size="4" maxlength="4"></td>
     </tr>
     <tr>
+      <td>International Tracking URL</td>
+      <td><input name="international_tracking_url" type="text" class="form-control form-control-sm" id="international_tracking_url" value="<%=(rsEditCountry.Fields.Item("international_tracking_url").Value)%>" size="10"></td>
+    </tr>	
+    <tr>	
+    <tr>
       <td>Display in country drop down</td>
       <td><input type="radio" name="Display" id="radio3" value="1" <% if rsEditCountry.Fields.Item("Display").Value = 1 Then %>checked<% end if %>>
         Yes
@@ -297,7 +306,6 @@ rsEditCountry_numRows = 0
         No</td>
         
     </tr>
-    <tr>
       <td>Show as origin country in admin products</td>
       <td><input type="radio" name="origin_toggle" value="1" <% if rsEditCountry.Fields.Item("origin_toggle").Value = 1 Then %>checked<% end if %>>
         Yes
@@ -324,8 +332,8 @@ If (CStr(Request("MM_update")) = "FRM_EditCompany" And CStr(Request("MM_recordId
   MM_editColumn = "CountryID"
   MM_recordId = "" + Request.Form("MM_recordId") + ""
   MM_editRedirectUrl = "countries-manage.asp"
-  MM_fieldsStr  = "country|value|ShippingType|value|Country_UPSCode|value|Display|value|origin_toggle|value"
-  MM_columnsStr = "Country|',none,''|CountryType|',none,''|Country_UPSCode|',none,''|Display|',none,''|origin_toggle|',none,''"
+  MM_fieldsStr  = "country|value|ShippingType|value|Country_UPSCode|value|Display|value|origin_toggle|value|international_tracking_url|value"
+  MM_columnsStr = "Country|',none,''|CountryType|',none,''|Country_UPSCode|',none,''|Display|',none,''|origin_toggle|',none,''|international_tracking_url|',none,''"
 
   ' create the MM_fields and MM_columns arrays
   MM_fields = Split(MM_fieldsStr, "|")
@@ -423,6 +431,7 @@ End If
     <th></th>
     <th>Display to public at checkout & accounts</th>
     <th>Country of origin option for admin products</th>
+	<th>Tracking URL</th>
   </tr>
 </thead>
   <% 
@@ -444,6 +453,9 @@ While ((Repeat1__numRows <> 0) AND (NOT rsGetCountries.EOF))
         <% else %>
         <span class="alert alert-info px-2 py-1 font-weight-bold">Yes</span>
       <% end if %></td>
+	  <td>
+	  <%=rsGetCountries.Fields.Item("international_tracking_url").Value%>
+	  </td>
     </tr>
     <% 
   Repeat1__index=Repeat1__index+1

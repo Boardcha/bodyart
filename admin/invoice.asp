@@ -476,6 +476,11 @@ if not rsGetOrder.eof then
 			<button id="return-label" class="btn btn-sm btn-secondary d-inline-block"  data-toggle="modal" data-target="#modal-return-label">Return label</button>
 			</div>
 			<% if rsGetOrder.Fields.Item("USPS_tracking").Value <> "" then %>
+				<%if rsGetOrder("checkout_estimated_delivery_date") <> "" then %>
+					<div class="mb-1">
+						<%=FormatDateTime(rsGetOrder("checkout_estimated_delivery_date"),vbShortDate)%> - Estimated original delivery date given at checkout
+					</div>
+				<% end if %>
 				<% if instr(rsGetOrder.Fields.Item("shipping_type").Value,"DHL") > 0 then %>
 				<span id="tracking_arrow_down" class="usps_tracking btn btn-sm btn-secondary" data-url="../dhl/dhl-tracking.asp?tracking=">DHL Tracking Details</span>
 				<% else %>
