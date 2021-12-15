@@ -127,7 +127,7 @@ Else ' If no other items
 	If var_giftcert = "yes" Then
 		'NO SHIPPING REQUIRED
 		'Digital gift certificate will be e-mailed to your recipient
-		options = "{""label"": ""Free: NO SHIPPING REQUIRED"", ""amount"": 0, ""detail"": ""Digital gift certificate will be e-mailed to your recipient"", ""identifier"": ""99""}
+		options = "{""label"": ""Free: NO SHIPPING REQUIRED"", ""amount"": 0, ""detail"": ""Digital gift certificate will be e-mailed to your recipient"", ""identifier"": ""99""}"
 	End If
 End If 
 

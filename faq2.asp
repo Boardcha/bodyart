@@ -13,8 +13,10 @@
 
 
 <div class="display-5">
-		Testing Fresh Desk support 
+		Support / FAQs 
 	</div>
+    
+    <iframe class="w-100 border-none" style="height:100%"  frameBorder="0" src="https://bodyartforms.freshdesk.com/support/solutions" title="description"></iframe>
     <script>
         window.fwSettings={
         'widget_id':61000001629
@@ -36,6 +38,14 @@
 	<br/>
 	<br/>
 	<br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
 	
 
 	

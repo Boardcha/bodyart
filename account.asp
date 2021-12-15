@@ -68,9 +68,10 @@ If Not rsGetUser.EOF Or Not rsGetUser.BOF Then ' Only run this info if a match w
 
 				'response.write "<br>===================<br>" & subQuery_build & "<br>===================<br>"
 			Next
-			'Remove first "OR" from subQuery1
+			'Remove first "AND" from subQuery1
 			subQuery1 = Mid(subQuery1, 5)
-			strSQL = "SELECT * FROM sent_items SNT INNER JOIN TBL_OrderSummary ORS ON SNT.ID = ORS.InvoiceID " & _
+			strSQL = "SELECT DISTINCT SNT.ID, SNT.pay_method, SNT.shipped, SNT.shipping_type, SNT.USPS_tracking, SNT.UPS_tracking, SNT.date_sent, SNT.ship_code, SNT.date_order_placed, SNT.company, SNT.customer_first, SNT.customer_last, SNT.[address], SNT.address2, SNT.[state], SNT.province, SNT.zip, SNT.city, SNT.country, SNT.ScanInvoice_Timestamp, ORS.returned, CONVERT(nvarchar(max), SNT.customer_comments) As customer_comments, CONVERT(nvarchar(max), SNT.item_description) As item_description, SNT.total_preferred_discount, SNT.total_coupon_discount, SNT.total_sales_tax, SNT.total_gift_cert, SNT.total_free_credits, SNT.total_store_credit, SNT.total_returns, SNT.shipping_rate " & _ 
+			"FROM sent_items SNT INNER JOIN TBL_OrderSummary ORS ON SNT.ID = ORS.InvoiceID " & _
 			"INNER JOIN ProductDetails PRD ON ORS.DetailID = PRD.ProductDetailID " & _
 			"INNER JOIN jewelry JEW ON PRD.ProductID = JEW.ProductID " & _
 			"WHERE SNT.ship_code = 'paid' AND SNT.customer_ID = ? " & _

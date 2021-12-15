@@ -133,6 +133,7 @@ end if  ' ----------------------------------------
 var_total_discount = 0
 var_total_discount = var_couponTotal + total_preferred_discount + var_credit_now + session("storeCredit_used") + var_total_giftcert_used
 var_grandtotal = var_subtotal - var_total_discount + var_salesTax + shipping_cost
+var_grandtotal = FormatNumber(var_grandtotal, 2)
 
 if session("amount_to_collect") <> "" then
 if session("amount_to_collect") <> 0 then
