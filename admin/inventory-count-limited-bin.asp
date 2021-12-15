@@ -186,7 +186,7 @@ $(document).ready(function(){
 		var previous_detailid = localStorage.detailid;
 		
 		$("#" + current_detailid).addClass("table-success");
-		$("#" + current_detailid).prependTo(".scanner-table"); // move row to top
+		$("#" + current_detailid).prependTo(".table"); // move row to top
 		
 		$("#" + previous_detailid).hide();
 		localStorage.setItem('detailid', $(this).val());
