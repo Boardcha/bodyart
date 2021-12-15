@@ -5,10 +5,6 @@
 'Session("GiftCertAmount") = 0
 'Session("GiftCertCode") = ""
 
-if session("textCouponBox") = "" then
-	session("textCouponBox") = "Coupon or certificate "
-end if
-
 ' Check to see if GIFT CERTIFICATE code is usable -------------------
 If (Request("coupon_code") <> "" and Session("GiftCertAmount") = 0) or Session("GiftCertCode") <> "" Then
 	

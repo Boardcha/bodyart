@@ -95,9 +95,10 @@
 	Set objFiles = objFolder.Files
 	dim curFile
 	For each curFile in objFiles
-		objFS.DeleteFile(curFile)
+	'==== COMMENTED OUT SO THAT SERVER DOESNT DELETE SUBFOLDERS
+	'	objFS.DeleteFile(curFile)
 	Next	
-	' Delete all subfolders and files
+	' Delete file in subfolder
 	For Each subFolder In objFolder.SubFolders
 		For each curFile in subFolder.Files
 			objFS.DeleteFile(curFile)

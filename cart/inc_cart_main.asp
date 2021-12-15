@@ -132,6 +132,18 @@ end if ' if customer is registered -----------------------
 
 if var_process_order <> "yes" then ' variable set on checkout_ajax_process_payment.asp page =============================
 
+if session("textCouponBox") = "" then
+	session("textCouponBox") = "Coupon or certificate "
+end if
+
+if Session("GiftCertAmount") = "" then
+Session("GiftCertAmount") = 0
+end if
+
+if session("storeCredit_amount") = "" then
+session("storeCredit_amount") = 0
+end if
+
 if check_stock = "yes" then
 	var_cart_count = 0
 	rs_getCart.ReQuery() 

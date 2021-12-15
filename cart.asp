@@ -7,14 +7,6 @@
 	' Setting some variables so it doesn't generate string mis match errors and 500 out pages
 	session("amount_to_collect") = 0
 	session("var_other_items") = 0
-
-	if Session("GiftCertAmount") = "" then
-		Session("GiftCertAmount") = 0
-	end if
-
-	if session("storeCredit_amount") = "" then
-		session("storeCredit_amount") = 0
-	end if
 %>
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <script type="text/javascript">
@@ -492,7 +484,10 @@ end if ' show if free sticker cookie has not been set to "no"
 									<div id="coupon-applied">
 										<% if var_display_coupon_code <> "" then %>
 											<div class="btn btn-sm btn-block btn-outline-info coupon-shortcut mt-2 font-weight-bold">Press to get <%= var_display_coupon_amount %>% OFF your order!</div>
-										<% end if %>	
+										<% end if %>
+										<div class="row">	
+											<div class="col-7">Subtotal</div><div class="col-5">$<span class="cart_subtotal"><%= FormatNumber((var_subtotal), -1, -2, -2, -2) %></span></div>
+										</div>	
 										<% if Request.Cookies("ID") <> "" then %>
 											<% if TotalSpent > 275 AND Session("CouponCode") = "" then %>
 												<div class="row">
@@ -513,7 +508,7 @@ end if ' show if free sticker cookie has not been set to "no"
 										if discounts_applied = "no" and Request("coupon_code") <> ""  then %> 
 											<div class="alert alert-danger p-1"><%= Valid_type %> NOT VALID</div>
 										<% end if %>
-										
+																				
 										<% if Session("CouponCode") <> "" then %>
 											<div class="row">
 												<div class="col-7">Coupon</div><div class="col-5">- $<span class="cart_coupon-amt"><%= FormatNumber(var_couponTotal, -1, -2, -2, -2) %></span></div>
@@ -529,11 +524,7 @@ end if ' show if free sticker cookie has not been set to "no"
 										<% ' if there is a gift certificate found
 										end if 
 										%>										
-									</div>
-									
-									<div class="row">	
-										<div class="col-7">Subtotal</div><div class="col-5">$<span class="cart_subtotal"><%= FormatNumber((var_subtotal), -1, -2, -2, -2) %></span></div>
-									</div>										
+									</div>									
 									
 									<div id="row_use_now_credits">
 										<div class="row">
