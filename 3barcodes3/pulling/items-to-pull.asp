@@ -169,11 +169,12 @@ end if '==== rsGetItems.eof
         If rsGetItems.Fields.Item("BinNumber_Detail").Value <> 0 then
              
             If  (rsGetItems.Fields.Item("ID_Description").Value = "Case 1" OR rsGetItems.Fields.Item("ID_Description").Value = "Case 2" OR rsGetItems.Fields.Item("ID_Description").Value = "Case 3" OR rsGetItems.Fields.Item("ID_Description").Value = "Case 4") Then  
-                BinType = "Shelf"
+                BinType = "<span class='mr-1 pr-1 border-secondary border-right'>" & rsGetItems("ID_Description") & "</span>Shelf"
             else
                 BinType = "BIN"
             end if
         %>
+                
                 <%= BinType %>
                 <span class="ml-1 mr-1 border-secondary border-right">
                     <%= rsGetItems.Fields.Item("BinNumber_Detail").Value %> 
@@ -185,9 +186,9 @@ end if '==== rsGetItems.eof
                 
         if rsGetItems.Fields.Item("customorder").Value <> "yes" then 
             If rsGetItems.Fields.Item("BinNumber_Detail").Value <> 0 then
-        '==== Show detail id for items in limited bins
+            '==== Show detail id for items in limited bins
             %>   
-            <%= rsGetItems.Fields.Item("ProductDetailID").Value %> 
+                <%= rsGetItems.Fields.Item("ProductDetailID").Value %>
             <% else 
             '===== regular stock item location
             %>
@@ -200,6 +201,10 @@ end if '==== rsGetItems.eof
                  (<%= rsGetOrder.Fields.Item("customer_first").Value %>)
             <% end if %>
         </span>
+        <% if rsGetItems.Fields.Item("BinNumber_Detail").Value <> 0 AND rsGetItems("ProductDetailID") <> rsGetItems("location") then
+        %> 
+        <span class="d-block ml-1">Old location <%= rsGetItems("location") %></span>
+        <% end if '  also show old location for limited bin labels IF DETAIL ID DOESNT MATCH %>
         <% else %>
             PRE-ORDER FOR | <%= rsGetOrder.Fields.Item("customer_first").Value %></span>
             <div>Invoice # <%= rsGetOrder.Fields.Item("ID").Value %></div>

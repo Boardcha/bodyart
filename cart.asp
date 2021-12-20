@@ -562,15 +562,6 @@ end if ' show if free sticker cookie has not been set to "no"
 										<div class="cart_shipping_amountLeft text-center text-success p-1 mt-1" <% if var_shipping_AmountNeeded <= 0 then %>style="display:none"<% end if %>>
 												<i class="fa fa-shipping-fast fa-lg mr-2"></i>
 												<span class="font-weight-bold">Only <span class="shipping_amount_left"><%= FormatCurrency(var_shipping_AmountNeeded, -1, -2, -2, -2) %></span> away from <%= var_shipping_goal %> SHIPPING</span>
-
-												<%
-												'===== FREE SHIPPING THRESHOLD CHANGE NOTICE FROM $25 TO $25. WILL DISPLAY FOR ONE MONTH =======
-												if now() < cDate("12/16/2021 11:00:00 PM") then %>
-												
-												<div class="text-success small">Our free shipping threshold has recently changed from $25 to $50</div>
-												<button class="btn btn-sm btn-outline-success" data-toggle="modal" data-target="#freeshipping"
-												data-dismiss="modal" >Click here for more info</button>
-												<% end if %>
 										</div>
 									<% end if ' free shipping notice only showing if order is not heavy
 									%>	

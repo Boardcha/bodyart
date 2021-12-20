@@ -1,6 +1,7 @@
+<!--#include virtual="/Connections/klaviyo.asp" -->
 <%
 ' make sure this information only fires off once per session
-if session("google_sent") <> "yes" then
+if 1=1 OR session("google_sent") <> "yes" then
 %>
 <script type="text/javascript">
 // Revised in 2021 to GA4 variable names
@@ -107,6 +108,151 @@ while NOT rsGoogle_GetOrderDetails.eof
 	});
 </script>	
 
+<!-- KLAVIYO ORDER PLACED PUSH BEGIN -->
+<%
+rsGoogle_GetOrderDetails.moveFirst
+While NOT rsGoogle_GetOrderDetails.eof
+	klaviyo_product_names = klaviyo_product_names & """" & Replace(rsGoogle_GetOrderDetails("title"), """", """""") & ""","
+	klaviyo_categories = klaviyo_categories & """" & Trim(rsGoogle_GetOrderDetails("jewelry")) & ""","
+	klaviyo_brands = klaviyo_brands & """" & rsGoogle_GetOrderDetails("brandname") & ""","
+
+	klaviyo_items = klaviyo_items & "{" & _
+			 """ProductID"": """ & rsGoogle_GetOrderDetails("ProductID") & """," & _
+			 """SKU"": """ & rsGoogle_GetOrderDetails("DetailID") & """," & _
+			 """ProductName"": """ & Replace(rsGoogle_GetOrderDetails("title"), """", """""") & """," & _
+			 """Quantity"": " & rsGoogle_GetOrderDetails("qty") & "," & _
+			 """ItemPrice"": " & rsGoogle_GetOrderDetails("item_price") & "," & _
+			 """RowTotal"": " & rsGoogle_GetOrderDetails("qty") * rsGoogle_GetOrderDetails("item_price") & "," & _
+			 """ProductURL"": ""https://bodyartforms.com/productdetails.asp?productid=" & rsGoogle_GetOrderDetails("ProductID") & """," & _
+			 """ImageURL"": ""https://bodyartforms-products.bodyartforms.com/" & rsGoogle_GetOrderDetails("largepic") & """," & _
+			 """ProductCategories"": [""" & Trim(rsGoogle_GetOrderDetails("jewelry")) & """]" & _
+		   "},"
+	rsGoogle_GetOrderDetails.MoveNext   
+Wend
+
+'Remove last coma from arrays
+klaviyo_product_names = Mid(klaviyo_product_names, 1, LEN(klaviyo_product_names)-1)
+klaviyo_categories = Mid(klaviyo_categories, 1, LEN(klaviyo_categories)-1)
+klaviyo_brands = Mid(klaviyo_brands, 1, LEN(klaviyo_brands)-1)
+klaviyo_items = Mid(klaviyo_items, 1, LEN(klaviyo_items)-1)
+	
+payload_order_placed = "{" & _
+   """token"": """ & klaviyo_public_key & """," & _
+   """event"": ""Placed Order""," & _
+   """customer_properties"": {" & _
+     """$email"": """ & rsGetOrder("email") & """," & _
+     """$first_name"": """ & rsGetOrder("customer_first") & """," & _
+     """$last_name"": """ & rsGetOrder("customer_last") & """," & _
+     """$phone_number"": """ & rsGetOrder("phone") & """," & _
+     """$address1"": """ & rsGetOrder("address") & """," & _
+     """$address2"": """"," & _
+     """$city"": """ & rsGetOrder("city") & """," & _
+     """$zip"": """ & rsGetOrder("zip") & """," & _
+     """$region"": """ & rsGetOrder("state") & """," & _
+     """$country"": """ & rsGetOrder("country") & """" & _
+   "}," & _
+   """properties"": {" & _
+     """$event_id"": """ & rsGetOrder("ID") & """," & _
+     """$value"": " & var_subtotal & "," & _
+     """OrderId"": """ & rsGetOrder("ID") & """," & _
+     """Categories"": [" & klaviyo_categories & "]," & _
+     """ItemNames"": [" & klaviyo_product_names & "]," & _
+     """Brands"": [" & klaviyo_brands & "]," & _
+     """DiscountCode"": """ & rsGetOrder("coupon_code") & """," & _ 
+     """DiscountValue"": " & rsGetOrder("total_coupon_discount") & "," & _
+     """Items"": [" & klaviyo_items & "]," & _
+     """BillingAddress"": {" & _
+       """FirstName"": """ & rsGetOrder("customer_first") & """," & _
+       """LastName"": """ & rsGetOrder("customer_last") & """," & _
+       """Company"": """"," & _
+       """Address1"": """ & rsGetOrder("billing_address") & """," & _
+       """Address2"": """"," & _
+       """City"": """ & rsGetOrder("city") & """," & _
+       """Region"": """ & rsGetOrder("state") & """," & _
+       """RegionCode"": """"," & _
+       """Country"": """ & rsGetOrder("country") & """," & _
+       """CountryCode"": """"," & _
+       """Zip"": """ & rsGetOrder("billing_zip") & """," & _
+       """Phone"": """ & rsGetOrder("phone") & """" & _
+     "}," & _
+     """ShippingAddress"": {" & _
+       """FirstName"": """ & rsGetOrder("customer_first") & """," & _
+       """LastName"": """ & rsGetOrder("customer_last") & """," & _
+       """Company"": """"," & _
+       """Address1"": """ & rsGetOrder("address") & """," & _
+       """Address2"": """"," & _
+	   """City"": """ & rsGetOrder("city") & """," & _
+       """Region"": """ & rsGetOrder("state") & """," & _
+       """RegionCode"": """"," & _
+       """Country"": """ & rsGetOrder("country") & """," & _
+       """CountryCode"": """"," & _
+       """Zip"": """ & rsGetOrder("zip") & """," & _
+       """Phone"": """ & rsGetOrder("phone") & """" & _
+     "}" & _
+   "}," & _
+   """time"": " & CStr(DateDiff("s", "01/01/1970 00:00:00", Now())) & _ 
+ "}"
+
+'Response.Write payload_order_placed
+'Response.Write "SEE BELOW<br>"
+set http = Server.CreateObject("Chilkat_9_5_0.Http")
+http.SetRequestHeader "Content-Type", "application/json"
+http.Accept = "application/json"
+Set resp = http.PostJson2("https://a.klaviyo.com/api/track", "application/json", payload_order_placed)
+If (http.LastMethodSuccess = 0) Then
+	Response.Write "<pre>" & Server.HTMLEncode( http.LastErrorText) & "</pre><br>"
+	Response.End
+End If
+
+jsonResponseStr = resp.BodyStr
+'Response.Write jsonResponseStr	
+'== KLAVIYO ORDER PLACED PUSH END ==
+
+'== KLAVIYO ORDERED PRODUCT PUSH BEGIN ==
+'FOR EACH LINE ITEM
+rsGoogle_GetOrderDetails.MoveFirst
+While NOT rsGoogle_GetOrderDetails.eof
+	payload_ordered_product = "{" & _
+	   """token"": """ & klaviyo_public_key & """," & _
+	   """event"": ""Ordered Product""," & _
+	   """customer_properties"": {" & _
+		 """$email"": """ & rsGetOrder("email") & """," & _
+		 """$first_name"": """ & rsGetOrder("customer_first") & """," & _
+		 """$last_name"": """ & rsGetOrder("customer_last") & """" & _
+	   "}," & _
+	   """properties"": {" & _
+		 """$event_id"": """ & rsGetOrder("ID") & """," & _
+		 """$value"": " & rsGoogle_GetOrderDetails("item_price") & "," & _
+		 """OrderId"": """ & rsGetOrder("ID") & """," & _
+		 """ProductID"": """ & rsGoogle_GetOrderDetails("ProductID") & """," & _
+		 """SKU"": """ & rsGoogle_GetOrderDetails("DetailID") & """," & _
+		 """ProductName"": """ & Replace(rsGoogle_GetOrderDetails("title"), """", """""") & """," & _
+		 """Quantity"": " & rsGoogle_GetOrderDetails("qty") & "," & _
+		 """ProductURL"": ""https://bodyartforms.com/productdetails.asp?productid=" & rsGoogle_GetOrderDetails("ProductID") & """," & _
+		 """ImageURL"": ""https://bodyartforms-products.bodyartforms.com/" & rsGoogle_GetOrderDetails("largepic") & """," & _
+		 """Categories"": [""" & Trim(rsGoogle_GetOrderDetails("jewelry")) & """]," & _
+		 """ProductBrand"": """ & rsGoogle_GetOrderDetails("brandname") & """" & _
+	   "}," & _
+	   """time"": " & CStr(DateDiff("s", "01/01/1970 00:00:00", Now())) & _ 
+	 "}"
+	 
+	'Response.Write payload_ordered_product
+	set http = Server.CreateObject("Chilkat_9_5_0.Http")
+	http.SetRequestHeader "Content-Type", "application/json"
+	http.Accept = "application/json"
+	Set resp = http.PostJson2("https://a.klaviyo.com/api/track", "application/json", payload_ordered_product)
+	If (http.LastMethodSuccess = 0) Then
+		'Response.Write "<pre>" & Server.HTMLEncode( http.LastErrorText) & "</pre>"
+		Response.End
+	End If
+
+	jsonResponseStr = resp.BodyStr
+	'Response.Write jsonResponseStr	
+	
+	rsGoogle_GetOrderDetails.MoveNext	
+Wend  
+'== KLAVIYO ORDERED PRODUCT PUSH END ==
+%>
 
 <!-- Facebook Pixel Code -->
 <script>

@@ -2,10 +2,12 @@
 <!--#include virtual="/Connections/dhl-auth-v4.asp"-->
 <script src="https://use.fortawesome.com/dc98f184.js"></script>
 <%
+display_international_track_link = ""
+
 '========== GET INVOICE BY TRACKING # TO FIND OUT WHAT DATE SENT WAS TO DETERMINE IF PACKAGE SHOULD BE TRACKED BY APIv2 OR APIv4 ===========================
     set objCmd = Server.CreateObject("ADODB.Command")
     objCmd.ActiveConnection = DataConn
-    objCmd.CommandText = "SELECT date_sent, date_order_placed FROM sent_items where USPS_tracking = ? AND date_sent <> '' ORDER BY ID DESC"
+    objCmd.CommandText = "SELECT date_sent, date_order_placed, international_tracking_num, international_tracking_url, country_UPSCode FROM sent_items LEFT OUTER JOIN TBL_Countries ON sent_items.country = TBL_Countries.Country where USPS_tracking = ? AND date_sent <> '' ORDER BY ID DESC"
     objCmd.Parameters.Append(objCmd.CreateParameter("USPS_tracking",200,1,200,request.querystring("tracking") ))
     set rsGetTrackType = objCmd.Execute()
 
@@ -75,6 +77,13 @@ j = eventsSize - 1 '---- REVERSES ORDER OF EVENTS FROM NEWEST TO OLDEST
         if eventsObj.StringOf("primaryEventDescription") <> "" then
         
             var_message = "<div class=""row py-2 border-top""><div class=""col-5"">" & FormatDateTime(replace(eventsObj.StringOf("date"), "-", "/"), 1) & "<br>" &  REPLACE(FormatDateTime(LEFT(eventsObj.StringOf("time"), 5), 3), ":00", "") & "<br>" &  eventsObj.StringOf("location") & "</div><div class=""col-7"">" &  eventsObj.StringOf("primaryEventDescription") & " " & eventsObj.StringOf("secondaryEventDescription")  & "</div></div>" & var_message 
+
+            ' code 447 = ARRIVED AT CUSTOMS
+            ' code 361 = ARRIVAL IN COUNTRY
+            if (eventsObj.StringOf("primaryEventId") = 360 or eventsObj.StringOf("primaryEventId") = 447 or eventsObj.StringOf("primaryEventId") = 361) and rsGetTrackType("international_tracking_num") <> "" then
+                display_international_track_link = "yes"
+            end if
+
 
             if j = 0 then '===== ONLY WRITE LAST EVENT =====
                 '======== WRITE LAST EVENT TO DB ===================================
@@ -191,7 +200,17 @@ end if
     </div>
   </div>
 
-            <div class="container p-0">   
+            <div class="container-fluid">
+            <% if display_international_track_link = "yes" and rsGetTrackType("international_tracking_url") <> "" then
+            international_link = replace(rsGetTrackType("international_tracking_url"), "{}", rsGetTrackType("international_tracking_num"))
+            %>
+                <div class="py-2 border-top">
+                    
+                    International tracking # <%= rsGetTrackType("international_tracking_num") %><br>
+                    Now that your package has officially left the USA, you can use the button below to track the package inside your country<br>
+                    <a class="btn btn-sm btn-secondary" href="<%=  international_link %>" target="_blank">Track your package</a>
+                </div>
+            <% end if %> 
         <%= var_message %>
     </div><!-- container-->
 

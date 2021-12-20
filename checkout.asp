@@ -17,7 +17,41 @@ check_stock = "yes"
 <!--#include file="Connections/authnet.asp"-->
 <!--#include virtual="cart/inc_cart_main.asp"-->
 <!--#include virtual="cart/inc_cart_loopitems-begin.asp"-->
+<%
+' KLAVIYO SCRIPT BEGIN 
+product_names = product_names & """" & rs_getCart("title") & ""","
+categories = categories & """" & Trim(rs_getCart("jewelry")) & ""","
+products = products & "{" & _
+         "'ProductID': '" & rs_getCart("ProductID") & "'," & _
+         "'SKU': '" & rs_getCart("cart_detailID") & "'," & _
+         "'ProductName': '" & rs_getCart("title") & "'," & _
+         "'Quantity': " & rs_getCart("cart_qty") & "," & _
+         "'ItemPrice': " & rs_getCart("price") & "," & _
+         "'RowTotal': " & rs_getCart("cart_qty") * rs_getCart("price") & "," & _
+         "'ProductURL': 'https://bodyartforms.com/productdetails.asp?productid=" & rs_getCart("ProductID") & "'," & _
+         "'ImageURL': 'https://bodyartforms-products.bodyartforms.com/" & rs_getCart("picture") & "'," & _
+         "'ProductCategories': ['" & Trim(rs_getCart("jewelry")) & "']" & _
+       "},"
+%>
 <!--#include virtual="cart/inc_cart_loopitems-end.asp"-->
+<%
+'Remove last coma
+products = Mid(products, 1, LEN(products)-1)
+product_names = Mid(product_names, 1, LEN(product_names)-1)
+categories = Mid(categories, 1, LEN(categories)-1)
+%>
+<script>
+	//Klaviyo Started Checkout push
+	_learnq.push(["track", "Started Checkout", {
+	 "$event_id": "<%= var_cart_userid %>_<%= CStr(DateDiff("s", "01/01/1970 00:00:00", Now())) %>",
+     "$value": <%=var_subtotal%>,
+     "ItemNames": [<%=product_names%>],
+     "CheckoutURL": "https://bodyartforms.com/checkout.asp",
+     "Categories": [<%=categories%>],
+     "Items": [<%=products%>]
+   }]);
+</script>
+<!-- KLAVIYO SCRIPT END -->
 <!--#include virtual="cart/inc_cart_grandtotal.asp"-->
 <%
 'response.write "<br/>subtotal " & var_subtotal

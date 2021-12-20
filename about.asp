@@ -104,7 +104,7 @@
 	</div>
 	<div class="row text-center py-3">
 		<div class="col-6">
-			<img class="img-fluid" src="images/employees/empty-avatar.png" alt="Gary" />
+			<img class="img-fluid" src="images/employees/gary-circle.png" alt="Gary" />
 			<h5>Gary</h5>
 		</div>
 		<div class="col-6">
@@ -118,7 +118,7 @@
 			<h5>Heather</h5>
 		</div>
 		<div class="col-6">
-			<img class="img-fluid" src="images/employees/empty-avatar.png" alt="Cain" />
+			<img class="img-fluid" src="images/employees/cain-circle.png" alt="Cain" />
 			<h5>Cain</h5>
 		</div>
 	</div>
