@@ -1,5 +1,8 @@
 <%@LANGUAGE="VBSCRIPT"%>
 <%
+Server.ScriptTimeout = 240
+%>
+<%
 	page_title = "Bodyartforms PayPal checkout"
 	page_description = "Bodyartforms paypal checkout"
 	page_keywords = "body jewelry, shopping cart, basket"

@@ -49,7 +49,8 @@ if request.form("backorder") = "yes" then
   
 mailer_type = request.form("type")
 %>
-
+<!--#include virtual="emails/function-send-email.asp"-->
+<!--#include virtual="emails/email_variables.asp"-->
 <%
 end if ' If the item was backordered
 %>

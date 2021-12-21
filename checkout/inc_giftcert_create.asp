@@ -20,7 +20,7 @@ If var_giftcert = "yes"  Then
 		
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "INSERT INTO TBLCredits (invoice, name, rec_name, rec_email, message, code, amount) VALUES (?,?,?,?,?,?,?)"
+		objCmd.CommandText = "INSERT INTO TBLCredits (invoice, name, rec_name, rec_email, message, code, amount, certificate_original_amount) VALUES (?,?,?,?,?,?,?,?)"
 		objCmd.Parameters.Append(objCmd.CreateParameter("InvoiceID",3,1,10,Session("invoiceid")))
 		objCmd.Parameters.Append(objCmd.CreateParameter("Name",200,1,30, your_name))
 		objCmd.Parameters.Append(objCmd.CreateParameter("Rec_Name",200,1,30,rec_name))
@@ -28,6 +28,7 @@ If var_giftcert = "yes"  Then
 		objCmd.Parameters.Append(objCmd.CreateParameter("Message",200,1,250, message))
 		objCmd.Parameters.Append(objCmd.CreateParameter("Code",200,1,50,var_cert_code))
 		objCmd.Parameters.Append(objCmd.CreateParameter("Amount",6,1,20, gift_amount))
+		objCmd.Parameters.Append(objCmd.CreateParameter("Original_Amount",6,1,20, gift_amount))
 		objCmd.Execute()
 
 %>

@@ -77,6 +77,7 @@ rsAddRecord("rec_name") = request.form("rec_name")
 rsAddRecord("rec_email") = request.form("rec_email")
 rsAddRecord("code") = request.form("code")
 rsAddRecord("amount") = request.form("gift_amount")
+rsAddRecord("certificate_original_amount") = request.form("gift_amount")
 rsAddRecord("message") = request.form("rec_message")
 rsAddRecord.update
 
