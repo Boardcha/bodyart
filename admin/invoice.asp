@@ -522,6 +522,7 @@ if not rsGetOrder.eof then
 				<option value="American Express">American Express</option>
 				<option value="Discover">Discover</option>
 				<option value="Instagram">Instagram</option>
+				<option value="Facebook">Facebook</option>
 				<option value="Cash">Cash</option>
 			</select>
 		</div>

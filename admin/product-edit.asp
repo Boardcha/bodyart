@@ -375,6 +375,7 @@ end if
 					<option value="7113.19.5090">7113.19.5090 - Solid gold or platinum jewelry</option>
 					<option value="7113.20.5000">7113.20.5000 -  Steel or titanium plated with gold or platinum</option>
 					<option value="7116.20.0500">7116.20.0500 - Semiprecious stone plugs (Natural, synthetic, or reconstructed)</option>
+					<option value="7117.90.7500">7117.90.7500 - Plastic jewelry</option>
 					<option value="3401.30.5000">3401.30.5000 - Soap cleansers</option>
 					<option value="3304.99.5000">3304.99.5000 - Oil / Lotion products</option>
 					<option value="8203.20.6060">8203.20.6060 - Tools</option>
@@ -1625,7 +1626,7 @@ end if
   </div>
 
 
-<!-- Begin Tarrif modal -->
+<!-- Begin Tariff modal -->
 <div class="modal fade" id="modal-tariff-info" tabindex="-1" role="dialog"  aria-labelledby="modal-tariff-info" >
 	<div class="modal-dialog mw-100 w-75" role="document">
 	  <div class="modal-content">

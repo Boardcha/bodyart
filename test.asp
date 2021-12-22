@@ -1,17 +1,19 @@
 <%@LANGUAGE="VBSCRIPT" CODEPAGE="1252"%>
-<link href="/CSS/baf.min.css?v=040220" id="lightmode" rel="stylesheet" type="text/css" />
+<!--#include virtual="/bootstrap-template/header-connection.asp" -->
+<!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <html>
     <html>
         <body>
         <% 
-        
-        Dim str, x
-        var_cleaned_zip = ""
-        var_cleaned_zip = "12345-1234"
-        xx = Instr(var_cleaned_zip,"-")
-        If xx Then var_cleaned_zip = Left(var_cleaned_zip,xx -1)
+            set objCmd = Server.CreateObject("ADODB.command")
+            objCmd.ActiveConnection = DataConn
+            objCmd.CommandText = "SELECT customer_ID, GETDATE() as 'current_date' FROM customers WHERE customer_ID = ?"
+            objCmd.Parameters.Append(objCmd.CreateParameter("CustID_Cookie",3,1,10,CustID_Cookie))
+            set rsGetDate = objCmd.Execute()
+
+            response.write "<br>CLASSIC ASP NOW() OUTPUT -  " & NOW()
+            response.write "<br>MSSQL SELECT GETDATE() AS OUTPUT -  " & rsGetDate("current_date")
         %> 
-        <% =var_cleaned_zip %> 
         </body>
         </html>
 </html>
