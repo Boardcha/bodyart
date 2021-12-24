@@ -413,10 +413,16 @@ function prefetchGooglePaymentData() {
  * Show Google Pay payment sheet when Google Pay payment button is clicked
  */
 function onGooglePaymentButtonClicked() {
-  const paymentDataRequest = getGooglePaymentDataRequest();
-  paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
-  const paymentsClient = getGooglePaymentsClient();
-  paymentsClient.loadPaymentData(paymentDataRequest);
+  if(preOrderItem == "yes")	{
+	checkoutMethod = "btn-googlepay";
+    $('#pre-order-warning-modal').modal('show');
+	$('#pre-order-items').load("/cart/ajax-pre-order-item-display.asp");	
+  }else{	
+	const paymentDataRequest = getGooglePaymentDataRequest();
+	paymentDataRequest.transactionInfo = getGoogleTransactionInfo();
+	const paymentsClient = getGooglePaymentsClient();
+	paymentsClient.loadPaymentData(paymentDataRequest);
+  }
 }
 
 /**

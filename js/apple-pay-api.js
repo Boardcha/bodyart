@@ -16,7 +16,11 @@ $( document ).ready(function() {
 	// Apple Button Click
 	const appleButton = document.querySelector('apple-pay-button');
 	appleButton.addEventListener('click', function () {
-		 
+	  if(preOrderItem == "yes")	{
+	    checkoutMethod = "btn-applepay";
+	    $('#pre-order-warning-modal').modal('show');
+		$('#pre-order-items').load("/cart/ajax-pre-order-item-display.asp");	
+	  }else{		 
 		 var runningTotal	= function() { return parseFloat(subTotal + shippingCost + tax - totalDiscount).toFixed(2); }
 		 var shippingOption = "";
 		 
@@ -313,7 +317,7 @@ $( document ).ready(function() {
 		}
 		
 		session.begin();		
-		
+	  }	
 	});
 
 });
