@@ -2,6 +2,7 @@
 	var salesTax = 0;
 	var shippingWeight = 0;
 	
+	
 	function calcAllTotals(e) {
 		
 		$('.checkout_button, #paypal-button-container').hide();
@@ -59,6 +60,7 @@
 			$("#store_credit_amt").html(json.store_credit_amt);
 			$("#use_now_amount").html(json.use_now_credits);
 			shippingWeight = json.weight;
+			preOrderItem = json.pre_order_item;
 
 			if (tax_country === 'USA') {
 				$(".cart_sales-tax-state").html(json.salestax_state + ' ');
