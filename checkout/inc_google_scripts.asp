@@ -1,7 +1,7 @@
 <!--#include virtual="/Connections/klaviyo.asp" -->
 <%
 ' make sure this information only fires off once per session
-if 1=1 OR session("google_sent") <> "yes" then
+if session("google_sent") <> "yes" then
 %>
 <script type="text/javascript">
 // Revised in 2021 to GA4 variable names
@@ -108,6 +108,33 @@ while NOT rsGoogle_GetOrderDetails.eof
 	});
 </script>	
 
+
+<!-- Facebook Pixel Code -->
+<script>
+!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+document,'script','https://connect.facebook.net/en_US/fbevents.js');
+
+fbq('init', '532347420293260');
+fbq('track', 'Purchase', {
+	value: '<%= FormatNumber(facebook_pixel_total, -1, -2, -2, -2) %>', currency:'USD',
+	content_type: 'product',
+	contents: [<%= LEFT(var_fb_line_item, (LEN(var_fb_line_item)-1)) %>]
+	});
+</script>
+<noscript><img height="1" width="1" style="display:none"
+src="https://www.facebook.com/tr?id=532347420293260&ev=PageView&noscript=1"
+/></noscript>
+<!-- End Facebook Pixel Code -->
+
+<%
+end if  ' session("google_sent") = ""
+' make sure this information only fires off once per session
+session("google_sent") = "yes"
+%>
+
 <!-- KLAVIYO ORDER PLACED PUSH BEGIN -->
 <%
 rsGoogle_GetOrderDetails.moveFirst
@@ -131,10 +158,10 @@ While NOT rsGoogle_GetOrderDetails.eof
 Wend
 
 'Remove last coma from arrays
-klaviyo_product_names = Mid(klaviyo_product_names, 1, LEN(klaviyo_product_names)-1)
-klaviyo_categories = Mid(klaviyo_categories, 1, LEN(klaviyo_categories)-1)
-klaviyo_brands = Mid(klaviyo_brands, 1, LEN(klaviyo_brands)-1)
-klaviyo_items = Mid(klaviyo_items, 1, LEN(klaviyo_items)-1)
+If klaviyo_product_names <> "" Then klaviyo_product_names = Mid(klaviyo_product_names, 1, LEN(klaviyo_product_names)-1)
+If klaviyo_categories <> "" Then klaviyo_categories = Mid(klaviyo_categories, 1, LEN(klaviyo_categories)-1)
+If klaviyo_brands <> "" Then klaviyo_brands = Mid(klaviyo_brands, 1, LEN(klaviyo_brands)-1)
+If klaviyo_items <> "" Then klaviyo_items = Mid(klaviyo_items, 1, LEN(klaviyo_items)-1)
 	
 payload_order_placed = "{" & _
    """token"": """ & klaviyo_public_key & """," & _
@@ -193,14 +220,13 @@ payload_order_placed = "{" & _
    """time"": " & CStr(DateDiff("s", "01/01/1970 00:00:00", Now())) & _ 
  "}"
 
-'Response.Write payload_order_placed
-'Response.Write "SEE BELOW<br>"
+
 set http = Server.CreateObject("Chilkat_9_5_0.Http")
 http.SetRequestHeader "Content-Type", "application/json"
 http.Accept = "application/json"
 Set resp = http.PostJson2("https://a.klaviyo.com/api/track", "application/json", payload_order_placed)
 If (http.LastMethodSuccess = 0) Then
-	Response.Write "<pre>" & Server.HTMLEncode( http.LastErrorText) & "</pre><br>"
+	'Response.Write "<pre>" & Server.HTMLEncode( http.LastErrorText) & "</pre><br>"
 	Response.End
 End If
 
@@ -236,7 +262,7 @@ While NOT rsGoogle_GetOrderDetails.eof
 	   """time"": " & CStr(DateDiff("s", "01/01/1970 00:00:00", Now())) & _ 
 	 "}"
 	 
-	'Response.Write payload_ordered_product
+
 	set http = Server.CreateObject("Chilkat_9_5_0.Http")
 	http.SetRequestHeader "Content-Type", "application/json"
 	http.Accept = "application/json"
@@ -252,30 +278,4 @@ While NOT rsGoogle_GetOrderDetails.eof
 	rsGoogle_GetOrderDetails.MoveNext	
 Wend  
 '== KLAVIYO ORDERED PRODUCT PUSH END ==
-%>
-
-<!-- Facebook Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-document,'script','https://connect.facebook.net/en_US/fbevents.js');
-
-fbq('init', '532347420293260');
-fbq('track', 'Purchase', {
-	value: '<%= FormatNumber(facebook_pixel_total, -1, -2, -2, -2) %>', currency:'USD',
-	content_type: 'product',
-	contents: [<%= LEFT(var_fb_line_item, (LEN(var_fb_line_item)-1)) %>]
-	});
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=532347420293260&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Facebook Pixel Code -->
-
-<%
-end if  ' session("google_sent") = ""
-' make sure this information only fires off once per session
-session("google_sent") = "yes"
 %>

@@ -1443,7 +1443,7 @@ end if ' if not rsGetOrder.eof then
 
 </body>
 </html>
-<script type="text/javascript" src="scripts/invoices.js?v=120621"></script>
+<script type="text/javascript" src="scripts/invoices.js?v=122321"></script>
 <% if request.querystring("bo_item") <> "" then %>
 	<script type="text/javascript">
 		$('.bo_orange_' + <%= request.querystring("bo_item") %>).trigger('click');

@@ -94,11 +94,19 @@ function uncheckAll(field)
 				<form class="p-0 m-0" id="frm-hidden-orders">
 					<div class="custom-control custom-radio  custom-control-inline">
 						<input type="radio" id="push_all" name="push_hidden" class="custom-control-input" value="all" checked>
-						<label class="custom-control-label" for="push_all">Ship ALL pre-approved orders</label>
+						<label class="custom-control-label" for="push_all">Ship ALL</label>
 					  </div>
 					  <div class="custom-control custom-radio  custom-control-inline">
-						<input type="radio" id="push_25" value="partial" name="push_hidden" class="custom-control-input">
-						<label class="custom-control-label" for="push_25">Ship 25 pre-approved orders</label>
+						<input type="radio" id="push_125" value="125" name="push_hidden" class="custom-control-input">
+						<label class="custom-control-label" for="push_125">Ship 125</label>
+					  </div>
+					  <div class="custom-control custom-radio  custom-control-inline">
+						<input type="radio" id="push_100" value="100" name="push_hidden" class="custom-control-input">
+						<label class="custom-control-label" for="push_100">Ship 100</label>
+					  </div>
+					  <div class="custom-control custom-radio  custom-control-inline">
+						<input type="radio" id="push_25" value="25" name="push_hidden" class="custom-control-input">
+						<label class="custom-control-label" for="push_25">Ship 25</label>
 					  </div>
 					  <button class="btn btn-sm btn-primary" type="button" id="approve-hidden-orders">Set to ship out</button>
 				</form>

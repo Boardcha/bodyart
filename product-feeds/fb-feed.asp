@@ -16,7 +16,7 @@ if sql <> "" then
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT p.ProductDetailID, j.ProductID, j.title, j.largepic, j.picture, j.material, j.description, j.customorder, p.price, ShowTextLogo, brandname, SaleDiscount, flare_type, pair, gauge, length, img_full, ProductDetail1, qty, GaugeOrder FROM jewelry AS j INNER JOIN ProductDetails AS p ON j.ProductID = p.ProductID INNER JOIN dbo.TBL_Companies AS b ON j.brandname = b.name  LEFT OUTER JOIN tbl_images AS i ON p.img_id = i.img_id INNER JOIN TBL_GaugeOrder AS g ON p.Gauge = g.GaugeShow WHERE jewelry <> N'save' AND j.active = 1 AND p.active = 1 AND customorder <> 'yes' AND qty > 0 AND " + sql + " ORDER BY ProductID DESC, GaugeOrder ASC"
+objCmd.CommandText = "SELECT p.ProductDetailID, j.ProductID, j.title, j.largepic, j.picture, j.material, j.description, j.customorder, p.price, ShowTextLogo, brandname, SaleDiscount, flare_type, pair, gauge, length, img_full, ProductDetail1, qty, GaugeOrder, material FROM jewelry AS j INNER JOIN ProductDetails AS p ON j.ProductID = p.ProductID INNER JOIN dbo.TBL_Companies AS b ON j.brandname = b.name  LEFT OUTER JOIN tbl_images AS i ON p.img_id = i.img_id INNER JOIN TBL_GaugeOrder AS g ON p.Gauge = g.GaugeShow WHERE jewelry <> N'save' AND j.active = 1 AND p.active = 1 AND customorder <> 'yes' AND qty > 0 AND " + sql + " ORDER BY ProductID DESC, GaugeOrder ASC"
 
 Set rsGetRecords = objCmd.Execute()
 
@@ -55,6 +55,9 @@ end if
 if rsGetRecords.Fields.Item("length").Value <> "" then
 	detail_text = detail_text & "Length: " & rsGetRecords.Fields.Item("length").Value
 end if
+if rsGetRecords("material") <> "" then
+	detail_materials = detail_text & "  |  Materials: " & rsGetRecords("material")
+end if
 if rsGetRecords.Fields.Item("img_full").Value <> "" then
 	image = "<g:image_link>https://bodyartforms-products.bodyartforms.com/" & rsGetRecords.Fields.Item("img_full").Value & "</g:image_link>"
 else
@@ -65,7 +68,7 @@ end if
     <item>
       <g:id><%= rsGetRecords.Fields.Item("ProductDetailID").Value %></g:id>
 	  <g:title><%= left(rsGetRecords.Fields.Item("title").Value,100) %></g:title>
-      <g:description><%= detail_text %>, <%= pair %>, <%= rsGetRecords.Fields.Item("flare_type").Value %></g:description>
+      <g:description><%= detail_text %>, <%= pair %>, <%= rsGetRecords.Fields.Item("flare_type").Value %><%= detail_materials %></g:description>
       <g:availability><% if rsGetRecords.Fields.Item("customorder").Value = "yes" then %>preorder<% else %>in stock<% end if %></g:availability>
 	  <g:condition>new</g:condition>
 	  <g:price><%= formatnumber(rsGetRecords.Fields.Item("price").Value,2) %> USD</g:price>

@@ -17,11 +17,13 @@
 </div>
 
 
-	You've unfortunately found a programming error and this page won't load. <br/>
+Do you need to get in touch with customer service?<br>
+<a class="btn btn-purple btn-sm mt-1 mb-3" href="contact.asp">Click here to contact us</a>	<br>
+You've unfortunately found a programming error and this page won't load. <br/>
 	If you have a minute and want to submit this bug to us that would be an amazing help!
 	<form class="pt-4" id="frm-500">
 	<div class="form-group">
-		<label class="h5" for="comments">Describe the page you were on:</label>
+		<label class="h5" for="comments">ANONYMOUS FEEDBACK - Describe what page you were trying to load when this error happened:</label>
 		<textarea class="form-control" name="comments" id="comments" rows="8" required></textarea>
 	</div>
 	<button type="submit" class="btn btn-purple">Submit</button>

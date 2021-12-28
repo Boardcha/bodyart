@@ -31,7 +31,7 @@ if request.form("item") <> "" then
 
             Set objCmd = Server.CreateObject ("ADODB.Command")
             objCmd.ActiveConnection = DataConn
-            objCmd.CommandText = "UPDATE tbl_po_details SET po_received = 1 WHERE po_detailid = ? AND po_orderid = ? AND po_received = 0"
+            objCmd.CommandText = "UPDATE tbl_po_details SET po_received = 1, po_date_received = '" & now() & "' WHERE po_detailid = ? AND po_orderid = ? AND po_received = 0"
             objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,20, request.form("item")))
             objCmd.Parameters.Append(objCmd.CreateParameter("po_id",3,1,20, request.form("po_id")))
             objCmd.Execute 

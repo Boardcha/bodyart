@@ -28,7 +28,7 @@ commUpdate.Execute()
 
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn  
-	objCmd.CommandText = "UPDATE tbl_po_details SET po_received = 1 WHERE po_detailid = " & Request.Form("DetailID")+ " AND po_orderid = "+Request("po_id")+"" 
+	objCmd.CommandText = "UPDATE tbl_po_details SET po_received = 1, po_date_received = '" & now() & "' WHERE po_detailid = " & Request.Form("DetailID")+ " AND po_orderid = "+Request("po_id")+"" 
 	objCmd.Execute()
 	Set objCmd = Nothing
 

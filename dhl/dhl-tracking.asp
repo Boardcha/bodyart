@@ -158,11 +158,15 @@ end if
             <i class="fa fa-truck fa-2x text-info"></i>
         </div>
         <% end if %>
-        <% if var_delivered = "yes" then %>
-        <div class="col text-right border-bottom border-success" style="border-width:3px!important">
-            <i class="fa fa-check-circle fa-2x text-success"></i>
+        <% if var_delivered = "yes" then 
+                delivery_status_class = "28a745"
+            else
+                delivery_status_class = "D8D8D8"
+            end if
+        %>
+        <div class="col text-right border-bottom" style="border-width:3px!important;border-color:#<%= delivery_status_class %>!important">
+            <i class="fa fa-check-circle fa-2x" style="color:#<%= delivery_status_class %>"></i>
         </div>
-        <% end if %>
       </div>
     <div class="row">
       <div class="col">
@@ -191,12 +195,10 @@ end if
         Out for delivery
       </div>
       <% end if %>
-      <% if var_delivered = "yes" then %>
       <div class="col text-right">
         Delivered<br/>
         <%= var_delivery_date %>
       </div>
-      <% end if %>
     </div>
   </div>
 

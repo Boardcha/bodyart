@@ -42,9 +42,13 @@
 		' Totals area at bottom of email receipts
 		var_email_totals = "Subtotal: " + FormatCurrency(var_subtotal, -1, -2, -2, -2) + "<br/>" + email_coupon_discount + " " + email_preffered_total + " " + email_use_now_credits + " " + email_sales_tax + " " + " " + email_store_credit_used + " " + email_gift_cert_used + "Shipping (" + session("var_email_shipping_option") + "): " + FormatCurrency(session("shipping_cost"), -1, -2, -2, -2) + "<br/><span style='padding-top:5px;font-weight: bold; font-size: 18px'>TOTAL (Paid with " + strCardType + " " + strBilling_cardnumber + ") " + FormatCurrency(var_grandtotal, -1, -2, -2, -2) + " USD</span>"
 
+	end if ' order details build-out
+
+	if IsArray(array_details_2) = "True" then
+		mail_order_details = ""
+		mail_free_items = ""
 		For i = 0 to (ubound(array_details_2, 2) - 1)
-		
-		
+	
 			' Do not write to email receipt if it's tax... display it in the totals area above
 			if Instr(1, array_details_2(2,i), "Tax") = 0 Then
 			
@@ -73,7 +77,14 @@
 					if array_details_2(5,i) <> "" then 
 						mail_order_details = mail_order_details & " <br>" & array_details_2(5,i)
 					end if
-					mail_order_details = mail_order_details & "<br><br>Quantity " & array_details_2(1,i) & " @ " & FormatCurrency(array_details_2(4,i)) & "<br><span style='font-weight:bold;font-size:1.1em'>" & FormatCurrency(array_details_2(4,i) * array_details_2(1,i),2) & "</span></td></tr>"
+					mail_order_details = mail_order_details & "<br><br>Quantity " & array_details_2(1,i)
+
+					'====== ONLY SEND OUT PRICE DATA ON INITIAL ORDER PLACEMENT ==========
+					if mailer_type = "cc approved" Then
+						mail_order_details = mail_order_details & " @ " & FormatCurrency(array_details_2(4,i)) & "<br><span style='font-weight:bold;font-size:1.1em'>" & FormatCurrency(array_details_2(4,i) * array_details_2(1,i),2)
+					end if
+
+					mail_order_details = mail_order_details & "</span></td></tr>"
 				end if
 				'====  IF ITEM IS A FREE ITEM DISPLAY SIMPLIFIED DETAILS
 				if array_details_2(12,i) > 0 and array_details_2(4,i) <= 0 then
@@ -81,7 +92,7 @@
 				end if
 			end if
 		next
-	end if ' order details build-out
+	end if '=======  array_details_2(1) <> ""
 
 	if done_mailing_certs = "no" then ' gift certificate creation / receipt
 		google_utmsource = "Gift certificate received"
@@ -140,6 +151,7 @@
 		Call baf_sendmail()
 	end if
 	
+	'===== LAST UPDATED NOVEMBER 2021================
 	if mailer_type = "cc approved" then ' credit card approved order receipt
 		google_utmsource = "Credit card / PayPal order receipt"
 		mail_to_email = session("email")
@@ -244,17 +256,47 @@
 		Call baf_sendmail()
 	end if ' Photo rejection
 
+	'===== LAST UPDATED DECEMBER 2021================
 	if mailer_type = "order-shipment-notification" then ' from admin section
 		google_utmsource = "Order shipment notification"
-		mail_to_email = var_email
-		mail_to_name = var_first
+		mail_to_email = rsGetInvoice("email")
+		mail_to_name =  rsGetInvoice("customer_first")
 		mail_subject = "Bodyartforms order shipment notification"
 		
 		' For orders that are not office pick up
 		if var_shipping_type <> "OFFICE PICK UP" then
-			mail_body = "Hello " & mail_to_name & ",<br/><br/>This is an automated email to notify you that your order #" & var_invoiceid & " is shipping out today.<br/><br/>" & var_tracking & "<br/><br/>We appreciate your business very much!<br/>If you have any questions or need assistance with your order please reply to this e-mail to get in touch with us. We're here to help Mon - Fri from 9am - 5pm.<br/><br/>Customer service:  (877) 223-5005"
+			
+			mail_body = "<div style='text-align:center'><div style='font-family:Arial;font-weight:bold;font-size:26px'>YOUR ORDER HAS SHIPPED!</div><br>"
+			
+			mail_body = mail_body & "<div style='text-align:left'>Hello " & mail_to_name & ",<br/><br/>This is an automated email to notify you that your order is being packaged up today and will be in the mail soon. We appreciate your business very much!<br><br>"
+
+			mail_body = mail_body & var_tracking
+
+			mail_body = mail_body & "</div><br><div style='text-align:center'><b>Invoice #</b> " & rsGetInvoice("ID") & "<br><b>Order date:</b> " & FormatDateTime(rsGetInvoice("date_order_placed"),vbLongDate) & _
+			"</div><div style='text-align:left'><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>DELIVERY DETAILS</div><br/>"
+
+			mail_body = mail_body & rsGetInvoice("customer_first") & " "
+			mail_body = mail_body & rsGetInvoice("customer_last") & " "
+			mail_body = mail_body & rsGetInvoice("company") & "<br/>"
+			mail_body = mail_body & rsGetInvoice("address") & " "
+			mail_body = mail_body & rsGetInvoice("address2") & "<br/>"
+			mail_body = mail_body & rsGetInvoice("city") & ", "
+			mail_body = mail_body & rsGetInvoice("state") & " "
+			mail_body = mail_body & rsGetInvoice("province") & " "
+			mail_body = mail_body & rsGetInvoice("zip") & "<br/>"
+			mail_body = mail_body & rsGetInvoice("country")
+
+			mail_body = mail_body & "</td></tr></table>" & _
+			"<br/><br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS ORDERED</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
+			if mail_free_items <> "" then 
+				mail_body = mail_body & "<div style='font-weight:bold;padding-top:5px;padding-bottom:5px'>FREE ITEMS</div>" & mail_free_items
+			end if 
+
+			mail_body = mail_body & "</div></div>"
+
 		else ' if it's an office pick up
-			mail_body = "Hello " & mail_to_name & ",<br/><br/>This is an automated email to notify you that your order #" & var_invoiceid & " is being packaged and will be available for pickup Mon - Fri (9am to 5pm).<br/><br/><strong>Our address is:</strong> <br/>Bodyartforms<br/>1966 S. Austin Ave.<br/>Georgetown, TX  78626<br/><br/><a href='https://www.google.com/maps/place/1966+S+Austin+Ave,+Georgetown,+TX+78626/@30.6257777,-97.6806638,17z/data=!3m1!4b1!4m5!3m4!1s0x8644d66050a433bf:0xa7e710a073726aa2!8m2!3d30.6257777!4d-97.6784751?hl=en'>Link to Google Maps</a><br/><a href='https://www.youtube.com/watch?v=42U6-0VHz5c&feature=youtu.be'>Here's a video of how to find our warehouse</a><br/><br/>We appreciate your business very much!<br/><br/>If you have any questions or need assistance with your order please reply to this e-mail to get in touch with us or call customer service at (877) 223-5005"
+
+			mail_body = "Hello " & mail_to_name & ",<br/><br/>This is an automated email to notify you that your order #" & rsGetInvoice("ID") & " is being packaged and will be available for pickup Mon - Fri (9am to 5pm).<br/><br/><strong>Our address is:</strong> <br/>Bodyartforms<br/>1966 S. Austin Ave.<br/>Georgetown, TX  78626<br/><br/><a href='https://www.google.com/maps/place/1966+S+Austin+Ave,+Georgetown,+TX+78626/@30.6257777,-97.6806638,17z/data=!3m1!4b1!4m5!3m4!1s0x8644d66050a433bf:0xa7e710a073726aa2!8m2!3d30.6257777!4d-97.6784751?hl=en'>Link to Google Maps</a><br/><a href='https://www.youtube.com/watch?v=42U6-0VHz5c&feature=youtu.be'>Here's a video of how to find our warehouse</a><br/><br/>We appreciate your business very much!<br/><br/>If you have any questions or need assistance with your order please reply to this e-mail to get in touch with us or call customer service at (877) 223-5005"
 		end if
 		
 		Call baf_sendmail()
@@ -352,13 +394,26 @@
 		Call baf_sendmail()
 	end if ' ====== customer_submitted_refund_notification
 	
+	'======= RE-WORDED BACKORDER EMAIL DECEMBER 2021 ==================================
 	'======= GENERAL BACKORDER EMAIL ==================================
 	if mailer_type = "backorder" then 'Backorder email
 		google_utmsource = "Backorder notification"
 		mail_to_email = var_customer_email
 		mail_to_name = var_customer_name
 		mail_subject = "Backorder notice - " + var_item_description + " (Invoice #" & var_invoice_number & ")"
-		mail_body = "Unfortunately, we do not have the " + var_item_description + " to send out because " + var_bo_reason + ". If you ordered more than one item then your package has already shipped out with the rest of your items. You have a few options listed below, so please reply to this email and let us know what you would like to do.<p><ul><li>Get an in-store credit for the item (you'll need to be a registered customer)</li><li>Get a refund for the item</li><li>Exchange the item for something else (just reply and let us know what item you want instead)</li></ul><p>Thanks, and sorry for the trouble!<p>Bodyartforms.com"
+		mail_body = "Hey " & var_customer_name &_
+		"<br><br>Thank you so much for your order! We are sorry to say that we do not have the item listed below to send out because " & var_bo_reason & ". If you ordered more than one item, then your package has already shipped out with the rest of your items." &_ 
+		"<table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>" &_
+		"<br>We always try our best to fulfill every order perfectly, but we dropped the ball. That's on us. Here's what we can do:" &_
+		"<ul>" &_
+		"<li>You can leave the item on backorder and we'll ship it when it comes back in stock</li>" &_
+		"<li>You can get in-store credit for the item (You'll need to have an account set up on the site if you'd like to do this)</li>" &_
+		"<li>You can get a refund for the item</li>" &_
+		"<li>You can exchange the item for something else (Just reply and let us know which item you want instead)</li>" &_
+		"</ul>" &_
+		"<div style='font-family:Arial;color:#ffffff;background-color:#696986;padding:20px;border-radius:10px'>We'd also like to extend you this one time coupon code for <strong>15% off any future order</strong> by way of apology.<div style='text-align:center;font-family:Arial;font-size:16px;color: #ffffff;;background-color:#41415a;padding:10px;font-weight:bold;text-decoration:none;margin:15px'>" & var_cert_code & "</div>We take customer service super seriously, and we're always working on improving. If you have any questions or feedback, we'd love to hear from you at <a style='text-decoration:none' href='mailto:help@bodyartforms.com'>help@bodyartforms.com</a></div>" &_
+		"<br><br>Thank's again for your support, and we look forward to hearing from you," &_
+		"<br><br>The Bodyartforms Team"
 		
 		Call baf_sendmail()
 		

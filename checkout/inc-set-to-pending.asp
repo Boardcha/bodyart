@@ -44,16 +44,6 @@ if request.form("Comments") = "" and session("customer_comments") = "" and var_g
 
 end if ' only run if all critera are met
 
-if preorder_shipping_notice = "yes"  then ' If there's a preorder push it into review
-		
-		set objCmd = Server.CreateObject("ADODB.command")
-		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "UPDATE sent_items SET shipped = 'PRE-ORDER REVIEW' WHERE ID = ?"
-		objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, Session("invoiceid")))
-		objCmd.Execute()
-
-end if  ' preorder_shipping_notice = "yes"
-
 ' Push orders through over $150 if they have more than 10 paid orders
 if request.form("Comments") = "" and session("customer_comments") = "" then 
 
@@ -69,31 +59,25 @@ if request.form("Comments") = "" and session("customer_comments") = "" then
 	var_total_orders = rsLastHoursInvoices.RecordCount	
 	
 	if var_total_orders >= 10 then
-	
-		if preorder_shipping_notice <> "yes" then ' If there's no preorder in the order, set it to ship out
-	
 			set objCmd = Server.CreateObject("ADODB.command")
 			objCmd.ActiveConnection = DataConn
 			objCmd.CommandText = "UPDATE sent_items SET shipped = 'Pending...' WHERE ID = ?"
 			objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, Session("invoiceid")))
 			objCmd.Execute()
-
-		else ' If order has a pre-order in it, set it to preorder review
-		
-			set objCmd = Server.CreateObject("ADODB.command")
-			objCmd.ActiveConnection = DataConn
-			objCmd.CommandText = "UPDATE sent_items SET shipped = 'PRE-ORDER REVIEW' WHERE ID = ?"
-			objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, Session("invoiceid")))
-			objCmd.Execute()
-		
-		end if  ' preorder_shipping_notice <> "yes"
-
-			
 	end if  ' var_total_orders >= 10
 	
 end if  ' var_grandtotal > 150
 
-
-
 end if  '  rsLastHoursInvoices.eof
+
+'========= ALWAYS PUSH PRE-ORDERS TO BE REVIEWED NO MATTER WHAT ====================
+if preorder_shipping_notice = "yes"  then ' If there's a preorder push it into review
+		
+		set objCmd = Server.CreateObject("ADODB.command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "UPDATE sent_items SET shipped = 'PRE-ORDER REVIEW' WHERE ID = ?"
+		objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, Session("invoiceid")))
+		objCmd.Execute()
+
+end if  ' preorder_shipping_notice = "yes"
 %>

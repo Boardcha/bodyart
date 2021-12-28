@@ -36,9 +36,9 @@ products = products & "{" & _
 <!--#include virtual="cart/inc_cart_loopitems-end.asp"-->
 <%
 'Remove last coma
-products = Mid(products, 1, LEN(products)-1)
-product_names = Mid(product_names, 1, LEN(product_names)-1)
-categories = Mid(categories, 1, LEN(categories)-1)
+If products <> "" Then products = Mid(products, 1, LEN(products)-1)
+If product_names <> "" Then product_names = Mid(product_names, 1, LEN(product_names)-1)
+If categories <> "" Then categories = Mid(categories, 1, LEN(categories)-1)
 %>
 <script>
 	//Klaviyo Started Checkout push

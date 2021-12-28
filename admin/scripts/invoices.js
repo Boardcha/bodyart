@@ -864,8 +864,8 @@ localStorage["copy_details"] = "" // set initial value to nothing
 
 		$.ajax({
 			method: "post",
-			url: "update_multiple_records.asp",
-			data: {checkbox: invoiceid}
+			url: "/admin/invoices/ajax-set-orders-to-shipped.asp",
+			data: {resend_email: invoiceid}
 			})
 			.done(function(msg ) {
 				$('#msg-send-shipment-email').html('<span class="alert alert-success p-2">E-mail sent</span>').delay(5000).fadeOut(1000);;

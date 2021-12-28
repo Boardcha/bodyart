@@ -18,7 +18,7 @@ if sql <> "" then
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT j.ProductID, ProductDetailID, j.title, ISNULL(d.Gauge,'') + ' ' + ISNULL(d.Length,'') + ' ' + ISNULL(d.ProductDetail1,'') AS 'variant_description', b.searchable_brand_tags, d.Gauge, j.picture, j.largepic, i.img_thumb, d.wearable_material, j.seo_meta_description, f.min_gauge, f.max_gauge, d.price, f.min_price, f.max_price, f.ShowTextLogo, ISNULL(flare_type,'') as flare_type, j.customorder, j.description, j.pair, REPLACE(REPLACE(TRIM(d.colors),'  ', ' '),' ' ,'/') as color_tags, j.jewelry, f.variants, d.qty AS 'inventory', CASE WHEN d.qty >=1 THEN 'in stock' ELSE 'out of stock' END AS 'availability' FROM jewelry AS j INNER JOIN FlatProducts AS f ON j.ProductID = f.productid INNER JOIN ProductDetails as d ON f.productid = d.ProductID INNER JOIN dbo.TBL_Companies AS b ON j.brandname = b.name LEFT OUTER JOIN tbl_images AS i ON d.img_id = i.img_id WHERE j.jewelry <> N'save' AND j.active = 1 AND d.active = 1 AND j.customorder <> 'yes' AND wearable_material <> 'Acrylic' AND  wearable_material <> 'Bone' AND  wearable_material <> 'Horn' " + sql + " ORDER BY ProductID DESC"
+objCmd.CommandText = "SELECT j.ProductID, ProductDetailID, j.title, ISNULL(d.Gauge,'') + ' ' + ISNULL(d.Length,'') + ' ' + ISNULL(d.ProductDetail1,'') AS 'variant_description', b.searchable_brand_tags, d.Gauge, j.picture, j.largepic, i.img_thumb, d.wearable_material, j.seo_meta_description, f.min_gauge, f.max_gauge, d.price, f.min_price, f.max_price, f.ShowTextLogo, ISNULL(flare_type,'') as flare_type, j.customorder, j.description, j.pair, REPLACE(REPLACE(TRIM(d.colors),'  ', ' '),' ' ,'/') as color_tags, j.jewelry, f.variants, d.qty AS 'inventory', CASE WHEN d.qty >=1 THEN 'in stock' ELSE 'out of stock' END AS 'availability', f.material, d.detail_materials FROM jewelry AS j INNER JOIN FlatProducts AS f ON j.ProductID = f.productid INNER JOIN ProductDetails as d ON f.productid = d.ProductID INNER JOIN dbo.TBL_Companies AS b ON j.brandname = b.name LEFT OUTER JOIN tbl_images AS i ON d.img_id = i.img_id WHERE j.jewelry <> N'save' AND j.active = 1 AND d.active = 1 AND j.customorder <> 'yes' AND wearable_material <> 'Acrylic' AND  wearable_material <> 'Bone' AND  wearable_material <> 'Horn' " + sql + " ORDER BY ProductID DESC"
 
 Set rsGetRecords = objCmd.Execute()
 
@@ -60,6 +60,12 @@ if rsGetRecords.Fields.Item("min_price").Value = rsGetRecords.Fields.Item("max_p
 else
 	price_range = formatcurrency(rsGetRecords.Fields.Item("min_price").Value,2) & " thru " & formatcurrency(rsGetRecords.Fields.Item("max_price").Value,2)
 end if
+if rsGetRecords("detail_materials") <> "" then
+	detail_materials = "  |  Materials: " & Mid(replace(rsGetRecords("detail_materials"), "  ,", ","), 3) & "  |  "
+end if
+if rsGetRecords("wearable_material") <> "" then
+	detail_wearable = "Wearable material: " & rsGetRecords("wearable_material") & "  |  "
+end if
 
 if rsGetRecords.Fields.Item("img_thumb").Value <> "" then
 	var_thumbnail_name = rsGetRecords.Fields.Item("img_thumb").Value
@@ -96,7 +102,7 @@ end if
 	<item>
 		<g:id><%= rsGetRecords.Fields.Item("ProductDetailID").Value %></g:id>
 		<g:title><%= pair_title & " " & rsGetRecords.Fields.Item("variant_description").Value & " #" & rsGetRecords.Fields.Item("ProductID").Value & " " & rsGetRecords.Fields.Item("flare_type").Value & " " & rsGetRecords.Fields.Item("title").Value %></g:title>
-		<g:description><%= pair %><%= rsGetRecords.Fields.Item("variant_description").Value %><%= " " & rsGetRecords.Fields.Item("flare_type").Value & " " %><%= rsGetRecords.Fields.Item("seo_meta_description").Value %></g:description>
+		<g:description><%= pair %><%= rsGetRecords.Fields.Item("variant_description").Value %><%= " " & rsGetRecords.Fields.Item("flare_type").Value & " " %><%= detail_materials %></g:description>
 		<g:inventory><%= rsGetRecords.Fields.Item("inventory").Value %></g:inventory>
 		<g:availability><%= availability %></g:availability>
 		<g:condition>new</g:condition>
@@ -115,7 +121,7 @@ end if
             <g:id><%= rsGetRecords.Fields.Item("ProductDetailID").Value %></g:id>
 			<g:item_group_id><%= rsGetRecords.Fields.Item("ProductID").Value %></g:item_group_id>
 			<g:title><%= pair_title & " " & rsGetRecords.Fields.Item("variant_description").Value & " #" & rsGetRecords.Fields.Item("ProductID").Value & " " & rsGetRecords.Fields.Item("flare_type").Value & " " & rsGetRecords.Fields.Item("title").Value %></g:title>
-			<g:description><%= rsGetRecords.Fields.Item("variant_description").Value %><%= pair_description %> <%= rsGetRecords.Fields.Item("flare_type").Value & " " %><%= rsGetRecords.Fields.Item("wearable_material").Value %></g:description>
+			<g:description><%= rsGetRecords.Fields.Item("variant_description").Value %><%= pair_description %> <%= rsGetRecords.Fields.Item("flare_type").Value & " " %><%= detail_materials %><%= detail_wearable %></g:description>
 			<g:inventory><%= rsGetRecords.Fields.Item("inventory").Value %></g:inventory>
 			<g:availability><%= availability %></g:availability>
 			<g:condition>new</g:condition>

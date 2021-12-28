@@ -1,8 +1,8 @@
 <%@LANGUAGE="VBSCRIPT" CODEPAGE="1252" %>
 <!--#include file="../../Connections/bodyartforms_sql_ADMIN.asp" -->
 <%
-if request.form("push_hidden") = "partial" then
-    var_sql = " TOP(25) "
+if request.form("push_hidden") <> "all" then
+    var_sql = " TOP(" & request.form("push_hidden") & ") "
 end if
 
 If WeekDayName(WeekDay(date())) = "Saturday" OR WeekDayName(WeekDay(date())) = "Sunday" then

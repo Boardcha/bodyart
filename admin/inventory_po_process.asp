@@ -34,7 +34,7 @@ For i=1 to Request.Form("total")
 	
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn  
-	objCmd.CommandText = "UPDATE tbl_po_details SET po_received = 1 WHERE po_detailid = " & Request.Form("po_detail_id_" & i) & " AND po_orderid = " & Session("po_id")
+	objCmd.CommandText = "UPDATE tbl_po_details SET po_received = 1, po_date_received = '" & now() & "' WHERE po_detailid = " & Request.Form("po_detail_id_" & i) & " AND po_orderid = " & Session("po_id")
 	objCmd.Execute()
 	Set objCmd = Nothing
 	

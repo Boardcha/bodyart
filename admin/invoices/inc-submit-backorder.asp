@@ -20,7 +20,7 @@
 					
 					<h6>Reason for backorder:</h6>
 					<div class="custom-control custom-radio">
-						<input class="custom-control-input" name="BOReason" type="radio" id="radio" value="our count was off and we have none left" checked>
+						<input class="custom-control-input" name="BOReason" type="radio" id="radio" value="our inventory was off and we have none left" checked>
 						<label class="custom-control-label" for="radio">Not enough items left in stock</label>
 					</div>
 					<div class="custom-control custom-radio">
@@ -28,7 +28,7 @@
 						<label class="custom-control-label" for="radio2">Last pair did not match</label>
 					</div>
 					<div class="custom-control custom-radio">
-						<input class="custom-control-input" type="radio" name="BOReason" id="radio3" value="the last ones we had we not the right size">
+						<input class="custom-control-input" type="radio" name="BOReason" id="radio3" value="the last ones we had were not the right size">
 						<label class="custom-control-label" for="radio3">Last ones were not the right size</label>
 					</div>
 					<div class="custom-control custom-radio">
