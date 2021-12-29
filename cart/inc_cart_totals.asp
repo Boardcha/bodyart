@@ -41,7 +41,8 @@
 	"total_without_certsOrCredits":"<%= FormatNumber(var_total_without_certsOrCredits, -1, -2, -2, -2) %>",
 	"total_without_shipping":"<%= FormatNumber(var_grandtotal - var_shipping_cost, -1, -2, -2, -2) %>",
 	"total_discount":"<%= FormatNumber(var_total_discount, -1, -2, -2, -2) %>",
-	"weight":"<%= var_totalweight %>"
+	"weight":"<%= var_totalweight %>",
+	"pre_order_item":"<%= preorder_shipping_notice %>"
 }
 <%
 Set rs_getCart = Nothing

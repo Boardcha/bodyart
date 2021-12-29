@@ -454,16 +454,7 @@ end if ' show if free sticker cookie has not been set to "no"
 			<div class="sticky-top" style="z-index:100">
 				<div class="card bg-light mb-2">
 					
-								<div class="card-body text-left py-2">
-									<% if preorder_in_order = "yes" then %>
-										<div class="alert alert-warning p-2">
-											<strong>Your order contains custom made (PRE-ORDER) items.</strong>
-											<br/>
-											Your ENTIRE ORDER will be held until the custom piece arrives to ship to you.
-										</div>	  			
-									<% end if ' if a pre-order is found in the order
-									%>
-									
+								<div class="card-body text-left py-2">						
 									
 									<% if Request.Cookies("ID") <> "" then ' if customer is logged in %>
 										<% if (rsGetUser.Fields.Item("credits").Value) <> 0 AND session("usecredit") <> "yes" then %>
@@ -579,7 +570,7 @@ end if ' show if free sticker cookie has not been set to "no"
 										</div>
 									<% If toggle_checkout_cards = true Then %>
 											<div class="checkout_now" style="display:none">
-												<a class="btn btn-block btn-primary mb-2 checkout_button" href="checkout.asp?type=card" ><h6>CHECKOUT WITH <span class="payment-options">CREDIT CARD
+												<a id="btn-checkout" class="btn btn-block btn-primary mb-2 checkout_button" href="checkout.asp?type=card" ><h6>CHECKOUT WITH <span class="payment-options">CREDIT CARD
 													<br/>
 													<span style="font-size:2em">
 													<i class="fa fa-cc-visa"></i>
@@ -596,7 +587,7 @@ end if ' show if free sticker cookie has not been set to "no"
 
 									<% If toggle_checkout_paypal = true Then %>
 										<div class="checkout_paypal mb-2"  style="display:none">
-											<a class="btn btn-block btn-warning checkout_button" href="checkout.asp?type=paypal">
+											<a id="btn-paypal" class="btn btn-block btn-warning checkout_button" href="checkout.asp?type=paypal">
 												<img style="height:30px" src="/images/paypal.png" />
 											</a>
 										</div>
@@ -733,6 +724,31 @@ if NOT rsGetAddOns.eof then
 							</div>
 					</div>
 			</div>	
+			
+			<!-- PRE_ORDER ITEM WARNING -->
+			<div class="modal fade" id="pre-order-warning-modal" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+						<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Your order contains custom made items</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div id="pre-order-items" class="modal-body">
+
+								</div>
+								<button id="btn-proceed-to-checkout" class="btn btn-lg btn-primary btn-block proceed_checkout w-75 mx-auto mb-3" type="button">PROCEED TO CHECKOUT</button>
+								<!--
+								<div class="modal-footer">
+									<div class="d-inline-block text-right w-50">
+										<button type="button" class="btn btn-secondary close-bo" data-dismiss="modal">Cancel</button>
+									</div>
+								</div>  
+								-->
+						</div>
+				</div>
+			</div>				
 	<%
 	End If 'End Of cart show if not empty
 	%>
@@ -761,6 +777,8 @@ if NOT rsGetAddOns.eof then
 	var totalDiscount = 0.0; // Gets updated in calcAllTotals()
 	var selectedShippingId = 0;
 	var selectedShippingCompany = "";
+	var preOrderItem = "";
+	var checkoutMethod = "";
 </script>
 
 <!-- Google Pay Javascript -->
@@ -768,8 +786,8 @@ if NOT rsGetAddOns.eof then
 <script async src="https://pay.google.com/gp/p/js/pay.js" onload="onGooglePayLoaded()"></script>
 
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
-<script type="text/javascript" src="/js-pages/cart.min.js?v=03032022"></script>
-<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=111721"></script>
+<script type="text/javascript" src="/js-pages/cart.min.js?v=03032023"></script>
+<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=111722"></script>
 <!-- ^^^^^^  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE ^^^^^^ -->
 <script type="text/javascript">
 	calcAllTotals();

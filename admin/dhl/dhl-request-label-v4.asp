@@ -13,14 +13,14 @@ Response.CodePage = 28591
 '==================== REMOVE ALL BASE64 IMAGES FROM DATABASE THAT ARE OVER 1 WEEK OLD ============
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
-objCmd.CommandText = "UPDATE sent_items SET dhl_base64_shipping_label = '' WHERE CAST(date_sent AS date) < CAST(GETDATE()-120 AS date)"
+objCmd.CommandText = "UPDATE sent_items SET dhl_base64_shipping_label = '', date_sent = NULL WHERE CAST(date_sent AS date) < CAST(GETDATE()-120 AS date)"
 objCmd.Execute()
 
 
 ' =================== REQUEST SHIPPING LABEL =====================================  
 if request.querystring("all") = "yes" then
 '==== GET ALL SHIPPING LABELS DURING BATCH PRINT
-    sql_where = "(dhl_package_id IS NULL OR dhl_package_id = '') AND ship_code = N'paid' AND  shipped = N'Pending shipment' AND giftcert_flag = 0 AND (shipping_type LIKE '%DHL%')"
+    sql_where = "(dhl_base64_shipping_label IS NULL OR dhl_base64_shipping_label = '') AND ship_code = N'paid' AND  shipped = N'Pending shipment' AND giftcert_flag = 0 AND (shipping_type LIKE '%DHL%')"
 end if 
 if request.querystring("single") = "yes" then
 '==== REQUEST SINGLE LABEL TO PRINT
@@ -115,7 +115,7 @@ if rsGetOrder.EOF then
 end if
 
 While NOT rsGetOrder.EOF
-var_packageid =  rsGetOrder.Fields.Item("OrderNumber").Value
+var_packageid =  rsGetOrder.Fields.Item("OrderNumber").Value & "-" & getInteger(4)
 
 var_address2 = ""
 if rsGetOrder.Fields.Item("ShipToAddress2").Value <> "" then

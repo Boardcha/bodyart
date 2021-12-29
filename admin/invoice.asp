@@ -482,11 +482,11 @@ if not rsGetOrder.eof then
 					</div>
 				<% end if %>
 				<% if instr(rsGetOrder.Fields.Item("shipping_type").Value,"DHL") > 0 then %>
-				<span id="tracking_arrow_down" class="usps_tracking btn btn-sm btn-secondary" data-url="../dhl/dhl-tracking.asp?tracking=">DHL Tracking Details</span>
+				<span id="tracking_arrow_down" class="usps_tracking btn btn-sm btn-secondary" data-url="../dhl/dhl-tracking.asp?tracking=">Hide Tracking Details</span>
 				<% else %>
-				<span id="tracking_arrow_down" class="usps_tracking btn btn-sm btn-secondary" data-url="../usps_tools/usps_tracking.asp?id=">USPS Tracking Details</span>
+				<span id="tracking_arrow_down" class="usps_tracking btn btn-sm btn-secondary" data-url="../usps_tools/usps_tracking.asp?id=">Hide Tracking Details</span>
 				<% end if %>
-				<span id="tracking_arrow_up" class="usps_tracking btn btn-sm btn-secondary" style="display:none">Hide Tracking Details</span>
+				<span id="tracking_arrow_up" class="usps_tracking btn btn-sm btn-secondary" style="display:none">Show Tracking Details</span>
 			<% end if %>
 			<div class="form-group ups-tracking">
 				<label class="font-weight-bold" for="ups-tracking">UPS Tracking:</label>
@@ -494,7 +494,13 @@ if not rsGetOrder.eof then
 			</div>
 			<button class="btn btn-sm btn-secondary ml-1 mr-0" id="btn-send-shipment-email" data-invoiceid="<%= rsGetOrder.Fields.Item("ID").Value %>">Send shipment email</button><span id="msg-send-shipment-email"></span>
 	
-			<div class="mt-3" id="tracking_display" style="display:none"></div>
+			<div class="mt-3" id="tracking_display" <% if rsGetOrder.Fields.Item("USPS_tracking").Value = "" then %> style="display:none" <%End If%>>
+				<% if instr(rsGetOrder.Fields.Item("shipping_type").Value,"DHL") > 0 then %>
+					<script>$('#tracking_display').load("/dhl/dhl-tracking.asp?tracking=<%=rsGetOrder.Fields.Item("USPS_tracking").Value%>");</script>
+				<% else %>
+					<script>$('#tracking_display').load("/usps_tools/usps_tracking.asp?id=<%=rsGetOrder.Fields.Item("USPS_tracking").Value%>");</script>
+				<% end if %>				
+			</div>
 
 </div>
 	<div class="col-sm pl-4 small disable-fields"> 

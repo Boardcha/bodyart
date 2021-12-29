@@ -21,13 +21,15 @@ else
 	var_addons = " AND cart_addon_item = 0 "
 end if
 
+
+
 	Session("StoreCreditAmount") = 0
 	Session("StoreCreditID") = 0
 
 	' RETRIEVE SHOPPING CART CONTENTS ---------------------------------------------
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT tbl_carts.cart_id, tbl_carts.cart_detailID, tbl_carts.cart_preorderNotes, tbl_carts.cart_custId, tbl_carts.cart_qty, tbl_carts.cart_wishlistid, jewelry.title, jewelry.internal, jewelry.customorder, jewelry.autoclavable, jewelry.brandname, jewelry.SaleDiscount, jewelry.secret_sale, jewelry.ProductID, jewelry.pair, jewelry.picture, ProductDetails.Gauge, ProductDetails.Length, ProductDetails.price, ProductDetails.wlsl_price, ProductDetails.qty, ProductDetails.ProductDetail1, ProductDetails.ProductDetailID, ProductDetails.free, jewelry.SaleExempt, jewelry.jewelry, TBL_Companies.preorder_timeframes, ProductDetails.weight, (jewelry.title + ' ' + ISNULL(ProductDetails.Gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') + ' ' +  ISNULL(ProductDetails.ProductDetail1,'')) AS 'mini_preview_text', (ISNULL(ProductDetails.Gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') + ' ' +  ISNULL(ProductDetails.ProductDetail1,'')) AS 'variant', CAST(ProductDetails.price * tbl_carts.cart_qty as money) AS 'mini_line_price' FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID INNER JOIN tbl_carts ON ProductDetails.ProductDetailID = tbl_carts.cart_detailId INNER JOIN TBL_Companies ON jewelry.brandname = TBL_Companies.name WHERE (tbl_carts." & var_db_field & " = ?) AND cart_save_for_later = 0 " & var_addons & " AND ProductDetails.active = 1 AND jewelry.active = 1"
+	objCmd.CommandText = "SELECT tbl_carts.cart_id, tbl_carts.cart_detailID, tbl_carts.cart_preorderNotes, tbl_carts.cart_custId, tbl_carts.cart_qty, tbl_carts.cart_wishlistid, jewelry.title, jewelry.internal, jewelry.customorder, jewelry.autoclavable, jewelry.brandname, jewelry.SaleDiscount, jewelry.secret_sale, jewelry.ProductID, jewelry.pair, jewelry.picture, ProductDetails.Gauge, ProductDetails.Length, ProductDetails.price, ProductDetails.wlsl_price, ProductDetails.qty, ProductDetails.ProductDetail1, ProductDetails.ProductDetailID, ProductDetails.free, jewelry.SaleExempt, jewelry.jewelry, TBL_Companies.preorder_timeframes, ProductDetails.weight, (jewelry.title + ' ' + ISNULL(ProductDetails.Gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') + ' ' +  ISNULL(ProductDetails.ProductDetail1,'')) AS 'mini_preview_text', (ISNULL(ProductDetails.Gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') + ' ' +  ISNULL(ProductDetails.ProductDetail1,'')) AS 'variant', CAST(ProductDetails.price * tbl_carts.cart_qty as money) AS 'mini_line_price' FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID INNER JOIN tbl_carts ON ProductDetails.ProductDetailID = tbl_carts.cart_detailId INNER JOIN TBL_Companies ON jewelry.brandname = TBL_Companies.name WHERE (tbl_carts." & var_db_field & " = ?) AND cart_save_for_later = 0 " & var_addons & " AND ProductDetails.active = 1 AND jewelry.active = 1 " & var_sql_query 
 	objCmd.Parameters.Append(objCmd.CreateParameter("cart_custID",3,1,10,var_cart_userid))
 	Set rs_getCart = objCmd.Execute()
 
