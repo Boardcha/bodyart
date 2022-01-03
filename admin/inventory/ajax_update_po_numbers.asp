@@ -52,7 +52,8 @@
 DataConn.Close()
 
 	' Delete cookie that holds the temp ID # so that it can start a new order from scratch
-	response.cookies(request("brand")) = ""
+	response.cookies("brandname = '" & request("brand") & "'") = ""
+	response.cookies("brandname = '" & request("brand") & "'").Expires = DateAdd("d",-1,now())
 	response.cookies("po-filter-status") = ""
 	response.cookies("po-filter-active") = ""
 	response.cookies("po-filter-qty") = ""

@@ -197,7 +197,8 @@ objCmd.Execute()
 ' Update total returns in DB and tax returns portion 
 set objCmd = Server.CreateObject("ADODB.Command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "UPDATE sent_items SET total_returns = total_returns + " & cc_refund_due + storecredit_refund_due + giftcert_refund_due  & ", returns_sales_tax = returns_sales_tax + " & returns_sales_tax & " WHERE ID = ?"
+objCmd.CommandText = "UPDATE sent_items SET total_returns = total_returns + " & cc_refund_due + storecredit_refund_due + giftcert_refund_due  & ", returns_sales_tax = returns_sales_tax + " & returns_sales_tax & ", returned_package = 1, returned_date = CAST( GETDATE() AS Date ), return_processed_by = ? WHERE ID = ?"
+objCmd.Parameters.Append(objCmd.CreateParameter("user_name",200,1,50, user_name))
 objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,15,var_invoiceid))
 
 objCmd.Execute()

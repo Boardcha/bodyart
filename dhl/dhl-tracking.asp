@@ -2,6 +2,7 @@
 <!--#include virtual="/Connections/dhl-auth-v4.asp"-->
 <script src="https://use.fortawesome.com/dc98f184.js"></script>
 <%
+if request("tracking") <> "" then
 display_international_track_link = ""
 
 '========== GET INVOICE BY TRACKING # TO FIND OUT WHAT DATE SENT WAS TO DETERMINE IF PACKAGE SHOULD BE TRACKED BY APIv2 OR APIv4 ===========================
@@ -215,5 +216,7 @@ end if
             <% end if %> 
         <%= var_message %>
     </div><!-- container-->
-
+<% else %>
+No tracking # provided
+<% end if 'request("tracking") <> "" %>
 

@@ -495,11 +495,15 @@ if not rsGetOrder.eof then
 			<button class="btn btn-sm btn-secondary ml-1 mr-0" id="btn-send-shipment-email" data-invoiceid="<%= rsGetOrder.Fields.Item("ID").Value %>">Send shipment email</button><span id="msg-send-shipment-email"></span>
 	
 			<div class="mt-3" id="tracking_display" <% if rsGetOrder.Fields.Item("USPS_tracking").Value = "" then %> style="display:none" <%End If%>>
-				<% if instr(rsGetOrder.Fields.Item("shipping_type").Value,"DHL") > 0 then %>
+				<% 
+				if rsGetOrder("USPS_tracking") <> "" then
+				if instr(rsGetOrder.Fields.Item("shipping_type").Value,"DHL") > 0 then %>
 					<script>$('#tracking_display').load("/dhl/dhl-tracking.asp?tracking=<%=rsGetOrder.Fields.Item("USPS_tracking").Value%>");</script>
 				<% else %>
 					<script>$('#tracking_display').load("/usps_tools/usps_tracking.asp?id=<%=rsGetOrder.Fields.Item("USPS_tracking").Value%>");</script>
-				<% end if %>				
+				<% end if 
+				end if
+				%>				
 			</div>
 
 </div>

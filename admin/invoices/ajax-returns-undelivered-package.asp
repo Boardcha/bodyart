@@ -21,7 +21,8 @@ end if
 ' ---------- Set order to Package came back status
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "UPDATE sent_items SET shipped = 'PACKAGE CAME BACK' WHERE ID = ?" 
+objCmd.CommandText = "UPDATE sent_items SET shipped = 'PACKAGE CAME BACK', returned_package = 1, returned_date = CAST( GETDATE() AS Date ), return_processed_by = ? WHERE ID = ?" 
+objCmd.Parameters.Append(objCmd.CreateParameter("user_name",200,1,50, user_name))
 objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,12, request.form("invoice")))
 objCmd.Execute()
 

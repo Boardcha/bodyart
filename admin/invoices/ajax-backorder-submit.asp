@@ -76,6 +76,13 @@ objCmd.Parameters.Append(objCmd.CreateParameter("qty",3,1,20, request.form("bo_q
 objCmd.Parameters.Append(objCmd.CreateParameter("productdetailid",3,1,20,productdetailid))
 objCmd.Execute()
 
+'Write info to edits log	
+set objCmd = Server.CreateObject("ADODB.Command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & productdetailid & ",'Automated - Updated qty to " & request.form("bo_qty") & " - backorder submit page','" & now() & "')"
+objCmd.Execute()
+Set objCmd = Nothing
+
 mailer_type = "backorder"
 %>
 <!--#include virtual="/checkout/inc_random_code_generator.asp"-->

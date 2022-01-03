@@ -10,6 +10,13 @@ if request.form("detailid") <> "" then ' check to see if a detailid is provided 
 	objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,10,request.form("detailid")))
 	Set rsUpdate = objCmd.Execute()
 
+	'Write info to edits log	
+	set objCmd = Server.CreateObject("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & request.form("detailid") & ",'Automated - Updated qty to " & request.form("qty") & " - updated qty from inventory count page','" & now() & "')"
+	objCmd.Execute()
+	Set objCmd = Nothing
+
 end if
 
 DataConn.Close()

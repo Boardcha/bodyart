@@ -100,6 +100,13 @@ var_create_neworder = ""
                     objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - " & rsGetItems.Fields.Item("ErrorQtyMissing").Value & ", DateLastPurchased = '"& date() &"' WHERE ProductDetailID = " & rsGetItems.Fields.Item("ProductDetailID").Value
                     objCmd.Execute()
 
+                    '======================= Write info to edits log	
+                    set objCmd = Server.CreateObject("ADODB.Command")
+                    objCmd.ActiveConnection = DataConn
+                    objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & rsGetItems("ProductDetailID") & ",'Automated - Updated (deducted) qty from " & rsGetItems("qty_instock") & " to " & rsGetItems("qty_instock") - rsGetItems("ErrorQtyMissing") & " - reship items window','" & now() & "')"
+                    objCmd.Execute()
+                    Set objCmd = Nothing
+
                     ' ====== Write item notes
                     set objCmd = Server.CreateObject("ADODB.command")
                     objCmd.ActiveConnection = DataConn
