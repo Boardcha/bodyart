@@ -43,7 +43,7 @@ If categories <> "" Then categories = Mid(categories, 1, LEN(categories)-1)
 <script>
 	//Klaviyo Started Checkout push
 	_learnq.push(["track", "Started Checkout", {
-	 "$event_id": "<%= var_cart_userid %>_<%= CStr(DateDiff("s", "01/01/1970 00:00:00", Now())) %>",
+	 "$event_id": "<%= var_cart_userid %>_<%= Year(Now()) & Month(Now()) & Day(Now()) & Hour(Now()) %>",
      "$value": <%=var_subtotal%>,
      "ItemNames": [<%=product_names%>],
      "CheckoutURL": "https://bodyartforms.com/checkout.asp",

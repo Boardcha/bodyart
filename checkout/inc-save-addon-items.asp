@@ -58,7 +58,10 @@ For i = 0 to (ubound(array_details_2, 2) - 1) ' loop through array
     objCmd.ActiveConnection = DataConn
     'objCmd.CommandType = 4
     'objCmd.CommandText = "Proc_Checkout4_InsertOrder"
-    objCmd.CommandText = "INSERT INTO TBL_OrderSummary (InvoiceID, ProductID, DetailID, qty, item_price, notes, PreOrder_Desc, item_wlsl_price, addon_item) VALUES (?,?,?,?,?,?,?,?, " & var_addons_db_flag & ")"
+	
+	'If ProductID flagged as "waiting-list", meaning if customer comes from waiting-list email notification, save this info to the "referrer" field.
+	If Session(array_details_2(6,i)) = "waiting-list" Then var_referrer = "'waiting-list'" Else var_referrer = "NULL"
+    objCmd.CommandText = "INSERT INTO TBL_OrderSummary (InvoiceID, ProductID, DetailID, qty, item_price, notes, PreOrder_Desc, item_wlsl_price, addon_item, referrer) VALUES (?,?,?,?,?,?,?,?, " & var_addons_db_flag & "," & var_referrer & ")"
             objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,15,session("invoiceid")))
             objCmd.Parameters.Append(objCmd.CreateParameter("productid",3,1,15,array_details_2(6,i)))
             objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,15,array_details_2(0,i)))

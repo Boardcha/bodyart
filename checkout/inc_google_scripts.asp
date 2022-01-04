@@ -108,33 +108,6 @@ while NOT rsGoogle_GetOrderDetails.eof
 	});
 </script>	
 
-
-<!-- Facebook Pixel Code -->
-<script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-document,'script','https://connect.facebook.net/en_US/fbevents.js');
-
-fbq('init', '532347420293260');
-fbq('track', 'Purchase', {
-	value: '<%= FormatNumber(facebook_pixel_total, -1, -2, -2, -2) %>', currency:'USD',
-	content_type: 'product',
-	contents: [<%= LEFT(var_fb_line_item, (LEN(var_fb_line_item)-1)) %>]
-	});
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=532347420293260&ev=PageView&noscript=1"
-/></noscript>
-<!-- End Facebook Pixel Code -->
-
-<%
-end if  ' session("google_sent") = ""
-' make sure this information only fires off once per session
-session("google_sent") = "yes"
-%>
-
 <!-- KLAVIYO ORDER PLACED PUSH BEGIN -->
 <%
 rsGoogle_GetOrderDetails.moveFirst
@@ -216,11 +189,11 @@ payload_order_placed = "{" & _
        """Zip"": """ & rsGetOrder("zip") & """," & _
        """Phone"": """ & rsGetOrder("phone") & """" & _
      "}" & _
-   "}," & _
-   """time"": " & CStr(DateDiff("s", "01/01/1970 00:00:00", Now())) & _ 
+   "}" & _
  "}"
 
-
+ 'Response.Write payload_order_placed
+ 'Response.Write "SEE BELOW<br>"
 set http = Server.CreateObject("Chilkat_9_5_0.Http")
 http.SetRequestHeader "Content-Type", "application/json"
 http.Accept = "application/json"
@@ -247,7 +220,7 @@ While NOT rsGoogle_GetOrderDetails.eof
 		 """$last_name"": """ & rsGetOrder("customer_last") & """" & _
 	   "}," & _
 	   """properties"": {" & _
-		 """$event_id"": """ & rsGetOrder("ID") & """," & _
+		 """$event_id"": """ &  rsGetOrder("ID") & "_" & rsGoogle_GetOrderDetails("DetailID") & """," & _
 		 """$value"": " & rsGoogle_GetOrderDetails("item_price") & "," & _
 		 """OrderId"": """ & rsGetOrder("ID") & """," & _
 		 """ProductID"": """ & rsGoogle_GetOrderDetails("ProductID") & """," & _
@@ -258,11 +231,10 @@ While NOT rsGoogle_GetOrderDetails.eof
 		 """ImageURL"": ""https://bodyartforms-products.bodyartforms.com/" & rsGoogle_GetOrderDetails("largepic") & """," & _
 		 """Categories"": [""" & Trim(rsGoogle_GetOrderDetails("jewelry")) & """]," & _
 		 """ProductBrand"": """ & rsGoogle_GetOrderDetails("brandname") & """" & _
-	   "}," & _
-	   """time"": " & CStr(DateDiff("s", "01/01/1970 00:00:00", Now())) & _ 
+	   "}" & _
 	 "}"
 	 
-
+	 'Response.Write payload_ordered_product
 	set http = Server.CreateObject("Chilkat_9_5_0.Http")
 	http.SetRequestHeader "Content-Type", "application/json"
 	http.Accept = "application/json"
@@ -273,9 +245,35 @@ While NOT rsGoogle_GetOrderDetails.eof
 	End If
 
 	jsonResponseStr = resp.BodyStr
-	'Response.Write jsonResponseStr	
+	'Response.Write payload_ordered_product & "<br>"	
 	
 	rsGoogle_GetOrderDetails.MoveNext	
 Wend  
 '== KLAVIYO ORDERED PRODUCT PUSH END ==
 %>
+
+<!-- Facebook Pixel Code -->
+<script>
+	!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+	n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+	n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+	t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
+	document,'script','https://connect.facebook.net/en_US/fbevents.js');
+	
+	fbq('init', '532347420293260');
+	fbq('track', 'Purchase', {
+		value: '<%= FormatNumber(facebook_pixel_total, -1, -2, -2, -2) %>', currency:'USD',
+		content_type: 'product',
+		contents: [<%= LEFT(var_fb_line_item, (LEN(var_fb_line_item)-1)) %>]
+		});
+	</script>
+	<noscript><img height="1" width="1" style="display:none"
+	src="https://www.facebook.com/tr?id=532347420293260&ev=PageView&noscript=1"
+	/></noscript>
+	<!-- End Facebook Pixel Code -->
+	
+	<%
+	end if  ' session("google_sent") = ""
+	' make sure this information only fires off once per session
+	session("google_sent") = "yes"
+	%>

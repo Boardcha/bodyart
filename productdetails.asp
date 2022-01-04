@@ -1,6 +1,7 @@
 <%@LANGUAGE="VBSCRIPT"  CODEPAGE="65001"%>
 <!--#include virtual="/Connections/sql_connection.asp" -->
 <%
+
 ' resetting some cart variables
 session("credit_now") = 0
 session("temp_shipping") = 0
@@ -14,7 +15,10 @@ Else
 	ProductID = 0
 End If
 
-
+If Request.QueryString("referrer") = "waiting-list" Then
+	'If customer comes from email notification, flag the productID.
+	Session(ProductID) = "waiting-list"
+End If
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
