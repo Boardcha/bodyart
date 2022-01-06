@@ -63,9 +63,13 @@
         <link rel="shortcut icon" href="/favicon.ico">
         <meta name="msapplication-TileColor" content="#2b5797">
         <meta name="theme-color" content="#ffffff">
-        <% if request.cookies("darkmode") <> "on" then %> 
+        <% if request.cookies("darkmode") <> "on" then 
+        var_applepay_color = "white"
+        %> 
         <link href="/CSS/baf.min.css?v=080221" id="lightmode" rel="stylesheet" type="text/css" />
-        <% else %>
+        <% else 
+        var_applepay_color = "black"
+        %>
         <link href="/CSS/baf-dark.min.css?v=080221" id="darkmode" rel="stylesheet" type="text/css" />
         <% end if %>
         <link href="/CSS/ion.rangeslider.min.css?v=061121" rel="stylesheet" type="text/css" />

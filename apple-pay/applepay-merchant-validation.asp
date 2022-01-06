@@ -1,7 +1,7 @@
 <!--#include virtual="/connections/chilkat.asp"-->
 <%
 
-Mode = "TEST" ' OR PRODUCTION
+Mode = "PRODUCTION" '============= TEST OR PRODUCTION =================
 'Note: Apple Pay does not work on localhost since they require domain verification.
 
 If Mode = "PRODUCTION" Then domain = "bodyartforms.com" else domain = "dev5.bodyartforms.com"

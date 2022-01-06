@@ -596,6 +596,7 @@ end if ' show if free sticker cookie has not been set to "no"
 									<% end if %>
 									<div id="pay-api-processing-message" style="display:none"></div>	
 									<div id="btn-googlepay" class="mb-3 checkout_button" style="width: 100%; height: 45px; display: none;"></div>
+									
 									<%
 									' === only show afterpay option to USA customers
 									if request.cookies("currency") = "" OR request.cookies("currency") = "USD" then
@@ -697,33 +698,6 @@ if NOT rsGetAddOns.eof then
                         </div>
                 </div>
         </div>	
-
-				<!-- FREE SHIPPING NOTICE CHANGING FROM $25 TO $50 -->
-				<div class="modal fade" id="freeshipping" tabindex="-1" role="dialog"                 aria-hidden="true">
-					<div class="modal-dialog" role="document">
-							<div class="modal-content">
-									<div class="modal-header">
-										<h5 class="modal-title">Free Shipping Threshold Increase</h5>
-										<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-											<span aria-hidden="true">&times;</span>
-										</button>
-									</div>
-									<div class="modal-body">
-										<p>You've probably heard about the shipping crisis in the news. Both the cost of shipping and shipping supplies have skyrocketed. We've been riding out the storm as long as possible, but the costs have mounted so much for us that we have had to make some tough decisions regarding our shipping rates.</p>
-										<p>Being able to offer free shipping to ya'll is important to us, and to do that sustainably we need to raise the threshold to $50.  Another change is eliminating the discount on international shipping, so the price on that will rise by $2, and three of our domestic options will be going up by $1.</p>
-										<p>These are not changes we're making lightly. For the better part of two decades, we've held our free shipping amount at $25, and for the last two years we have maintained the same low shipping rates across the board. We maintained those standards throughout the pandemic, even as we've watched other websites raise their free shipping thresholds to $70+ or eliminate it entirely. The changes we are making now are something we've been discussing and crunching the numbers on for some time.</p>
-										<p>We know folks are strapped, things are still tough, and we haven't fully recovered from the pandemic, but adopting these new standards will help us keep your orders flowing in the quickest, most sustainable way going forward.</p>
-										<p>Please let us know if you have any feedback at all regarding these changes. We value all the thoughts and conversations we have with you!!</p>
-										P.S. We are keeping all of our free gift selections at the $30, $50, $75, $100, and $150. We've added a bunch of fun new options in there in the last month or two. 
-									</div>  
-									<div class="modal-footer">
-										<div class="d-inline-block text-right w-50">
-											<button type="button" class="btn btn-secondary close-bo" data-dismiss="modal">Close</button>
-										</div>
-									</div>  
-							</div>
-					</div>
-			</div>	
 			
 			<!-- PRE_ORDER ITEM WARNING -->
 			<div class="modal fade" id="pre-order-warning-modal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -784,6 +758,10 @@ if NOT rsGetAddOns.eof then
 <!-- Google Pay Javascript -->
 <script src="/js/google-pay-v2api.js?ver=1"></script>
 <script async src="https://pay.google.com/gp/p/js/pay.js" onload="onGooglePayLoaded()"></script>
+
+<!-- Apple Pay Javascript -->
+<script src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js"></script>
+<script src="/js/apple-pay-api.js?ver=3"></script>
 
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
 <script type="text/javascript" src="/js-pages/cart.min.js?v=03032023"></script>
