@@ -405,9 +405,14 @@
 		"<br><br>Thank you so much for your order! We are sorry to say that we do not have the item listed below to send out because " & var_bo_reason & ". If you ordered more than one item, then your package has already shipped out with the rest of your items." &_ 
 		"<table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>" &_
 		"<br>We always try our best to fulfill every order perfectly, but we dropped the ball. That's on us. Here's what we can do:" &_
-		"<ul>" &_
-		"<li>You can leave the item on backorder and we'll ship it when it comes back in stock</li>" &_
-		"<li>You can get in-store credit for the item (You'll need to have an account set up on the site if you'd like to do this)</li>" &_
+		"<ul>"
+		
+		'======== Only display this option if it's a regularly stocked item
+		if var_jewelry_status = "None" then
+			mail_body = mail_body & "<li>You can leave the item on backorder and we'll ship it when it comes back in stock</li>"
+		end if
+
+		mail_body = mail_body & "<li>You can get in-store credit for the item (You'll need to have an account set up on the site if you'd like to do this)</li>" &_
 		"<li>You can get a refund for the item</li>" &_
 		"<li>You can exchange the item for something else (Just reply and let us know which item you want instead)</li>" &_
 		"</ul>" &_

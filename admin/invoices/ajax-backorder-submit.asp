@@ -6,7 +6,7 @@
 orderdetailid = request.form("orderdetailid")
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT InvoiceID, ProductID, DetailID, title, ProductDetail1, Gauge, Length, stock_qty, OrderDetailID, email, customer_first, title, qty, ProductDetail1, ProductDetailID, item_price, PreOrder_Desc, picture, free FROM dbo.QRY_OrderDetails WHERE OrderDetailID = ?" 
+objCmd.CommandText = "SELECT InvoiceID, ProductID, DetailID, title, ProductDetail1, Gauge, Length, stock_qty, OrderDetailID, email, customer_first, title, qty, ProductDetail1, ProductDetailID, item_price, PreOrder_Desc, picture, free, type FROM dbo.QRY_OrderDetails WHERE OrderDetailID = ?" 
 objCmd.Parameters.Append(objCmd.CreateParameter("orderdetailid",3,1,20, orderdetailid))
 Set rsGetInfo = objCmd.Execute()
 
@@ -59,6 +59,7 @@ productdetailid = rsGetInfo.Fields.Item("DetailID").Value
 var_customer_name = rsGetInfo.Fields.Item("customer_first").Value
 var_customer_email = rsGetInfo.Fields.Item("email").Value
 var_invoice_number = rsGetInfo.Fields.Item("InvoiceID").Value
+var_jewelry_status = rsGetInfo("type")
 var_bo_reason = Request.Form("bo_reason")
 
 ' Set item to backorder status (and not on review)
