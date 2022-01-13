@@ -300,6 +300,14 @@ if JsonLabel.StringOf("title") <> "" then '====== DISPLAY ERROR MESSAGE ========
 
         var_request_error = "Access token expired" & var_request_error
 
+    ELSEIF JsonLabel.StringOf("title") = "Unknown exception - API Service" THEN
+
+        var_request_error = "DHL Service is having API issues" & var_request_error
+
+    ELSEIF JsonLabel.StringOf("title") = "Product Finding Failed" THEN
+
+        var_request_error = "DHL Shipping type for order not found Invoice <a href='/admin/invoice.asp?ID=" & rsGetOrder.Fields.Item("OrderNumber").Value & "' target='_blank'>" & rsGetOrder.Fields.Item("OrderNumber").Value & "</a><br><br>" & var_request_error
+
     ELSE '=== If detailed errors are available =====
 
     

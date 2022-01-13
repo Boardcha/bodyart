@@ -22,7 +22,7 @@ else
 		'==== CREATE EMPTY ORDER, Use the word "Empty" as a way to track the newest order ==========
 		set objCmd = Server.CreateObject("ADODB.Command")
 		objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
-		objCmd.CommandText = "INSERT INTO sent_items (shipped, date_order_placed, ship_code, pay_method) VALUES ('Pending...', '" & now() & "', 'paid', 'Empty')"
+		objCmd.CommandText = "INSERT INTO sent_items (shipped, date_order_placed, ship_code, pay_method, order_created_by) VALUES ('Pending...', '" & now() & "', 'paid', 'Empty', '" & user_name & "')"
 		objCmd.Execute() 
 
 		'===== RETRIEVE NEWEST EMPTY ORDER =================

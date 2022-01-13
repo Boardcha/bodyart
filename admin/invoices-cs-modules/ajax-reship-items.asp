@@ -66,7 +66,8 @@ var_create_neworder = ""
 
             set objCmd = Server.CreateObject("ADODB.Command")
             objCmd.ActiveConnection = DataConn
-            objCmd.CommandText = "INSERT INTO sent_items (shipped, customer_ID, customer_first, customer_last, company, address, address2, city, state, province, zip, country, email, date_order_placed, shipping_rate, shipping_type, ship_code, phone, pay_method, UPS_Service, autoclave) SELECT 'Pending...', customer_ID, customer_first, customer_last, company, address, address2, city, state, province, zip, country, email, '" & now() & "',0 ,'" & var_shipping_type & "' , 'paid', phone, pay_method, '', autoclave FROM sent_items WHERE ID = ?" 
+            objCmd.CommandText = "INSERT INTO sent_items (shipped, customer_ID, customer_first, customer_last, company, address, address2, city, state, province, zip, country, email, date_order_placed, shipping_rate, shipping_type, ship_code, phone, pay_method, UPS_Service, autoclave, reship_processed_by) SELECT 'Pending...', customer_ID, customer_first, customer_last, company, address, address2, city, state, province, zip, country, email, '" & now() & "',0 ,'" & var_shipping_type & "' , 'paid', phone, pay_method, '', autoclave, ? FROM sent_items WHERE ID = ?" 
+            objCmd.Parameters.Append(objCmd.CreateParameter("user_name",200,1,50, user_name))
             objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,15,var_invoiceid))
             objCmd.Execute() 
             

@@ -6,13 +6,13 @@ bootstrapped = "yes"
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
-objCmd.CommandText = "SELECT ID, company, customer_first, customer_last, address, address2, city, state, zip, country, phone, email FROM sent_items WHERE (dhl_package_id IS NULL OR dhl_package_id = '') AND ship_code = N'paid' AND shipped = N'Pending shipment' AND giftcert_flag = 0 AND (shipping_type LIKE '%DHL%')"
+objCmd.CommandText = "SELECT ID, company, customer_first, customer_last, address, address2, city, state, zip, country, phone, email, shipping_type FROM sent_items WHERE (dhl_package_id IS NULL OR dhl_package_id = '') AND ship_code = N'paid' AND shipped = N'Pending shipment' AND giftcert_flag = 0 AND (shipping_type LIKE '%DHL%')"
 Set rsGetManifests = objCmd.Execute()
 %>
 <!DOCTYPE html> 
 <html>
 <head>
-<title>DHL Labels & Closeouts</title>
+<title>DHL troubleshoot orders</title>
 </head>
 <body>
 <!--#include file="admin_header.asp"-->
@@ -30,6 +30,7 @@ Set rsGetManifests = objCmd.Execute()
                     <th>Zip</th>
                     <th>Country</th>
                     <th>Phone</th>
+                    <th>Ship Method</th>
                     <th>Email</th>
                 </tr>
             </thead>
@@ -49,6 +50,7 @@ Set rsGetManifests = objCmd.Execute()
                 <td><%= rsGetManifests.Fields.Item("zip").Value %></td>
                 <td><%= rsGetManifests.Fields.Item("country").Value %></td>
                 <td><%= rsGetManifests.Fields.Item("phone").Value %></td>
+                <td><%= rsGetManifests("shipping_type") %></td>
                 <td><%= rsGetManifests.Fields.Item("email").Value %></td>
                 </tr>
               <%
