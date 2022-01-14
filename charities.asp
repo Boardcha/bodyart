@@ -9,61 +9,95 @@
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->
 <!--#include virtual="/bootstrap-template/header-navigation.asp" -->
 <!--#include virtual="/bootstrap-template/filters.asp" -->
-<div class="fa-blacked-out-extra-bold mb-4" style="font-size:2em">
-		Charities
+<style>
+	.charities img {max-height:100px}
+</style>
+<div style="margin:-1.5rem -1rem 1em -1.5rem">
+<picture>
+	<source media="(max-width: 550px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner_550x350_v2.jpg">
+	<source media="(max-width: 850px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner_850x350_v2.jpg">
+	<source media="(max-width: 1024px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner_1024x350_v2.jpg">
+	<source media="(max-width: 1600px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner_1600x350_v2.jpg">
+	<source media="(min-width: 1920px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner_1920x350_v2.jpg">
+		<img class="img-fluid hero-slider" src="https://sliders.bodyartforms.com/banner_1600x350_v2.jpg" 
+	srcset="https://sliders.bodyartforms.com/banner_1920x350_v2.jpg 1920w,
+	https://sliders.bodyartforms.com/banner_1600x350_v2.jpg 1600w,
+	https://sliders.bodyartforms.com/banner_1024x350_v2.jpg 1024w,
+	https://sliders.bodyartforms.com/banner_850x350_v2.jpg 850w,
+	https://sliders.bodyartforms.com/banner_550x350_v2.jpg 550w"
+	sizes="100vw"
+	alt="Charities banner" />
+</picture>
 </div>
-Our Charitable Giving
-						</h5>
-						<div class="mb-2">Giving to charities has always been important to us. We give to many charities on a monthly basis (listed below) and we also give annual donations to many other charities not listed here.</div>
-						In 2020 we donated 21% of our profits to charity<br/>
-						In 2019 we donated 21% of our profits to charity<br/>
-						In 2018 we donated 7% of our profits to charity<br/>
-						In 2017 we donated 30% of our profits to charity<br/>
-						In 2016 we donated 17% of our profits to charity<br/>
-						In 2015 we donated 30% of our profits to charity
-								<h5 class="mt-3">
-										Charities we donate to monthly
-								</h5>
 
-								<h4>Helping animals</h4>
-								<a href="http://www.austinhumanesociety.org/" target="_blank" alt="Austin Humane Society"><img src="/images/charities/austin-humane-society.png"></a>
-								<a href="http://www.aspca.org" target="_blank" alt="ASPCA"><img src="/images/charities/aspca.png" style="width: 100px"></a>
-								<a href="https://www.austinpetsalive.org/" target="_blank" alt="Austin Pets Alive"><img src="/images/charities/austin-pets-alive.png" style="width: 100px"></a>
-								<a href="http://www.hfa.org" target="_blank" alt="Humane Farming Association"><img src="/images/charities/humane-farming-association.png" style="width: 100px"></a>
-								<a href="https://www.deanschneider.com" target="_blank" alt="Dean Schneider Foundation"><img src="/images/charities/dean-schneider.png" style="width: 100px"></a>
-								<a href="http://www.defenders.org" target="_blank" alt="Defenders of Wildlife"><img src="/images/charities/defenders-of-wildlife.png" style="width: 100px"></a>
-								<a href="https://emancipet.org/" target="_blank" alt="Emancipet"><img src="/images/charities/emancipet.png" style="width: 100px"></a>
-								<a href="https://www.elephants.com/" target="_blank" alt="Elephant Sanctuary in Tenneessee"><img src="/images/charities/elephant-sanctuary.png" style="width: 100px"></a>
+<h2>
+		Bodyartforms values giving back
+</h2>
+						<div class="alert">Giving to charities has always been something we are extremely passionate about. We've been giving over 20% of our profits to charity for many years. When you buy from us, you can trust that you're money will go to help many charities every month!</div>
 
-								<h4>Helping People</h4>
-								<a href="https://www.centraltexasfoodbank.org/" target="_blank" alt="Central Texas Food Bank"><img src="/images/charities/central-texas-food-bank.png" style="width: 100px"></a>
-								<a href="http://www.starry.org/" target="_blank" alt="Starry"><img src="/images/charities/starry.png" style="width: 100px"></a>
-								<a href="https://www.naacp.org/" target="_blank" alt="National Association for the Advancement of Colored People (NAACP)"><img src="/images/charities/naacp.png" style="width: 100px"></a>
-								<a href="http://www.survivalinternational.org" target="_blank" alt="Survival International"><img src="/images/charities/survival.svg" style="width: 100px"></a>
+								<h4 class="text-center my-4">Here are just a <u>few</u> charities we donate too each year</h4>
+	<div class="container-fluid charities">
+		<div class="row">
+			<div class="col-md-6">
+								<div class="card">
+									<div class="card-header text-white bg-secondary h4">
+										Helping animals
+									</div>
+									<div class="card-body">
+									  <p class="card-text">
+										<a href="http://www.austinhumanesociety.org/" target="_blank" alt="Austin Humane Society"><img src="/images/charities/austin-humane-society.png"></a>
+										<a href="http://www.aspca.org" target="_blank" alt="ASPCA"><img src="/images/charities/square-aspca.png" ></a>
+										<a href="https://www.austinpetsalive.org/" target="_blank" alt="Austin Pets Alive"><img src="/images/charities/square-austin-pets-alive.png" ></a>
+									  </p>
+									</div>
+								  </div>
+			</div>
+			<div class="col-md-6">
+								  <div class="card mt-3">
+									<div class="card-header text-white bg-secondary h4">
+										Helping people
+									</div>
+									<div class="card-body">
+									  <p class="card-text">
+										<a href="https://www.centraltexasfoodbank.org/" target="_blank" alt="Central Texas Food Bank"><img src="/images/charities/square-central-texas-food-bank.png" ></a>
+										<a href="http://www.starry.org/" target="_blank" alt="Starry"><img src="/images/charities/starry.png" ></a>
+										REd cross
+									  </p>
+									</div>
+								  </div>
+			</div>	
+								</div>
+			<div class="row">
+				<div class="col-md-6">
+								  <div class="card mt-3">
+									<div class="card-header text-white bg-secondary h4">
+										Helping the environment
+									</div>
+									<div class="card-body">
+									  <p class="card-text">
+										Earthday.org
+										NRDC
+										Oceana
+									  </p>
+									</div>
+								  </div>
+			</div>
+			<div class="col-md-6">
+								  <div class="card mt-3">
+									<div class="card-header text-white bg-secondary h4">
+										Changing our media
+									</div>
+									<div class="card-body">
+									  <p class="card-text">
+										Austin PBS
+										<a href="https://www.kut.org/" target="_blank" alt="NPR / KUT.org"><img src="/images/charities/kut-npr.png" ></a>
+									  </p>
+									</div>
+								  </div>
+				</div>
+		</div><!-- row -->
+		</div><!-- container -->
 
 
-								<h4>Helping the environment</h4>
-
-								<ul class="list-group list-group-flush mt-3"></ul>
-									
-									
-								<h4>Changing our media</h4>	
-								<a href="https://www.kut.org/" target="_blank" alt="NPR / KUT.org"><img src="/images/charities/kut-npr.png" style="width: 100px"></a>
-
-
-									
-									
-									
-									<li class="list-group-item"><a href="https://www.innocenceproject.org/" target="_blank">Innocense Project</a></li>
-									<li class="list-group-item"><a href="https://www.ifaw.org/" target="_blank">International Fund for Animal Welfare (IFAW)</a></li>
-									<li class="list-group-item"><a href="https://www.mealsonwheels-williamsonburnet.org/" target="_blank">Meals on wheels</a></li>
-									
-									<li class="list-group-item"><a href="http://www.nrdc.org" target="_blank">Natural Resources Defense Council (NRDC)</a></li>
-									
-									<li class="list-group-item"><a href="https://www.splcenter.org/" target="_blank">Southern Poverty Law Center</a></li>
-									
-									
-									<li class="list-group-item"><a href="https://bailproject.org/" target="_blank">The Bail Project</a></li>
-								</ul>
 
 <!--#include virtual="/bootstrap-template/footer.asp" -->
