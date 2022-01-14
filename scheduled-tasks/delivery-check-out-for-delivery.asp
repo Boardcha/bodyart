@@ -5,34 +5,6 @@ Server.ScriptTimeout = 1000
 <!--#include virtual="/Connections/dhl-auth-v4.asp"-->
 <!--#include virtual="/emails/function-send-email.asp"-->
 <%
-'=== CHECK DELIVERED ORDERS ===
-Set objCmd = Server.CreateObject("ADODB.Command")
-objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT ID, customer_first, email, estimated_delivery_date, USPS_tracking FROM sent_items WHERE estimated_delivery_date = CONVERT(VARCHAR(10), GETDATE(), 23) AND delivered_email_sent = 0" 
-Set rsDelivered = objCmd.Execute()
-
-While Not rsDelivered.EOF
-	status = getDeliveryStatus(rsDelivered("USPS_tracking"))
-	If status = "ORDER_DELIVERED" Then 
-		GetOrderItems(rsDelivered("ID"))
-		mailer_type = "ORDER_DELIVERED"
-		var_email = "amanda@bodyartforms.com"
-		'rsDelivered("email")
-		var_first = rsDelivered("customer_first")
-		var_invoiceid = rsDelivered("ID")
-		var_tracking = "Your tracking # is <strong>" & rsDelivered("USPS_tracking") & "</strong>. If you have an account on our website, you can track your package by going to your order history and pressing the Track Order button. Or, you can track your package by going directly to <a href=""https://bodyartforms.com/dhl-tracker.asp?tracking=" & rsDelivered("USPS_tracking") & """>this link</a>." & mail_order_details				
-		%>
-		<!--#include virtual="/emails/email_variables.asp"-->
-		<%
-		set objCmd = Server.CreateObject("ADODB.command")
-		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "UPDATE sent_items SET delivered_email_sent = 1 WHERE ID = " & rsDelivered("ID")
-		objCmd.Execute()	
-	End If
-	rsDelivered.MoveNext
-Wend
-rsDelivered.Close
-
 '=== CHECK ORDERS WILL BE DELIVERED TODAY ===
 Set objCmd = Server.CreateObject("ADODB.Command")
 objCmd.ActiveConnection = DataConn
@@ -62,40 +34,8 @@ While Not rsDeliveringToday.EOF
 Wend
 rsDeliveringToday.Close 
 
-'=== CHECK DELAYED ORDER ===
-Set objCmd = Server.CreateObject("ADODB.Command")
-objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT ID, customer_first, email, estimated_delivery_date, USPS_tracking FROM sent_items WHERE estimated_delivery_date = CONVERT(VARCHAR(10), DateAdd(""d"", - 1, GETDATE()), 23) AND packaged_delivered = 0 AND order_delayed_email_sent = 0" 
-Set rsDelayed = objCmd.Execute()
-
-While Not rsDelayed.EOF
-	status = getDeliveryStatus(rsDelayed("USPS_tracking"))
-	If status <> "ORDER_DELIVERED" Then 
-		mailer_type = "ORDER_DELAYED"
-		var_email =  "amanda@bodyartforms.com"
-		'rsDelayed("email")
-		var_first = rsDelayed("customer_first")
-		var_invoiceid = rsDelayed("ID")
-		var_estimated_delivery_date = rsDelayed("estimated_delivery_date")
-		var_tracking = "Your tracking # is <strong>" & rsDelayed("USPS_tracking") & "</strong>. If you have an account on our website, you can track your package by going to your order history and pressing the Track Order button. Or, you can track your package by going directly to <a href=""https://bodyartforms.com/dhl-tracker.asp?tracking=" & rsDelayed("USPS_tracking") & """>this link</a>."			
-		%>
-		<!--#include virtual="/emails/email_variables.asp"-->
-		<%
-		set objCmd = Server.CreateObject("ADODB.command")
-		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "UPDATE sent_items SET order_delayed_email_sent = 1 WHERE ID = " & rsDelayed("ID")
-		objCmd.Execute()
-				   
-	End If																				   
-				  
-	rsDelayed.MoveNext
-Wend
-rsDelayed.Close
-
 Response.Write "Successfuly completed." 
 Set rsDeliveringToday = Nothing
-Set rsDelivered = Nothing
-Set rsDelayed = Nothing
 DataConn.Close()
 Set DataConn = Nothing
 %>
@@ -167,7 +107,7 @@ End Function
 Function GetOrderItems(InvoiceID)
 	Set objCmd = Server.CreateObject ("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT InvoiceID, ProductID, DetailID, title, ProductDetail1, Gauge, Length, stock_qty, OrderDetailID, email, customer_first, title, qty, ProductDetail1, ProductDetailID, item_price, PreOrder_Desc, picture, free, type FROM dbo.QRY_OrderDetails WHERE OrderDetailID = ?" 
+	objCmd.CommandText = "SELECT InvoiceID, ProductID, DetailID, title, ProductDetail1, Gauge, Length, stock_qty, OrderDetailID, email, customer_first, title, qty, ProductDetail1, ProductDetailID, item_price, PreOrder_Desc, picture, free, type, title FROM dbo.QRY_OrderDetails WHERE InvoiceID = ?" 
 	objCmd.Parameters.Append(objCmd.CreateParameter("InvoiceID",3,1,20, InvoiceID))
 	Set rsGetInfo = objCmd.Execute()
 
@@ -213,7 +153,8 @@ Function GetOrderItems(InvoiceID)
 		array_details_2(11,array_add_new) = array_detail
 		array_details_2(12,array_add_new) = rsGetInfo("free") 
 
-		GetOrderItems = array_details_2()
+		GetOrderItems = array_details_2
+		response.write "items found<br>"
 		
 	'================================================================================================
 	' END store details into a dynamic multidimensional array
