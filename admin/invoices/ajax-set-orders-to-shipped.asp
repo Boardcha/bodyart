@@ -45,15 +45,9 @@ WHILE NOT rsGetInvoice.EOF
 	end if
 
 		var_tracking = "<div style='font-family:Arial;color: #ffffff;;background-color:#696986;padding:20px;border-radius:10px'>Your tracking # is " & rsGetInvoice.Fields.Item("USPS_tracking").Value & "<br>Shipped via " & var_shipping_type & "<br>" & estimated_delivery & "<br><br><a style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#41415a;padding:10px;font-weight:bold;text-decoration:none' href='"
-	if instr(rsGetInvoice.Fields.Item("shipping_type").Value, "DHL") > 0 then
-		var_tracking = var_tracking & "https://bodyartforms.com/dhl-tracker.asp?tracking=" & rsGetInvoice.Fields.Item("USPS_tracking").Value
-	end if 
-	if instr(rsGetInvoice.Fields.Item("shipping_type").Value, "USPS") > 0 then
-		var_tracking = var_tracking & "https://tools.usps.com/go/TrackConfirmAction?qtc_tLabels1=" & rsGetInvoice.Fields.Item("USPS_tracking").Value
-	end if
-	if instr(rsGetInvoice.Fields.Item("shipping_type").Value, "UPS") then
-		var_tracking = var_tracking & "https://www.ups.com/track?loc=en_US&requester=QUIC&tracknum=" & rsGetInvoice.Fields.Item("UPS_tracking").Value & "/"
-	end if
+%>
+<!--#include virtual="/admin/packing/tracker-builder.asp"-->
+<%
 		var_tracking = var_tracking & "'>TRACK YOUR PACKAGE</a><br><br><i>Please note that it can take 1-2 days for tracking information to become available.</i></div>"
 	
 

@@ -4,37 +4,42 @@ Server.ScriptTimeout = 1000
 <!--#include virtual="/Connections/sql_connection.asp" -->
 <!--#include virtual="/Connections/dhl-auth-v4.asp"-->
 <!--#include virtual="/emails/function-send-email.asp"-->
+<!--#include virtual="/scheduled-tasks/item-builder.asp"-->
 <%
 '=== CHECK DELIVERED ORDERS ===
 Set objCmd = Server.CreateObject("ADODB.Command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT ID, customer_first, email, estimated_delivery_date, USPS_tracking FROM sent_items WHERE estimated_delivery_date = CONVERT(VARCHAR(10), GETDATE(), 23) AND delivered_email_sent = 0" 
-Set rsDelivered = objCmd.Execute()
+objCmd.CommandText = "SELECT ID, customer_first, email, estimated_delivery_date, USPS_tracking, shipping_type FROM sent_items WHERE estimated_delivery_date = CONVERT(VARCHAR(10), GETDATE(), 23) AND delivered_email_sent = 0" 
+Set rsGetInvoice = objCmd.Execute()
 
-While Not rsDelivered.EOF
-	status = getDeliveryStatus(rsDelivered("USPS_tracking"))
+While Not rsGetInvoice.EOF
+	status = getDeliveryStatus(rsGetInvoice("USPS_tracking"))
+	var_tracking = ""
+%>
+<!--#include virtual="/admin/packing/tracker-builder.asp"-->
+<%
 	If status = "ORDER_DELIVERED" Then 
-		GetOrderItems(rsDelivered("ID"))
+		GetOrderItems(rsGetInvoice("ID"))
 		mailer_type = "ORDER_DELIVERED"
 		var_email = "amanda@bodyartforms.com"
-		'rsDelivered("email")
-		var_first = rsDelivered("customer_first")
-		var_invoiceid = rsDelivered("ID")
-		var_tracking = "Your tracking # is <strong>" & rsDelivered("USPS_tracking") & "</strong>. If you have an account on our website, you can track your package by going to your order history and pressing the Track Order button. Or, you can track your package by going directly to <a href=""https://bodyartforms.com/dhl-tracker.asp?tracking=" & rsDelivered("USPS_tracking") & """>this link</a>." & mail_order_details				
+		'rsGetInvoice("email")
+		var_first = rsGetInvoice("customer_first")
+		var_invoiceid = rsGetInvoice("ID")
+		var_tracking = "Your tracking # is <strong>" & rsGetInvoice("USPS_tracking") & "</strong>. If you have an account on our website, you can track your package by going to your order history and pressing the Track Order button. Or, you can track your package by going directly to <a href=""https://bodyartforms.com/dhl-tracker.asp?tracking=" & rsGetInvoice("USPS_tracking") & """>this link</a>." & mail_order_details				
 		%>
 		<!--#include virtual="/emails/email_variables.asp"-->
 		<%
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "UPDATE sent_items SET delivered_email_sent = 1 WHERE ID = " & rsDelivered("ID")
+		objCmd.CommandText = "UPDATE sent_items SET delivered_email_sent = 1 WHERE ID = " & rsGetInvoice("ID")
 		objCmd.Execute()	
 	End If
-	rsDelivered.MoveNext
+	rsGetInvoice.MoveNext
 Wend
-rsDelivered.Close
+rsGetInvoice.Close
 
 Response.Write "Successfuly completed." 
-Set rsDelivered = Nothing
+Set rsGetInvoice = Nothing
 DataConn.Close()
 Set DataConn = Nothing
 %>
@@ -101,62 +106,5 @@ Function getDeliveryStatus(trackingNumber)
 	
 	getDeliveryStatus = var_status
 	
-End Function
-
-Function GetOrderItems(InvoiceID)
-	Set objCmd = Server.CreateObject ("ADODB.Command")
-	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT InvoiceID, ProductID, DetailID, title, ProductDetail1, Gauge, Length, stock_qty, OrderDetailID, email, customer_first, title, qty, ProductDetail1, ProductDetailID, item_price, PreOrder_Desc, picture, free, type, title FROM dbo.QRY_OrderDetails WHERE InvoiceID = ?" 
-	objCmd.Parameters.Append(objCmd.CreateParameter("InvoiceID",3,1,20, InvoiceID))
-	Set rsGetInfo = objCmd.Execute()
-
-	'================================================================================================
-	' START store details into a dynamic multidimensional array
-	reDim array_details_2(12,0)
-
-		array_gauge = ""
-		if rsGetInfo("Gauge") <> "" then
-			array_gauge = Server.HTMLEncode(rsGetInfo("Gauge"))
-		end if
-		
-		array_length = ""
-		if rsGetInfo("Length") <> "" then
-			array_length = Server.HTMLEncode(rsGetInfo("Length"))
-		end if
-		
-		array_detail = ""
-		if rsGetInfo("ProductDetail1") <> "" then
-			array_detail = Server.HTMLEncode(rsGetInfo("ProductDetail1"))
-		end if
-		
-		array_add_new = uBound(array_details_2,2) 
-		REDIM PRESERVE array_details_2(12,array_add_new+1) 
-
-		array_details_2(0,array_add_new) = rsGetInfo("ProductDetailID")
-		array_details_2(1,array_add_new) = rsGetInfo("qty")
-		array_details_2(2,array_add_new) = rsGetInfo("title") 
-		array_details_2(3,array_add_new) = array_gauge
-		array_details_2(4,array_add_new) = FormatNumber(rsGetInfo("item_price"), -1, -2, -2, -2)
-		
-		var_preorder_text = ""
-		if rsGetInfo("PreOrder_Desc") <> "" then
-			var_preorder_text = replace(rsGetInfo("PreOrder_Desc"),"{}", "   ")
-		end if
-		
-		array_details_2(5,array_add_new) = var_preorder_text
-		array_details_2(6,array_add_new) = rsGetInfo("ProductID")
-		array_details_2(7,array_add_new) = "" ' item notes
-		array_details_2(8,array_add_new) = 0
-		array_details_2(9,array_add_new)= rsGetInfo("picture")
-		array_details_2(10,array_add_new) = array_length
-		array_details_2(11,array_add_new) = array_detail
-		array_details_2(12,array_add_new) = rsGetInfo("free") 
-
-		GetOrderItems = array_details_2
-		response.write "items found<br>"
-		
-	'================================================================================================
-	' END store details into a dynamic multidimensional array
-
 End Function
 %>

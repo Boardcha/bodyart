@@ -12,7 +12,7 @@
 <style>
 	.charities img {max-height:100px}
 </style>
-<div style="margin:-1.5rem -1rem 1em -1.5rem">
+<div class="bg-dark pt-1" style="margin:-1.5rem -1rem 1em -1.5rem">
 <picture>
 	<source media="(max-width: 550px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner_550x350_v2.jpg">
 	<source media="(max-width: 850px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner_850x350_v2.jpg">
@@ -33,10 +33,10 @@
 <h2>
 		Bodyartforms values giving back
 </h2>
-						<div class="alert">Giving to charities has always been something we are extremely passionate about. We've been giving over 20% of our profits to charity for many years. When you buy from us, you can trust that you're money will go to help many charities every month!</div>
+						<div class="alert">Giving to charities has always been something we are extremely passionate about. We've been giving over 20% of our profits to charity for many years. When you buy from us, you can trust that a portion of that money will go to help many charities every month!</div>
 
 								<h4 class="text-center my-4">Here are just a <u>few</u> charities we donate too each year</h4>
-	<div class="container-fluid charities">
+	<div class="container-fluid text-center charities">
 		<div class="row">
 			<div class="col-md-6">
 								<div class="card">
@@ -45,23 +45,25 @@
 									</div>
 									<div class="card-body">
 									  <p class="card-text">
-										<a href="http://www.austinhumanesociety.org/" target="_blank" alt="Austin Humane Society"><img src="/images/charities/austin-humane-society.png"></a>
+										<a href="http://www.austinhumanesociety.org/" target="_blank" alt="Austin Humane Society"><img src="/images/charities/square-austin-humane-society.png"></a>
 										<a href="http://www.aspca.org" target="_blank" alt="ASPCA"><img src="/images/charities/square-aspca.png" ></a>
 										<a href="https://www.austinpetsalive.org/" target="_blank" alt="Austin Pets Alive"><img src="/images/charities/square-austin-pets-alive.png" ></a>
+										<a href="https://wildlifesos.org/" target="_blank" alt="Wildlife SOS"><img src="/images/charities/square-wildlifesos.png" ></a>
 									  </p>
 									</div>
 								  </div>
 			</div>
 			<div class="col-md-6">
-								  <div class="card mt-3">
+								  <div class="card">
 									<div class="card-header text-white bg-secondary h4">
 										Helping people
 									</div>
 									<div class="card-body">
 									  <p class="card-text">
+										<a href="https://www.redcross.org/" target="_blank" alt="Red Cross"><img src="/images/charities/square-red-cross.png" ></a>
 										<a href="https://www.centraltexasfoodbank.org/" target="_blank" alt="Central Texas Food Bank"><img src="/images/charities/square-central-texas-food-bank.png" ></a>
-										<a href="http://www.starry.org/" target="_blank" alt="Starry"><img src="/images/charities/starry.png" ></a>
-										REd cross
+										<a href="http://www.starry.org/" target="_blank" alt="Starry"><img src="/images/charities/square-starry.png" ></a>
+										<a href="https://www.mealsonwheelsamerica.org/" target="_blank" alt="Meals On Wheels"><img src="/images/charities/square-mealsonwheels.png" ></a>
 									  </p>
 									</div>
 								  </div>
