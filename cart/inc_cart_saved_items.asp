@@ -7,6 +7,9 @@ if CustID_Cookie <> 0 then
 	' RETRIEVE SAVE FOR LATER CONTENTS ---------------------------------------------
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
+	' cart_save_for_later = 0, initial value
+	' cart_save_for_later = 1, it is saved for later
+	' cart_save_for_later = 2, it is added back to the cart (to track how many people is checking out with saved for later cart items)	
 	objCmd.CommandText = "SELECT tbl_carts.cart_id, tbl_carts.cart_detailID, tbl_carts.cart_preorderNotes, tbl_carts.cart_custId, tbl_carts.cart_qty, tbl_carts.cart_wishlistid, jewelry.customorder, jewelry.SaleDiscount, jewelry.secret_sale, jewelry.ProductID, jewelry.active as p_active, jewelry.picture, ProductDetails.active as d_active, ProductDetails.Gauge, ProductDetails.Length, ProductDetails.price, ProductDetails.qty, ProductDetails.ProductDetail1, ProductDetails.ProductDetailID, (jewelry.title + ' ' + ProductDetails.Gauge + ' ' + ProductDetails.Length + ' ' +  ProductDetails.ProductDetail1) AS 'title' FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID INNER JOIN tbl_carts ON ProductDetails.ProductDetailID = tbl_carts.cart_detailId WHERE (tbl_carts." & var_db_field & " = ?) AND cart_save_for_later = 1"
 	objCmd.Parameters.Append(objCmd.CreateParameter("cart_custID",3,1,10,var_cart_userid))
 	

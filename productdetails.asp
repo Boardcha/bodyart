@@ -38,7 +38,10 @@ Set rsProductStats = objCmd.Execute()
 ' Retrieve how many people have this product in their cart (and not on save for later status)
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT COUNT(cart_id) as 'currently_in_all_carts' FROM tbl_carts INNER JOIN ProductDetails ON tbl_carts.cart_detailId = ProductDetails.ProductDetailID WHERE cart_save_for_later = 0 AND cart_LastViewed > (GETDATE()- 30) AND ProductID = ?"
+' cart_save_for_later = 0, initial value
+' cart_save_for_later = 1, it is saved for later
+' cart_save_for_later = 2, it is added back to the cart (to track how many people is checking out with saved for later cart items)	
+objCmd.CommandText = "SELECT COUNT(cart_id) as 'currently_in_all_carts' FROM tbl_carts INNER JOIN ProductDetails ON tbl_carts.cart_detailId = ProductDetails.ProductDetailID WHERE (cart_save_for_later = 0 OR cart_save_for_later = 2) AND cart_LastViewed > (GETDATE()- 30) AND ProductID = ?"
 objCmd.Parameters.Append(objCmd.CreateParameter("ProductID",3,1,10,ProductID))
 Set rsHowManyInCarts = objCmd.Execute()
 

@@ -1,6 +1,10 @@
 <%@LANGUAGE="VBSCRIPT" CODEPAGE="1252"%>
 <!--#include file="../Connections/bodyartforms_sql_ADMIN.asp" -->
 <%
+'==== PAGE HAS BEEN BOOSTRAPPED =======
+bootstrapped = "yes"
+
+
 Dim rsShowWaitingList__MMColParam
 rsShowWaitingList__MMColParam = "1"
 If (Request.QueryString("DetailID") <> "") Then 
@@ -106,19 +110,19 @@ End If
 <head>
 <title>View waiting list</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<link href="../includes/nav.css" rel="stylesheet" type="text/css">
 </head>
 
-<body bgcolor="#666699" text="#CCCCCC">
- <span class="adminheader"><%=(rsShowWaitingList.Fields.Item("title").Value)%>&nbsp;<%=(rsShowWaitingList.Fields.Item("ProductDetail1").Value)%> (<%=(rsShowWaitingList_total)%>)   </span><br />
- <br />
-<table width="100%" border="0" cellspacing="1" cellpadding="2">
+<body>
+  <!--#include file="admin_header.asp"-->
+ <h4><%=(rsShowWaitingList.Fields.Item("title").Value)%>&nbsp;<%=(rsShowWaitingList.Fields.Item("ProductDetail1").Value)%> (<%=(rsShowWaitingList_total)%>)   </h4>
+
+<table class="table table-sm table-borderless">
     <% 
 While ((Repeat1__numRows <> 0) AND (NOT rsShowWaitingList.EOF)) 
 %>
-<tr class="pricegauge">
-        <td bgcolor="#000000"><%=(rsShowWaitingList.Fields.Item("name").Value)%></td>
-        <td bgcolor="#000000"><%=(rsShowWaitingList.Fields.Item("email").Value)%></td>
+<tr>
+        <td><%=(rsShowWaitingList.Fields.Item("name").Value)%></td>
+        <td><%=(rsShowWaitingList.Fields.Item("email").Value)%></td>
     </tr>
       <% 
   Repeat1__index=Repeat1__index+1
@@ -127,8 +131,6 @@ While ((Repeat1__numRows <> 0) AND (NOT rsShowWaitingList.EOF))
 Wend
 %>
   </table>
-  <p>&nbsp;</p>
-  <p>&nbsp;&nbsp;&nbsp;</p>
 </body>
 </html>
 <%

@@ -203,13 +203,6 @@ end select
 
 end if 'if Request.QueryString("ProductID") <> ""
 
-if rs_getproduct.Fields.Item("new_page_date").Value >= now()-45 then
-	new_active = "btn-primary"
-	new_text = "Remove from new"
-else
-	new_active = "btn-secondary"
-	new_text = "Add to new"
-end if
 
 if rs_getproduct.Fields.Item("active").Value = 1 then
     var_active_class = "alert-success"
@@ -292,25 +285,37 @@ $(document).ready(function(){
 							<span id="reviewed-msg"></span>
 							<% end if %>
 						</div>
-					</div>
+					</div>						
                 </div>
 				</div>				
-
-				<button class="btn btn-sm <%= new_active %>" id="new-toggle" type="button" data-id="<%=(rs_getproduct.Fields.Item("ProductID").Value)%>"><%= new_text %></button>
-
+				
+				
 				<button id="duplicate" class="btn btn-sm btn-secondary" type="button">
 				Duplicate</button>
 
 				<button class="btn btn-sm btn-secondary" type="button" id="show_combine" data-toggle="modal" data-target="#modal-combine">Combine</button>
-
+				
 				<div class="mt-3" style="display:none" id="duplicate-show-buttons">
 					<button id="duplicate-product" class="btn btn-sm btn-outline-secondary d-inline-block" type="button" data-id="<%=(rs_getproduct.Fields.Item("ProductID").Value)%>">Product only</button>
 					<button id="duplicate-all"  class="btn btn-sm btn-outline-secondary d-inline-block" type="button" data-id="<%=(rs_getproduct.Fields.Item("ProductID").Value)%>">Product + details</button>
 				</div>
 
 				<input class="form-control form-control-sm" name="product-id" id="productid" type="hidden" value="<%= rs_getproduct.Fields.Item("ProductID").Value %>">
-				
-				<div class="form-group mt-3">
+				<%
+				'====== CONFIGURE DATE TO SHOW CORRECTLY IN Field
+				if rs_getproduct.Fields.Item("new_page_date").Value <> "" then
+				var_new_page_date = rs_getproduct.Fields.Item("new_page_date").Value
+					var_new_page_date = DatePart("yyyy",var_new_page_date) _
+					& "-" & Right("0" & DatePart("m",var_new_page_date), 2) _
+					& "-" & Right("0" & DatePart("d",var_new_page_date), 2)
+				end if		
+				%>
+					<div class="form-group mt-3">
+						<label class="font-weight-bold" for="new_page_date">New Page Date</label>
+						<input class="form-control form-control-sm" name="new_page_date" type="date" id="new_page_date" value="<%=var_new_page_date%>" data-column="new_page_date">
+					</div>
+				<div class="form-group">
+					<label class="font-weight-bold" for="active">Status</label>
 					<select name="active" class="form-control form-control-sm d-inline-block <%= var_active_class %>" data-column="active" data-friendly="Active">
 						<option selected value="<%=(rs_getproduct.Fields.Item("active").Value)%>" ><% if (rs_getproduct.Fields.Item("active").Value) = 1 then %>Active<% else%>Inactive<% end if %></option>
 						<option value="1">Active</option>
@@ -973,6 +978,7 @@ var_sale_expiration = rs_getproduct.Fields.Item("sale_expiration").Value
 	& "-" & Right("0" & DatePart("m",var_sale_expiration), 2) _
 	& "-" & Right("0" & DatePart("d",var_sale_expiration), 2)
 end if
+
 '======== SALE DISCOUNTS ARE SET BACK TO 0 VIA A DAILY JOB IN THE DATABASE THAT CHECKS THE CURRENT EXPIRATION ON ALL PRODUCTS
 						  
 	  
@@ -1750,7 +1756,6 @@ end if
 <script type="text/javascript" src="scripts/dropzone.js"></script>
 <script type="text/javascript" src="scripts/jquery.validate.min.js"></script>
 <script type="text/javascript" src="scripts/product-edit-version2.js?v=102121"></script>
-
 </html>
 <% If var_access_level = "Packaging" then  %>
 	<script type="text/javascript">

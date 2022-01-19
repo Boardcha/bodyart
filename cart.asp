@@ -64,7 +64,10 @@ if request.querystring("remove_save") <> "" then
 
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "UPDATE tbl_carts SET cart_save_for_later = 0 WHERE cart_id = ? AND " & var_db_field & " = ?"
+	' cart_save_for_later = 0, initial value
+	' cart_save_for_later = 1, it is saved for later
+	' cart_save_for_later = 2, it is added back to the cart (to track how many people is checking out with saved for later cart items)
+	objCmd.CommandText = "UPDATE tbl_carts SET cart_save_for_later = 2 WHERE cart_id = ? AND " & var_db_field & " = ?"
 	objCmd.Parameters.Append(objCmd.CreateParameter("cart_id",3,1,10, request.querystring("remove_save")))
 	objCmd.Parameters.Append(objCmd.CreateParameter("cart_custID",3,1,10, var_cart_userid))
 	objCmd.Execute()

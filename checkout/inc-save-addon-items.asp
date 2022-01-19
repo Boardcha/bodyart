@@ -60,7 +60,13 @@ For i = 0 to (ubound(array_details_2, 2) - 1) ' loop through array
     'objCmd.CommandText = "Proc_Checkout4_InsertOrder"
 	
 	'If ProductID flagged as "waiting-list", meaning if customer comes from waiting-list email notification, save this info to the "referrer" field.
-	If Session(array_details_2(6,i)) = "waiting-list" Then var_referrer = "'waiting-list'" Else var_referrer = "NULL"
+	If Session(array_details_2(6,i)) = "waiting-list" Then 
+		var_referrer = "'waiting-list'" 
+	ElseIf Session(array_details_2(13,i)) = 2 Then ' 2 = it is added to cart back from saved items
+		var_referrer = "'save-for-later'" 
+	Else 
+		var_referrer = "NULL"
+	End If
     objCmd.CommandText = "INSERT INTO TBL_OrderSummary (InvoiceID, ProductID, DetailID, qty, item_price, notes, PreOrder_Desc, item_wlsl_price, addon_item, referrer) VALUES (?,?,?,?,?,?,?,?, " & var_addons_db_flag & "," & var_referrer & ")"
             objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,15,session("invoiceid")))
             objCmd.Parameters.Append(objCmd.CreateParameter("productid",3,1,15,array_details_2(6,i)))

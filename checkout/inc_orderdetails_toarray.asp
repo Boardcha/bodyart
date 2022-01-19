@@ -1,7 +1,7 @@
 <%
 '================================================================================================
 ' START store details into a dynamic multidimensional array
-'reDim array_details_2(12,0)
+'reDim array_details_2(13,0)
 'Dim array_add_new : array_add_new = 0 
 
 'Do while NOT rs_getCart.EOF ' if cart is not emptyh
@@ -22,7 +22,7 @@
 	end if
 	
 	array_add_new = uBound(array_details_2,2) 
-	REDIM PRESERVE array_details_2(12,array_add_new+1) 
+	REDIM PRESERVE array_details_2(13,array_add_new+1) 
 
 	array_details_2(0,array_add_new) = rs_getCart.Fields.Item("ProductDetailID").Value
 	array_details_2(1,array_add_new) = rs_getCart.Fields.Item("cart_qty").Value
@@ -44,7 +44,7 @@
 	array_details_2(10,array_add_new) = array_length
 	array_details_2(11,array_add_new) = array_detail
 	array_details_2(12,array_add_new) = rs_getCart("free") 
-	
+	array_details_2(13,array_add_new) = rs_getCart("cart_save_for_later") 
 	
 '	rs_getCart.MoveNext()
 

@@ -104,7 +104,10 @@ end if
 			
 				set objCmd = Server.CreateObject("ADODB.command")
 				objCmd.ActiveConnection = DataConn
-				objCmd.CommandText = "UPDATE tbl_carts SET cart_save_for_later = 0 WHERE " & var_db_field & " = ? AND cart_id = ?"
+				' cart_save_for_later = 0, initial value
+				' cart_save_for_later = 1, it is saved for later
+				' cart_save_for_later = 2, it is added back to the cart (to track how many people is checking out with saved for later cart items)
+				objCmd.CommandText = "UPDATE tbl_carts SET cart_save_for_later = 2 WHERE " & var_db_field & " = ? AND cart_id = ?"
 					
 				objCmd.Parameters.Append(objCmd.CreateParameter("cart_custID",3,1,10,var_cart_userid))
 				objCmd.Parameters.Append(objCmd.CreateParameter("cart_id",3,1,10,duplicate_cartid))
