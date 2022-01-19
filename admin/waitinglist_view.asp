@@ -13,7 +13,7 @@ Dim rsShowWaitingList_numRows
 
 Set rsShowWaitingList = Server.CreateObject("ADODB.Recordset")
 rsShowWaitingList.ActiveConnection = MM_bodyartforms_sql_STRING
-rsShowWaitingList.Source = "SELECT DetailID, name, email, title, ProductDetail1 FROM dbo.QRYWaitingList WHERE DetailID = " + Replace(rsShowWaitingList__MMColParam, "'", "''") + " ORDER BY name ASC"
+rsShowWaitingList.Source = "SELECT DetailID, name, email, title, ProductDetail1, (SELECT SUM(waiting_qty) FROM dbo.QRYWaitingList WHERE DetailID = " + Replace(rsShowWaitingList__MMColParam, "'", "''") + ") as total_waiting_qty FROM dbo.QRYWaitingList WHERE DetailID = " + Replace(rsShowWaitingList__MMColParam, "'", "''") + " ORDER BY name ASC"
 rsShowWaitingList.CursorLocation = 3 'adUseClient
 rsShowWaitingList.LockType = 1 'Read-only records
 rsShowWaitingList.Open()
@@ -36,7 +36,7 @@ Dim rsShowWaitingList_first
 Dim rsShowWaitingList_last
 
 ' set the record count
-rsShowWaitingList_total = rsShowWaitingList.RecordCount
+rsShowWaitingList_total = rsShowWaitingList("total_waiting_qty")
 
 ' set the number of rows displayed on this page
 If (rsShowWaitingList_numRows < 0) Then

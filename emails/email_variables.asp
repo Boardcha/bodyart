@@ -302,44 +302,55 @@
 	end if ' order-shipment-notification
 	
 	if mailer_type = "OUT_FOR_DELIVERY" then 
-		google_utmsource = "Order out for delivery notification"
+		google_utmsource = "Out for delivery notification"
 		mail_to_email = var_email
 		mail_to_name = var_first
-		'cc1_name = "Parth"
-		'cc1_email = "tanejap652@gmail.com"
-		mail_subject = "Your Bodyartforms order is out for delivery today!"	
-		mail_body = "Hello " & mail_to_name & ",<br/><br/>This is an automated email to notify you that your order #" & var_invoiceid & " is out for delivery.<br/><br/>" & var_tracking & "<br/><br/>We appreciate your business very much!<br/>If you have any questions or need assistance with your order please reply to this e-mail to get in touch with us. We're here to help Mon - Fri from 9am - 5pm.<br/><br/>Customer service:  (877) 223-5005"
+		mail_subject = "Your Bodyartforms order is out for delivery today"	
+		mail_body = "<div style='text-align:center'><div style='font-family:Arial;font-weight:bold;font-size:26px'>YOUR ORDER IS BEING DELIVERED TODAY</div><br>"
+				
+		mail_body = mail_body & "<div style='text-align:left'>Hello " & mail_to_name & ",<br/><br/>This is an automated email to let you know that your Bodyartforms order is scheduled to be delivered today!<br><br>"
+
+		mail_body = mail_body & "<div style='font-family:Arial;color: #ffffff;;background-color:#696986;padding:20px;border-radius:10px'>Your tracking # is " & rsGetInvoice("USPS_tracking") & "<br>Shipped via " & rsGetInvoice("shipping_type") & "<br><br><a style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#41415a;padding:10px;font-weight:bold;text-decoration:none' href='"
+
+		mail_body = mail_body & var_tracking & "'>TRACK YOUR PACKAGE</a></div>"
+
+		mail_body = mail_body & "</div><br><div style='text-align:center'><b>Invoice #</b> " & rsGetInvoice("ID") & "<br><b>Order date:</b> " & FormatDateTime(rsGetInvoice("date_order_placed"),vbLongDate) & _
+			"</div><div style='text-align:left'>"
+
+		mail_body = mail_body & "<br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS ORDERED</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
+			if mail_free_items <> "" then 
+				mail_body = mail_body & "<div style='font-weight:bold;padding-top:5px;padding-bottom:5px'>FREE ITEMS</div>" & mail_free_items
+			end if 
+
+		mail_body = mail_body & "</div></div>"
 		
 		Call baf_sendmail()
 	end if 
 
 	'=============== LAST UPDATED JAN 2022 ===============================
 	if mailer_type = "ORDER_DELIVERED" then 
+
 		google_utmsource = "Order delivered notification"
 		mail_to_email = var_email
 		mail_to_name = var_first
-		mail_subject = "Your Bodyartforms order has been delivered!"	
-		mail_body = "Hello " & mail_to_name & ",<br/><br/>This is an automated email to notify you that your order #" & var_invoiceid & " has been delivered.<br/><br/>" & var_tracking & "<br/><br/>We appreciate your business very much!<br/>If you have any questions or need assistance with your order please reply to this e-mail to get in touch with us. We're here to help Mon - Fri from 9am - 5pm.<br/><br/>Customer service:  (877) 223-5005"
-
-			mail_body = "<div style='text-align:center'><div style='font-family:Arial;font-weight:bold;font-size:26px'>YOUR ORDER HAS BEEN DELIVERED!</div><br>"
+		mail_subject = "Your Bodyartforms order has been delivered"	
+		mail_body = "<div style='text-align:center'><div style='font-family:Arial;font-weight:bold;font-size:26px'>YOUR ORDER HAS BEEN DELIVERED</div><br>"
 				
-			mail_body = mail_body & "<div style='text-align:left'>Hello " & mail_to_name & ",<br/><br/>This is an automated email to let you know that your Bodyartforms order has been delivered!<br><br>"
+		mail_body = mail_body & "<div style='text-align:left'>Hello " & mail_to_name & ",<br/><br/>This is an automated email to let you know that your Bodyartforms order has been delivered! We hope you love everything you received &#10084;<br><br>If there are any issues with your order please reply to this email to get in touch with us. We'll reply as soon as we can!<br><br>"
 
-			mail_body = mail_body & "<div style='font-family:Arial;color: #ffffff;;background-color:#696986;padding:20px;border-radius:10px'>Your tracking # is " & rsGetInvoice.Fields.Item("USPS_tracking").Value & "<br>Shipped via " & var_shipping_type & "<br><br><a style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#41415a;padding:10px;font-weight:bold;text-decoration:none' href='"
-			%>
-			<!--#include virtual="/admin/packing/tracker-builder.asp"-->
-			<%
-			mail_body = mail_body & "'>TRACK YOUR PACKAGE</a></div>"
+		mail_body = mail_body & "<div style='font-family:Arial;color: #ffffff;;background-color:#696986;padding:20px;border-radius:10px'>Your tracking # is " & rsGetInvoice("USPS_tracking") & "<br>Shipped via " & rsGetInvoice("shipping_type") & "<br><br><a style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#41415a;padding:10px;font-weight:bold;text-decoration:none' href='"
 
-			mail_body = mail_body & "</div><br><div style='text-align:center'><b>Invoice #</b> " & rsGetInvoice("ID") & "<br><b>Order date:</b> " & FormatDateTime(rsGetInvoice("date_order_placed"),vbLongDate) & _
-			"</div><div style='text-align:left'><br/>"
+		mail_body = mail_body & var_tracking & "'>TRACK YOUR PACKAGE</a></div>"
 
-			mail_body = mail_body & "<br/><br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS ORDERED</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
+		mail_body = mail_body & "</div><br><div style='text-align:center'><b>Invoice #</b> " & rsGetInvoice("ID") & "<br><b>Order date:</b> " & FormatDateTime(rsGetInvoice("date_order_placed"),vbLongDate) & _
+			"</div><div style='text-align:left'>"
+
+		mail_body = mail_body & "<br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS ORDERED</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
 			if mail_free_items <> "" then 
 				mail_body = mail_body & "<div style='font-weight:bold;padding-top:5px;padding-bottom:5px'>FREE ITEMS</div>" & mail_free_items
 			end if 
 
-			mail_body = mail_body & "</div></div>"
+		mail_body = mail_body & "</div></div>"
 		
 		Call baf_sendmail()
 	end if 
