@@ -21,7 +21,7 @@
 SqlString = "SELECT * FROM TBL_Sliders WHERE active= 1 AND GETDATE() BETWEEN date_start AND date_end ORDER BY show_up_order" 
 Set rsGetSliders = DataConn.Execute(SqlString)
 		
-SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE new_page_date >= GETDATE()-45 AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND brandname <> 'Wildcard' AND customorder <> 'yes' ORDER BY new_page_date DESC" 
+SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE new_page_date >= GETDATE()-45 AND new_page_date <= GETDATE() AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND brandname <> 'Wildcard' AND customorder <> 'yes' ORDER BY new_page_date DESC" 
 Set rsGetNewestProducts = DataConn.Execute(SqlString)
 
 SqlString = "SELECT TOP (12) * FROM (SELECT TOP (100) * FROM FlatProducts WHERE active = 1 AND customorder <> 'yes' AND free_item IS NULL AND type = 'None' AND (NOT (material LIKE '%acrylic%')) AND (NOT (tags LIKE '%save%')) ORDER BY qty_sold_last_7_days DESC) as t ORDER BY NEWID()" 

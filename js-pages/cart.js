@@ -450,6 +450,7 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 				$('#processing-message').html('');
 			});
 	    }
+		$('#coupon_code').val('');
 	   e.preventDefault();
 	}); 
 	

@@ -301,6 +301,7 @@
 		Call baf_sendmail()
 	end if ' order-shipment-notification
 	
+	'=============== LAST UPDATED JAN 2022 ===============================
 	if mailer_type = "OUT_FOR_DELIVERY" then 
 		google_utmsource = "Out for delivery notification"
 		mail_to_email = var_email
@@ -354,7 +355,8 @@
 		
 		Call baf_sendmail()
 	end if 
-
+	
+	'=============== LAST UPDATED JAN 2022 ===============================
 	if mailer_type = "ORDER_DELAYED" then 
 		google_utmsource = "Order delayed notification"
 		mail_to_email = var_email

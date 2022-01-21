@@ -20,7 +20,7 @@ While Not rsGetInvoice.EOF
 <!--#include virtual="/admin/packing/tracker-builder.asp"-->
 <%
 	If status = "ORDER_DELIVERED" Then 
-		GetOrderItems(rsGetInvoice("ID"))
+		GetOrderItems(rsGetInvoice("ID")) 'Calls function that build items array
 		mailer_type = "ORDER_DELIVERED"
 		var_email = "amanda@bodyartforms.com"
 		'rsGetInvoice("email")

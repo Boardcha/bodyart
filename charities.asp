@@ -33,6 +33,9 @@
 <h2>
 		Bodyartforms values giving back
 </h2>
+<h2>
+	-WIGGLES ON MOBILE
+</h2>
 						<div class="alert">Giving to charities has always been something we are extremely passionate about. We've been giving over 20% of our profits to charity for many years. When you buy from us, you can trust that a portion of that money will go to help many charities every month!</div>
 
 								<h4 class="text-center my-4">Here are just a <u>few</u> charities we donate too each year</h4>
