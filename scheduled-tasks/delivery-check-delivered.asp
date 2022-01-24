@@ -13,6 +13,8 @@ objCmd.ActiveConnection = DataConn
 objCmd.CommandText = "SELECT ID, customer_first, email, estimated_delivery_date, date_order_placed, USPS_tracking, shipping_type FROM sent_items WHERE estimated_delivery_date = CONVERT(VARCHAR(10), GETDATE(), 23) AND delivered_email_sent = 0" 
 Set rsGetInvoice = objCmd.Execute()
 
+GetOrderItems("00000") 'Calls function that build items array
+
 While Not rsGetInvoice.EOF
 	status = getDeliveryStatus(rsGetInvoice("USPS_tracking"))
 	var_tracking = ""

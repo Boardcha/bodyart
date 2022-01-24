@@ -46,7 +46,6 @@
 
 	if IsArray(array_details_2) = "True" then
 		mail_order_details = ""
-		mail_free_items = ""
 		For i = 0 to (ubound(array_details_2, 2) - 1)
 	
 			' Do not write to email receipt if it's tax... display it in the totals area above
@@ -55,8 +54,8 @@
 				'	https://bafthumbs-400.bodyartforms.com
 				'	https://bodyartforms-products.bodyartforms.com
 
-				'====== CHECK IF ITEM IS NOT A FREE ITEM AND IF SO DISPLAY LARGER DETAILS FOR IT =====
-				if array_details_2(4,i) > 0 then
+				'======= REMOVE GAUGE CARD, STICKERS, STORE CREDITS FROM ITEMS LIST
+				if array_details_2(6,i) <> 1430 AND array_details_2(6,i) <> 3928 AND array_details_2(6,i) <> 2890 then
 
 					mail_order_details = mail_order_details & "<tr style='border-bottom: 1px solid rgb(100, 100, 100);'><td style='padding-top:15px;padding-right:15px;' valign='top'><img style='width:200px' src='https://bafthumbs-400.bodyartforms.com/" & array_details_2(9,i) & "'></td>"
 					
@@ -85,11 +84,7 @@
 					end if
 
 					mail_order_details = mail_order_details & "</span></td></tr>"
-				end if
-				'====  IF ITEM IS A FREE ITEM DISPLAY SIMPLIFIED DETAILS
-				if array_details_2(12,i) > 0 and array_details_2(4,i) <= 0 then
-					mail_free_items = mail_free_items & array_details_2(1,i) & "&nbsp;&nbsp;|&nbsp;" & array_details_2(2,i) & "&nbsp;" & array_details_2(3,i) & "&nbsp;" & array_details_2(10,i) & "&nbsp;" & array_details_2(11,i) & "<br>"
-				end if
+				end if '=== filter out gauge card, sticker and credits
 			end if
 		next
 	end if '=======  array_details_2(1) <> ""
@@ -165,10 +160,7 @@
 	
 		mail_body = "<div style='text-align:center'><div style='font-family:Arial;font-weight:bold;font-size:26px'>THANKS FOR YOUR ORDER</div>We'll send you another email with your tracking information when your order ships out.<br><b>Invoice #</b> " & Session("invoiceid") & "<br><b>Order date:</b> " & date() & "<br><br>" & add_ons_link & "</div>" & _
 		"<div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>DELIVERY DETAILS</div><br/>" + session("shipping_first") + " " + session("shipping_last") + " " + session("shipping_company") + "<br/>" + session("shipping_address1") + " " + session("shipping_address2") + "<br/>" + session("city") + ", " + session("state") + " " + session("shipping_province") + " " + session("shipping_zip") + "<br/>" + session("country") + "</td></tr></table>" & _
-		"<br/><br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS ORDERED</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
-		if mail_free_items <> "" then 
-			mail_body = mail_body & "<div style='font-weight:bold;padding-top:5px;padding-bottom:5px'>FREE ITEMS</div>" & mail_free_items
-		end if 
+		"<br/><br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
 		mail_body = mail_body & "<div style='text-align:right;background-color:#e6e6e6;border-bottom: 1px solid rgb(100, 100, 100);border-top: 1px solid rgb(100, 100, 100);margin-top:20px;margin-bottom:20px;padding:20px'>" & var_email_totals & "</div>"
 		
 		Call baf_sendmail()
@@ -183,10 +175,7 @@
 		
 		mail_body = "<div style='text-align:center'><div style='font-family:Arial;font-weight:bold;font-size:26px'>ADD ONS ORDER CONFIRMATION</div><br><b>Items added to invoice #</b> " & Session("invoiceid") & "<br><b>Order date:</b> " & date() & "<br><br>" & add_ons_link & "</div>" & _
 		"<div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>DELIVERY DETAILS</div><br/>" + session("shipping_first") + " " + session("shipping_last") + " " + session("shipping_company") + "<br/>" + session("shipping_address1") + " " + session("shipping_address2") + "<br/>" + session("city") + ", " + session("state") + " " + session("shipping_province") + " " + session("shipping_zip") + "<br/>" + session("country") + "</td></tr></table>" & _
-		"<br/><br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS ORDERED</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
-		if mail_free_items <> "" then 
-			mail_body = mail_body & "<div style='font-weight:bold;padding-top:5px;padding-bottom:5px'>FREE ITEMS</div>" & mail_free_items
-		end if 
+		"<br/><br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
 		mail_body = mail_body & "<div style='text-align:right;background-color:#e6e6e6;border-bottom: 1px solid rgb(100, 100, 100);border-top: 1px solid rgb(100, 100, 100);margin-top:20px;margin-bottom:20px;padding:20px'>" & var_email_totals & "</div>"
 		
 		Call baf_sendmail()
@@ -205,10 +194,7 @@
 		var_invoiceid = Session("invoiceid")
 			
 		mail_body = "<strong>" + var_shipping_first + ", thanks for your order!</strong><br/>Your order confirmation is below for your records.<br/><br/><p>For money order and cash payments, only US funds are accepted.  If payment is sent in any currency other than US funds, your payment will be returned to you.  We cannot accept checks, money grams, or wire transfers.</p><br/><p>We recommend adding insurance or tracking on any payments sent.  We are not responsible for payments lost in shipping.</p><br/><p><strong>For money order payments:</strong><br/>The best place to get a money order is at your bank or post office. Please be sure the money order is in US funds and that the payment is made out to Bodyartforms.  Please also include your invoice # on the money orders FOR line. The address to send payment to is below. After we receive payment your order will ship out the following business day.<br/><br/><p><strong>For cash payments:</strong><br/>Please send US funds wrapped in an extra piece of paper to conceal it in the envelope. The address to send payment to is below. After we receive payment your order will ship out the following business day. <i>Please do not send coins in your envelope. If you do, it may tear the envelope and cause the funds to be lost.</i></p><br/><p><strong>Cancellations and order changes:</strong><br/><p>If you need to cancel your order, simply do not send payment in and it will cancel itself out after 60 days. If you need to make a change to your order, you can place a new order and send payment in for the new order only.</p><p><i>When sending in payment, please be sure to put your full name and mailing address, as well as the invoice #, on the envelope.</i></p><br/><strong>Send payment to:</strong><br/>Bodyartforms<br/>1966 S. Austin Ave.<br/>Georgetown, TX  78626</p><br/>" & _
-		"<br/><br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS ORDERED</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
-		if mail_free_items <> "" then 
-			mail_body = mail_body & "<div style='font-weight:bold;padding-top:5px;padding-bottom:5px'>FREE ITEMS</div>" & mail_free_items
-		end if 
+		"<br/><br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
 		mail_body = mail_body & "<div style='text-align:right;background-color:#e6e6e6;border-bottom: 1px solid rgb(100, 100, 100);border-top: 1px solid rgb(100, 100, 100);margin-top:20px;margin-bottom:20px;padding:20px'>" & var_email_totals & "</div>"
 		
 		Call baf_sendmail()
@@ -286,10 +272,7 @@
 			mail_body = mail_body & rsGetInvoice("zip") & "<br/>"
 			mail_body = mail_body & rsGetInvoice("country")
 
-			mail_body = mail_body & "<br/><br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS ORDERED</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
-			if mail_free_items <> "" then 
-				mail_body = mail_body & "<div style='font-weight:bold;padding-top:5px;padding-bottom:5px'>FREE ITEMS</div>" & mail_free_items
-			end if 
+			mail_body = mail_body & "<br/><br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
 
 			mail_body = mail_body & "</div></div>"
 
@@ -318,10 +301,7 @@
 		mail_body = mail_body & "</div><br><div style='text-align:center'><b>Invoice #</b> " & rsGetInvoice("ID") & "<br><b>Order date:</b> " & FormatDateTime(rsGetInvoice("date_order_placed"),vbLongDate) & _
 			"</div><div style='text-align:left'>"
 
-		mail_body = mail_body & "<br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS ORDERED</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
-			if mail_free_items <> "" then 
-				mail_body = mail_body & "<div style='font-weight:bold;padding-top:5px;padding-bottom:5px'>FREE ITEMS</div>" & mail_free_items
-			end if 
+		mail_body = mail_body & "<br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
 
 		mail_body = mail_body & "</div></div>"
 		
@@ -346,10 +326,7 @@
 		mail_body = mail_body & "</div><br><div style='text-align:center'><b>Invoice #</b> " & rsGetInvoice("ID") & "<br><b>Order date:</b> " & FormatDateTime(rsGetInvoice("date_order_placed"),vbLongDate) & _
 			"</div><div style='text-align:left'>"
 
-		mail_body = mail_body & "<br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS ORDERED</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
-			if mail_free_items <> "" then 
-				mail_body = mail_body & "<div style='font-weight:bold;padding-top:5px;padding-bottom:5px'>FREE ITEMS</div>" & mail_free_items
-			end if 
+		mail_body = mail_body & "<br/><div style='font-family:Arial;font-size:16px;color: #ffffff;;background-color:#696986;padding:10px'>ITEMS</div><table style='border-collapse:collapse;width: 98%'>" + mail_order_details + "</table>"
 
 		mail_body = mail_body & "</div></div>"
 		

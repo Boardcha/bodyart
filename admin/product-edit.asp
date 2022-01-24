@@ -1112,6 +1112,7 @@ end if
 				<option value="4mm">4mm</option>
 				<option value="5mm">5mm</option>
 				<option value="3/16&quot;">3/16&quot;</option>
+				<option value="7/32&quot;">7/32&quot;</option>
 				<option value="1/4&quot;">1/4&quot;</option>
 				<option value="7mm">7mm</option>
 				<option value="9/32&quot;">9/32&quot;</option>
@@ -1405,6 +1406,7 @@ end if
 				<option value="4mm">4mm</option>
 				<option value="5mm">5mm</option>
 				<option value="3/16&quot;">3/16&quot;</option>
+				<option value="7/32&quot;">7/32&quot;</option>
 				<option value="1/4&quot;">1/4&quot;</option>
 				<option value="7mm">7mm</option>
 				<option value="9/32&quot;">9/32&quot;</option>
