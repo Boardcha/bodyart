@@ -80,8 +80,8 @@
 									</div>
 									<div class="card-body">
 									  <p class="card-text">
-										Earthday.org
-										NRDC
+										<a href="https://www.earthday.org/" target="_blank" alt="Earthday.org"><img src="/images/charities/square-earthdayorg.png" ></a>
+										<a href="https://www.nrdc.org/" target="_blank" alt="NRDC"><img src="/images/charities/square-nrdc.png" ></a>
 										Oceana
 									  </p>
 									</div>

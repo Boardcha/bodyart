@@ -72,7 +72,7 @@
 		
 		
 		<div class="col-12 mb-2 mt-5 bg-secondary text-white rounded" style="font-size:1.5em">
-			CUSTOMER SERVICE
+			Customer Service
 		</div>		
 		<div class="row text-center py-3">
 			<div class="col-6">
@@ -84,11 +84,22 @@
 				<h5>Sarena</h5>
 			</div>
 		</div>
-	<div class="row">
+
+		<div class="col-12 mb-2 mt-5 bg-secondary text-white rounded" style="font-size:1.5em">
+			Social Media
+		</div>		
+		<div class="row text-center py-3">
+			<div class="col-6">
+				<img class="img-fluid" src="images/employees/empty-avatar.png" alt="Charles" />
+				<h5>Charles</h5>
+			</div>
+			<div class="col-6">
+				<img class="img-fluid" src="images/employees/elizabeth-circle.png" alt="Elizabeth" />
+				<h5>Elizabeth</h5>
+			</div>
+		</div>
 
 
-
-	</div>
 	<div class="col-12 mb-2 mt-5 bg-secondary text-white rounded" style="font-size:1.5em">
 		Packaging
 	</div>

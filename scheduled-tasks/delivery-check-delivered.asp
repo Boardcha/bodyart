@@ -13,7 +13,7 @@ objCmd.ActiveConnection = DataConn
 objCmd.CommandText = "SELECT ID, customer_first, email, estimated_delivery_date, date_order_placed, USPS_tracking, shipping_type FROM sent_items WHERE estimated_delivery_date = CONVERT(VARCHAR(10), GETDATE(), 23) AND delivered_email_sent = 0" 
 Set rsGetInvoice = objCmd.Execute()
 
-GetOrderItems("00000") 'Calls function that build items array
+reDim array_details_2(12,0)
 
 While Not rsGetInvoice.EOF
 	status = getDeliveryStatus(rsGetInvoice("USPS_tracking"))
@@ -24,8 +24,7 @@ While Not rsGetInvoice.EOF
 	If status = "ORDER_DELIVERED" Then 
 		GetOrderItems(rsGetInvoice("ID")) 'Calls function that build items array
 		mailer_type = "ORDER_DELIVERED"
-		var_email = "amanda@bodyartforms.com"
-		'rsGetInvoice("email")
+		var_email = rsGetInvoice("email")
 		var_first = rsGetInvoice("customer_first")	
 		%>
 		<!--#include virtual="/emails/email_variables.asp"-->
