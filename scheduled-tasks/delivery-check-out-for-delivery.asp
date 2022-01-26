@@ -13,6 +13,8 @@ objCmd.ActiveConnection = DataConn
 objCmd.CommandText = "SELECT ID, customer_first, email, estimated_delivery_date, USPS_tracking FROM sent_items WHERE estimated_delivery_date = CONVERT(VARCHAR(10), GETDATE(), 23) AND delivering_today_email_sent = 0" 
 Set rsGetInvoice = objCmd.Execute()
 
+reDim array_details_2(12,0)
+
 While Not rsGetInvoice.EOF 
 
 	status = getDeliveryStatus(rsGetInvoice("USPS_tracking"))
@@ -21,6 +23,7 @@ While Not rsGetInvoice.EOF
 	<!--#include virtual="/admin/packing/tracker-builder.asp"-->
 	<%
 	If status = "OUT_FOR_DELIVERY" Then 
+		GetOrderItems(rsGetInvoice("ID")) 'Calls function that build items array
 		mailer_type = "OUT_FOR_DELIVERY"
 		var_email = "amanda@bodyartforms.com"
 		'rsGetInvoice("email")

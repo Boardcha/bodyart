@@ -12,13 +12,16 @@ elseif request.querystring("q") = "brand" then
 	sql = " AND b.searchable_brand_tags = '" & request.querystring("brand") & "'"
 elseif request.querystring("q") = "new" then
 	sql = " AND j.new_page_date >= GETDATE()-90"
+elseif request.querystring("q") = "date_added" then
+	sql = " AND YEAR(j.date_added) = YEAR('" & request.querystring("year") & "')"
+	'sql = " AND j.new_page_date >= GETDATE()-90"
 end if
 
 if sql <> "" then
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT j.ProductID, ProductDetailID, j.title, ISNULL(d.Gauge,'') + ' ' + ISNULL(d.Length,'') + ' ' + ISNULL(d.ProductDetail1,'') AS 'variant_description', b.searchable_brand_tags, d.Gauge, j.picture, j.largepic, i.img_thumb, d.wearable_material, j.seo_meta_description, f.min_gauge, f.max_gauge, d.price, f.min_price, f.max_price, f.ShowTextLogo, ISNULL(flare_type,'') as flare_type, j.customorder, j.description, j.pair, REPLACE(REPLACE(TRIM(d.colors),'  ', ' '),' ' ,'/') as color_tags, j.jewelry, f.variants, d.qty AS 'inventory', CASE WHEN d.qty >=1 THEN 'in stock' ELSE 'out of stock' END AS 'availability', f.material, d.detail_materials FROM jewelry AS j INNER JOIN FlatProducts AS f ON j.ProductID = f.productid INNER JOIN ProductDetails as d ON f.productid = d.ProductID INNER JOIN dbo.TBL_Companies AS b ON j.brandname = b.name LEFT OUTER JOIN tbl_images AS i ON d.img_id = i.img_id WHERE j.jewelry <> N'save' AND j.active = 1 AND d.active = 1 AND j.customorder <> 'yes' AND wearable_material <> 'Acrylic' AND  wearable_material <> 'Bone' AND  wearable_material <> 'Horn' " + sql + " ORDER BY ProductID DESC"
+objCmd.CommandText = "SELECT j.ProductID, ProductDetailID, j.title, ISNULL(d.Gauge,'') + ' ' + ISNULL(d.Length,'') + ' ' + ISNULL(d.ProductDetail1,'') AS 'variant_description', b.searchable_brand_tags, d.Gauge, j.picture, j.largepic, i.img_thumb, d.wearable_material, j.seo_meta_description, f.min_gauge, f.max_gauge, d.price, f.min_price, f.max_price, f.ShowTextLogo, ISNULL(flare_type,'') as flare_type, j.customorder, j.date_added, j.description, j.pair, REPLACE(REPLACE(TRIM(d.colors),'  ', ' '),' ' ,'/') as color_tags, j.jewelry, f.variants, d.qty AS 'inventory', CASE WHEN d.qty >=1 THEN 'in stock' ELSE 'out of stock' END AS 'availability', f.material, d.detail_materials FROM jewelry AS j INNER JOIN FlatProducts AS f ON j.ProductID = f.productid INNER JOIN ProductDetails as d ON f.productid = d.ProductID INNER JOIN dbo.TBL_Companies AS b ON j.brandname = b.name LEFT OUTER JOIN tbl_images AS i ON d.img_id = i.img_id WHERE j.jewelry <> N'save' AND j.active = 1 AND d.active = 1 AND j.customorder <> 'yes' AND wearable_material <> 'Acrylic' AND  wearable_material <> 'Bone' AND  wearable_material <> 'Horn' AND exclude_from_social_feeds = 0 AND j.title IS NOT NULL " + sql + " ORDER BY ProductID DESC"
 
 Set rsGetRecords = objCmd.Execute()
 
@@ -30,8 +33,7 @@ Set rsGetRecords = objCmd.Execute()
     <description>Bodyartforms jewelry feed</description>
 <%
 
-With rsGetRecords
-Do While Not.Eof
+While Not rsGetRecords.Eof
 
 pair = ""
 var_brand = ""
@@ -139,9 +141,8 @@ end if
     <% end if '==== variants = 1 %>   
 <%
 
-.Movenext()
-Loop
-End With 
+rsGetRecords.Movenext()
+wend
 
 
 rsGetRecords.Close()

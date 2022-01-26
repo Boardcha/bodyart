@@ -861,7 +861,13 @@ end if
 		  <div class="custom-control custom-checkbox">
 			<input class="custom-control-input" name="pinned_product" id="pinned_product" type="checkbox" value="1" <% if (rs_getproduct.Fields.Item("pinned_product").Value) = "1" then %>checked<% end if %> data-unchecked="0" data-column="pinned_product" data-friendly="Pin product">
 			<label class="custom-control-label" for="pinned_product">Pin product to top of search results</label>
-		  </div>      
+		  </div>
+
+		  <div class="custom-control custom-checkbox">
+			<input class="custom-control-input" name="exclude_from_social_feeds" id="exclude_from_social_feeds" type="checkbox" value="1" <% if rs_getproduct("exclude_from_social_feeds") = "True" then %>checked<% end if %> data-unchecked="0" data-column="exclude_from_social_feeds" data-friendly="Exclude from social media feeds">
+			<label class="custom-control-label" for="exclude_from_social_feeds">Exclude from social media feeds</label>
+		  </div>	  
+		  
 
     </div><!-- end second column -->
     

@@ -248,7 +248,7 @@ Set rsInventoryIssues = objcmd.Execute()
 
 <% '==================== START PRE-ORDERS MENU ====================================
 
-If (user_name = "Melissa" and var_access_level = "Customer service") or var_access_level = "Admin" or var_access_level = "Manager" then  %>
+If (user_name = "Melissa" and var_access_level = "Customer service") or var_access_level = "Admin" or var_access_level = "Manager" OR user_name = "Nathan" OR user_name = "Jackie" OR user_name = "Adrienne" then  %>
 	<li class="nav-item dropdown position-static border-right border-secondary">
 		<a class="nav-link" href="#" id="PreOrdersDropdown"
 				role="button" data-toggle="dropdown" aria-haspopup="true"
