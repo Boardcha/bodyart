@@ -15,11 +15,6 @@ cmd_rsGetRecords.ActiveConnection = DataConn
 cmd_rsGetRecords.CommandText = "SELECT Count(*) AS Total_ToReview FROM sent_items WHERE shipped = 'Review'"
 Set rsGetRecords = cmd_rsGetRecords.Execute()
 
-set cmd_BOReviews = Server.CreateObject("ADODB.command")
-cmd_BOReviews.ActiveConnection = DataConn
-cmd_BOReviews.CommandText = "SELECT Count(*) AS Total_BOReviews FROM dbo.QRY_OrderDetails WHERE BackorderReview = 'Y'"
-Set rsBOReviews = cmd_BOReviews.Execute()
-
 set Cmd_rsGetTotalOrder = Server.CreateObject("ADODB.command")
 Cmd_rsGetTotalOrder.ActiveConnection = DataConn
 Cmd_rsGetTotalOrder.CommandText = "SELECT Count(*) AS Total_ToShip FROM sent_items  WHERE ship_code = 'paid' AND (shipped = 'Pending shipment' OR shipped = 'SHIPPING BACKORDER' OR shipped = 'RETURN ENVELOPE' OR shipped = 'RESHIP PACKAGE')"
@@ -60,12 +55,6 @@ Set rs_getsections = objCmd.Execute()
 						<li>
 							<a href="review_orders.asp">Review orders to ship<span  class="ml-2 badge badge-danger"><%=(rsGetRecords.Fields.Item("Total_ToReview").Value)%></span></a>
 						</li>
-						<%  
-						If var_access_level <> "Packaging"  then  %>
-						<li>
-							<a href="review_problemorders.asp">Approve backorders<span  class="ml-2 badge badge-danger"><%=(rsBOReviews.Fields.Item("Total_BOReviews").Value)%></span></a>
-						</li>
-						<% end if  %>	
 						</ul>
 				</div>
 			  </div>

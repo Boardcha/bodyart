@@ -85,10 +85,6 @@ Wend
         <% End If ' end rsGetRecords.EOF And rsGetRecords.BOF %>
 
 
-<!--#include file="invoices/inc-review-backorders.asp"-->
-
-
-
 <% else ' unathorized access error %>
 Not accessible
 <% end if ' END ACCESS TO PAGE FOR ONLY USERS WHO SHOULD BE ABLE TO SEE IT %>
@@ -130,25 +126,6 @@ Not accessible
 	var auto_url = "invoices-cs-modules/ajax-reship-update-qty.asp"
 	auto_update(); // run function to update fields when tabbing out of them
 
-$("#btn_print").click(function(){
-
-	$("#bo-print").print({
-		globalStyles: true,
-		mediaPrint: false,
-		stylesheet: null,
-		noPrintSelector: ".no-print",
-		iframe: true,
-		append: null,
-		prepend: null,
-		manuallyCopyFormValues: true,
-		deferred: $.Deferred(),
-		timeout: 750,
-		title: null,
-		doctype: '<!doctype html>'
-	});
-});
-
-	
 
 	// Change reship order modal
 	$(document).on("click", ".btn-update-reship-modal", function(event){

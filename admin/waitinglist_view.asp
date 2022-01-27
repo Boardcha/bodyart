@@ -6,7 +6,7 @@ bootstrapped = "yes"
 
 Set objCmd = Server.CreateObject("ADODB.Command")
 objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
-objCmd.CommandText = "SELECT DetailID, name, email, title, ProductDetail1 FROM dbo.QRYWaitingList WHERE DetailID = ? ORDER BY name ASC"
+objCmd.CommandText = "SELECT DetailID, name, email, title, ProductDetail1, waiting_qty FROM dbo.QRYWaitingList WHERE DetailID = ? ORDER BY name ASC"
 objCmd.Parameters.Append(objCmd.CreateParameter("DetailID",3,1,20, request.querystring("DetailID")  ))
 
 set rsShowWaitingList = Server.CreateObject("ADODB.Recordset")
@@ -31,6 +31,13 @@ var_total_waiting = rsShowWaitingList.RecordCount
  <h4><%=(rsShowWaitingList.Fields.Item("title").Value)%>&nbsp;<%=(rsShowWaitingList.Fields.Item("ProductDetail1").Value)%> (<%= var_total_waiting %>)   </h4>
  
 <table class="table table-sm table-striped table-borderless w-50">
+  <thead class="thead-dark">
+<tr> 
+  <th>Name</th>
+  <th>Email</th>
+<th>Qty wanted</th>
+</tr>
+  </thead>
 
     <% 
 While NOT rsShowWaitingList.EOF
@@ -38,6 +45,7 @@ While NOT rsShowWaitingList.EOF
 <tr>
         <td><%=(rsShowWaitingList.Fields.Item("name").Value)%></td>
         <td><%=(rsShowWaitingList.Fields.Item("email").Value)%></td>
+        <td><%= rsShowWaitingList("waiting_qty") %></td>
     </tr>
       <% 
   rsShowWaitingList.MoveNext()

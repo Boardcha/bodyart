@@ -9,6 +9,15 @@ While Not rsToggle.EOF
 	If rsToggle("toggle_item") = "toggle_checkout_paypal" AND rsToggle("value") Then checkout_paypal_checked = "checked"
 	rsToggle.MoveNext	
 Wend
+
+set objCmd = Server.CreateObject("ADODB.command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "SELECT InvoiceID FROM TBL_OrderSummary WHERE BackorderReview = 'Y'"
+
+set rsBOReviews = Server.CreateObject("ADODB.Recordset")
+rsBOReviews.CursorLocation = 3 'adUseClient
+rsBOReviews.Open objCmd
+total_backorders_to_review = rsBOReviews.RecordCount
 %>
 
 <% ' Set testing user access level
@@ -304,10 +313,6 @@ If var_access_level = "Packaging" or var_access_level = "Admin" or var_access_le
 		<div class="container-fluid">
 			<div class="row w-100">
 				<div class="col">
-					<h5>Invoices</h5>
-						<a href="/admin/review-backorders.asp">Review backorders</a>
-				</div>
-				<div class="col">
 					<h5>Import tracking #'s</h5>
 						<a href="/admin/insertUPSTracking_numbers.asp">Import UPS #'s</a>
 				</div>
@@ -503,6 +508,10 @@ If var_access_level = "Admin" then  %>
 <% end if ' Admin only navigation %>
 </ul>
 	<ul class="navbar-nav ml-auto">
+	<%  
+	If var_access_level <> "Packaging" and total_backorders_to_review > 0  then  %>
+	<li class="nav-item"><a class="nav-link border-right border-secondary bg-danger" href="/admin/review-backorders.asp">Backorders (<%= total_backorders_to_review %>)</a></li>
+	<% end if  %>	
 <%
 if var_access_level = "Admin" or var_access_level = "Manager" or user_name = "Nathan" or user_name = "Melissa" or user_name = "Anna" or user_name = "Rebekah" or user_name = "Sarena" then
 
