@@ -4,33 +4,6 @@
 </div>
 </main><!-- end main content -->
 
-<%
-if Request.ServerVariables("URL") <> "/index.asp" and Request.ServerVariables("URL") <> "" then 
-    footer_cards = "display:none"
-end if 
-%>
-<!-- begin text boxes -->
-	
-<div class="container-fluid text-light bg-lightpurple mt-5 py-2" style="margin-bottom:-3em;<%= footer_cards %>">
-    <div class="row">
-        <div class="col-12 col-md-3 text-center p-2">
-                <i class="fa fa-shipping-fast fa-lg"></i>
-            <h5 class="p-0 m-0">FREE SHIPPING</h5><span class="small">Over $50 in USA</span></div>
-        <div class="col-12 col-md-3 text-center p-2">
-                <i class="fa fa-undo-alt fa-lg"></i>
-            <h5 class="p-0 m-0">QUICK RETURNS</h5><span class="small">We want happy customers!</span></div>
-        <div class="col-12 col-md-3 text-center p-2">
-                <i class="fa fa-smile-bts fa-lg"></i>
-            <h5 class="p-0 m-0">FREEBIES</h5><span class="small">O-rings, jewelry, &amp; stickers</span></div>
-        <div class="col-12 col-md-3 text-center p-2">
-            <i class="fa fa-heart fa-lg"></i>
-            <h5 class="p-0 m-0">WE DONATE!</h5>
-            <span class="small">Over $25,000 a year to charity</span>
-        </div>
-                </div>
-            </div>
-<!-- End begin text boxes -->
-
 
 <footer>
     <div class="container-fluid text-light pb-2 pt-4 mt-5 px-md-4">

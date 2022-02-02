@@ -70,12 +70,12 @@ end if  ' var_grandtotal > 150
 
 end if  '  rsLastHoursInvoices.eof
 
-'========= ALWAYS PUSH PRE-ORDERS TO BE REVIEWED NO MATTER WHAT ====================
+'========= ALWAYS PUSH CUSTOM ORDERS TO BE REVIEWED NO MATTER WHAT ====================
 if preorder_shipping_notice = "yes"  then ' If there's a preorder push it into review
 		
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "UPDATE sent_items SET shipped = 'PRE-ORDER REVIEW' WHERE ID = ?"
+		objCmd.CommandText = "UPDATE sent_items SET shipped = 'CUSTOM ORDER IN REVIEW' WHERE ID = ?"
 		objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, Session("invoiceid")))
 		objCmd.Execute()
 

@@ -23,13 +23,13 @@ if request.form("detailid") <> "" then
 
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT SUM(TBL_OrderSummary.qty) as 'total_on_hold' FROM TBL_OrderSummary INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID WHERE (sent_items.ship_code = N'paid') AND date_order_placed > '1/1/2021' AND preorder = 1 AND TBL_OrderSummary.DetailID = ? AND  ((sent_items.shipped = N'PRE-ORDER REVIEW') OR (sent_items.shipped = N'PRE-ORDER APPROVED') OR (sent_items.shipped = N'ON ORDER'))"
+	objCmd.CommandText = "SELECT SUM(TBL_OrderSummary.qty) as 'total_on_hold' FROM TBL_OrderSummary INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID WHERE (sent_items.ship_code = N'paid') AND date_order_placed > '1/1/2021' AND preorder = 1 AND TBL_OrderSummary.DetailID = ? AND  ((sent_items.shipped = N'CUSTOM ORDER IN REVIEW') OR (sent_items.shipped = N'CUSTOM ORDER APPROVED') OR (sent_items.shipped = N'ON ORDER'))"
 	objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,10, request.form("detailid")))
 	Set rsGetTotal_PreOrderItemsOnHold = objCmd.Execute()
 
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT TOP(20) sent_items.id, TBL_OrderSummary.DetailID, sent_items.shipped, TBL_OrderSummary.qty, sent_items.date_order_placed, sent_items.ship_code, sent_items.ID FROM TBL_OrderSummary INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID WHERE (sent_items.ship_code = N'paid') AND date_order_placed > '1/1/2021' AND preorder = 1 AND TBL_OrderSummary.DetailID = ? AND  ((sent_items.shipped = N'PRE-ORDER REVIEW') OR (sent_items.shipped = N'PRE-ORDER APPROVED') OR (sent_items.shipped = N'ON ORDER'))"
+	objCmd.CommandText = "SELECT TOP(20) sent_items.id, TBL_OrderSummary.DetailID, sent_items.shipped, TBL_OrderSummary.qty, sent_items.date_order_placed, sent_items.ship_code, sent_items.ID FROM TBL_OrderSummary INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID WHERE (sent_items.ship_code = N'paid') AND date_order_placed > '1/1/2021' AND preorder = 1 AND TBL_OrderSummary.DetailID = ? AND  ((sent_items.shipped = N'CUSTOM ORDER IN REVIEW') OR (sent_items.shipped = N'CUSTOM ORDER APPROVED') OR (sent_items.shipped = N'ON ORDER'))"
 	objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,10, request.form("detailid")))
 	Set rsGet_PreOrderItemsOnHold = objCmd.Execute()
 
@@ -62,9 +62,9 @@ If Not rsGetDatesSold.EOF Then
 </table>
 			<span class="badge badge-info" style="font-size:100%!important"><%=total%></span> sales in last 6 months
 			<% if NOT rsGetTotal_PreOrderItemsOnHold.EOF then %>
-			<div class="bg-dark text-light font-weight-bold p-1 my-2">Pre-Orders</div>
+			<div class="bg-dark text-light font-weight-bold p-1 my-2">Custom orders</div>
 			<div>
-				<span class="badge badge-info" style="font-size:100%!important"><%= rsGetTotal_PreOrderItemsOnHold("total_on_hold") %></span> on hold for pre-orders
+				<span class="badge badge-info" style="font-size:100%!important"><%= rsGetTotal_PreOrderItemsOnHold("total_on_hold") %></span> on hold for custom orders
 			</div>
 			<% while not rsGet_PreOrderItemsOnHold.eof %>
 				<a class="mr-3" href='invoice.asp?ID=<%= rsGet_PreOrderItemsOnHold("ID") %>' target='_blank' ><%= rsGet_PreOrderItemsOnHold("ID") %></a>

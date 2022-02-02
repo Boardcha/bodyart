@@ -228,7 +228,7 @@ Wend
 				<span class="font-weight-bold">Recipient's e-mail:</span> <%= certificate_array(0) %>
 				<span class="font-weight-bold">Your name:</span> <%= certificate_array(1) %>
 				<span class="font-weight-bold">Your message:</span> <%= certificate_array(2) %>
-				<%	end if ' detect whether preorder or gift cert %>
+				<%	end if ' detect whether custom order or gift cert %>
 			<% end if %>
 		
 			<% if rs_getCart.Fields.Item("cart_qty").Value <= rs_getCart.Fields.Item("qty").Value then %>
@@ -703,7 +703,7 @@ if NOT rsGetAddOns.eof then
         </div>	
 			
 			<!-- PRE_ORDER ITEM WARNING -->
-			<div class="modal fade" id="pre-order-warning-modal" tabindex="-1" role="dialog" aria-hidden="true">
+			<div class="modal fade" id="custom-order-warning-modal" tabindex="-1" role="dialog" aria-hidden="true">
 				<div class="modal-dialog" role="document">
 						<div class="modal-content">
 								<div class="modal-header">
@@ -712,7 +712,7 @@ if NOT rsGetAddOns.eof then
 										<span aria-hidden="true">&times;</span>
 									</button>
 								</div>
-								<div id="pre-order-items" class="modal-body">
+								<div id="custom-order-items" class="modal-body">
 
 								</div>
 								<button id="btn-proceed-to-checkout" class="btn btn-lg btn-primary btn-block proceed_checkout w-75 mx-auto mb-3" type="button">PROCEED TO CHECKOUT</button>
@@ -767,7 +767,7 @@ if NOT rsGetAddOns.eof then
 <script src="/js/apple-pay-api.js?ver=3"></script>
 
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
-<script type="text/javascript" src="/js-pages/cart.min.js?v=03032023"></script>
+<script type="text/javascript" src="/js-pages/cart.min.js?v=012822"></script>
 <script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=111722"></script>
 <!-- ^^^^^^  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE ^^^^^^ -->
 <script type="text/javascript">

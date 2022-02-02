@@ -10,7 +10,7 @@ Dim rsGetPreorders_numRows
 
 Set rsGetPreorders = Server.CreateObject("ADODB.Recordset")
 rsGetPreorders.ActiveConnection = MM_bodyartforms_sql_STRING
-rsGetPreorders.Source = "SELECT TOP (100) PERCENT dbo.TBL_OrderSummary.InvoiceID, dbo.TBL_OrderSummary.ProductID, dbo.TBL_OrderSummary.DetailID, dbo.TBL_OrderSummary.qty, dbo.TBL_OrderSummary.PreOrder_Desc, dbo.jewelry.title, dbo.ProductDetails.ProductDetail1, dbo.sent_items.ID, dbo.TBL_OrderSummary.OrderDetailID, dbo.jewelry.customorder, dbo.sent_items.shipped, dbo.jewelry.brandname, dbo.TBL_OrderSummary.item_shipped, dbo.TBL_OrderSummary.item_ordered,  dbo.TBL_OrderSummary.item_received, dbo.TBL_OrderSummary.notes, total_items_subtotal, dbo.TBL_OrderSummary.status, dbo.ProductDetails.ProductDetailID,  dbo.sent_items.customer_first, dbo.ProductDetails.Gauge, dbo.ProductDetails.Length, dbo.sent_items.customer_comments FROM dbo.TBL_OrderSummary INNER JOIN  dbo.jewelry ON dbo.TBL_OrderSummary.ProductID = dbo.jewelry.ProductID INNER JOIN  dbo.ProductDetails ON dbo.TBL_OrderSummary.DetailID = dbo.ProductDetails.ProductDetailID INNER JOIN  dbo.sent_items ON dbo.TBL_OrderSummary.InvoiceID = dbo.sent_items.ID WHERE (dbo.jewelry.customorder = 'yes') AND (dbo.TBL_OrderSummary.item_ordered = 0) AND (dbo.sent_items.shipped = N'PRE-ORDER REVIEW') ORDER BY dbo.TBL_OrderSummary.InvoiceID"
+rsGetPreorders.Source = "SELECT TOP (100) PERCENT dbo.TBL_OrderSummary.InvoiceID, dbo.TBL_OrderSummary.ProductID, dbo.TBL_OrderSummary.DetailID, dbo.TBL_OrderSummary.qty, dbo.TBL_OrderSummary.PreOrder_Desc, dbo.jewelry.title, dbo.ProductDetails.ProductDetail1, dbo.sent_items.ID, dbo.TBL_OrderSummary.OrderDetailID, dbo.jewelry.customorder, dbo.sent_items.shipped, dbo.jewelry.brandname, dbo.TBL_OrderSummary.item_shipped, dbo.TBL_OrderSummary.item_ordered,  dbo.TBL_OrderSummary.item_received, dbo.TBL_OrderSummary.notes, total_items_subtotal, dbo.TBL_OrderSummary.status, dbo.ProductDetails.ProductDetailID,  dbo.sent_items.customer_first, dbo.ProductDetails.Gauge, dbo.ProductDetails.Length, dbo.sent_items.customer_comments FROM dbo.TBL_OrderSummary INNER JOIN  dbo.jewelry ON dbo.TBL_OrderSummary.ProductID = dbo.jewelry.ProductID INNER JOIN  dbo.ProductDetails ON dbo.TBL_OrderSummary.DetailID = dbo.ProductDetails.ProductDetailID INNER JOIN  dbo.sent_items ON dbo.TBL_OrderSummary.InvoiceID = dbo.sent_items.ID WHERE (dbo.jewelry.customorder = 'yes') AND (dbo.TBL_OrderSummary.item_ordered = 0) AND (dbo.sent_items.shipped = N'CUSTOM ORDER IN REVIEW') ORDER BY dbo.TBL_OrderSummary.InvoiceID"
 rsGetPreorders.CursorLocation = 3 'adUseClient
 rsGetPreorders.LockType = 1 'Read-only records
 rsGetPreorders.Open()
@@ -25,7 +25,7 @@ commUpdate.ActiveConnection = MM_bodyartforms_sql_STRING
 
 For i = 0 To UBound(varID) 
 
-commUpdate.CommandText = "UPDATE dbo.QRY_OrderDetails SET shipped = 'PRE-ORDER APPROVED' WHERE OrderDetailID = " & varID(i) 
+commUpdate.CommandText = "UPDATE dbo.QRY_OrderDetails SET shipped = 'CUSTOM ORDER APPROVED' WHERE OrderDetailID = " & varID(i) 
     ' comment out next line AFTER IT WORKS 
     'Response.Write "DEBUG SQL: " & commUpdate.CommandText & "<BR/>" 
 commUpdate.Execute()
@@ -37,13 +37,13 @@ end if
 %>
 <html>
 <head>
-<title>Pre-order review &amp; approval</title>
+<title>Custom order review &amp; approval</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"></head>
 <body>
 <!--#include file="admin_header.asp"-->
 <div class="p-3">
 
-<h5>Review &amp; approve pre-orders </h5> 
+<h5>Review &amp; approve custom orders </h5> 
 
 <form action="" method="post" name="FRM_update" id="FRM_update">
 <% If Not rsGetPreorders.EOF Then %>
@@ -93,7 +93,7 @@ Wend
         
         <% End If ' end Not rsGetPreorders.EOF Or NOT rsGetPreorders.BOF %>
       <% If rsGetPreorders.EOF And rsGetPreorders.BOF Then %>
-        <p>No pre-orders to review </p>
+        <p>No custom orders to review </p>
         <% End If ' end rsGetPreorders.EOF And rsGetPreorders.BOF %>
 </td>
   </tr>

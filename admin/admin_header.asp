@@ -71,7 +71,7 @@ Set rsGetProblemOrders = objcmd.Execute()
 
 set objcmd = Server.CreateObject("ADODB.command")
 objcmd.ActiveConnection = DataConn
-objcmd.CommandText = "SELECT Count(*) AS Total_Over150 FROM vw_sum_order_orderhistory WHERE over_150 = 1 AND shipped <>  'Pre-order Approved' AND shipped <> 'On Order' AND shipped <> 'ON HOLD'"
+objcmd.CommandText = "SELECT Count(*) AS Total_Over150 FROM vw_sum_order_orderhistory WHERE over_150 = 1 AND shipped <>  'CUSTOM ORDER APPROVED' AND shipped <> 'On Order' AND shipped <> 'ON HOLD'"
 Set rsOrderOver150 = objcmd.Execute()
 %>
 	<li class="nav-item dropdown position-static border-right border-secondary">
@@ -255,23 +255,23 @@ Set rsInventoryIssues = objcmd.Execute()
 <% end if '=========== END PRODUCT MANAGEMENT MENU ================================ %>
 
 
-<% '==================== START PRE-ORDERS MENU ====================================
+<% '==================== START CUSTOM ORDERS MENU ====================================
 
 If (user_name = "Melissa" and var_access_level = "Customer service") or var_access_level = "Admin" or var_access_level = "Manager" OR user_name = "Nathan" OR user_name = "Jackie" OR user_name = "Adrienne" then  %>
 	<li class="nav-item dropdown position-static border-right border-secondary">
 		<a class="nav-link" href="#" id="PreOrdersDropdown"
 				role="button" data-toggle="dropdown" aria-haspopup="true"
 				aria-expanded="false">
-				Pre-orders</a>
+				Custom Orders</a>
 	<div class="dropdown-menu bg-dark w-100 m-0  border-0 rounded-0 pb-5"
 				aria-labelledby="PreOrdersDropdown">
 		<div class="container-fluid">
 			<div class="row w-100">
 				<div class="col">
-					<h5>Pre-Orders</h5>
-						<a href="/admin/custom_orders.asp">Ship out pre-orders</a><br/>
-						<a href="/admin/preorder_approved.asp?Company=Industrial Strength">Approved pre-orders</a><br/>
-						<a href="/admin/preorder_review.asp">Review pre-orders</a><br/>
+					<h5>Custom Orders</h5>
+						<a href="/admin/custom_orders.asp">Ship out custom orders</a><br/>
+						<a href="/admin/preorder_approved.asp?Company=Industrial Strength">Approved custom orders</a><br/>
+						<a href="/admin/preorder_review.asp">Review custom orders</a><br/>
 						<a href="/admin/preorder_emails.asp">E-mails for delays</a><br/>
 						<a href="/admin/one-time-coupons.asp">One time use coupons</a>
 				</div>
@@ -299,7 +299,7 @@ If (user_name = "Melissa" and var_access_level = "Customer service") or var_acce
 		</div>
 	</div>
 </li>
-<% end if  '=========== END PRE-ORDERS MENU ================================ %>
+<% end if  '=========== END CUSTOM ORDERS MENU ================================ %>
 
 <% ' START packaging
 If var_access_level = "Packaging" or var_access_level = "Admin" or var_access_level = "Manager" then  %>
@@ -509,7 +509,7 @@ If var_access_level = "Admin" then  %>
 </ul>
 	<ul class="navbar-nav ml-auto">
 	<%  
-	If var_access_level <> "Packaging" and total_backorders_to_review > 0  then  %>
+	If var_access_level <> "Packaging" and user_name <> "Rebekah" and total_backorders_to_review > 0  then  %>
 	<li class="nav-item"><a class="nav-link border-right border-secondary bg-danger" href="/admin/review-backorders.asp">Backorders (<%= total_backorders_to_review %>)</a></li>
 	<% end if  %>	
 <%

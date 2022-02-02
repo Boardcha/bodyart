@@ -202,10 +202,10 @@ no</td>
         (only the image name)</td>
     </tr>
     <tr>
-      <td>Pre-order timeframe</td>
+      <td>Custom order timeframe</td>
       <td><input class="form-control form-control-sm" name="preorder_timeframes" type="text">
 	  
-	  Pre-order company? <input name="preorder_status" type="checkbox" value="1">
+	  Custom order company? <input name="preorder_status" type="checkbox" value="1">
 	  
         </td>
     </tr>
@@ -415,10 +415,10 @@ rsEditCompany_numRows = 0
           (only the image name)</td>
     </tr>
     <tr>
-      <td>Pre-order timeframe</td>
+      <td>Custom order timeframe</td>
       <td><input class="form-control form-control-sm mr-5" name="preorder_timeframes" type="text" value="<%=(rsEditCompany.Fields.Item("preorder_timeframes").Value)%>">
 	 
-	  Pre-order company? <input name="preorder_status" type="checkbox" value="1" <% if rsEditCompany.Fields.Item("preorder_status").Value = 1 then %>checked<% end if %>>
+	  Custom order company? <input name="preorder_status" type="checkbox" value="1" <% if rsEditCompany.Fields.Item("preorder_status").Value = 1 then %>checked<% end if %>>
         </td>
     <tr>
       <td>Vendor page FULL link</td>

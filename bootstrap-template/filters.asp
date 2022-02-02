@@ -137,8 +137,8 @@
                     <label class="form-check-label d-block" for="filter-saddle">Saddles</label>
                   </div>
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="preorders" value="preorder-yes" id="filter-preorderyes" data-friendly="Pre-Orders">
-                    <label class="form-check-label d-block" for="filter-preorderyes">Pre-orders (Custom)</label>
+                    <input class="form-check-input" type="checkbox" name="customorders" value="customorder-yes" id="filter-preorderyes" data-friendly="Custom orders">
+                    <label class="form-check-label d-block" for="filter-preorderyes">Custom orders</label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="jewelry" value="retainer" id="filter-retainers" data-friendly="Retainers">
@@ -1073,20 +1073,20 @@ rsGetGauges.ReQuery() %>
               </div>
             </div>
                         <div class="card rounded-0 border-0">
-              <a class="card-header collapsed h6 filter-dropdown" id="preorders-head" data-toggle="collapse" data-target="#preorders" aria-expanded="false" aria-controls="collapseOne"
+              <a class="card-header collapsed h6 filter-dropdown" id="customorders-head" data-toggle="collapse" data-target="#customorders" aria-expanded="false" aria-controls="collapseOne"
                 href="#collapseOne"><i class="fa" aria-hidden="true"></i>
-                Pre-Orders
+                Custom Orders
               </a>
-              <div id="preorders" class="collapse" aria-labelledby="preorders-head" data-parent="#accordion">
+              <div id="customorders" class="collapse" aria-labelledby="customorders-head" data-parent="#accordion">
                 <div class="card-body noscroll">
 
  <div class="form-check">
-                    <input class="form-check-input"   type="radio" name="preorders" value="preorder-not" id="filter-nopreorders" data-friendly="Do not show pre-orders">
-                    <label class="form-check-label d-block" for="filter-nopreorders">Do not show pre-orders</label>
+                    <input class="form-check-input"   type="radio" name="customorders" value="customorder-not" id="filter-nocustomorders" data-friendly="Do not show custom orders">
+                    <label class="form-check-label d-block" for="filter-nocustomorders">Do not show custom orders</label>
                   </div>
                    <div class="form-check">
-                    <input class="form-check-input" type="radio" name="preorders" value="preorder-yes" id="filter-onlypreorders" data-friendly="Only show pre-orders">
-                    <label class="form-check-label d-block" for="filter-onlypreorders">Show ONLY preorders</label>
+                    <input class="form-check-input" type="radio" name="customorders" value="customorder-yes" id="filter-onlycustomorders" data-friendly="Only show custom orders">
+                    <label class="form-check-label d-block" for="filter-onlycustomorders">Show ONLY custom orders</label>
                   </div>
 
                 </div>
@@ -1180,7 +1180,7 @@ color_array = array("amber", "aqua", "black", "blue", "bone", "brass", "bronze",
         objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, request.cookies("OrderAddonsActive")))
         Set rsVerifyAddonOrder = objCmd.Execute()
         
-        if rsVerifyAddonOrder.Fields.Item("ship_code").Value = "paid" AND ISNULL(rsVerifyAddonOrder.Fields.Item("ScanInvoice_Timestamp").Value) AND (rsVerifyAddonOrder.Fields.Item("shipped").Value = "PRE-ORDER REVIEW" OR rsVerifyAddonOrder.Fields.Item("shipped").Value = "PRE-ORDER APPROVED" OR rsVerifyAddonOrder.Fields.Item("shipped").Value = "Pending..." OR rsVerifyAddonOrder.Fields.Item("shipped").Value = "Review" OR rsVerifyAddonOrder.Fields.Item("shipped").Value = "Pending shipment") then
+        if rsVerifyAddonOrder.Fields.Item("ship_code").Value = "paid" AND ISNULL(rsVerifyAddonOrder.Fields.Item("ScanInvoice_Timestamp").Value) AND (rsVerifyAddonOrder.Fields.Item("shipped").Value = "CUSTOM ORDER IN REVIEW" OR rsVerifyAddonOrder.Fields.Item("shipped").Value = "CUSTOM ORDER APPROVED" OR rsVerifyAddonOrder.Fields.Item("shipped").Value = "Pending..." OR rsVerifyAddonOrder.Fields.Item("shipped").Value = "Review" OR rsVerifyAddonOrder.Fields.Item("shipped").Value = "Pending shipment") then
         %>
         <div class="alert alert-info" id="addon-alert">
           <h4>ADDING ITEMS TO YOUR ORDER #<%= request.cookies("OrderAddonsActive") %></h4>

@@ -289,9 +289,9 @@ if not rsGetOrder.eof then
 						<option value="PACKAGE CAME BACK">Package came back</option>
 						<option value="Pending...">Pending...</option>
 						<option value="Lost package">Lost package</option>
-						<option value="PRE-ORDER REVIEW">Pre-order items on review</option>
-						<option value="PRE-ORDER APPROVED">Pre-order items approved to order</option>
-						<option value="ON ORDER">Pre-order items have been ordered</option>
+						<option value="CUSTOM ORDER IN REVIEW">Custom items in review</option>
+						<option value="CUSTOM ORDER APPROVED">Custom items approved to order</option>
+						<option value="ON ORDER">Custom items have been ordered</option>
 						<option value="RETURN">Return (Waiting for return)</option>
 						<option value="RETURN (EXCEPTION)">Return (New orders allowed)</option>
 						<option value="Shipped">Shipped</option>
@@ -766,7 +766,7 @@ end if ' if gift cert not used on any order
 end if ' display gift cert info
  end if 'if gift cert is found 
  %>
-<% if InStr( 1, (rsGetOrderItems.Fields.Item("title").Value), "PRE-ORDER", vbTextCompare) then
+<% if InStr( 1, (rsGetOrderItems.Fields.Item("title").Value), "CUSTOM ORDER", vbTextCompare) then
 
 if rsGetOrderItems.Fields.Item("item_ordered").Value = 1 then
 	var_ordered_status = "alert-success"
@@ -788,7 +788,7 @@ else
 	var_received_information = ""
 end if
 %>
-<textarea  class="mt-2 form-control form-control-sm" name="preorder_<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>" type="text" data-column="PreOrder_Desc" data-friendly="Pre-order specs"  data-productdetailid="<%= rsGetOrderItems.Fields.Item("ProductDetailID").Value %>" data-productid="<%= rsGetOrderItems.Fields.Item("ProductID").Value %>" data-detailid="<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>"><% If isNull(rsGetOrderItems.Fields.Item("PreOrder_Desc").Value) then %><% else %><%= Server.HTMLEncode(rsGetOrderItems.Fields.Item("PreOrder_Desc").Value) %><% end if %></textarea>
+<textarea  class="mt-2 form-control form-control-sm" name="preorder_<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>" type="text" data-column="PreOrder_Desc" data-friendly="Custom item specs"  data-productdetailid="<%= rsGetOrderItems.Fields.Item("ProductDetailID").Value %>" data-productid="<%= rsGetOrderItems.Fields.Item("ProductID").Value %>" data-detailid="<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>"><% If isNull(rsGetOrderItems.Fields.Item("PreOrder_Desc").Value) then %><% else %><%= Server.HTMLEncode(rsGetOrderItems.Fields.Item("PreOrder_Desc").Value) %><% end if %></textarea>
 
  <label class="m-0 mt-2" for="ordered_<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>">Ordered: <%= var_ordered_information %></label> 
           <select  class="form-control form-control-sm status <%= var_ordered_status %>" name="ordered_<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>" type="text" data-column="item_ordered" data-friendly="Item ordered" data-detailid="<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>" data-productdetailid="<%= rsGetOrderItems.Fields.Item("ProductDetailID").Value %>" data-productid="<%= rsGetOrderItems.Fields.Item("ProductID").Value %>">
@@ -1205,7 +1205,7 @@ end if ' if not rsGetOrder.eof then
 					  <% end if %>
 					  <div class="custom-control custom-checkbox d-inline-block ml-3">
 						<input type="checkbox" class="custom-control-input" name="preorder-restock-fee" id="preorder-restock-fee">
-						<label class="custom-control-label" for="preorder-restock-fee">15% pre-order restock fee</label>
+						<label class="custom-control-label" for="preorder-restock-fee">15% custom item restock fee</label>
 					  </div>
 
 					<table class="table table-sm">

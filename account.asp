@@ -202,15 +202,15 @@ For intRecord = 1 To rsGetOrders.PageSize
 		var_order_status = rsGetOrders.Fields.Item("shipped").Value
 	end if
 
-	'pre-order status variables
-	if rsGetOrders.Fields.Item("shipped").Value = "PRE-ORDER REVIEW" then
-		var_order_status = "Your pre-order items are currently under review for approval before being submitted to the manufacturer to be made."
+	'custom order status variables
+	if rsGetOrders.Fields.Item("shipped").Value = "CUSTOM ORDER IN REVIEW" then
+		var_order_status = "Your custom ordered items are currently under review for approval before being submitted to the manufacturer to be made."
 	end if
-	if rsGetOrders.Fields.Item("shipped").Value = "PRE-ORDER APPROVED" then
-		var_order_status = "Your pre-order items have been reviewed and approved and will soon be sent to the manufacturer to be made for you."
+	if rsGetOrders.Fields.Item("shipped").Value = "CUSTOM ORDER APPROVED" then
+		var_order_status = "Your custom ordered items have been reviewed and approved and will soon be sent to the manufacturer to be made for you."
 	end if
 	if rsGetOrders.Fields.Item("shipped").Value = "ON ORDER" then
-		var_order_status = "Your pre-order items have been sent to the manufacturer to be made and at this time we are waiting for them to arrive. We'll ship them to you as soon as they come in!"
+		var_order_status = "Your custom ordered items have been sent to the manufacturer to be made and at this time we are waiting for them to arrive. We'll ship them to you as soon as they come in!"
 	end if	
 	
 	' variable for ship time ETA
@@ -329,13 +329,13 @@ paid_status = rsGetOrders.Fields.Item("ship_code").Value
 varstatus = rsGetOrders.Fields.Item("shipped").Value
 orderscanned = rsGetOrders.Fields.Item("ScanInvoice_Timestamp").Value
 
-if paid_status = "paid" and isnull(orderscanned) and rsGetOrders.Fields.Item("pay_method").Value <> "Afterpay" and (varstatus = "Pending..." OR varstatus = "Pending shipment" OR varstatus = "Review" OR varstatus = "PRE-ORDER REVIEW") then
+if paid_status = "paid" and isnull(orderscanned) and rsGetOrders.Fields.Item("pay_method").Value <> "Afterpay" and (varstatus = "Pending..." OR varstatus = "Pending shipment" OR varstatus = "Review" OR varstatus = "CUSTOM ORDER IN REVIEW") then
 %>
 	<button class="btn btn-purple btn-sm my-1 btn-addon-modal" id="addon-<%= rsGetOrders.Fields.Item("ID").Value %>" type="button" data-invoice="<%= rsGetOrders.Fields.Item("ID").Value %>" data-toggle="modal" data-target="#AddonModal">Add item(s) to order</button>
 <% 
 end if
 
-if paid_status = "paid" and rsGetOrderTotals.Fields.Item("store_credit").Value = 0 and rsGetOrderTotals.Fields.Item("gift_cert").Value = 0 and (varstatus = "Pending..." OR varstatus = "Pending shipment" OR varstatus = "Review" OR varstatus = "PRE-ORDER REVIEW") then
+if paid_status = "paid" and rsGetOrderTotals.Fields.Item("store_credit").Value = 0 and rsGetOrderTotals.Fields.Item("gift_cert").Value = 0 and (varstatus = "Pending..." OR varstatus = "Pending shipment" OR varstatus = "Review" OR varstatus = "CUSTOM ORDER IN REVIEW") then
 
 if rsContainsGiftCert.BOF and rsContainsGiftCert.EOF then
 %>
@@ -466,7 +466,7 @@ While not rsGetOrderDetails.eof
 					</div>
 			</div>
 			<% if rsGetOrderDetails.Fields.Item("PreOrder_Desc").Value <> "" AND rsGetOrderDetails.Fields.Item("ProductID").Value <> 2424 then %>
-				<button class="btn btn-sm btn-outline-secondary btn-block my-1 btn-moreInfo-modal" type="button" data-toggle="modal" data-target="#MoreInfoModal" data-preorderSpecs="<%= Server.HTMLEncode(rsGetOrderDetails.Fields.Item("PreOrder_Desc").Value) %>">Pre-Order Details</button>
+				<button class="btn btn-sm btn-outline-secondary btn-block my-1 btn-moreInfo-modal" type="button" data-toggle="modal" data-target="#MoreInfoModal" data-preorderSpecs="<%= Server.HTMLEncode(rsGetOrderDetails.Fields.Item("PreOrder_Desc").Value) %>">Custom Order Details</button>
 			<% end if %>
 			<%= var_bo_text %>
 			<div class="small font-weight-bold"><span class="pr-3">Qty <%= rsGetOrderDetails.Fields.Item("qty").Value %></span><%=FormatCurrency((rsGetOrderDetails.Fields.Item("item_price").Value)*(rsGetOrderDetails.Fields.Item("qty").Value),2)%></div>

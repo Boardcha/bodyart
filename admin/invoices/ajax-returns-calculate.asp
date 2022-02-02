@@ -119,7 +119,7 @@ end if
     end if
 
 
-    ' ====== pre-order restocking fee, if selected
+    ' ====== custom order restocking fee, if selected
     if request.form("preorder-restock-fee") = "on" then
         preorder_restock_fee = preorder_subtotal * .15
         preorder_restock_json = formatnumber(preorder_subtotal) * .15

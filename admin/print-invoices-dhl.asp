@@ -149,7 +149,7 @@ ItemsTotal = 0
 			</strong>
 		<% end if %>
 		&nbsp;&nbsp;<%=(rsGetOrderDetails.Fields.Item("ProductDetail1").Value)%>&nbsp;<%=(rsGetOrderDetails.Fields.Item("Gauge").Value)%>&nbsp;<%=(rsGetOrderDetails.Fields.Item("Length").Value)%>
-        <% if InStr( 1, (rsGetOrderDetails.Fields.Item("title").Value), "PRE-ORDER", vbTextCompare) then %>
+        <% if InStr( 1, (rsGetOrderDetails.Fields.Item("title").Value), "CUSTOM ORDER", vbTextCompare) then %>
         <br>
         <%= (rsGetOrderDetails.Fields.Item("PreOrder_Desc").Value) %>
         <% end if %>

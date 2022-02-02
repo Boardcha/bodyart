@@ -19,7 +19,7 @@ rsGetRecords_numRows = 0
 
 if (rsGetRecords.Fields.Item("preorder").Value) = 1 then
 
-commUpdate.CommandText = "UPDATE sent_items SET shipped = 'PRE-ORDER REVIEW' WHERE ID = " & varID(i) 
+commUpdate.CommandText = "UPDATE sent_items SET shipped = 'CUSTOM ORDER IN REVIEW' WHERE ID = " & varID(i) 
     ' comment out next line AFTER IT WORKS 
     'Response.Write "DEBUG SQL: " & commUpdate.CommandText & "<BR/>" 
 commUpdate.Execute()

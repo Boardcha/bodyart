@@ -396,15 +396,15 @@ end if
 	%>
 
 	<div class="custom-control custom-checkbox">
-		<input name="custom" id="custom" type="checkbox" class="custom-control-input ispreorder" value="yes" <% if (rs_getproduct.Fields.Item("customorder").Value) = "yes" then %>checked<% end if %> data-unchecked="no" data-column="customorder" data-friendly="PRE-ORDER">
-		<label class="custom-control-label" for="custom">Is this product a pre-order?</label>
+		<input name="custom" id="custom" type="checkbox" class="custom-control-input ispreorder" value="yes" <% if (rs_getproduct.Fields.Item("customorder").Value) = "yes" then %>checked<% end if %> data-unchecked="no" data-column="customorder" data-friendly="CUSTOM ORDER">
+		<label class="custom-control-label" for="custom">Is this product a custom item?</label>
 	  </div>
             
 		
 		
 		<div class="preorder-fields" style="<%= preorder_fields %>">
 
-		<h4 class="mt-4">Pre-order options</h4>
+		<h4 class="mt-4">Custom item options</h4>
 
 			<div class="custom-control custom-checkbox">
 				<input class="custom-control-input" name="preorder_nospecs" id="preorder_nospecs" type="checkbox" value="1" <% if (rs_getproduct.Fields.Item("preorder_nospecs").Value) = "1" then %>checked<% end if %> data-unchecked="0" data-column="preorder_nospecs" data-friendly="Preorder no specs">

@@ -449,40 +449,40 @@
 		Call baf_sendmail()
 	end if ' ====== BACKORDERS From ajax-backorder-process to send out notification
 
-	if mailer_type = "bo-preorder-standard" then 'Backorder pre-order email - BASIC
+	if mailer_type = "bo-preorder-standard" then 'Backorder custom order email - BASIC
 		google_utmsource = "Preorder backorder notice - generic"
 		mail_to_email = rsGetItem.Fields.Item("email").Value
 		mail_to_name = rsGetItem.Fields.Item("customer_first").Value
-		mail_subject = "PRE-ORDER backorder notice (#" & rsGetItem.Fields.Item("InvoiceID").Value & ")"
-		mail_body = "Unfortunately, the manufacturer has placed your " + rsGetItem.Fields.Item("title").Value + " on back order.  The piece you ordered can still be made, however it may take longer than the estimated 4-6 weeks for us to receive it and then ship it out to you. We are very sorry for the inconvenience, and we would like to give you a few options:<p><ul><li>We can leave the item on back order and when it arrives from the manufacture we will ship out your entire order</li><li>We can ship out the stock items that we have now via the shipping method you chose, and ship out the Pre-order item via basic mail as soon as it comes in</li><li>We can issue you a refund or store credit for the pre-order item and ship out the rest of your order</li><li>We can cancel the order and issue you a refund or store credit for the entire order</li></ul><p>Please let us know what you would prefer, by either replying to this email, or giving us a call at 512-943-8654 and we will get you taken care of.<p>Thank you!"
+		mail_subject = "Custom item backorder notice (#" & rsGetItem.Fields.Item("InvoiceID").Value & ")"
+		mail_body = "Unfortunately, the manufacturer has placed your " + rsGetItem.Fields.Item("title").Value + " on back order.  The piece you ordered can still be made, however it may take longer than the estimated 4-6 weeks for us to receive it and then ship it out to you. We are very sorry for the inconvenience, and we would like to give you a few options:<p><ul><li>We can leave the item on back order and when it arrives from the manufacture we will ship out your entire order</li><li>We can ship out the stock items that we have now via the shipping method you chose, and ship out the custom item via basic mail as soon as it comes in</li><li>We can issue you a refund or store credit for the custom item and ship out the rest of your order</li><li>We can cancel the order and issue you a refund or store credit for the entire order</li></ul><p>Please let us know what you would prefer, by either replying to this email, or giving us a call at 512-943-8654 and we will get you taken care of.<p>Thank you!"
 		
 		Call baf_sendmail()
 		
-	end if ' Backorder pre-order email - BASIC
+	end if ' Backorder custom item email - BASIC
 
-	if mailer_type = "bo-preorder-specs" then 'Backorder pre-order email - SPECS ISSUE
+	if mailer_type = "bo-preorder-specs" then 'Backorder custom item email - SPECS ISSUE
 		google_utmsource = "Preorder need more specs"
 		mail_to_email = rsGetItem.Fields.Item("email").Value
 		mail_to_name = rsGetItem.Fields.Item("customer_first").Value
-		mail_subject = "PRE-ORDER specs problem (Invoice #" & rsGetItem.Fields.Item("InvoiceID").Value & ")"
-		mail_body = "Unfortunately, the manufacturer has contacted us to let us know the your item " + rsGetItem.Fields.Item("title").Value + " cannot be made with the specs that were included. We are very sorry for the inconvenience, and we would like to give you a few options:<p><ul><li>You can contact Melissa at Melissa@bodyartforms.com and she can let you know what other options are available for the item(s) that you ordered.</li><li>We can issue you a refund or store credit for the pre-order item and ship out the rest of your order</li><li>We can cancel the order and issue you a refund or store credit for the entire order. If there are other pre-order items on the order, there will be a 15% restocking fee for canceling the other pre-order items.</li></ul><p>Please let us know what you would prefer, by either replying to this email, or giving us a call at 512-943-8654 and we will get you taken care of.<p>Thank you!"
+		mail_subject = "Custom item specs problem (Invoice #" & rsGetItem.Fields.Item("InvoiceID").Value & ")"
+		mail_body = "Unfortunately, the manufacturer has contacted us to let us know the your item " + rsGetItem.Fields.Item("title").Value + " cannot be made with the specs that were included. We are very sorry for the inconvenience, and we would like to give you a few options:<p><ul><li>You can contact Melissa at Melissa@bodyartforms.com and she can let you know what other options are available for the item(s) that you ordered.</li><li>We can issue you a refund or store credit for the custom item and ship out the rest of your order</li><li>We can cancel the order and issue you a refund or store credit for the entire order. If there are other custom items on the order, there will be a 15% restocking fee for canceling the other custom items.</li></ul><p>Please let us know what you would prefer, by either replying to this email, or giving us a call at 512-943-8654 and we will get you taken care of.<p>Thank you!"
 		
 		Call baf_sendmail()
 		
 		
-	end if ' Backorder pre-order email	- SPECS ISSUE
+	end if ' Backorder custom item email	- SPECS ISSUE
 	
-	if mailer_type = "bo-preorder-discontinued" then 'Backorder pre-order email - DISCONTINUED
+	if mailer_type = "bo-preorder-discontinued" then 'Backorder custom item email - DISCONTINUED
 		google_utmsource = "Preorder discontinued notice"	
 		mail_to_email = rsGetItem.Fields.Item("email").Value
 		mail_to_name = rsGetItem.Fields.Item("customer_first").Value
-		mail_subject = "PRE-ORDER discontinued notice (#" & rsGetItem.Fields.Item("InvoiceID").Value & ")"
-		mail_body = "Unfortunately, the manufacturer has discontinued " + rsGetItem.Fields.Item("title").Value + "and your pre-order item can no longer be made. We are very sorry for the inconvenience, and we would like to give you a couple of options:<p><ul><li>We can issue you a refund or store credit for the pre-order item and ship out the rest of your order</li><li>We can cancel the order and issue you a refund or store credit for the entire order</li></ul><p>Please let us know what you would prefer, by either replying to this email, or giving us a call at 512-943-8654 and we will get you taken care of.<p>Thank you!"
+		mail_subject = "Custom item discontinued notice (#" & rsGetItem.Fields.Item("InvoiceID").Value & ")"
+		mail_body = "Unfortunately, the manufacturer has discontinued " + rsGetItem.Fields.Item("title").Value + "and your custom item can no longer be made. We are very sorry for the inconvenience, and we would like to give you a couple of options:<p><ul><li>We can issue you a refund or store credit for the custom item and ship out the rest of your order</li><li>We can cancel the order and issue you a refund or store credit for the entire order</li></ul><p>Please let us know what you would prefer, by either replying to this email, or giving us a call at 512-943-8654 and we will get you taken care of.<p>Thank you!"
 		
 		Call baf_sendmail()
 		
 		
-	end if ' Backorder pre-order email	- DISCONTINUED
+	end if ' Backorder custom item email	- DISCONTINUED
 
 	if mailer_type = "money-request" then 'PayPal money request
 		google_utmsource = "PayPal money request"

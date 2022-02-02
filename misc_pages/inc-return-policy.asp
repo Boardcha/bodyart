@@ -2,7 +2,7 @@
 	<h5 class="alert-heading">We want you to be 100% satisfied with your order!</h5>
 	<ul class="m-0">
 		<li>We take returns up to 30 days after you receive your order.</li>
-		<li>Pre-orders have a 15% restocking fee.</li>
+		<li>Custom orders have a 15% restocking fee.</li>
 		<li>Shipping costs for returns are the responsibility of the customer, unless the item(s) arrived damaged or incorrect. </li>
 	</ul>
   </div>

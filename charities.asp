@@ -12,19 +12,19 @@
 <style>
 	.charities img {max-height:100px}
 </style>
-<div class="bg-dark pt-1" style="margin:-1.5rem -1rem 1em -1.5rem">
+<div class="bg-dark pt-1 slider-container">
 <picture>
-	<source media="(max-width: 550px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner_550x350_v2.jpg">
-	<source media="(max-width: 850px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner_850x350_v2.jpg">
-	<source media="(max-width: 1024px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner_1024x350_v2.jpg">
-	<source media="(max-width: 1600px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner_1600x350_v2.jpg">
-	<source media="(min-width: 1920px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner_1920x350_v2.jpg">
-		<img class="img-fluid hero-slider" src="https://sliders.bodyartforms.com/banner_1600x350_v2.jpg" 
-	srcset="https://sliders.bodyartforms.com/banner_1920x350_v2.jpg 1920w,
-	https://sliders.bodyartforms.com/banner_1600x350_v2.jpg 1600w,
-	https://sliders.bodyartforms.com/banner_1024x350_v2.jpg 1024w,
-	https://sliders.bodyartforms.com/banner_850x350_v2.jpg 850w,
-	https://sliders.bodyartforms.com/banner_550x350_v2.jpg 550w"
+	<source media="(max-width: 550px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner-550x350_v2.jpg">
+	<source media="(max-width: 850px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner-850x350_v2.jpg">
+	<source media="(max-width: 1024px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner-1024x350_v2.jpg">
+	<source media="(max-width: 1600px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner-1600x350_v2.jpg">
+	<source media="(min-width: 1920px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/banner-1920x350_v2.jpg">
+		<img class="img-fluid hero-slider" src="https://sliders.bodyartforms.com/banner-1600x350_v2.jpg" 
+	srcset="https://sliders.bodyartforms.com/banner-1920x350_v2.jpg 1920w,
+	https://sliders.bodyartforms.com/banner-1600x350_v2.jpg 1600w,
+	https://sliders.bodyartforms.com/banner-1024x350_v2.jpg 1024w,
+	https://sliders.bodyartforms.com/banner-850x350_v2.jpg 850w,
+	https://sliders.bodyartforms.com/banner-550x350_v2.jpg 550w"
 	sizes="100vw"
 	alt="Charities banner" />
 </picture>
@@ -32,9 +32,6 @@
 
 <h2>
 		Bodyartforms values giving back
-</h2>
-<h2>
-	-WIGGLES ON MOBILE
 </h2>
 						<div class="alert">Giving to charities has always been something we are extremely passionate about. We've been giving over 20% of our profits to charity for many years. When you buy from us, you can trust that a portion of that money will go to help many charities every month!</div>
 
@@ -82,7 +79,7 @@
 									  <p class="card-text">
 										<a href="https://www.earthday.org/" target="_blank" alt="Earthday.org"><img src="/images/charities/square-earthdayorg.png" ></a>
 										<a href="https://www.nrdc.org/" target="_blank" alt="NRDC"><img src="/images/charities/square-nrdc.png" ></a>
-										Oceana
+										<a href="https://oceana.org/" target="_blank" alt="Oceana"><img src="/images/charities/square-oceana.png" ></a>
 									  </p>
 									</div>
 								  </div>
@@ -94,8 +91,8 @@
 									</div>
 									<div class="card-body">
 									  <p class="card-text">
-										Austin PBS
-										<a href="https://www.kut.org/" target="_blank" alt="NPR / KUT.org"><img src="/images/charities/kut-npr.png" ></a>
+										<a href="https://austinpbs.org/" target="_blank" alt="Austin PBS"><img src="/images/charities/square-austinpbs.png" ></a>
+										<a href="https://www.kut.org/" target="_blank" alt="NPR / KUT.org"><img src="/images/charities/square-kut-npr.png" ></a>
 									  </p>
 									</div>
 								  </div>

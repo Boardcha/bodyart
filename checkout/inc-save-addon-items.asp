@@ -5,7 +5,7 @@
 ' =================================================================================
 
 if preorder_shipping_notice = "yes" then
-    var_toggle_preorder = ", preorder = 1, shipped = 'PRE-ORDER REVIEW'"
+    var_toggle_preorder = ", preorder = 1, shipped = 'CUSTOM ORDER IN REVIEW'"
 end if
 
 set objCmd = Server.CreateObject("ADODB.command")

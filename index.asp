@@ -55,6 +55,32 @@ Set rsGetTestimonials = DataConn.Execute(SqlString)
 	</div>
 </div>
 
+
+<div class="text-light bg-darkpurple slider-container" style="margin-top: -.75rem !important;margin-bottom: 0 !important">
+    <div class="row" style="margin: 0 !important;">
+        <div class="col-6 col-md-3 text-center p-2">
+                <i class="fa fa-shipping-fast fa-lg"></i>
+            <h5 class="p-0 m-0">FREE SHIPPING</h5><span class="small">Over $50 in USA</span></div>
+        <div class="col-6 col-md-3 text-center p-2">
+			<a class="text-light" target="_blank" href="https://www.google.com/search?q=bodyartforms&rlz=1C1GCEU_enUS820US820&sxsrf=AOaemvJs13VFDyY93__6KGGoqYp8aTE-_g%3A1643299544838&ei=2MLyYaO1MtKnqtsPnp6gmAo&ved=0ahUKEwijgYTtp9L1AhXSk2oFHR4PCKMQ4dUDCA4&uact=5&oq=bodyartforms&gs_lcp=Cgdnd3Mtd2l6EAMyCAgAEIAEELEDMgQIABBDMgUIABCABDILCC4QgAQQxwEQrwEyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQ6BAgjECc6BQgAEJECOg4ILhCABBCxAxDHARCjAjoLCAAQgAQQsQMQgwE6EQguEIAEELEDEIMBEMcBENEDOgQILhBDOgcIABCxAxBDOgoIABCABBCHAhAUOg4ILhCABBCxAxDHARDRAzoICC4QgAQQsQNKBAhBGABKBAhGGABQAFi_CWDOCmgAcAJ4AIABpwGIAYYKkgEEMC4xMJgBAKABAcABAQ&sclient=gws-wiz#lrd=0x8644d1b07d7b15e9:0x25f2510443ffe450,1,,,">
+                <i class="fa fa-star fa-lg pr-1"></i><i class="fa fa-star fa-lg pr-1"></i><i class="fa fa-star fa-lg pr-1"></i><i class="fa fa-star fa-lg pr-1"></i><i class="fa fa-star fa-lg pr-1"></i>
+            	<h5 class="p-0 m-0">5 STAR RATING</h5><span class="small">On Google</span></div>
+			</a>
+        <div class="col-6 col-md-3 text-center p-2">
+            <a href="/free-items.asp" class="text-light">   
+				<i class="fa fa-smile-bts fa-lg"></i>
+				<h5 class="p-0 m-0">FREEBIES</h5><span class="small">Check them out!</span></div>
+			</a> 
+        <div class="col-6 col-md-3 text-center p-2">
+            <a href="/charities.asp" class="text-light">
+				<i class="fa fa-heart fa-lg"></i>
+				<h5 class="p-0 m-0">WE DONATE!</h5>
+				<span class="small">See our charities</span>
+			</a>
+        </div>
+                </div>
+            </div>
+
 			<% 
 			If Not rsGetTestimonials.EOF Then %>
 			<div class="baf-carousel mb-3" id="testimonials">
@@ -168,7 +194,7 @@ Set rsGetTestimonials = DataConn.Execute(SqlString)
 				</div>
 		
 		<div class="col-12 col-sm-4 col-lg-4 px-1 px-xl-5 mt-2">	
-			<a class="homepage-graphic" href="/products.asp?price=20" id="square-under20-graphic"><img class="img-fluid" src="/images/homepage/under-20-bucks.jpg" alt="image"></a>
+			<a class="homepage-graphic" href="/products.asp?price=0%3B20" id="square-under20-graphic"><img class="img-fluid" src="/images/homepage/under-20-bucks.jpg" alt="image"></a>
 		</div>
 		<div class="col-12 col-sm-4 col-lg-4 px-1 px-xl-5 mt-2">	
 				<a class="homepage-graphic" href="/products.asp?jewelry=plugs" id="square-plugs-graphic"><img class="img-fluid" src="/images/homepage/home-plugs-tunnels.jpg" alt="image"></a>

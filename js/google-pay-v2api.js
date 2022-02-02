@@ -415,8 +415,8 @@ function prefetchGooglePaymentData() {
 function onGooglePaymentButtonClicked() {
   if(preOrderItem == "yes")	{
 	checkoutMethod = "btn-googlepay";
-    $('#pre-order-warning-modal').modal('show');
-	$('#pre-order-items').load("/cart/ajax-pre-order-item-display.asp");	
+    $('#custom-order-warning-modal').modal('show');
+	$('#custom-order-items').load("/cart/ajax-pre-order-item-display.asp");	
   }else{	
 	const paymentDataRequest = getGooglePaymentDataRequest();
 	paymentDataRequest.transactionInfo = getGoogleTransactionInfo();

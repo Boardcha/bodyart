@@ -13,7 +13,7 @@ rsGetRecords.Open()
 rsGetRecords_numRows = 0
 
 
-' Get pre-order companies
+' Get custom order companies
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
 objCmd.CommandText = "SELECT name FROM TBL_Companies WHERE preorder_status = 1"
@@ -30,7 +30,7 @@ End If
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
-<title>Ship out pre-orders</title>
+<title>Ship out custom orders</title>
 <style>
 	.row:hover select  {background-color:#6FA59A}
 	.row:hover input[type="checkbox"]{outline:2px solid #6FA59A;outline-offset: -2px;}
@@ -40,7 +40,7 @@ End If
 <!--#include file="admin_header.asp"-->
 <div class="p-3">
 
-<h4>Pre-orders review to ship out</h4>
+<h4>Custom orders review to ship out</h4>
 
 <div class="card my-3">
 	<div class="card-header h5">
@@ -144,7 +144,7 @@ end if
 				<%=(rsGetOrderDetails2.Fields.Item("qty").Value)%>
 				<span class="mx-2">|</span>
 				<span class="font-weight-bold mr-2"><%=(rsGetOrderDetails2.Fields.Item("brandname").Value)%></span>
-				<a class="mx-1" href="../productdetails.asp?ProductID=<%=(rsGetOrderDetails2.Fields.Item("ProductID").Value)%>" target="_blank"><%=Replace((rsGetOrderDetails2.Fields.Item("title").Value), "PRE-ORDER", "")%></a>
+				<a class="mx-1" href="../productdetails.asp?ProductID=<%=(rsGetOrderDetails2.Fields.Item("ProductID").Value)%>" target="_blank"><%=Replace((rsGetOrderDetails2.Fields.Item("title").Value), "CUSTOM ORDER", "")%></a>
 				<span class="mr-1"><%=(rsGetOrderDetails2.Fields.Item("Gauge").Value)%></span>
 				<span class="mr-1"><%=(rsGetOrderDetails2.Fields.Item("Length").Value)%></span>
 				<%=(rsGetOrderDetails2.Fields.Item("ProductDetail1").Value)%> (<%=(rsGetOrderDetails2.Fields.Item("PreOrder_Desc").Value)%>)

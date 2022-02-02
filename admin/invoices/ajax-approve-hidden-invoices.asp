@@ -14,10 +14,10 @@ objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
 objCmd.CommandText = "UPDATE " & var_sql & " sent_items SET shipped = 'Pending shipment' WHERE ship_code = 'paid' AND shipped = 'Pending...' "  & sql_delay_150s & " AND (Review_OrderError <> 1 OR Review_OrderError IS NULL)"
 objCmd.Execute()
 
-'========= ALWAYS PUSH PRE-ORDERS TO BE REVIEWED NO MATTER WHAT ====================
+'========= ALWAYS PUSH CUSTOM ORDERS TO BE REVIEWED NO MATTER WHAT ====================
     set objCmd = Server.CreateObject("ADODB.command")
     objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
-    objCmd.CommandText = "UPDATE sent_items SET shipped = 'PRE-ORDER REVIEW' WHERE preorder = 1 AND ship_code = 'paid' AND (shipped = 'Pending...' OR shipped = 'Review')"
+    objCmd.CommandText = "UPDATE sent_items SET shipped = 'CUSTOM ORDER IN REVIEW' WHERE preorder = 1 AND ship_code = 'paid' AND (shipped = 'Pending...' OR shipped = 'Review')"
     objCmd.Execute()
 
 ' ===== Count all hidden records to be shipped

@@ -808,7 +808,7 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 if preorder_shipping_notice = "yes" then
 %>
 <div class="alert alert-warning font-weight-bold">
-		Your order contains custom made (PRE-ORDER) items.
+		Your order contains CUSTOM ORDERED items.
 <br/>		Your ENTIRE ORDER will be held until the custom piece arrives to ship to you.
 </div>
 <% 
@@ -835,7 +835,7 @@ else
 %>
 </div>
 <%		
-end if ' if a pre-order is found in the order
+end if ' if a custom order is found in the order
 
 if request.form("shipping-country") = "" and session("shipping-display") = "" then 
 	var_hide = "style=""display:none"""
@@ -1128,7 +1128,7 @@ end if
 						
 					<% if preorder_in_order = "yes" then %>
 					<div class="alert alert-warning p-1 my-2 small font-weight-bold">
-						Pre-order cancellations will have a 15% restocking fee
+						Custom order cancellations will have a 15% restocking fee
 					</div>
 					<% end if %>	
 				</div><!-- end card footer for totals -->

@@ -206,7 +206,7 @@ end if '==== rsGetItems.eof
         <span class="d-block ml-1">Old location <%= rsGetItems("location") %></span>
         <% end if '  also show old location for limited bin labels IF DETAIL ID DOESNT MATCH %>
         <% else %>
-            PRE-ORDER FOR | <%= rsGetOrder.Fields.Item("customer_first").Value %></span>
+            CUSTOM ORDER FOR | <%= rsGetOrder.Fields.Item("customer_first").Value %></span>
             <div>Invoice # <%= rsGetOrder.Fields.Item("ID").Value %></div>
         <% end if %> 
         <% ' If a returned package is in the order

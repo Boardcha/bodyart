@@ -24,7 +24,7 @@ NewEmail = ""
 <html>
 <head>
 
-<title>Pre-order e-mail lists</title>
+<title>Custom orders e-mail lists</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"></head>
 <body>
 <!--#include file="admin_header.asp"-->

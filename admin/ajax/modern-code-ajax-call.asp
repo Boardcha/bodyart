@@ -105,7 +105,7 @@ elseif action = "count" then
 	rsCheck.ActiveConnection = MM_bodyartforms_sql_STRING
 	sqlString = "SELECT j.ProductID, j.title, j.description, j.picture, j.onsale, j.salediscount, CAST(j.ProductNotes AS VARCHAR(MAX)) as ProductNotes, j.type, MAX(pd.DateLastPurchased) as 'LastPurchaseDate',"
 	sqlString = sqlString & "MIN(pd.DateLastPurchased) as 'OldestPurchaseDate' FROM jewelry j inner join dbo.ProductDetails pd "
-	sqlString = sqlString & "on j.ProductID = pd.ProductID WHERE j.Active = 1 and j.jewelry not like '%save%' and j.title not like '%pre-order%' "
+	sqlString = sqlString & "on j.ProductID = pd.ProductID WHERE j.Active = 1 and j.jewelry not like '%save%' and j.title not like '%CUSTOM ORDER%' "
 	sqlString = sqlString & "group by j.ProductID, j.title, j.description, j.picture, j.onsale, j.salediscount, CAST(j.ProductNotes AS VARCHAR(MAX)), j.type"
 	sqlString = sqlString & sql_range & " ORDER BY MAX(pd.DateLastPurchased)"
 	rsCheck.Source = sqlString
@@ -138,7 +138,7 @@ else
 
 	sqlString = "SELECT j.ProductID, j.title, j.description, j.picture, j.onsale, j.salediscount, CAST(j.ProductNotes AS VARCHAR(MAX)) as ProductNotes, j.type, MAX(pd.DateLastPurchased) as 'LastPurchaseDate',"
 	sqlString = sqlString & "MIN(pd.DateLastPurchased) as 'OldestPurchaseDate' FROM jewelry j inner join dbo.ProductDetails pd "
-	sqlString = sqlString & "on j.ProductID = pd.ProductID WHERE j.Active = 1 and j.jewelry not like '%save%' and j.title not like '%pre-order%' "
+	sqlString = sqlString & "on j.ProductID = pd.ProductID WHERE j.Active = 1 and j.jewelry not like '%save%' and j.title not like '%CUSTOM ORDER%' "
 	sqlString = sqlString & "group by j.ProductID, j.title, j.description, j.picture, j.onsale, j.salediscount, CAST(j.ProductNotes AS VARCHAR(MAX)), j.type"
 	sqlString = sqlString & " HAVING (MAX(pd.DateLastPurchased) <= DATEADD(month, -" & rangefilter & ", getdate())) ORDER BY MAX(pd.DateLastPurchased)"
 	sqlString = sqlString & "  OFFSET " & offset & " ROWS FETCH NEXT " & pageSize & " ROWS ONLY"

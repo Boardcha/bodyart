@@ -62,18 +62,12 @@
   
 <div class="pt-4 pb-1">
 		Phone lines are open Monday - Friday,  9am to 5pm central time.</div>
-	<h6><i class="fa fa-phone fa-lg"></i> &nbsp;&nbsp;Customer service: &nbsp;(877) 223-5005</h6><h6><i class="fa fa-phone fa-lg"></i> &nbsp;&nbsp;Pre-orders: &nbsp;(512) 943-8654</h6>
-	
-	<h6 class="pt-4">Address (For online order pick up ONLY):</h6>
+	<h6><i class="fa fa-phone fa-lg"></i>Customer service: &nbsp;(877) 223-5005</h6><h6><i class="fa fa-phone fa-lg"></i>Custom orders: &nbsp;(512) 943-8654</h6>
+	<br>
+Bodyartforms<br>
 1966 S. Austin Ave.<br />
 Georgetown, TX  78626 <br />
-<a href="http://goo.gl/maps/Q4mLD" title="Google Maps link" target="_blank">Link to Google Maps</a></p>   
-<iframe src="//www.youtube.com/embed/42U6-0VHz5c"  allowfullscreen></iframe> 
 
-
-<iframe scrolling="no" src="https://maps.google.com/maps?f=q&amp;source=s_q&amp;hl=en&amp;geocode=&amp;q=1966+S+Austin+Ave,+Georgetown,+TX&amp;aq=0&amp;oq=1966+s.+austin+a&amp;sll=30.656666,-97.70895&amp;sspn=0.277619,0.364952&amp;ie=UTF8&amp;hq=&amp;hnear=1966+S+Austin+Ave,+Georgetown,+Texas+78626&amp;t=m&amp;z=14&amp;ll=30.625777,-97.678495&amp;output=embed"></iframe>
-
-<a href="https://maps.google.com/maps?f=q&amp;source=embed&amp;hl=en&amp;geocode=&amp;q=1966+S+Austin+Ave,+Georgetown,+TX&amp;aq=0&amp;oq=1966+s.+austin+a&amp;sll=30.656666,-97.70895&amp;sspn=0.277619,0.364952&amp;ie=UTF8&amp;hq=&amp;hnear=1966+S+Austin+Ave,+Georgetown,+Texas+78626&amp;t=m&amp;z=14&amp;ll=30.625777,-97.678495" target="_blank"><br/>View Larger Map</a>
 
 
 <!--#include virtual="/bootstrap-template/footer.asp" -->

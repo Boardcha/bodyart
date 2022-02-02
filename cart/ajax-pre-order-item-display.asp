@@ -6,7 +6,7 @@ var_sql_query = " AND customorder = 'yes'"
 %>
 <!--#include virtual="cart/inc_cart_main.asp" -->
 <div class="alert alert-warning p-2">
-	<strong>Your order contains custom made (PRE-ORDER) items</strong>
+	<strong>Your order contains custom made items</strong>
 	<br>
 	Your ENTIRE ORDER will be held until the all the custom pieces arrive to ship to you. If you would like to receive the items that are not custom first, please place a separate order for those items.
 </div>

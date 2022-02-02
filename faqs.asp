@@ -143,9 +143,9 @@
 				</div>
 				<div class="card">
 					<a class="card-header collapsed text-dark faq-header" href="" id="headorders2" data-toggle="collapse" data-target="#faqorders2" aria-expanded="false"
-					 aria-controls="faqorders2" data-gtm="How do PRE-ORDERS orders work?">
+					 aria-controls="faqorders2" data-gtm="How do custom orders work?">
 						<i class="fa" aria-hidden="true"></i>
-						How do PRE-ORDERS orders work?
+						How do custom orders work?
 					</a>
 					<div id="faqorders2" class="collapse" aria-labelledby="headorders2" data-parent="#accordionOrders">
 						<div class="card-body">
@@ -265,7 +265,7 @@
 								or "Shipped". You can check your order status through your account any time online by going to your
 								<a href="youraccount_OrderHistory.asp">order history page</a>.</p>
 							<p>
-								Also, once we receive and process your payment, your order will ship out on the next business day (unless it's a pre-order).
+								Also, once we receive and process your payment, your order will ship out on the next business day (unless it's a custom order).
 								Both registered and unregistered customers, get a confirmation email when your order ships out.
 							</p>
 						</div>

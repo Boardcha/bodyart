@@ -18,8 +18,8 @@ $( document ).ready(function() {
 	appleButton.addEventListener('click', function () {
 	  if(preOrderItem == "yes")	{
 	    checkoutMethod = "btn-applepay";
-	    $('#pre-order-warning-modal').modal('show');
-		$('#pre-order-items').load("/cart/ajax-pre-order-item-display.asp");	
+	    $('#custom-order-warning-modal').modal('show');
+		$('#custom-order-items').load("/cart/ajax-pre-order-item-display.asp");	
 	  }else{		 
 		 var runningTotal	= function() { return parseFloat(subTotal + shippingCost + tax - totalDiscount).toFixed(2); }
 		 var shippingOption = "";

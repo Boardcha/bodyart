@@ -45,7 +45,7 @@ function uncheckAll(field)
 			field[i].checked = false ;
 	}
 
-	// Approve hidden pre-approved orders
+	// Approve hidden custom item orders
 	$(document).on("click", "#approve-hidden-orders", function(event){
 		$('#hidden-orders-message').html('<i class="fa fa-spinner fa-2x fa-spin"></i>');
 

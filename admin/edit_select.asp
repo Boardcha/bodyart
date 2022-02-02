@@ -180,7 +180,7 @@ Wend
   <thead class="thead-dark">
     <tr>
       <th colspan="3">
-        PRE-ORDERS <%= request.querystring("jewelry") %>
+        CUSTOM ORDERS <%= request.querystring("jewelry") %>
       </th>
     </tr>
   </thead>

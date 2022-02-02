@@ -59,7 +59,7 @@ End if
 
 	  Set rsGetPreorders_cmd = Server.CreateObject ("ADODB.Command")
 	  rsGetPreorders_cmd.ActiveConnection = MM_bodyartforms_sql_STRING
-	  rsGetPreorders_cmd.CommandText = "SELECT sent_items.shipped, TBL_OrderSummary.DetailID, TBL_OrderSummary.qty FROM         sent_items INNER JOIN TBL_OrderSummary ON sent_items.ID = TBL_OrderSummary.InvoiceID WHERE (sent_items.shipped = N'ON ORDER' OR sent_items.shipped = N'PRE-ORDER APPROVED' OR sent_items.shipped = N'PRE-ORDER REVIEW' OR sent_items.shipped = N'ON HOLD') AND DetailID = " & rsGetRegular.Fields.Item("ProductDetailID").Value 
+	  rsGetPreorders_cmd.CommandText = "SELECT sent_items.shipped, TBL_OrderSummary.DetailID, TBL_OrderSummary.qty FROM         sent_items INNER JOIN TBL_OrderSummary ON sent_items.ID = TBL_OrderSummary.InvoiceID WHERE (sent_items.shipped = N'ON ORDER' OR sent_items.shipped = N'CUSTOM ORDER APPROVED' OR sent_items.shipped = N'CUSTOM ORDER IN REVIEW' OR sent_items.shipped = N'ON HOLD') AND DetailID = " & rsGetRegular.Fields.Item("ProductDetailID").Value 
 	  rsGetPreorders_cmd.Prepared = true
 	   
 	  Set rsGetPreorders = rsGetPreorders_cmd.Execute
@@ -203,7 +203,7 @@ End if ' If regular recordset is not empty
   <% If RecentlySold = "yes" then   ' SHOW BELOW IF ITEM HASN'T BEEN SOLD IN THE LAST 24 HOURS%>
  <div class="alert alert-success">
 	 <%= rsGetRegular.Fields.Item("qty").Value %> in stock <% If Not rsGetPreorders.EOF Or Not rsGetPreorders.BOF Then %> 
- 	+ <%= preorder_qty %> reserved for pre-orders
+ 	+ <%= preorder_qty %> reserved for custom orders
  <% End If ' end Not rsGetPreorders.EOF Or NOT rsGetPreorders.BOF %>
 </div>
 

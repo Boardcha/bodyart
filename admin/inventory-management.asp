@@ -55,7 +55,7 @@ Set rsGetMainList = objCmd.Execute()
 			<div class="small">
 				Admin viewing only
 			</div>
-			Wholesale assets <i class="fa fa-information fa-lg" data-bs-toggle="tooltip" data-bs-placement="top" title="Current wholesale value of all products that are in stock, active, and not pre-orders."></i>
+			Wholesale assets <i class="fa fa-information fa-lg" data-bs-toggle="tooltip" data-bs-placement="top" title="Current wholesale value of all products that are in stock, active, and not custom orders."></i>
 
 	</th>
 		<% end if %>

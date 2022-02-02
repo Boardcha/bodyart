@@ -75,7 +75,7 @@ $('.card-fields').hide();
 		var preorder_specs = $(this).attr('data-preorderSpecs');
 		
 		if (preorder_specs != '') {
-			preorder_specs = '<div class="font-weight-bold mb-1">Your Pre-Order Specifications:</div>' + preorder_specs
+			preorder_specs = '<div class="font-weight-bold mb-1">Your Custom Order Specifications:</div>' + preorder_specs
 		}
 console.log(preorder_specs);
 		$('#loader-more-information').html(preorder_specs)

@@ -454,22 +454,22 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 	   e.preventDefault();
 	}); 
 	
-	// Check if there is pre-order item in the cart
+	// Check if there is custom items in the cart
 	$(document).on("click", "#btn-checkout, #btn-paypal", function(e){
 		if(preOrderItem == "yes"){
 			e.preventDefault();
 			checkoutMethod = $(this).attr("id");
-			$('#pre-order-warning-modal').modal('show');
-			$('#pre-order-items').load("/cart/ajax-pre-order-item-display.asp");	
+			$('#custom-order-warning-modal').modal('show');
+			$('#custom-order-items').load("/cart/ajax-pre-order-item-display.asp");	
 		}else{	
 			// Proceed checkout process
 		}
 	});
 	
-	// Check if there is pre-order item in the cart
+	// Check if there is custom items in the cart
 	$(document).on("click", "#btn-proceed-to-checkout", function(e){
 		preOrderItem = "";
-		$('#pre-order-warning-modal').modal('hide');
+		$('#custom-order-warning-modal').modal('hide');
 		if(checkoutMethod == "btn-checkout"){
 			window.location = "/checkout.asp?type=card"
 		}else if(checkoutMethod == "btn-paypal"){

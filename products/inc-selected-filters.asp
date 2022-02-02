@@ -156,14 +156,14 @@
 			next		
 	end if
 
-	If request.querystring("preorders") <> "" and request.querystring("preorders") <> " " then
+	If request.querystring("customorders") <> "" and request.querystring("customorders") <> " " then
 	%>
-			<a class="filter-delete text-danger d-lg-block d-inline-block mr-3 mr-lg-0" href="" data-filter="preorders" data-value="<%= request.querystring("preorders") %>">
+			<a class="filter-delete text-danger d-lg-block d-inline-block mr-3 mr-lg-0" href="" data-filter="customorders" data-value="<%= request.querystring("customorders") %>">
 			<i class="fa fa-times"></i>
-			<% if request.querystring("preorders") = "preorder-not" then %>
-				Not showing pre-orders
-			<% elseif request.querystring("preorders") = "preorder-yes" then %>
-				Showing only pre-orders
+			<% if request.querystring("customorders") = "customorder-not" then %>
+				Not showing custom orders
+			<% elseif request.querystring("customorders") = "customorder-yes" then %>
+				Showing only custom orders
 			<% end if %>
 			</a>
 	<%

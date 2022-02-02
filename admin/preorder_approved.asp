@@ -9,14 +9,14 @@ Dim rsGetPreorders_numRows
 
 Set rsGetPreorders = Server.CreateObject("ADODB.Recordset")
 rsGetPreorders.ActiveConnection = MM_bodyartforms_sql_STRING
-rsGetPreorders.Source = "SELECT InvoiceID, ProductID, DetailID, qty, PreOrder_Desc, detail_code, title, ProductDetail1, OrderDetailID, Gauge, Length FROM dbo.QRY_OrderDetails WHERE customorder = 'yes' AND (shipped = 'PRE-ORDER APPROVED' or shipped = 'ON ORDER') AND item_ordered = 0 AND brandname = '" + Request.querystring("Company") + "' ORDER BY jewelry, InvoiceID ASC"
+rsGetPreorders.Source = "SELECT InvoiceID, ProductID, DetailID, qty, PreOrder_Desc, detail_code, title, ProductDetail1, OrderDetailID, Gauge, Length FROM dbo.QRY_OrderDetails WHERE customorder = 'yes' AND (shipped = 'CUSTOM ORDER APPROVED' or shipped = 'ON ORDER') AND item_ordered = 0 AND brandname = '" + Request.querystring("Company") + "' ORDER BY jewelry, InvoiceID ASC"
 rsGetPreorders.CursorLocation = 3 'adUseClient
 rsGetPreorders.LockType = 1 'Read-only records
 rsGetPreorders.Open()
 
 rsGetPreorders_numRows = 0
 
-' Get pre-order companies
+' Get custom order companies
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
 objCmd.CommandText = "SELECT name FROM TBL_Companies WHERE preorder_status = 1"
@@ -68,7 +68,7 @@ end if
 <html>
 <head>
 
-<title>Pre-order review &amp; approval</title>
+<title>Custom order review &amp; approval</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1"></head>
 <body>
 <!--#include file="admin_header.asp"-->
@@ -93,7 +93,7 @@ end if
 </script>
 <div class="p-3">
 <h5>
-	Pre-orders that need to be placed
+	Custom orders that need to be placed
 </h5> 
 
 <form action="" method="post" name="FRM_update" id="FRM_update">
@@ -132,7 +132,7 @@ end if
 						<a href="invoice.asp?ID=<%=(rsGetPreorders.Fields.Item("InvoiceID").Value)%>"> <%=(rsGetPreorders.Fields.Item("InvoiceID").Value)%></a></td>
 					<td style="border: 1px solid #000000" align="center"><%=(rsGetPreorders.Fields.Item("qty").Value)%></td>
 					<td style="border: 1px solid #000000"><%=(rsGetPreorders.Fields.Item("detail_code").Value)%>&nbsp;</td>
-					<td style="border: 1px solid #000000"><%=Replace((rsGetPreorders.Fields.Item("title").Value), "PRE-ORDER ", "")%>&nbsp;<%=(rsGetPreorders.Fields.Item("gauge").Value)%>&nbsp;<%=(rsGetPreorders.Fields.Item("Length").Value)%>&nbsp;<%=(rsGetPreorders.Fields.Item("ProductDetail1").Value)%><br>
+					<td style="border: 1px solid #000000"><%=Replace((rsGetPreorders.Fields.Item("title").Value), "CUSTOM ORDER ", "")%>&nbsp;<%=(rsGetPreorders.Fields.Item("gauge").Value)%>&nbsp;<%=(rsGetPreorders.Fields.Item("Length").Value)%>&nbsp;<%=(rsGetPreorders.Fields.Item("ProductDetail1").Value)%><br>
 					  Specs: <%=(rsGetPreorders.Fields.Item("PreOrder_Desc").Value)%></td>
 				  </tr>
 				  <% 
@@ -150,7 +150,7 @@ end if
 <% End If ' end Not rsGetPreorders.EOF Or NOT rsGetPreorders.BOF %>
 </form>
 <% If rsGetPreorders.EOF And rsGetPreorders.BOF Then %>
-	<div class="alert alert-danger">No pre-orders to review </div>
+	<div class="alert alert-danger">No custom orders to review </div>
 <% End If ' end rsGetPreorders.EOF And rsGetPreorders.BOF %>
 
 </div>

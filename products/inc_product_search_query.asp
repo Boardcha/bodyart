@@ -90,8 +90,8 @@ if request.querystring("jewelry") <> "" then
 	' Special situation that if category is basics then it needs to be AND and not OR
 	var_category = replace(var_category, "basics or", "basics and")
 	var_category = replace(var_category, "or jewelry:+basics", "and jewelry:+basics")
-	var_category = replace(var_category, "jewelry:preorderyes", "preorder-yes")
-	var_category = replace(var_category, "jewelry:+preorderyes", "preorder-yes")
+	var_category = replace(var_category, "jewelry:customorderyes", "customorder-yes")
+	var_category = replace(var_category, "jewelry:+customorderyes", "customorder-yes")
 	
 	var_category = "(" + var_category + ")"
 else ' if no category was selected
@@ -542,24 +542,24 @@ else
 	var_pairs = ""
 end if
 
-If request.querystring("preorders") = "preorder-yes" or Instr(lcase(request.querystring("keywords")), "pre-order") or Instr(lcase(request.querystring("keywords")), "custom") or Instr(lcase(request.querystring("keywords")), "preorder") or Instr(lcase(request.querystring("keywords")), "pre order") then
+If request.querystring("customorders") = "customorder-yes" or Instr(lcase(request.querystring("keywords")), "pre-order") or Instr(lcase(request.querystring("keywords")), "custom") or Instr(lcase(request.querystring("keywords")), "preorder") or Instr(lcase(request.querystring("keywords")), "pre order") or Instr(lcase(request.querystring("keywords")), "custom") or Instr(lcase(request.querystring("keywords")), "custom item") or Instr(lcase(request.querystring("keywords")), "custom order") then
 	If DetectTags = "yes" then
-		var_preorders = " and preorder-yes"
+		var_customorders = " and customorder-yes"
 	else
-		var_preorders = "preorder-yes"
+		var_customorders = "customorder-yes"
 	end if
 		DetectTags = "yes"
-elseif request.querystring("preorders") = "preorder-not" then
+elseif request.querystring("customorders") = "customorder-not" then
 	If DetectTags = "yes" then
-		var_preorders = " and preorder-not"
+		var_customorders = " and customorder-not"
 	else
-		var_preorders = "preorder-not"
+		var_customorders = "customorder-not"
 	end if
 		DetectTags = "yes"		
 else
-	var_preorders = ""
+	var_customorders = ""
 end if
-'response.write "PREORDERS: " & var_preorders
+'response.write "PREORDERS: " & var_customorders
 
 
 If request.querystring("filter-stock") = "" OR request.querystring("filter-stock") = NULL OR request.querystring("filter-stock") <> "all" then
@@ -719,8 +719,8 @@ else
 	'Keywords = NULL 
 end if
 
-If var_category + var_brand + var_piercing + var_threading + var_flare + discount + Limited + OneTime + var_pairs + var_preorders <> "" then
-		var_full_text_tags = var_category + var_brand + var_piercing + var_threading + var_flare + discount + Limited + OneTime + var_pairs + var_preorders
+If var_category + var_brand + var_piercing + var_threading + var_flare + discount + Limited + OneTime + var_pairs + var_customorders <> "" then
+		var_full_text_tags = var_category + var_brand + var_piercing + var_threading + var_flare + discount + Limited + OneTime + var_pairs + var_customorders
 end if
 
 If var_gauge + var_length + var_colors <> "" then
@@ -730,7 +730,7 @@ end if
 '	SQL QUERY TO OUTPUT INFLECTIONAL FORMS OF A WORD
 '	SELECT display_term, source_term, occurrence FROM sys.dm_fts_parser('FORMSOF(FREETEXT, "rose")', 1033, 0, 0)
 
-	'response.write "Keywords: " + Keywords + "<br/>DB product build: " + var_full_text_tags + "<br/>DB details build: " + var_full_text_detail_tags + "<br/>Material build: " + var_material + "<br/>Querystring: " + Request.ServerVariables("QUERY_STRING") + "<br/>"
+'	response.write "Keywords: " + Keywords + "<br/>DB product build: " + var_full_text_tags + "<br/>DB details build: " + var_full_text_detail_tags + "<br/>Material build: " + var_material + "<br/>Querystring: " + Request.ServerVariables("QUERY_STRING") + "<br/>"
 
 ' If no querystring is found out, (user deletes all filters) then limit the results to the new items
 If request.querystring() = "" then	

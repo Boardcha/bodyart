@@ -456,11 +456,11 @@ end if
 		end if
 
 	
-	' Set variable for pre-order ----------------
+	' Set variable for custom orders ----------------
 	var_title = ""
-	if InStr( 1, (rsGetRecords.Fields.Item("title").Value), "PRE-ORDER", vbTextCompare ) then
+	if InStr( 1, (rsGetRecords.Fields.Item("title").Value), "CUSTOM ORDER", vbTextCompare ) then
 		
-		var_title = Replace(rsGetRecords.Fields.Item("title").Value, "PRE-ORDER", "<span class=""preorder-text"">PRE-ORDER </span>")
+		var_title = Replace(rsGetRecords.Fields.Item("title").Value, "CUSTOM ORDER", "<span class='badge badge-secondary' style='font-size:.9em'>CUSTOM ORDER </span>")
 		
 	else
 	

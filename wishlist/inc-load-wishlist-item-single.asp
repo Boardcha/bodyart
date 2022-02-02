@@ -59,7 +59,7 @@ if NOT rsGetCategory.EOF then %>
 </div>
 
 <div class="form-group">
-    <label for="comments">Comments or Pre-Order specs</label> 
+    <label for="comments">Comments or custom order specs</label> 
     <input class="form-control" name="comments" id="comments" type="text" value="<%= rsGetWishlist.Fields.Item("comments").Value %>">
 </div>
 

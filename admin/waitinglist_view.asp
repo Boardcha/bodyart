@@ -6,7 +6,7 @@ bootstrapped = "yes"
 
 Set objCmd = Server.CreateObject("ADODB.Command")
 objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
-objCmd.CommandText = "SELECT DetailID, name, email, title, ProductDetail1, waiting_qty FROM dbo.QRYWaitingList WHERE DetailID = ? ORDER BY name ASC"
+objCmd.CommandText = "SELECT ID, DetailID, name, email, title, ProductDetail1, waiting_qty, date_added FROM dbo.QRYWaitingList WHERE DetailID = ? ORDER BY date_added ASC"
 objCmd.Parameters.Append(objCmd.CreateParameter("DetailID",3,1,20, request.querystring("DetailID")  ))
 
 set rsShowWaitingList = Server.CreateObject("ADODB.Recordset")
@@ -33,19 +33,19 @@ var_total_waiting = rsShowWaitingList.RecordCount
 <table class="table table-sm table-striped table-borderless w-50">
   <thead class="thead-dark">
 <tr> 
-  <th>Name</th>
   <th>Email</th>
 <th>Qty wanted</th>
+<th>Date added</th>
 </tr>
   </thead>
 
     <% 
 While NOT rsShowWaitingList.EOF
 %>
-<tr>
-        <td><%=(rsShowWaitingList.Fields.Item("name").Value)%></td>
-        <td><%=(rsShowWaitingList.Fields.Item("email").Value)%></td>
+    <tr id="row-<%= rsShowWaitingList("ID") %>">
+        <td><i class="btn btn-sm btn-danger fa fa-trash-alt mr-5 delete-row"  data-id="<%= rsShowWaitingList("ID") %>"></i><%=(rsShowWaitingList.Fields.Item("email").Value)%></td>
         <td><%= rsShowWaitingList("waiting_qty") %></td>
+        <td><%= rsShowWaitingList("date_added") %></td>
     </tr>
       <% 
   rsShowWaitingList.MoveNext()
@@ -61,3 +61,22 @@ Wend
 rsShowWaitingList.Close()
 Set rsShowWaitingList = Nothing
 %>
+<script type="text/javascript">
+// Delete item from waiting list
+$(".delete-row").click(function(){ 
+  var id = $(this).attr("data-id");
+
+  $.ajax({
+  method: "POST",
+  url: "inventory/ajax-delete-waiting-list.asp",
+  data: {id: id}
+  })
+  .done(function( msg ) {
+    $('#row-' + id).fadeOut("slow");
+  })
+  .fail(function(msg) {
+    alert("DELETE FAILED " + id);
+  });
+  
+});
+</script>

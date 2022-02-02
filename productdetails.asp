@@ -969,7 +969,7 @@ var button_addcart = document.getElementById('btn-add-cart');
 				
 							If rsProduct.Fields.Item("preorder_nospecs").Value = 0 then %>
 							<div class="form-group">
-								<label for="preorders">Provide pre-order specifications (see product description below for what info we need)</label>
+								<label for="preorders">Provide custom order specifications (see product description below for what info we need)</label>
 								<textarea class="form-control" name="preorders" id="preorders" placeholder="Type specs here" rows="4"></textarea>
 							</div>
 							<% end if %>
@@ -982,7 +982,7 @@ var button_addcart = document.getElementById('btn-add-cart');
 								<input class="form-control" type="text" name="preorder_field1" id="preorder_field1" placeholder="Type specs here" required>
 								<input type="hidden" name="preorder_field1_label" value="<%= rsProduct.Fields.Item("preorder_field1_label").Value %>">
 								<div class="invalid-feedback">
-										Pre-Order specifications required
+										Custom order specifications required
 								</div>
 							</div>
 							<% end if %>
@@ -993,7 +993,7 @@ var button_addcart = document.getElementById('btn-add-cart');
 								<input class="form-control" type="text" name="preorder_field2" id="preorder_field2"  placeholder="Type specs here" required>
 								<input type="hidden" name="preorder_field2_label" value="<%= rsProduct.Fields.Item("preorder_field2_label").Value %>">
 								<div class="invalid-feedback">
-										Pre-Order specifications required
+									Custom order specifications required
 								</div>
 							</div>
 							<% end if %>
@@ -1004,7 +1004,7 @@ var button_addcart = document.getElementById('btn-add-cart');
 								<input class="form-control" type="text" name="preorder_field3" id="preorder_field3" placeholder="Type specs here" required>
 								<input type="hidden" name="preorder_field3_label" value="<%= rsProduct.Fields.Item("preorder_field3_label").Value %>">
 								<div class="invalid-feedback">
-										Pre-Order specifications required
+									Custom order specifications required
 								</div>
 							</div>	
 							<% end if %>
@@ -1015,7 +1015,7 @@ var button_addcart = document.getElementById('btn-add-cart');
 								<input class="form-control" type="text" name="preorder_field4" id="preorder_field4" placeholder="Type specs here" required>
 								<input type="hidden" name="preorder_field4_label" value="<%= rsProduct.Fields.Item("preorder_field4_label").Value %>">
 								<div class="invalid-feedback">
-										Pre-Order specifications required
+									Custom order specifications required
 								</div>
 							</div>
 							<% end if %>
@@ -1025,7 +1025,7 @@ var button_addcart = document.getElementById('btn-add-cart');
 							<label for="preorder_field5"><%= Server.HTMLEncode(rsProduct.Fields.Item("preorder_field5").Value) %></label>
 								<input class="form-control" type="text" name="preorder_field5" id="preorder_field5"  placeholder="Type specs here" required><input type="hidden" name="preorder_field5_label" value="<%= rsProduct.Fields.Item("preorder_field5_label").Value %>">
 								<div class="invalid-feedback">
-										Pre-Order specifications required
+									Custom order specifications required
 								</div>
 							</div>
 							<% end if %>
@@ -1216,7 +1216,7 @@ end if
 				</li>
 				<% If rsProduct.Fields.Item("customorder").Value = "yes" then %>
 				<li class="nav-item mr-1">
-						<a class="nav-link text-ltpurple border-secondary" id="preordersfaq-tab" data-toggle="tab" href="#preordersfaq" role="tab" aria-controls="preordersfaq" aria-selected="true">Pre-Orders</a>
+						<a class="nav-link text-ltpurple border-secondary" id="preordersfaq-tab" data-toggle="tab" href="#preordersfaq" role="tab" aria-controls="preordersfaq" aria-selected="true">Custom Orders</a>
 				</li>
 				<% end if %>
 				<li class="nav-item mr-1">
