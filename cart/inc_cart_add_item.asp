@@ -13,6 +13,12 @@ else
 	var_add_cart_detailId = request.form("DetailID")
 end if
 
+if request.querystring("anodID") <> "" then
+	var_anodID = request.querystring("anodID")
+else
+	var_anodID = request.form("anodID")
+end if
+
 ' response.write "preorders " & request.form("preorders") 
 if request.form("preorders") <> "" and request.form("preorders") <> "undefined" then
 	var_add_cart_preorders = request.form("preorders")
@@ -85,8 +91,7 @@ end if
 		
 			set objCmd = Server.CreateObject("ADODB.command")
 			objCmd.ActiveConnection = DataConn
-			objCmd.CommandText = "INSERT INTO tbl_carts (cart_qty, cart_detailID, " & var_db_field & ", cart_preorderNotes, cart_dateAdded, cart_wishlistid, cart_ip_country, cart_addon_item) VALUES (?,?,?,?,?,?,?,?)"
-				
+			objCmd.CommandText = "INSERT INTO tbl_carts (cart_qty, cart_detailID, " & var_db_field & ", cart_preorderNotes, cart_dateAdded, cart_wishlistid, cart_ip_country, cart_addon_item, anodID) VALUES (?,?,?,?,?,?,?,?,?)"
 			objCmd.Parameters.Append(objCmd.CreateParameter("cart_qty",3,1,10,var_add_cart_qty))
 			objCmd.Parameters.Append(objCmd.CreateParameter("detailID",3,1,10,var_add_cart_detailId))
 			objCmd.Parameters.Append(objCmd.CreateParameter("cart_custID",3,1,10,var_cart_userid))
@@ -95,6 +100,7 @@ end if
 			objCmd.Parameters.Append(objCmd.CreateParameter("wishlistID",3,1,10,var_wishlistID))
 			objCmd.Parameters.Append(objCmd.CreateParameter("ip_country",200,1,5,Request.ServerVariables("HTTP_NGX_GEOIP2_COUNTRYCODE")))
 			objCmd.Parameters.Append(objCmd.CreateParameter("cart_addon_item",3,1,2,var_addon))
+			objCmd.Parameters.Append(objCmd.CreateParameter("anodID",3,1,10,var_anodID))
 			objCmd.Execute()
 		
 		else ' if a duplicate is found, then update the qty in the current row
