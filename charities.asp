@@ -64,6 +64,8 @@
 										<a href="https://www.centraltexasfoodbank.org/" target="_blank" alt="Central Texas Food Bank"><img src="/images/charities/square-central-texas-food-bank.png" ></a>
 										<a href="http://www.starry.org/" target="_blank" alt="Starry"><img src="/images/charities/square-starry.png" ></a>
 										<a href="https://www.mealsonwheelsamerica.org/" target="_blank" alt="Meals On Wheels"><img src="/images/charities/square-mealsonwheels.png" ></a>
+										<a href="https://www.thetrevorproject.org/" target="_blank" alt="The Trevor Project"><img src="/images/charities/square-trevor-project.png" ></a>
+										<a href="https://naacp.org/" target="_blank" alt="NAACP"><img src="/images/charities/square-naacp.png" ></a>
 									  </p>
 									</div>
 								  </div>
