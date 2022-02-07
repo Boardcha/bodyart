@@ -230,7 +230,7 @@ end if
 
 <% if CustID_Cookie <> 0 and (request.querystring("pagenumber") = "" or request.querystring("pagenumber") = "1") then %>
 <div class="my-3">
-	<button class="btn-save-search btn btn-sm btn-outline-info text-center"><i class="fa fa-heart"></i> Save this search to my account</button>
+	<button class="btn-save-search btn btn-sm btn-outline-info text-center track-click" id="button-save-search-to-account"><i class="fa fa-heart"></i> Save this search to my account</button>
 	<input type="hidden" name="save-search-string" id="save-search-string" value="<%= Request.ServerVariables("QUERY_STRING") %>">
 </div>
 <% end if %>
