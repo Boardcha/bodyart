@@ -62,17 +62,17 @@ Set rsGetTestimonials = DataConn.Execute(SqlString)
                 <i class="fa fa-shipping-fast fa-lg"></i>
             <h5 class="p-0 m-0">FREE SHIPPING</h5><span class="small">Over $50 in USA</span></div>
         <div class="col-6 col-md-3 text-center p-2">
-			<a class="text-light" target="_blank" href="https://www.google.com/search?q=bodyartforms&rlz=1C1GCEU_enUS820US820&sxsrf=AOaemvJs13VFDyY93__6KGGoqYp8aTE-_g%3A1643299544838&ei=2MLyYaO1MtKnqtsPnp6gmAo&ved=0ahUKEwijgYTtp9L1AhXSk2oFHR4PCKMQ4dUDCA4&uact=5&oq=bodyartforms&gs_lcp=Cgdnd3Mtd2l6EAMyCAgAEIAEELEDMgQIABBDMgUIABCABDILCC4QgAQQxwEQrwEyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQ6BAgjECc6BQgAEJECOg4ILhCABBCxAxDHARCjAjoLCAAQgAQQsQMQgwE6EQguEIAEELEDEIMBEMcBENEDOgQILhBDOgcIABCxAxBDOgoIABCABBCHAhAUOg4ILhCABBCxAxDHARDRAzoICC4QgAQQsQNKBAhBGABKBAhGGABQAFi_CWDOCmgAcAJ4AIABpwGIAYYKkgEEMC4xMJgBAKABAcABAQ&sclient=gws-wiz#lrd=0x8644d1b07d7b15e9:0x25f2510443ffe450,1,,,">
+			<a class="text-light homepage-graphic" id="google-rating-link" target="_blank" href="https://www.google.com/search?q=bodyartforms&rlz=1C1GCEU_enUS820US820&sxsrf=AOaemvJs13VFDyY93__6KGGoqYp8aTE-_g%3A1643299544838&ei=2MLyYaO1MtKnqtsPnp6gmAo&ved=0ahUKEwijgYTtp9L1AhXSk2oFHR4PCKMQ4dUDCA4&uact=5&oq=bodyartforms&gs_lcp=Cgdnd3Mtd2l6EAMyCAgAEIAEELEDMgQIABBDMgUIABCABDILCC4QgAQQxwEQrwEyBQgAEIAEMgUIABCABDIFCAAQgAQyBQgAEIAEMgUIABCABDIFCAAQgAQ6BAgjECc6BQgAEJECOg4ILhCABBCxAxDHARCjAjoLCAAQgAQQsQMQgwE6EQguEIAEELEDEIMBEMcBENEDOgQILhBDOgcIABCxAxBDOgoIABCABBCHAhAUOg4ILhCABBCxAxDHARDRAzoICC4QgAQQsQNKBAhBGABKBAhGGABQAFi_CWDOCmgAcAJ4AIABpwGIAYYKkgEEMC4xMJgBAKABAcABAQ&sclient=gws-wiz#lrd=0x8644d1b07d7b15e9:0x25f2510443ffe450,1,,,">
                 <i class="fa fa-star fa-lg pr-1"></i><i class="fa fa-star fa-lg pr-1"></i><i class="fa fa-star fa-lg pr-1"></i><i class="fa fa-star fa-lg pr-1"></i><i class="fa fa-star fa-lg pr-1"></i>
             	<h5 class="p-0 m-0">5 STAR RATING</h5><span class="small">On Google</span></div>
 			</a>
         <div class="col-6 col-md-3 text-center p-2">
-            <a href="/free-items.asp" class="text-light">   
+            <a href="/free-items.asp" class="text-light homepage-graphic" id="freebies-link">   
 				<i class="fa fa-smile-bts fa-lg"></i>
 				<h5 class="p-0 m-0">FREEBIES</h5><span class="small">Check them out!</span></div>
 			</a> 
         <div class="col-6 col-md-3 text-center p-2">
-            <a href="/charities.asp" class="text-light">
+            <a href="/charities.asp" class="text-light homepage-graphic" id="charities-link">
 				<i class="fa fa-heart fa-lg"></i>
 				<h5 class="p-0 m-0">WE DONATE!</h5>
 				<span class="small">See our charities</span>
@@ -86,10 +86,10 @@ Set rsGetTestimonials = DataConn.Execute(SqlString)
 			<div class="baf-carousel mb-3" id="testimonials">
 			<% 	While NOT rsGetTestimonials.EOF %>
 			<div class="slide alert alert-light">
-				<i class="fa fa-lg fa-double-quote-serif-left pr-2"></i>
+				<i class="fa fa-lg fa-double-quote-serif-left pr-2 homepage-graphic" id="testimonial-left"></i>
 				<%=(rsGetTestimonials.Fields.Item("Testimonial").Value)%>
 		
-				<i class="fa fa-lg fa-double-quote-serif-right pl-2"></i>
+				<i class="fa fa-lg fa-double-quote-serif-right pl-2 homepage-graphic" id="testimonial-right"></i>
 				<span class="pl-3">
 				</span>
 			</div>

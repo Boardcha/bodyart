@@ -420,6 +420,18 @@
       content: '\f038';
   }
 
+  .fa-emoji-sad:before {
+      content: '\f039';
+  }
+
+  .fa-emoji-neutral:before {
+      content: '\f03a';
+  }
+
+  .fa-emoji-happy:before {
+      content: '\f03b';
+  }
+
 
 .sr-only {
     position: absolute;

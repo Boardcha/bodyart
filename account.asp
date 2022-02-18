@@ -679,12 +679,13 @@ By clicking the start button below, you'll be taken to our product search where 
 		<div class="modal-dialog" role="document">
 		  <div class="modal-content">
 			<div class="modal-header">
-			  <h5 class="modal-title" id="headSubmitSurvey">Submit A Survey</h5>
+			  <div class="modal-title" id="headSubmitSurvey"><h5>Submit A Survey<i class="fa fa-lg fa-emoji-happy ml-3"></i><i class="fa fa-lg fa-emoji-neutral mx-2"></i><i class="fa fa-lg fa-emoji-sad"></i></h5>
+			<h6 style="font-weight:normal !important">This survey has 12 questions and should only take about 5 minutes to complete. Thanks for your feedback!</h6></div>
 			  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 				<span aria-hidden="true">&times;</span>
 			  </button>
 			</div>
-			<div class="modal-body modal-scroll-long" id="survey-body">
+			<div class="modal-body modal-scroll-long" id="survey-body"> 
 					<form name="frm-survey" id="frm-survey">
 							<a id="survey-top"></a>
 							<h6 class="m-0">How do you feel about our overall jewelry selection?<span class="text-danger"> *</span></h6>

@@ -89,12 +89,13 @@
 		next
 	end if '=======  array_details_2(1) <> ""
 
+	'========== LAST UPDATED FEB 2022 =====================================================
 	if done_mailing_certs = "no" then ' gift certificate creation / receipt
 		google_utmsource = "Gift certificate received"
 		mail_to_email = rec_email
 		mail_to_name = rec_name
-		mail_subject =  your_name + " has given you a $" & gift_amount & " Bodyartforms.com gift certificate!"
-		mail_body = "You have just received a <strong>$" & gift_amount & "</strong> gift certificate to spend at Bodyartforms.com from " & your_name & ".<br/><br/>CODE: <b>" & var_cert_code & "</b><br/><br/>Their message to you:<br/>" & message & "<br/><br/><br/>To redeem this gift certificate, simply <a href=""https://www.bodyartforms.com"" style=""color: #475F8D !important; text-decoration: none;"">shop online at Bodyartforms.com</a>. At the bottom of the shopping cart page before you begin checkout enter the code above in the gift certificate box and press apply. ENJOY!!"
+		mail_subject = your_name + " has gifted you a $" & gift_amount & " Bodyartforms gift certificate!"
+		mail_body = "<div style='text-align:center'><div style='font-family:Arial;font-size:30px;font-weight:bold'>YOUR DAY JUST GOT BETTER.</div><a href='https://bodyartforms.com' style='text-decoration:none'><img src='https://bodyartforms.com/images/baf-present.png' style='width:200px;height:auto;margin-top:10px;margin-bottom:10px'></a></div><div style='font-family:Arial;font-size:20px;border: 6px dashed #696887;padding:10px;font-weight:bold;text-decoration:none;text-align:center'>You received $" & gift_amount & "<br><br>CODE: " & var_cert_code & " </div><br/>" & your_name & "'s message to you:<br/>" & message & "<br/><br/>To use your gift card, simply <a href='https://www.bodyartforms.com' style='color: #696887 !important; text-decoration: none'><strong>shop online at Bodyartforms</strong></a>. At checkout there will be a box where you can enter and apply your code.<div style='font-family:Arial;font-size:30px;font-weight:bold;text-align:center;margin-top:20px'>ENJOY</div><div style='text-align: center'><table style='border-collapse: separate; border-spacing: 4px;width:300px;margin-left: auto; margin-right: auto'><tr><td width='50%' style='background-color:#41415a'><a href='https://bodyartforms.com/products.asp?new=Yes' style='display:block;height:100%;padding:10px;color:#fff; text-decoration: none'>Shop new items</a></td><td width='50%'  style='background-color:#41415a'><a href='https://bodyartforms.com/products.asp?feature=top_seller' style='display:block;height:100%;padding:10px;color:#fff;text-decoration: none'>Shop top sellers</a></td></tr></table></div>"
 		
 		Call baf_sendmail()
 		

@@ -31,6 +31,7 @@
             <input type="checkbox" name="jewelry" value="nipple-stirrup">
             <input type="checkbox" name="jewelry" value="nipple-capcir">
             <input type="checkbox" name="jewelry" value="halloween">
+            <input type="checkbox" name="jewelry" value="earring-huggies">
             <input type="text" name="filter-stock" id="filter-stock" value="<%= request.querystring("filter-stock") %>">
             <input type="text" name="new" id="filter_new" value="<%= request.querystring("new") %>">
             <input type="text" name="restock" id="filter_restock" value="<%= request.querystring("restock") %>">

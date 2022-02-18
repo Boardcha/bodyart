@@ -213,6 +213,8 @@ Set rsInventoryIssues = objcmd.Execute()
 
 						<h5 class="mt-3">Research</h5>
 						<a href="/admin/edits_logs.asp">Edit logs</a><br/>
+						<a href="/admin/competitor-research.asp">Competitors (Google Trends)</a><br/>
+						<a href="https://datastudio.google.com/u/0/reporting/b0e4b497-15a9-491d-9134-6eaab615d3a6/page/5auqB">Google Ecommerce Analytics</a><br/>
 				</div>
 				<div class="col">
 					<h5>Searches</h5>
@@ -509,7 +511,7 @@ If var_access_level = "Admin" then  %>
 </ul>
 	<ul class="navbar-nav ml-auto">
 	<%  
-	If var_access_level <> "Packaging" and user_name <> "Rebekah" and total_backorders_to_review > 0  then  %>
+	If user_name <> "Rebekah" and total_backorders_to_review > 0  then  %>
 	<li class="nav-item"><a class="nav-link border-right border-secondary bg-danger" href="/admin/review-backorders.asp">Backorders (<%= total_backorders_to_review %>)</a></li>
 	<% end if  %>	
 <%

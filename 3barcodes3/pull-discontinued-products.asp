@@ -65,9 +65,20 @@ end select
         rsGetDetails.CursorLocation = 3 'adUseClient
         rsGetDetails.Open objCmd
 
-        if rsGetDetails.RecordCount <= 0 then
-            display_scanner_field = "style=""display:none"""
+        if rsGetDetails.eof then
             details_message = "<div class='alert alert-danger'>No active items to be pulled</div>"
+        end if
+
+        ' ---- Check to see if there are any details left and if not, then send back json response
+        ' --- pull details
+        set objCmd = Server.CreateObject("ADODB.command")
+        objCmd.ActiveConnection = DataConn
+        objCmd.CommandText = "SELECT item_pulled FROM ProductDetails WHERE ProductID = ? AND item_pulled = 0 AND ProductDetails.active = 1"
+        objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,20, rsGetProducts("ProductID")  ))
+        set rsCheckCompletion = objCmd.Execute()
+
+        if NOT rsCheckCompletion.eof then
+            display_scanner_field = "style=""display:none"""
         else
             display_scanner_field = " "
         end if
@@ -117,7 +128,7 @@ end select
         disabled_input = " "
     end if
 
-    if rsGetDetails.Fields.Item("qty_counted_discontinued").Value = 0 then
+    if rsGetDetails.Fields.Item("qty_counted_discontinued").Value = -1 then
         var_qty = rsGetDetails.Fields.Item("qty").Value
         qty_description = ""
     else
@@ -180,6 +191,7 @@ Next ' ====== PAGING
         } else {
             status = "clear"
         }
+        console.log(status);
 
         $.ajax({
         method: "post",

@@ -230,6 +230,9 @@ Set rsNavWaitingList = objCmd.Execute()
                                                                                         <a class="dropdown-item track-basics-dropdown track-nav-loose-ends" href="/products.asp?jewelry=balls&material=solid+rose+gold&material=solid+white+gold&material=solid+yellow+gold" id="ends-gold">
                                                                                                 Gold ends
                                                                                         </a>
+                                                                                        <a class="dropdown-item track-basics-dropdown track-nav-loose-ends" href="/products.asp?jewelry=balls&customorders=customorder-yes" id="ends-custom-ordered">
+                                                                                                Custom order ends
+                                                                                        </a>
                                                                                         <a class="dropdown-item track-basics-dropdown track-nav-loose-ends" href="/products.asp?jewelry=beads" id="ends-beads">
                                                                                                 Replacement beads
                                                                                         </a>
@@ -258,6 +261,9 @@ Set rsNavWaitingList = objCmd.Execute()
                                                                                 <a class="dropdown-item track-basics-dropdown track-nav-captives" href="/products.asp?jewelry=captive-cbr" id="captives-cbrs">
                                                                                         Captive Bead Rings
                                                                                 </a>
+                                                                                <a class="dropdown-item track-basics-dropdown track-nav-captives" href="/products.asp?jewelry=captive&customorders=customorder-yes" id="captives-custom-ordered">
+                                                                                        Custom Order Rings
+                                                                                </a>
                                                                         </div>
                                                                         <div class="col-xxs-6 col-sm-4 col-lg-2 mx-lg-auto">
                                                                                 <a class="h6 d-block pb-1 border-bottom border-secondary  track-basics-dropdown track-nav-labret" href="/products.asp?jewelry=labret" id="image-labret">
@@ -276,6 +282,9 @@ Set rsNavWaitingList = objCmd.Execute()
                                                                                 </a>
                                                                                 <a class="dropdown-item track-basics-dropdown track-nav-labret" href="/products.asp?jewelry=captive&amp;piercing=labret" id="labrets-rings">
                                                                                         Lip rings
+                                                                                </a>
+                                                                                <a class="dropdown-item track-basics-dropdown track-nav-labret" href="/products.asp?jewelry=labret&customorders=customorder-yes" id="labrets-custom-ordered">
+                                                                                        Custom order labrets
                                                                                 </a>
                                                                                 <a class="dropdown-item track-basics-dropdown track-nav-labret" href="/products.asp?jewelry=labret-stretched" id="labret-stretched">
                                                                                         Stretched labret
@@ -301,6 +310,9 @@ Set rsNavWaitingList = objCmd.Execute()
                                                                                 </a>
                                                                                 <a class="dropdown-item track-basics-dropdown track-nav-barbells" href="/products.asp?jewelry=barbell&amp;piercing=nipple" id="barbells-nipple">
                                                                                         Nipple barbells
+                                                                                </a>
+                                                                                <a class="dropdown-item track-basics-dropdown track-nav-barbells" href="/products.asp?jewelry=barbell&customorders=customorder-yes" id="barbells-custom-ordered">
+                                                                                        Custom order barbells
                                                                                 </a>
                                                                                 <a class="dropdown-item track-basics-dropdown track-nav-barbells" href="/products.asp?keywords=tongue&amp;jewelry=barbell" id="barbells-tongue">
                                                                                         Tongue barbells
@@ -376,6 +388,9 @@ Set rsNavWaitingList = objCmd.Execute()
                                                                                 <a class="dropdown-item track-septum-dropdown track-septums" href="/products.asp?keywords=retainer&piercing=septum" id="septum-retainers">
                                                                                         Septum hiders / retainers
                                                                                 </a>
+                                                                                <a class="dropdown-item track-septum-dropdown track-septums" href="/products.asp?jewelry=septum&customorders=customorder-yes" id="septum-custom-ordered">
+                                                                                        Custom septum jewelry
+                                                                                </a>
                                                                                 <a class="dropdown-item track-septum-dropdown track-septums" href="/products.asp?keywords=plug&piercing=septum" id="septum-plugs">
                                                                                         Septum plugs
                                                                                 </a>
@@ -413,6 +428,9 @@ Set rsNavWaitingList = objCmd.Execute()
                                                                                 </a>
                                                                                 <a class="dropdown-item track-septum-dropdown track-nose" href="/products.asp?keywords=retainer&jewelry=nose-ring" id="nose-retainers">
                                                                                         Clear & skin tone nose hiders
+                                                                                </a>
+                                                                                <a class="dropdown-item track-septum-dropdown track-nose" href="/products.asp?jewelry=nose-ring&customorders=customorder-yes" id="nostril-custom-ordered">
+                                                                                        Custom order nose jewelry
                                                                                 </a>
                                                                         </div>
                                                                 </div>
@@ -641,6 +659,9 @@ Set rsNavWaitingList = objCmd.Execute()
                                                                                 <a class="dropdown-item track-other-jewelry-dropdown track-navel" href="/products.asp?jewelry=belly-dangle" id="navels-dangle">
                                                                                         Belly jewelry (with dangles)
                                                                                 </a>
+                                                                                <a class="dropdown-item track-other-jewelry-dropdown track-navel" href="/products.asp?jewelry=belly&customorders=customorder-yes" id="navels-custom-ordered">
+                                                                                        Custom order belly jewelry
+                                                                                </a>
                                                                                 <a class="dropdown-item track-other-jewelry-dropdown track-navel" href="/products.asp?keywords=retainer&jewelry=belly" id="navel-retainers">
                                                                                         Retainers
                                                                                 </a>
@@ -664,7 +685,9 @@ Set rsNavWaitingList = objCmd.Execute()
                                                                                 <a class="dropdown-item track-other-jewelry-dropdown track-nipple" href="/products.asp?jewelry=nipple-shield&amp;jewelry=nipple-stirrup" id="nipple-stirrup">
                                                                                         Shields &amp; stirrups
                                                                                 </a>
-                                                                              
+                                                                                <a class="dropdown-item track-other-jewelry-dropdown track-nipple" href="/products.asp?jewelry=nipple&customorders=customorder-yes" id="nipple-custom-ordered">
+                                                                                        Custom order nipple jewelry
+                                                                                </a>
                                                                                                                                                      
                                                                                     
                                                                         </div>

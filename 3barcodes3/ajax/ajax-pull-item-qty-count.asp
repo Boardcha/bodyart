@@ -5,6 +5,7 @@
 <%
 status = request.form("status")
 
+
 if status = "update" then
 
     set objCmd = Server.CreateObject("ADODB.command")
@@ -18,24 +19,32 @@ if status = "update" then
     ' --- pull details
     set objCmd = Server.CreateObject("ADODB.command")
     objCmd.ActiveConnection = DataConn
-    objCmd.CommandText = "SELECT item_pulled FROM ProductDetails WHERE ProductID = ? AND item_pulled = 0"
+    objCmd.CommandText = "SELECT item_pulled FROM ProductDetails WHERE ProductID = ? AND item_pulled = 0 AND ProductDetails.active = 1"
     objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,20, request.form("productid")  ))
     set rsGetDetails = objCmd.Execute()
     
-    if rsGetDetails.eof and rsGetDetails.bof then
+    if rsGetDetails.eof then
     %>
-        "status":"complete"
-<%    end if 
+        "status":"complete",
+        "action":"update",
+        "product_id": "<%= request.form("productid") %>"
+<%  else %>
+        "status":"incomplete",
+        "action":"update",
+        "product_id": "<%= request.form("productid") %>"
+<%
+    end if 
 
 else
 
     set objCmd = Server.CreateObject("ADODB.command")
     objCmd.ActiveConnection = DataConn
-    objCmd.CommandText = "UPDATE ProductDetails SET qty_counted_discontinued = 0, item_pulled = 0 WHERE ProductDetailID = ?"
+    objCmd.CommandText = "UPDATE ProductDetails SET qty_counted_discontinued = -1, item_pulled = 0 WHERE ProductDetailID = ?"
     objCmd.Parameters.Append(objCmd.CreateParameter("ProductDetailID",3,1,15, request.form("detailid") ))
     set rsGetDetails = objCmd.Execute()
 %>
-        "status":"incomplete"
+        "status":"incomplete",
+        "action":"clear"
 <%
 end if
 %>
