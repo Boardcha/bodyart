@@ -204,7 +204,7 @@ Wend
 			<% end if %>
 			<% if rs_getCart.Fields.Item("cart_preorderNotes").Value <> "" then %>	  
 				<% if rs_getCart.Fields.Item("ProductID").Value <> 2424 then ' if item is not a gift certificate %>
-					<strong>Your specs:</strong> <span class="spectext<%= rs_getCart.Fields.Item("cart_id").Value %>"><%= rs_getCart.Fields.Item("cart_preorderNotes").Value %></span>
+					<strong><% if rs_getCart("anodID") = 0 then %>Custom color:<% else %>Your specs:<% end if %></strong> <span class="spectext<%= rs_getCart.Fields.Item("cart_id").Value %>"><%= rs_getCart.Fields.Item("cart_preorderNotes").Value %></span>
 
 					<div class="spec<%= rs_getCart.Fields.Item("cart_id").Value %>" style="display:none">
 						<textarea class="form-control form-control-sm my-2 specvalue<%= rs_getCart.Fields.Item("cart_id").Value %>" data-id="<%= rs_getCart.Fields.Item("cart_id").Value %>" rows="10"><%= rs_getCart.Fields.Item("cart_preorderNotes").Value %></textarea>
@@ -212,7 +212,9 @@ Wend
 					</div>
 				
 					<div>
+						<% if rs_getCart("anodID") = 0 then %>
 					<span class="btn btn-sm btn-outline-secondary edit-spec edit<%= rs_getCart.Fields.Item("cart_id").Value %>" data-id="<%= rs_getCart.Fields.Item("cart_id").Value %>">Edit specs</span>
+					<% end if %>
 					
 					<span class="btn btn-sm btn-outline-success updateconfirm<%= rs_getCart.Fields.Item("cart_id").Value %>" style="display:none" data-id="<%= rs_getCart.Fields.Item("cart_id").Value %>"><i class="fa fa-check"></i></span>
 
@@ -259,7 +261,7 @@ if Request.Cookies("ID") <> "" then ' qty select name value changes if logged in
 	<div class="d-inline d-xl-block">	
 	<% if var_giftcert = "no" then %>
 	Qty: <div class="form-inline d-inline-block">
-				<input class="form-control text-center form-control-sm qty_change qty_change_id_<%=(rs_getCart.Fields.Item("ProductDetailID").Value)%>" style="width: 60px" type="tel" maxlength="2" value="<%=(rs_getCart.Fields.Item("cart_qty").Value)%>" name="qty_change_id_<%= change_id %>" id="<%=(rs_getCart.Fields.Item("cart_id").Value)%>" data-detailid="<%=(rs_getCart.Fields.Item("ProductDetailID").Value)%>" data-orig_qty="<%=(rs_getCart.Fields.Item("cart_qty").Value)%>" data-now_item_price="<%= FormatNumber(var_itemPrice, -1, -2, -2, -2) %>" data-retail_item_price="<%= FormatNumber((rs_getCart.Fields.Item("price").Value), -1, -2, -2, -2) %>" data-item_savings="<%= FormatNumber(var_couponLineTotal, -1, -2, -2, -2) %>">
+				<input class="form-control text-center form-control-sm qty_change qty_change_id_<%=(rs_getCart.Fields.Item("ProductDetailID").Value)%>" style="width: 60px" type="tel" maxlength="2" value="<%=(rs_getCart.Fields.Item("cart_qty").Value)%>" name="qty_change_id_<%= change_id %>" id="<%=(rs_getCart.Fields.Item("cart_id").Value)%>" data-detailid="<%=(rs_getCart.Fields.Item("ProductDetailID").Value)%>" data-orig_qty="<%=(rs_getCart.Fields.Item("cart_qty").Value)%>" data-now_item_price="<%= FormatNumber(var_itemPrice, -1, -2, -2, -2) %>" data-retail_item_price="<%= FormatNumber((rs_getCart.Fields.Item("price").Value), -1, -2, -2, -2) %>" data-item_savings="<%= FormatNumber(var_couponLineTotal, -1, -2, -2, -2) %>" data-anodization-subtotal="<%= FormatNumber(var_anodizationSubTotal, -1, -2, -2, -2) %>"  data-anodization-basePrice="<%= FormatNumber(var_anodizationBasePrice, -1, -2, -2, -2) %>">
 			</div>
 			<div class="btn btn-sm btn-outline-success success_id_<%=(rs_getCart.Fields.Item("ProductDetailID").Value)%>" style="display:none"><i class="fa fa-check"></i></div>
 			<input type="hidden" name="orig-qty-<%= rs_getCart.Fields.Item("ProductDetailID").Value %>" value="<%=(rs_getCart.Fields.Item("cart_qty").Value)%>">
@@ -280,6 +282,11 @@ Qty: <%= rs_getCart.Fields.Item("cart_qty").Value %>
 end if 'if var_showgifts <> "no" only display on the viewcart page 
 %>	
 </div><!-- end qty display -->
+<%If var_anodizationSubTotal >0 Then %>
+	<div class="d-inline d-xl-block">
+			<span class="badge badge-info">+ <%= exchange_symbol %><span class="anodization_line_total_<%= rs_getCart.Fields.Item("ProductDetailID").Value %>" data-price="<%= FormatNumber(var_anodizationSubTotal, -1, -2, -2, -2) %>"><%= FormatNumber(var_anodizationSubTotal, -1, -2, -2, -2) %></span> color add-on</span>
+	</div>
+<%End If%>
 <div class="d-inline d-xl-block">
 			<span class="font-weight-bold"><%= exchange_symbol %><span class=" line_item_total_<%= rs_getCart.Fields.Item("ProductDetailID").Value %>" data-price="<%= FormatNumber(var_lineTotal, -1, -2, -2, -2) %>"><%= FormatNumber(var_lineTotal, -1, -2, -2, -2) %></span></span>
 			<span class="font-weight-bold ml-1">total</span>
@@ -767,7 +774,7 @@ if NOT rsGetAddOns.eof then
 <script src="/js/apple-pay-api.js?ver=3"></script>
 
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
-<script type="text/javascript" src="/js-pages/cart.min.js?v=012822"></script>
+<script type="text/javascript" src="/js-pages/cart.min.js?v=03032024"></script>
 <script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=111722"></script>
 <!-- ^^^^^^  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE ^^^^^^ -->
 <script type="text/javascript">

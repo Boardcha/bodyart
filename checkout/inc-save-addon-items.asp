@@ -67,7 +67,7 @@ For i = 0 to (ubound(array_details_2, 2) - 1) ' loop through array
 	Else 
 		var_referrer = "NULL"
 	End If
-    objCmd.CommandText = "INSERT INTO TBL_OrderSummary (InvoiceID, ProductID, DetailID, qty, item_price, notes, PreOrder_Desc, item_wlsl_price, addon_item, referrer) VALUES (?,?,?,?,?,?,?,?, " & var_addons_db_flag & "," & var_referrer & ")"
+    objCmd.CommandText = "INSERT INTO TBL_OrderSummary (InvoiceID, ProductID, DetailID, qty, item_price, notes, PreOrder_Desc, anodization_id_ordered, item_wlsl_price, addon_item, referrer) VALUES (?,?,?,?,?,?,?,?,?, " & var_addons_db_flag & "," & var_referrer & ")"
             objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,15,session("invoiceid")))
             objCmd.Parameters.Append(objCmd.CreateParameter("productid",3,1,15,array_details_2(6,i)))
             objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,15,array_details_2(0,i)))
@@ -75,6 +75,7 @@ For i = 0 to (ubound(array_details_2, 2) - 1) ' loop through array
             objCmd.Parameters.Append(objCmd.CreateParameter("item_price",6,1,10,array_details_2(4,i)))
             objCmd.Parameters.Append(objCmd.CreateParameter("item_notes",200,1,50,array_details_2(7,i)))
             objCmd.Parameters.Append(objCmd.CreateParameter("preorder_notes",200,1,2000,array_details_2(5,i)))
+			objCmd.Parameters.Append(objCmd.CreateParameter("anodization_id_ordered",3,1,15,array_details_2(14,i)))
             objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10,array_details_2(8,i)))
     objCmd.Execute()
 next ' loop through array

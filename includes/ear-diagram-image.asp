@@ -1,7 +1,15 @@
 <div style="position: relative">
     <img style="width:100%" id="ear-diagram-image" src="/images/ear-diagram.png">
-    <a class="track-click" id="filters-image-map-ear-industrial" href="/products.asp?keywords=industrial&jewelry=barbell"><div style="position: absolute; left: 57%; top: 24.5%; width: 25%; height: 5%; background-color: rgba(0, 0, 0, .25)"></div></a>
-    <a  class="track-click" id="filters-image-map-ear-industrial"  href="/products.asp?piercing=Rook"><div style="position: absolute; left: 51%; top: 41%; width: 16%; height: 5%; background-color: rgba(0, 0, 0, .25);"></div></a>
+    <div id="ear-diagram-popup" style="display:none;position: absolute; left: 5%; top: 1%; width: 90%; height: 50%;background-color:white;border-radius:5px;padding:1em;font-family: verdana, sans-serif, arial;text-align:center"><div class="ear-diagram-message"></div><button class="btn btn-sm btn-secondary my-2 modal-ear-submit-filters">Apply your filters & search products</button><div>OR <span class="text-primary pointer" id="close-ear-diagram-popup">close this popup</span> to select more locations</div></div>
+    <a class="track-click" id="filters-image-map-ear-industrial" data-name="Industrial" data-form-checkbox="filter-industrial" href="/products.asp?piercing=Industrial"><div style="position: absolute; left: 57%; top: 24.5%; width: 25%; height: 5%"></div></a>
+    <a class="track-click" id="filters-image-map-ear-rook" data-name="Rook" data-form-checkbox="filter-rook" href="/products.asp?piercing=Rook"><div style="position: absolute; left: 51%; top: 41%; width: 16%; height: 5%"></div></a>
+    <a class="track-click" id="filters-image-map-ear-daith" data-name="Daith" data-form-checkbox="filter-daith"  href="/products.asp?piercing=Daith"><div style="position: absolute; left: 53%; top: 46.5%; width: 16%; height: 5%"></div></a>
+    <a class="track-click" id="filters-image-map-ear-tragus" data-name="Tragus" data-form-checkbox="filter-tragus" href="/products.asp?piercing=Tragus"><div style="position: absolute; left: 67%; top: 52%; width: 18%; height: 5%"></div></a>
+    <a class="track-click" id="filters-image-map-ear-anti-tragus" data-name="Anti-Tragus" data-form-checkbox="filter-antitragus"  href="/products.asp?piercing=Anti-tragus"><div style="position: absolute; left: 56%; top: 58.5%; width: 28%; height: 5%"></div></a>
+    <a class="track-click" id="filters-image-map-ear-lobe" data-name="Lobe" data-form-checkbox="filter-lobe"  href="/products.asp?piercing=Lobe"><div style="position: absolute; left: 48%; top: 73%; width: 16%; height: 5%"></div></a>
+    <a class="track-click" id="filters-image-map-ear-helix" data-name="Helix" data-form-checkbox="filter-helix"  href="/products.asp?piercing=Helix"><div style="position: absolute; left: 12.5%; top: 32.5%; width: 17%; height: 5%"></div></a>
+    <a class="track-click" id="filters-image-map-ear-snug" data-name="Snug" data-form-checkbox="filter-snug"  href="/products.asp?piercing=Snug"><div style="position: absolute; left: 24.5%; top: 52%; width: 14%; height: 5%"></div></a>
+    <a class="track-click" id="filters-image-map-ear-conch" data-name="Conch" data-form-checkbox="filter-conch"  href="/products.asp?piercing=Conch"><div style="position: absolute; left: 19%; top: 59%; width: 18%; height: 5%"></div></a>
   </div>
 
 <!--

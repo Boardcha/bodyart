@@ -70,6 +70,17 @@ end if  ' var_grandtotal > 150
 
 end if  '  rsLastHoursInvoices.eof
 
+'========= ALWAYS SET CUSTOM ANODIZATION TO IN PROGRESS ====================
+if var_anodization_added = 1  then
+		
+		set objCmd = Server.CreateObject("ADODB.command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "UPDATE sent_items SET shipped = 'CUSTOM COLOR IN PROGRESS' WHERE ID = ?"
+		objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, Session("invoiceid")))
+		objCmd.Execute()
+
+end if
+
 '========= ALWAYS PUSH CUSTOM ORDERS TO BE REVIEWED NO MATTER WHAT ====================
 if preorder_shipping_notice = "yes"  then ' If there's a preorder push it into review
 		

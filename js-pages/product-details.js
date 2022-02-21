@@ -131,14 +131,17 @@ function refreshMenu() {
 
 			changebutton();
 			var_detailid = $('.add-cart:checked').val();
+			var_anodid = $('.add-anodization:checked').val();
 			var_qty = $("[name='qty']").val();
 			var_preorders = $.grep([$("textarea#preorders").val(), $("[name='preorder_field1_label']").val() + $("[name='preorder_field1']").val(), $("[name='preorder_field2_label']").val() + $("[name='preorder_field2']").val(), $("[name='preorder_field3_label']").val() + $("[name='preorder_field3']").val(), $("[name='preorder_field4_label']").val() + $("[name='preorder_field4']").val(), $("[name='preorder_field5_label']").val() + $("[name='preorder_field5']").val(), var_preorder6, var_preorder7], Boolean).join(", ");
-
+			if (var_anodid > 0) 
+				var_preorders = $('.add-anodization:checked').attr("data-title");
+				console.log(var_preorders);
 				if (getCookie("cartCount") > 0) {
 				var cart_count = $('.cart-count').html();
 			} else {
 				var cart_count = 0;
-		}
+			}
 			
 			var customorder = $("#customorder").val();
 
@@ -149,7 +152,7 @@ function refreshMenu() {
 			$.ajax({
 			method: "POST",
 			url: "cart/ajax_cart_add_item.asp",
-			data: {DetailID: var_detailid, qty: var_qty, preorders: var_preorders, customorder: customorder}
+			data: {DetailID: var_detailid, qty: var_qty, preorders: var_preorders, customorder: customorder, anodID:var_anodid}
 			})
 			.done(function( msg ) {
 				// Update button to confirm addition to cart
@@ -209,14 +212,21 @@ function refreshMenu() {
 		var selected_text = $(this).attr("dropdown-title");
 		//console.log('imgid:' + imgid + ' img_name:' +  img_name + ' data_index:' + data_index);
 		// Change out selected drop down text
-		$('#selected-item').html(selected_text);
-
+		$("#selected-item").html(selected_text);
+	
 		if (imgid != 0) {
 	//		$("#img_thumb_" + imgid).click();
 		$(".slider-main-image").slick('slickGoTo', data_index, true);
 		}
 	});
 
+	$(document).on("change", ".add-anodization", function(event)
+	{
+		var selected_text = $(this).attr("dropdown-title");
+		$("#selected-anodization").html(selected_text);
+	});
+
+	
 	$(document).on("click", "#dropdownAddCart", function(){
 		$('#add-cart-menu .dropdown-menu').scrollTop(0);
 		$('.dropdown-menu').animate({

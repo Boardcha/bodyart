@@ -216,7 +216,9 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 			var qty_cart_id = $('#' + qty_field_id).attr("id");
 			row_cart_detailid = $('#' + qty_field_id).attr("data-detailid");
 			var item_sale_price = $('#' + qty_field_id).attr("data-now_item_price");
-
+			var item_anodization_subtotal = $('#' + qty_field_id).attr("data-anodization-subtotal");
+			var var_anodizationBasePrice = $('#' + qty_field_id).attr("data-anodization-basePrice");
+			console.log(var_anodizationBasePrice);
 			if (qty_value <= 0) {
 				$('#' + qty_field_id).val('1');
 				$('#' + qty_field_id).trigger('change');
@@ -236,9 +238,8 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 			
 			function reWriteValues() {
 				
-				new_row_sale_price = qty_value * item_sale_price;				
-				
-			
+				new_row_sale_price = qty_value * item_sale_price;									new_row_anodization_price = qty_value * var_anodizationBasePrice;	
+
 				$(".success_id_" + row_cart_detailid).show();
 					$(".success_id_" + row_cart_detailid).delay(3000).fadeOut();
 					
@@ -248,9 +249,10 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 					
 					// toFixed corrects format number decimal places
 					$('.line_item_total_' + row_cart_detailid).html(new_row_sale_price.toFixed(2));
+					$('.anodization_line_total_' + row_cart_detailid).html(new_row_anodization_price.toFixed(2));
 					
 			} // end reWriteValues() function
-
+			
 			$.ajax({
 			type: "post",
 			dataType: "json",
@@ -275,16 +277,16 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 			function reWriteOverOrdered() {
 				
 			//	new_row_retail_price = reset_qty * item_retail_price;	
-				new_row_sale_price = reset_qty * item_sale_price;				
-			
-			
+				new_row_sale_price = reset_qty * item_sale_price;	
+				new_row_anodization_price = reset_qty * var_anodizationBasePrice;	
+
 				$(".success_id_" + row_cart_detailid).show();
 					$(".success_id_" + row_cart_detailid).delay(3000).fadeOut();
 					
 					$('.qty_change_id_' + row_cart_detailid).attr('data-orig_qty',qty_value);		
 					
 					$('.line_item_total_' + row_cart_detailid).html('$' + new_row_sale_price.toFixed(2));
-					
+					$('.anodization_line_total_' + row_cart_detailid).html('$' + new_row_anodization_price.toFixed(2));
 			} // end reWriteOverOrdered() function
 
 			

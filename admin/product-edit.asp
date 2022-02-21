@@ -867,8 +867,15 @@ end if
 			<input class="custom-control-input" name="exclude_from_social_feeds" id="exclude_from_social_feeds" type="checkbox" value="1" <% if rs_getproduct("exclude_from_social_feeds") = "True" then %>checked<% end if %> data-unchecked="0" data-column="exclude_from_social_feeds" data-friendly="Exclude from social media feeds">
 			<label class="custom-control-label" for="exclude_from_social_feeds">Exclude from social media feeds</label>
 		  </div>	  
-		  
-
+		<div class="custom-control custom-checkbox">
+			<input class="custom-control-input" name="standard_anodization" id="standard_anodization" type="checkbox" value="1" <% if rs_getproduct.Fields.Item("standard_anodization").Value = True then %>checked<% end if %> data-unchecked="0" data-column="standard_anodization" data-friendly="standard_anodization">
+			<label class="custom-control-label" for="standard_anodization">Anodization</label>
+		</div>		  
+		<div class="custom-control custom-checkbox">
+			<input class="custom-control-input" name="high_voltage_anodization" id="high_voltage_anodization" type="checkbox" value="1" <% if rs_getproduct.Fields.Item("high_voltage_anodization").Value = True then %>checked<% end if %> data-unchecked="0" data-column="high_voltage_anodization" data-friendly="high_voltage_anodization">
+			<label class="custom-control-label" for="high_voltage_anodization">High voltage anodization</label>
+		</div>		  
+		
     </div><!-- end second column -->
     
 

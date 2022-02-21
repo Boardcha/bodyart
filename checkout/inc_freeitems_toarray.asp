@@ -16,7 +16,7 @@ if request.cookies("OrderAddonsActive") = "" then
 if request.cookies("gaugecard") <> "no" and var_other_items = 1 then ' add gauge card to array -----------------------
 
 		array_add_new = uBound(array_details_2,2)
-		REDIM PRESERVE array_details_2(13,array_add_new+1) 
+		REDIM PRESERVE array_details_2(14,array_add_new+1) 
 
 		array_details_2(0,array_add_new) = "5461"
 		array_details_2(1,array_add_new) = "1" ' qty
@@ -40,7 +40,7 @@ if request.cookies("oringsid") <> "" then ' add o-ring item to details array ---
 	if cStr(rsGetOrings.Fields.Item("ProductDetailID").Value) = request.cookies("oringsid") then ' only retrive item customer selected
 
 		array_add_new = uBound(array_details_2,2)
-		REDIM PRESERVE array_details_2(13,array_add_new+1) 
+		REDIM PRESERVE array_details_2(14,array_add_new+1) 
 
 		array_details_2(0,array_add_new) = rsGetOrings.Fields.Item("ProductDetailID").Value
 		array_details_2(1,array_add_new) = "4"
@@ -70,7 +70,7 @@ if request.cookies("stickerid") <> "" then ' add sticker to details array ------
 	if cStr(rsGetFree.Fields.Item("ProductDetailID").Value) = request.cookies("stickerid") then ' only retrive item customer selected
 
 		array_add_new = uBound(array_details_2,2)
-		REDIM PRESERVE array_details_2(13,array_add_new+1) 
+		REDIM PRESERVE array_details_2(14,array_add_new+1) 
 
 		array_details_2(0,array_add_new) = rsGetFree.Fields.Item("ProductDetailID").Value
 		array_details_2(1,array_add_new) = "1"
@@ -108,7 +108,7 @@ do until gift_count = 7 ' loop through free gifts
 			if rsGetFree.Fields.Item("free").Value <= var_subtotal_after_discounts then ' fraud check
 			
 				array_add_new = uBound(array_details_2,2)
-				REDIM PRESERVE array_details_2(13,array_add_new+1) 
+				REDIM PRESERVE array_details_2(14,array_add_new+1) 
 
 				array_details_2(0,array_add_new) = rsGetFree.Fields.Item("ProductDetailID").Value
 				array_details_2(1,array_add_new) = rsGetFree.Fields.Item("Free_QTY").Value

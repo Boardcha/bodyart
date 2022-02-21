@@ -243,8 +243,11 @@ Set rsInventoryIssues = objcmd.Execute()
 				</div>
 				<div class="col">
 					<h5>Anodizing</h5>
+					<a href="/admin/anodization-orders.asp">Custom orders that need anodizing</a><br/>
 					<a href="/admin/inventory-anodize.asp">Anodized products list</a><br/>
 					<a href="/admin/available-empty-bins.asp">Available empty bins</a><br/>
+					<br>
+					<a href="/admin/anodization-management.asp">Colors & voltage pricing</a><br/>
 					<br>
 					<h5>Pulling Stock</h5>
 					<a href="/admin/inventory-bulk-pull-po.asp">Create internal purchase order</a><br/>					

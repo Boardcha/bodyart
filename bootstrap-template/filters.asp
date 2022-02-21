@@ -634,13 +634,21 @@ rsGetGauges.ReQuery() %>
                         <div class="card rounded-0 border-0">
               <a class="card-header collapsed h6 filter-dropdown" id="piercingtype-head" data-toggle="collapse" data-target="#piercingtype" aria-expanded="false" aria-controls="piercingtype"
                 href="#"><i class="fa" aria-hidden="true"></i>
-                Piercing Type
+                Piercing Location
               </a>
               <div id="piercingtype" class="collapse" aria-labelledby="piercingtype-head" data-parent="#accordion">
                 <div class="card-body">
 
                 <div class="h5 mt-0 mb-0 pb-1 w-75 border-bottom">
                     Ear
+                  </div>
+                  <style>
+                    #filters-ear-diagram #ear-diagram-image{width:50%}
+                  </style>
+                  <a class="btn btn-sm btn-purple text-light my-1" href="" data-toggle="modal" data-target="#modal-ear-diagram"
+                  data-dismiss="modal" href="#">Click to enlarge diagram</a>
+                  <div class="filters-ear-diagram">
+                  <!--#include virtual="/includes/ear-diagram-image.asp"-->
                   </div>
                   <div class="form-check">
                     <input class="form-check-input"  type="checkbox" name="piercing" value="Anti-tragus" id="filter-antitragus" data-friendly="Anti-tragus">
@@ -1199,3 +1207,26 @@ color_array = array("amber", "aqua", "black", "blue", "bone", "brass", "bronze",
           <%
           end if ' on the correct order status
         end if ' addon cookie not null %>
+
+        <!-- Modal for ear diagram -->
+        <div class="modal fade filters-ear-diagram" id="modal-ear-diagram" tabindex="-1" role="dialog" aria-labelledby="LabelEarDiagram"
+                aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                                <div class="modal-header">
+                                        <div class="modal-title" id="LabelEarDiagram">
+                                          <h5>Common ear piercing locations</h5>
+                                          Select a tag to apply it to your filter
+                                        </div>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                <span aria-hidden="true">&times;</span>
+                                        </button>
+                                </div>
+                    
+                               <!--#include virtual="/includes/ear-diagram-image.asp"-->
+                               <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                              </div>
+                        </div>
+                </div>
+        </div>

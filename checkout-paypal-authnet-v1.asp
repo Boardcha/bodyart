@@ -269,7 +269,7 @@ End If ' end step 2 ----------------------------------------
 <!--#include virtual="checkout/inc_random_code_generator.asp"--> 
 <%
 'Set array to store all order details (FOR CHECKOUT STORAGE INTO DATABASE)
-	reDim array_details_2(13,0)
+	reDim array_details_2(14,0)
 	Dim array_add_new : array_add_new = 0 
 	
 'ORDER IS ALREADY STORED ON /checkout/ajax_process_payment.asp and if Json returns PayPal then it goes to this page

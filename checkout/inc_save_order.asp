@@ -334,7 +334,7 @@ if var_addons_active <> "yes" then
 	objCmd.ActiveConnection = DataConn
 	'objCmd.CommandType = 4
 	'objCmd.CommandText = "Proc_Checkout4_InsertOrder"
-	objCmd.CommandText = "INSERT INTO sent_items (customer_ID, email, company, customer_first, customer_last, address, address2, city, state, province, zip, country, phone, UPS_AmountPaid, UPS_Service, item_description, customer_comments, shipping_rate, shipping_type, pay_method, shipped, date_order_placed, coupon_code, IPaddress,  billing_name, billing_address, billing_zip, preorder, autoclave, total_sales_tax, taxes_state_only, taxes_county_only, taxes_city_only, taxes_special_only, combined_tax_rate, total_gift_cert, total_coupon_discount, total_preferred_discount, total_store_credit, total_free_credits, giftcert_flag, currency_type, exchange_rate, checkout_estimated_delivery_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+	objCmd.CommandText = "INSERT INTO sent_items (customer_ID, email, company, customer_first, customer_last, address, address2, city, state, province, zip, country, phone, UPS_AmountPaid, UPS_Service, item_description, customer_comments, shipping_rate, shipping_type, pay_method, shipped, date_order_placed, coupon_code, IPaddress,  billing_name, billing_address, billing_zip, preorder, autoclave, total_sales_tax, taxes_state_only, taxes_county_only, taxes_city_only, taxes_special_only, combined_tax_rate, total_gift_cert, total_coupon_discount, total_preferred_discount, total_store_credit, total_free_credits, giftcert_flag, currency_type, exchange_rate, checkout_estimated_delivery_date, anodize) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 
 	var_customer_comments = replace(request.form("Comments"), ",", "")
 	var_gift_order = replace(request.form("gift"), ",", "")
@@ -375,9 +375,10 @@ if var_addons_active <> "yes" then
 			objCmd.Parameters.Append(objCmd.CreateParameter("@shipping_type",200,1,70,shipping_option))
 			
 			objCmd.Parameters.Append(objCmd.CreateParameter("@pay_method",200,1,30,strCardType))
-			objCmd.Parameters.Append(objCmd.CreateParameter("@shipped",200,1,15,"Pending..."))
-			objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,now())) 'UGUR: This doesn't work on my local, see below line
-			'objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,Cstr(now())))
+			objCmd.Parameters.Append(objCmd.CreateParameter("@shipped",200,1,50,"Pending..."))
+
+			'objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,now())) 'UGUR: This doesn't work on my local, see below line
+			objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,Cstr(now())))
 
 			if session("preferred") = "yes" then
 				var_store_coupon = "YTG89R57"
@@ -402,7 +403,7 @@ if var_addons_active <> "yes" then
 				objCmd.Parameters.Append(objCmd.CreateParameter("@autoclave",3,1,1,1))
 			else
 				objCmd.Parameters.Append(objCmd.CreateParameter("@autoclave",3,1,1,0))
-			end if
+			end if	
 			
 			objCmd.Parameters.Append(objCmd.CreateParameter("@total_sales_tax",6,1,10,session("amount_to_collect")))
 			objCmd.Parameters.Append(objCmd.CreateParameter("@taxes_state_only",6,1,10,session("state_tax_collectable")))
@@ -438,7 +439,12 @@ if var_addons_active <> "yes" then
 				objCmd.Parameters.Append(objCmd.CreateParameter("@checkout_estimated_delivery",200,1,30, NULL ))
 			end if			
 			
-
+			if var_anodization_added = 1 then
+				objCmd.Parameters.Append(objCmd.CreateParameter("@anodize",3,1,1,1))
+			else
+				objCmd.Parameters.Append(objCmd.CreateParameter("@anodize",3,1,1,0))
+			end if	
+			
 	objCmd.Execute()
 
 	' Get invoice # for order
@@ -468,7 +474,7 @@ if var_addons_active <> "yes" then
 		Else 
 			var_referrer = "NULL"
 		End If
-		objCmd.CommandText = "INSERT INTO TBL_OrderSummary (InvoiceID, ProductID, DetailID, qty, item_price, notes, PreOrder_Desc, item_wlsl_price, referrer) VALUES (?,?,?,?,?,?,?,?," & var_referrer & ")"
+		objCmd.CommandText = "INSERT INTO TBL_OrderSummary (InvoiceID, ProductID, DetailID, qty, item_price, notes, PreOrder_Desc, anodization_id_ordered, item_wlsl_price, referrer) VALUES (?,?,?,?,?,?,?,?,?," & var_referrer & ")"
 				objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,15,session("invoiceid")))
 				objCmd.Parameters.Append(objCmd.CreateParameter("productid",3,1,15,array_details_2(6,i)))
 				objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,15,array_details_2(0,i)))
@@ -476,7 +482,9 @@ if var_addons_active <> "yes" then
 				objCmd.Parameters.Append(objCmd.CreateParameter("item_price",6,1,10,array_details_2(4,i)))
 				objCmd.Parameters.Append(objCmd.CreateParameter("item_notes",200,1,50,array_details_2(7,i)))
 				objCmd.Parameters.Append(objCmd.CreateParameter("preorder_notes",200,1,2000,array_details_2(5,i)))
-				objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10,array_details_2(8,i)))
+				objCmd.Parameters.Append(objCmd.CreateParameter("anodization_id_ordered",3,1,15,array_details_2(14,i)))
+				objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10,1))
+				'objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10,array_details_2(8,i)))
 		objCmd.Execute()
 	next ' loop through array
 

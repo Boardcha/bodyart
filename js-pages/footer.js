@@ -58,6 +58,31 @@ $('#filters .two-filters').on('change',function(){
     $('input[name="' + filter_type + '"][value="' + filter_value + '"]').prop("checked" , this.checked);
 });
 
+// Filters clickable ear image map
+$(".filters-ear-diagram a").removeAttr("href"); // Allow other pages to show the links. Just don't need it in the filters area or filters pop up modal
+$('.filters-ear-diagram a').on('click',function(){
+    var form_field_name = $(this).attr("data-form-checkbox");
+    var name_friendly = $(this).attr("data-name");
+
+    if($("#" + form_field_name).prop("checked") == true){
+        $("#" + form_field_name).prop("checked", false);
+        $(".ear-diagram-message").html(name_friendly + " removed from filters");
+        $("#modal-ear-diagram #ear-diagram-popup").show();
+    } else {
+        $("#" + form_field_name).prop("checked", true);
+        $(".ear-diagram-message").html(name_friendly + " added to filters");
+        $("#modal-ear-diagram #ear-diagram-popup").show();
+    } 
+});
+$('#modal-ear-diagram #close-ear-diagram-popup').on('click',function(){
+    $("#modal-ear-diagram #ear-diagram-popup").hide();
+});
+$('#modal-ear-diagram .modal-ear-submit-filters').on('click',function(){
+    $('#form-filters').submit();
+});
+
+
+
 // Alters bootstrap to hide alert window on [x] close rather than removing from DOM completely
     $(function () {
         $("[data-hide]").on("click", function () {

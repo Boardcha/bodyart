@@ -682,6 +682,7 @@ var button_addcart = document.getElementById('btn-add-cart');
 
 			var qty = document.getElementById("add-qty").value;
 			var_detailid = $('.add-cart:checked').val();
+			var anodid = $('.add-anodization:checked').val();
 			var actual_price = $('.add-cart:checked').attr('data-actual-price');
 
 			var variant = document.querySelector("input[name=add-cart]:checked");
@@ -933,6 +934,9 @@ var button_addcart = document.getElementById('btn-add-cart');
 								<span id="loading-addtocart" style="display:none"><i class="fa fa-spinner fa-2x fa-spin"></i></span>
 								
 							<span class="form-group" id="select-addtocart"><!--#include virtual="/products/inc-details-dropdown-addtocart.asp" --></span>
+							<% If rsProduct("standard_anodization") = true OR rsProduct("high_voltage_anodization") = true Then %>
+								<span class="form-group" id="select-anodization"><!--#include virtual="/products/inc-anodize-dropdown-addtocart.asp" --></span>
+							<%End If%>
 				<div class="my-2">
 							<span class="qty-input-field">
 							<div class="input-group">
@@ -1571,7 +1575,7 @@ end if
 <% end if %>
 <script src="/js/jquery.fancybox.min.js"></script>
 <script type="text/javascript" src="/js/slick.min.js"></script>
-<script type="text/javascript" src="/js-pages/product-details.min.js?v=111721" ></script>
+<script type="text/javascript" src="/js-pages/product-details.js?v=111722" ></script>
 
 <!-- Start Afterpay Javascript -->
 <!--
