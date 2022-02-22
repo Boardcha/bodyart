@@ -73,7 +73,7 @@ end select
         ' --- pull details
         set objCmd = Server.CreateObject("ADODB.command")
         objCmd.ActiveConnection = DataConn
-        objCmd.CommandText = "SELECT item_pulled FROM ProductDetails WHERE ProductID = ? AND item_pulled = 0 AND ProductDetails.active = 1"
+        objCmd.CommandText = "SELECT item_pulled FROM ProductDetails WHERE ProductID = ? AND item_pulled = 0 AND active = 1 AND BinNumber_Detail = 0"
         objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,20, rsGetProducts("ProductID")  ))
         set rsCheckCompletion = objCmd.Execute()
 
