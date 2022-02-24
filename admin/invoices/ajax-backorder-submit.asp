@@ -6,7 +6,7 @@
 orderdetailid = request.form("orderdetailid")
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT InvoiceID, ProductID, DetailID, title, ProductDetail1, Gauge, Length, stock_qty, OrderDetailID, email, customer_first, title, qty, ProductDetail1, ProductDetailID, item_price, PreOrder_Desc, picture, free, type FROM dbo.QRY_OrderDetails WHERE OrderDetailID = ?" 
+objCmd.CommandText = "SELECT InvoiceID, ProductID, DetailID, title, ProductDetail1, Gauge, Length, stock_qty, OrderDetailID, email, customer_first, title, qty, stock_qty, ProductDetail1, ProductDetailID, item_price, PreOrder_Desc, picture, free, type FROM dbo.QRY_OrderDetails WHERE OrderDetailID = ?" 
 objCmd.Parameters.Append(objCmd.CreateParameter("orderdetailid",3,1,20, orderdetailid))
 Set rsGetInfo = objCmd.Execute()
 
@@ -80,7 +80,7 @@ objCmd.Execute()
 'Write info to edits log	
 set objCmd = Server.CreateObject("ADODB.Command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & productdetailid & ",'Automated - Updated qty to " & request.form("bo_qty") & " - backorder submit page','" & now() & "')"
+objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & rsGetInfo("DetailID") & ",'Automated - Updated qty from " & rsGetInfo("stock_qty") & " to " & request.form("bo_qty") & " - backorder submit page','" & now() & "')"
 objCmd.Execute()
 Set objCmd = Nothing
 

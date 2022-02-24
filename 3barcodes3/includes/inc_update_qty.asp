@@ -2,6 +2,12 @@
 <!--#include file="../../Connections/bodyartforms_sql_ADMIN.asp" -->
 <%
 if request.form("detailid") <> "" then ' check to see if a detailid is provided and if not, just update the main products table	
+
+	Set objCmd = Server.CreateObject ("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "SELECT qty FROM ProductDetails WHERE ProductDetailID = ?" 
+	objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,15, request.form("detailid") ))
+	Set rsGetCurrentQty = objCmd.Execute()
 	
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
@@ -13,7 +19,7 @@ if request.form("detailid") <> "" then ' check to see if a detailid is provided 
 	'Write info to edits log	
 	set objCmd = Server.CreateObject("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & request.form("detailid") & ",'Automated - Updated qty to " & request.form("qty") & " - updated qty from inventory count page','" & now() & "')"
+	objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & request.form("detailid") & ",'Automated - Updated qty from " & rsGetCurrentQty("qty") & " to " & request.form("qty") & " - updated qty from inventory count page','" & now() & "')"
 	objCmd.Execute()
 	Set objCmd = Nothing
 

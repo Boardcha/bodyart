@@ -98,7 +98,7 @@
         </div>
         <div class="row py-2">
             <div class="text-center w-100">
-                <a href="/privacy-policy.asp" class="text-light">
+                <a href="/privacy-policy.asp" class="text-info">
                     Privacy Policy</a>
                 &copy;
                 <%= year(date) %> Bodyartforms LLC

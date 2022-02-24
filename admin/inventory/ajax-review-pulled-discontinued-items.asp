@@ -11,6 +11,12 @@
 	column_value = request.form("value")
 	id = request.form("id")
 	friendly_name = request.form("friendly_name")
+
+	Set objCmd = Server.CreateObject ("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "SELECT qty FROM ProductDetails WHERE ProductDetailID = ?" 
+	objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,15, id ))
+	Set rsGetCurrentQty = objCmd.Execute()
 	
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
@@ -22,7 +28,7 @@
 	' ====== INSERT EDITS LOG WITH ALL INFORMATION 
 	Set objCmd = Server.CreateObject ("ADODB.Command")
     objCmd.ActiveConnection = DataConn
-    objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, edit_date, detail_id, description) VALUES(?, GETDATE(), ?, 'Automated message: Manually updated qty to ' + ? + ' from admin reviewing pulled discontinued items')"
+    objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, edit_date, detail_id, description) VALUES(?, GETDATE(), ?, 'Automated - Manually updated qty from " & rsGetCurrentQty("qty") & " to ' + ? + ' from admin reviewing pulled discontinued items')"
     objCmd.Parameters.Append(objCmd.CreateParameter("user_id",3,1,15, rsGetUser.Fields.Item("user_id").Value ))
     objCmd.Parameters.Append(objCmd.CreateParameter("detail_id",3,1,15, id ))
     objCmd.Parameters.Append(objCmd.CreateParameter("qty",200,1,10, column_value ))

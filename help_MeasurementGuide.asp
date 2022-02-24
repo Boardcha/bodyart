@@ -28,4 +28,9 @@
 
 
 
-<!--#include virtual="/bootstrap-template/footer.asp" -->
+<!--#include virtual="/bootstrap-template/footer.asp" --> 
+<script type="text/javascript">
+	$(document).on("click", "#toggle-above-1inch", function(){
+		$('#above-1inch').toggle();
+	})
+</script>

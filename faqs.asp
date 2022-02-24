@@ -593,6 +593,18 @@ Wend
 						</div>
 					</div>
 				</div>
+				<div class="card">
+					<a class="card-header collapsed text-dark faq-header" href="" id="privacypolicy" data-toggle="collapse" data-target="#faqmisc3" aria-expanded="false"
+					 aria-controls="faqmisc3" data-gtm="What is your privacy policy?">
+						<i class="fa" aria-hidden="true"></i>
+						What is your privacy policy?
+					</a>
+					<div id="faqmisc3" class="collapse" aria-labelledby="privacypolicy" data-parent="#accordionPrivacy">
+						<div class="card-body">
+						<!--#include virtual="/includes/inc-privacy-policy.asp" -->
+						</div>
+					</div>
+				</div>
 			</div>
 			<!-- end accordion -->
 

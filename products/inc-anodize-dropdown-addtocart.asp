@@ -1,8 +1,21 @@
 <%
+If rsProduct("standard_anodization") = True Then
+	sqlWhere = "WHERE standard_anodization = 1"
+Else
+	sqlWhere = "WHERE standard_anodization = 0"
+End IF	
+If rsProduct("high_voltage_anodization") = True Then
+	sqlWhere = sqlWhere & " OR high_voltage = 1"
+Else
+	sqlWhere = sqlWhere & " OR high_voltage = 0"
+End IF	
+'Response.Write sqlWhere & "aaa"
+
+
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
 	
-objCmd.CommandText = "SELECT * FROM TBL_Anodization_Colors_Pricing ORDER BY color_name ASC"
+objCmd.CommandText = "SELECT * FROM TBL_Anodization_Colors_Pricing " & sqlWhere & "  ORDER BY color_name ASC"
 
 set rsGetItems = Server.CreateObject("ADODB.Recordset")
 rsGetItems.CursorLocation = 3 'adUseClient

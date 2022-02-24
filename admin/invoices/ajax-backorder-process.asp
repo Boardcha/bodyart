@@ -9,6 +9,12 @@ objCmd.CommandText = "SELECT customer_ID, total_preferred_discount, total_coupon
 objCmd.Parameters.Append(objCmd.CreateParameter("string_id",3,1,12,request.form("invoice")))
 Set rsGetOrder = objCmd.Execute()
 
+Set objCmd = Server.CreateObject ("ADODB.Command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "SELECT qty FROM ProductDetails WHERE ProductDetailID = ?" 
+objCmd.Parameters.Append(objCmd.CreateParameter("string_id",3,1,12,request.form("detailid")))
+Set rsGetCurrentQty = objCmd.Execute()
+
 var_custid = 0
 var_coupon_discount = 0
 var_preferred_discount = 0
@@ -168,6 +174,13 @@ if request.form("agenda") = "ship-one" then
 	"status":"Backorder shipment created</br><strong><ul><li>CUSTOMER HAS BEEN EMAILED</li><li>Quantities have been deducted</li></ul></strong><a href='invoice.asp?ID=<%= rsGetNewInvoice.Fields.Item("ID").Value %>'>Click here</a> to go to new order"
 }
 <%
+
+	'Write info to edits log	
+	set objCmd = Server.CreateObject("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & var_detailid & ",'Automated - Updated qty from " & rsGetCurrentQty("qty") & " to " & cint(rsGetCurrentQty("qty")) - cint(var_qty) & " - backorder came back in stock and set to ship out','" & now() & "')"
+	objCmd.Execute()
+	Set objCmd = Nothing
 end if '	Reship just the backorder item 
 
 
@@ -190,6 +203,13 @@ if request.form("agenda") = "reship" then
 	"status":"Current order has been set to ship out again.</br><strong><ul><li>CUSTOMER HAS BEEN EMAILED</li><li>Quantities have been deducted</li></ul></strong><a href='invoice.asp?ID=<%= var_invoice %>'>Click here</a> to refresh order"
 }
 <%
+'Write info to edits log	
+set objCmd = Server.CreateObject("ADODB.Command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & var_detailid & ",'Automated - Updated qty from " & rsGetCurrentQty("qty") & " to " & cint(rsGetCurrentQty("qty")) - cint(var_qty) & " - backorder came back in stock and set to ship out','" & now() & "')"
+objCmd.Execute()
+Set objCmd = Nothing
+
 end if '	Reship the entire order
 
 
@@ -418,7 +438,7 @@ if request.form("agenda") = "exchange" then
 	'====== GET INFORMATION ABOUT NEW EXCHANGED ITEM ======
 	Set objCmd = Server.CreateObject ("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT *, ProductDetailID, title + ' ' + Gauge + ' ' + Length + ' ' + ProductDetail1 AS 'exchange_item_title' FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID WHERE ProductDetailID = ?" 
+	objCmd.CommandText = "SELECT *, ProductDetailID, title + ' ' + Gauge + ' ' + Length + ' ' + ProductDetail1 AS 'exchange_item_title', qty FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID WHERE ProductDetailID = ?" 
 	objCmd.Parameters.Append(objCmd.CreateParameter("ProductDetailID",3,1,12, var_exchange_detailid))
 	Set rsGetExchangeItemDetails = objCmd.Execute()
  
@@ -442,6 +462,13 @@ if request.form("agenda") = "exchange" then
 		objCmd.ActiveConnection = DataConn
 		objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - " & var_exchange_qty & ", DateLastPurchased = '"& date() &"' WHERE ProductDetailID = " & var_exchange_detailid 
 		objCmd.Execute()
+
+		'Write info to edits log	
+		set objCmd = Server.CreateObject("ADODB.Command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & var_exchange_detailid & ",'Automated - Updated qty from " & rsGetExchangeItemDetails("qty") & " to " & cint(rsGetExchangeItemDetails("qty")) - cint(var_exchange_qty) & " - exchanged backorder item','" & now() & "')"
+		objCmd.Execute()
+		Set objCmd = Nothing
 	
 	end function	'	processExchange()
 	
