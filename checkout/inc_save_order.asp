@@ -377,8 +377,8 @@ if var_addons_active <> "yes" then
 			objCmd.Parameters.Append(objCmd.CreateParameter("@pay_method",200,1,30,strCardType))
 			objCmd.Parameters.Append(objCmd.CreateParameter("@shipped",200,1,50,"Pending..."))
 
-			'objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,now())) 'UGUR: This doesn't work on my local, see below line
-			objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,Cstr(now())))
+			objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,now())) 'UGUR: This doesn't work on my local, see below line
+			'objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,Cstr(now())))
 
 			if session("preferred") = "yes" then
 				var_store_coupon = "YTG89R57"
@@ -483,8 +483,8 @@ if var_addons_active <> "yes" then
 				objCmd.Parameters.Append(objCmd.CreateParameter("item_notes",200,1,50,array_details_2(7,i)))
 				objCmd.Parameters.Append(objCmd.CreateParameter("preorder_notes",200,1,2000,array_details_2(5,i)))
 				objCmd.Parameters.Append(objCmd.CreateParameter("anodization_id_ordered",3,1,15,array_details_2(14,i)))
-				objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10,1))
-				'objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10,array_details_2(8,i)))
+				objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10,array_details_2(8,i)))  'UGUR: This doesn't work on my local, see below line
+				'objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10,1))
 		objCmd.Execute()
 	next ' loop through array
 
