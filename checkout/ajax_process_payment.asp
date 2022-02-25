@@ -29,7 +29,7 @@ if stock_display = "" then
 	'Let Google and Apple APIs know if order is flagged
 	
 	If session("flag") = "yes" Then%>
-		"flagged":"yes"
+		"flagged":"yes",
 	<%End If
 
 else
@@ -97,6 +97,18 @@ if payment_approved = "yes" then
 		objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15,session("invoiceid")))
 		objCmd.Execute()
 	end if
+
+	' WRITE TO CREDIT CARD LOG
+	set objCmd = Server.CreateObject("ADODB.command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "INSERT INTO tbl_creditcard_logs (invoice_id, payflow_step, api_message, transaction_id,total, email) VALUES (?,?,?,?,?,?)"
+	objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15, session("invoiceid")))
+	objCmd.Parameters.Append(objCmd.CreateParameter("payflow_step",200,1,200, "ORDER APPROVED"))
+	objCmd.Parameters.Append(objCmd.CreateParameter("api_message",200,1,2000, "DEBUGGER - ORDER APPROVED"))
+	objCmd.Parameters.Append(objCmd.CreateParameter("transaction_id",200,1,200, 0))
+	objCmd.Parameters.Append(objCmd.CreateParameter("total",6,1,10, var_grandtotal))
+	objCmd.Parameters.Append(objCmd.CreateParameter("email",200,1,100, session("email")))
+	objCmd.Execute()
 %>
 <% if var_addons_active <> "yes" then %>
 <!--#include virtual="/checkout/inc-set-to-pending.asp" -->
@@ -137,6 +149,20 @@ end if ' If no stock changes have occurred
 	}
 <%
 	' ^^ END build { for .json return throughout this page}
+
+	
+	' WRITE TO CREDIT CARD LOG
+	set objCmd = Server.CreateObject("ADODB.command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "INSERT INTO tbl_creditcard_logs (invoice_id, payflow_step, api_message, transaction_id,total, email) VALUES (?,?,?,?,?,?)"
+	objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15, session("invoiceid")))
+	objCmd.Parameters.Append(objCmd.CreateParameter("payflow_step",200,1,200, "BOTTOM OF PAGE"))
+	objCmd.Parameters.Append(objCmd.CreateParameter("api_message",200,1,2000, "DEBUGGER - CODE HAS PROCESSED THROUGH THE END OF THE PAGE"))
+	objCmd.Parameters.Append(objCmd.CreateParameter("transaction_id",200,1,200, 0))
+	objCmd.Parameters.Append(objCmd.CreateParameter("total",6,1,10, var_grandtotal))
+	objCmd.Parameters.Append(objCmd.CreateParameter("email",200,1,100, session("email")))
+	objCmd.Execute()
+	
 DataConn.Close()
 Set DataConn = Nothing
 

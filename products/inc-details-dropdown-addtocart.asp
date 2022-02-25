@@ -44,7 +44,12 @@ var_totalitems = rsGetItems.RecordCount
 if not rsGetItems.eof then
 %>
 <div class="dropdown my-2" id="add-cart-menu" style="<%= var_cart_modal %>">
-<button class="btn btn-light rounded-0 bg-white text-left dropdown-toggle font-weight-bold  py-2" style="border:1px solid #ced4da" type="button" id="dropdownAddCart" data-flip="false" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="<%= var_cart_modal %>"><span id="selected-item">Select item:</span>
+<button class="btn btn-light rounded-0 bg-white text-left dropdown-toggle font-weight-bold  py-2" style="border:1px solid #ced4da" type="button" id="dropdownAddCart" data-flip="false" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="<%= var_cart_modal %>">
+	<%If var_totalitems = 1 Then%>
+		<span id="selected-item"></span>
+	<%Else%>
+		<span id="selected-item">Select item:</span>
+	<%End If%>
 </button>
 <div class="dropdown-menu modal-scroll-long rounded-0" style="border:2px solid #ced4da" aria-labelledby="dropdownAddCart">
 		<div id="msg-filtered-dropdown"></div>
@@ -100,7 +105,7 @@ if not rsGetItems.eof then
 			%>
 			<label class="btn rounded-0 py-3 py-lg-2 border-bottom text-left btn-select-menu option_img_<%=(rsGetItems.Fields.Item("img_id").Value)%>">
 				<input class="add-cart" type="radio" name="add-cart" value="<%=(rsGetItems.Fields.Item("ProductDetailID").Value)%>" data-img_id="<%=(rsGetItems.Fields.Item("img_id").Value)%>" data-sale-price="<%= option_sale_price %>" data-retail-price="<%= option_retail_price %>" data-actual-price="<%= option_actual_price %>" data-symbol="<%= exchange_symbol %>" data-title="<%= replace(rsGetItems.Fields.Item("ProductDetail1").Value, """", "") %>" dropdown-title="<%= exchange_symbol %><%= option_actual_price %>
-				&nbsp;&nbsp;&nbsp;&nbsp;<%= server.htmlencode(rsGetItems.Fields.Item("OptionTitle").Value) %>" data-variant="<%= trim(server.htmlencode(rsGetItems.Fields.Item("OptionTitle").Value)) %>" required ><%= exchange_symbol %><%= option_actual_price %>
+				&nbsp;&nbsp;&nbsp;&nbsp;<%= server.htmlencode(rsGetItems.Fields.Item("OptionTitle").Value) %>" data-variant="<%= trim(server.htmlencode(rsGetItems.Fields.Item("OptionTitle").Value)) %>" required   <%if var_totalitems = 1 Then Response.Write "checked"%>><%= exchange_symbol %><%= option_actual_price %>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<% if rsGetItems.Fields.Item("Gauge").Value <> "" then %>
 					<%= rsGetItems.Fields.Item("Gauge").Value %>&nbsp;
@@ -137,3 +142,13 @@ if not rsGetItems.eof then
 <%
 end if 	' not rsGetItems.eof 
 %>
+<script>
+	// If there's only one option in the list copy the default checked value and display it to user
+	var ele = document.getElementsByName('add-cart');
+		
+	for(i = 0; i < ele.length; i++) {
+		if(ele[i].checked)
+		document.getElementById("selected-item").innerHTML
+				= ele[i].getAttribute('dropdown-title');			
+	}
+</script>

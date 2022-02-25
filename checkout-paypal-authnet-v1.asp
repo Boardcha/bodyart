@@ -355,7 +355,19 @@ else ' Show decline information
 end if ' If payment is a success
 %>
 
-
-
 <div style="height: 200px"></div>
+<%
+' WRITE TO PAYPAL LOG
+set objCmd = Server.CreateObject("ADODB.command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "INSERT INTO tbl_paypal_logs (invoice_id, payflow_step, api_message, payerID, transaction_id,total, email) VALUES (?,?,?,?,?,?,?)"
+objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15, session("invoiceid")))
+objCmd.Parameters.Append(objCmd.CreateParameter("payflow_step",200,1,200, "BOTTOM OF PAGE"))
+objCmd.Parameters.Append(objCmd.CreateParameter("api_message",200,1,2000, "DEBUGGER - CODE HAS PROCESSED THROUGH THE END OF THE PAGE"))
+objCmd.Parameters.Append(objCmd.CreateParameter("payerID",200,1,200, 0))
+objCmd.Parameters.Append(objCmd.CreateParameter("transaction_id",200,1,200, 0))
+objCmd.Parameters.Append(objCmd.CreateParameter("total",6,1,10, 0))
+objCmd.Parameters.Append(objCmd.CreateParameter("email",200,1,100, session("email")))
+objCmd.Execute()
+%>
 <!--#include virtual="/bootstrap-template/footer.asp" -->
