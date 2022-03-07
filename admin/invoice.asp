@@ -144,7 +144,7 @@ end if ' if order is paid with credit card  or paypal
 
 Set objCmd = Server.CreateObject("ADODB.Command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT TBL_OrderSummary.InvoiceID, TBL_OrderSummary.ProductID, TBL_OrderSummary.DetailID, jewelry.picture, TBL_OrderSummary.qty, TBL_OrderSummary.PreOrder_Desc, jewelry.title, ProductDetails.ProductDetail1, ProductDetails.qty AS stock_qty, ProductDetails.price, sent_items.ID, TBL_OrderSummary.OrderDetailID, jewelry.customorder, sent_items.shipped, jewelry.brandname, TBL_OrderSummary.backorder, TBL_OrderSummary.item_shipped, TBL_OrderSummary.item_ordered, TBL_OrderSummary.item_received, TBL_OrderSummary.item_price, TBL_OrderSummary.notes, TBL_OrderSummary.discount, sent_items.email, sent_items.customer_ID, sent_items.ship_code, sent_items.price AS OrderTotal, TBL_OrderSummary.status, sent_items.Comments_OrderError, sent_items.Review_OrderError, ProductDetails.wlsl_price, sent_items.date_sent, TBL_OrderSummary.CharityPaid, TBL_OrderSummary.CharityPaidDate, TBL_OrderSummary.ProductReviewed, jewelry.jewelry, jewelry.SaleExempt, jewelry.type, ProductDetails.ProductDetailID,  ProductDetails.location, ProductDetails.DetailCode, sent_items.customer_first, TBL_OrderSummary.ProductPhotographed, TBL_Barcodes_SortOrder.ID_SortOrder, TBL_Barcodes_SortOrder.ID_Description, TBL_Barcodes_SortOrder.ID_Number, jewelry.type, ProductDetails.BinNumber_Detail, ProductDetails.Gauge, ProductDetails.Length, jewelry.active AS ActiveMain, ProductDetails.active AS ActiveDetail, TBL_OrderSummary.BackorderReview, ProductDetails.free, TBL_OrderSummary.item_problem, TBL_OrderSummary.TimesScanned, TBL_OrderSummary.ErrorReportDate, TBL_OrderSummary.ErrorDescription, TBL_OrderSummary.ErrorOnReview,  TBL_OrderSummary.ErrorSealedBag, TBL_OrderSummary.ErrorConserveBags, TBL_OrderSummary.ErrorQtyMissing, sent_items.PackagedBy, addon_item, TBL_OrderSummary.date_added, ISNULL(replace(jewelry.type,'None',''),'') + ' ' + ISNULL(jewelry.title,'') + ' ' + ISNULL(ProductDetails.ProductDetail1,'') + ' ' + ISNULL(ProductDetails.Gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') as 'item_description', TBL_OrderSummary.returned, TBL_OrderSummary.returned_qty, preorder_timeframes, item_ordered_date, item_received_date  FROM TBL_OrderSummary INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID INNER JOIN ProductDetails ON TBL_OrderSummary.DetailID = ProductDetails.ProductDetailID INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number LEFT OUTER JOIN TBL_Companies ON jewelry.brandname = TBL_Companies.name WHERE InvoiceID = '" & rsGetOrder.Fields.Item("ID").Value & "' ORDER BY OrderDetailID ASC"
+objCmd.CommandText = "SELECT TBL_OrderSummary.InvoiceID, TBL_OrderSummary.ProductID, TBL_OrderSummary.DetailID, jewelry.picture, TBL_OrderSummary.qty, TBL_OrderSummary.PreOrder_Desc, jewelry.title, ProductDetails.ProductDetail1, ProductDetails.qty AS stock_qty, ProductDetails.price, sent_items.ID, TBL_OrderSummary.OrderDetailID, jewelry.customorder, sent_items.shipped, jewelry.brandname, TBL_OrderSummary.backorder, TBL_OrderSummary.item_shipped, TBL_OrderSummary.item_ordered, TBL_OrderSummary.item_received, TBL_OrderSummary.item_price, TBL_OrderSummary.notes, TBL_OrderSummary.discount, sent_items.email, anodization_id_ordered, sent_items.customer_ID, sent_items.ship_code, sent_items.price AS OrderTotal, TBL_OrderSummary.status, sent_items.Comments_OrderError, sent_items.Review_OrderError, ProductDetails.wlsl_price, sent_items.date_sent, TBL_OrderSummary.CharityPaid, TBL_OrderSummary.CharityPaidDate, TBL_OrderSummary.ProductReviewed, jewelry.jewelry, TBL_OrderSummary.anodization_fee, jewelry.SaleExempt, jewelry.type, ProductDetails.ProductDetailID,  ProductDetails.location, ProductDetails.DetailCode, sent_items.customer_first, TBL_OrderSummary.ProductPhotographed, TBL_Barcodes_SortOrder.ID_SortOrder, TBL_Barcodes_SortOrder.ID_Description, TBL_Barcodes_SortOrder.ID_Number, jewelry.type, ProductDetails.BinNumber_Detail, ProductDetails.Gauge, ProductDetails.Length, jewelry.active AS ActiveMain, ProductDetails.active AS ActiveDetail, TBL_OrderSummary.BackorderReview, ProductDetails.free, TBL_OrderSummary.item_problem, TBL_OrderSummary.TimesScanned, TBL_OrderSummary.ErrorReportDate, TBL_OrderSummary.ErrorDescription, TBL_OrderSummary.ErrorOnReview,  TBL_OrderSummary.ErrorSealedBag, TBL_OrderSummary.ErrorConserveBags, TBL_OrderSummary.ErrorQtyMissing, sent_items.PackagedBy, addon_item, TBL_OrderSummary.date_added, ISNULL(replace(jewelry.type,'None',''),'') + ' ' + ISNULL(jewelry.title,'') + ' ' + ISNULL(ProductDetails.ProductDetail1,'') + ' ' + ISNULL(ProductDetails.Gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') as 'item_description', TBL_OrderSummary.returned, TBL_OrderSummary.returned_qty, preorder_timeframes, item_ordered_date, item_received_date  FROM TBL_OrderSummary INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID INNER JOIN ProductDetails ON TBL_OrderSummary.DetailID = ProductDetails.ProductDetailID INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number LEFT OUTER JOIN TBL_Companies ON jewelry.brandname = TBL_Companies.name WHERE InvoiceID = '" & rsGetOrder.Fields.Item("ID").Value & "' ORDER BY OrderDetailID ASC"
 Set rsGetOrderItems = objCmd.Execute()
 
 
@@ -536,6 +536,7 @@ if not rsGetOrder.eof then
 				<option value="PayPal">PayPal</option>
 				<option value="American Express">American Express</option>
 				<option value="Discover">Discover</option>
+				<option value="Etsy">Etsy</option>
 				<option value="Instagram">Instagram</option>
 				<option value="Facebook">Facebook</option>
 				<option value="Cash">Cash</option>
@@ -643,6 +644,7 @@ if not rsGetOrder.eof then
 		<th scope="col">Price</th>
 		<th scope="col">Total</th>
 		<th scope="col">Coupon</th>
+		<th scope="col">Color Fee</th>
 		<th scope="col">Notes</th>
 		<th scope="col">&nbsp;</th>
 		<th scope="col">&nbsp;</th>
@@ -673,8 +675,13 @@ else
 	open_default = "style=""display:none"""
 end if
 
+	copy_anodization_fee = ""
+	if rsGetOrderItems("anodization_fee") > 0 then 
+		copy_anodization_fee = " + " & FormatCurrency(rsGetOrderItems("qty") * rsGetOrderItems("anodization_fee"), -1, -2, -0, -2) & " color add-on fee"
+	end if
 
-	copy_line_detail = rsGetOrderItems.Fields.Item("qty").Value & "&nbsp;&nbsp;|&nbsp;&nbsp;" & rsGetOrderItems.Fields.Item("title").Value & "&nbsp;" & rsGetOrderItems.Fields.Item("ProductDetail1").Value & "&nbsp;" & rsGetOrderItems.Fields.Item("Gauge").Value & "&nbsp;" & rsGetOrderItems.Fields.Item("Length").Value & "&nbsp;" & rsGetOrderItems.Fields.Item("PreOrder_Desc").Value & "&nbsp;" & rsGetOrderItems.Fields.Item("notes").Value &  "&nbsp;&nbsp;&nbsp;&nbsp;$" & FormatNumber(rsGetOrderItems.Fields.Item("item_price").Value * rsGetOrderItems.Fields.Item("qty").Value, -1, -2, -0, -2)
+
+	copy_line_detail = rsGetOrderItems.Fields.Item("qty").Value & "&nbsp;&nbsp;|&nbsp;&nbsp;" & rsGetOrderItems.Fields.Item("title").Value & "&nbsp;" & rsGetOrderItems.Fields.Item("ProductDetail1").Value & "&nbsp;" & rsGetOrderItems.Fields.Item("Gauge").Value & "&nbsp;" & rsGetOrderItems.Fields.Item("Length").Value & "&nbsp;" & rsGetOrderItems.Fields.Item("PreOrder_Desc").Value & "&nbsp;" & rsGetOrderItems.Fields.Item("notes").Value &  "&nbsp;&nbsp;&nbsp;&nbsp;$" & FormatNumber(rsGetOrderItems.Fields.Item("item_price").Value * rsGetOrderItems.Fields.Item("qty").Value, -1, -2, -0, -2) & "&nbsp;" & copy_anodization_fee
 						
 	copy_order_details = copy_order_details & "&#10;" &  copy_line_detail
 %>
@@ -726,6 +733,9 @@ end if
 <% end if %>
 <% if rsGetOrderItems.Fields.Item("returned").Value = 1 then %>
 	<br/><strong>RETURNED QTY <%= rsGetOrderItems.Fields.Item("returned_qty").Value %></strong>
+<% end if %>
+<% If rsGetOrderItems("anodization_fee") > 0 and rsGetOrderItems("PreOrder_Desc") <> "" then %>
+<br/><span class="badge badge-info mt-1" style="font-size:1em"><%= rsGetOrderItems("PreOrder_Desc") %> &#151; Anodization service added</span>
 <% end if %>
 <% if InStr( 1, lcase(rsGetOrderItems.Fields.Item("title").Value), lcase("gift certificate"), vbTextCompare) then 
 
@@ -840,6 +850,9 @@ end if
 		<td>&nbsp;</td>
 		<% end if %>
 		<td>
+			<%= FormatCurrency(rsGetOrderItems("qty") * rsGetOrderItems("anodization_fee"), -1, -2, -0, -2) %>
+		</td>
+		<td>
 			<input class="form-control form-control-sm" name="item_notes_<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>" type="text" value="<%= rsGetOrderItems.Fields.Item("notes").Value %>" data-column="notes" data-friendly="Item notes" data-detailid="<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>" data-productdetailid="<%= rsGetOrderItems.Fields.Item("ProductDetailID").Value %>" data-productid="<%= rsGetOrderItems.Fields.Item("ProductID").Value %>">
 		</td>
 		<td>
@@ -930,10 +943,10 @@ end if
 	</tr>
 <%
 	SumLineItem = SumLineItem + LineItem
+	sum_anodization_fees = sum_anodization_fees + rsGetOrderItems("qty") * rsGetOrderItems("anodization_fee")
 rsGetOrderItems.MoveNext()
-	InvoiceTotal = SumLineItem + (rsGetOrder.Fields.Item("shipping_rate").Value) - (rsGetOrder.Fields.Item("coupon_amt").Value)
 Wend
-
+	InvoiceTotal = SumLineItem + (rsGetOrder.Fields.Item("shipping_rate").Value) - (rsGetOrder.Fields.Item("coupon_amt").Value)
 copy_totals = "Subtotal: &nbsp;&nbsp;&nbsp;" & FormatCurrency(SumLineItem, -1, -2, -0, -2) & "&#10;"
 
 %>
@@ -1053,7 +1066,7 @@ end if
 
 next ' loop through totals array
 
-InvoiceTotal = (SumLineItem - total_preferred_discount - total_coupon_discount - total_free_credits + rsGetOrder.Fields.Item("shipping_rate").Value + total_sales_tax - total_store_credit - total_gift_cert - total_returns)
+InvoiceTotal = (SumLineItem + sum_anodization_fees - total_preferred_discount - total_coupon_discount - total_free_credits + rsGetOrder.Fields.Item("shipping_rate").Value + total_sales_tax - total_store_credit - total_gift_cert - total_returns)
 
 copy_totals = copy_totals & "Shipping:&nbsp;&nbsp;&nbsp;" & FormatCurrency(rsGetOrder.Fields.Item("shipping_rate").Value, -1, -2, -0, -2) & "&#10;" & "&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#10;TOTAL:&nbsp;&nbsp;&nbsp;" & FormatCurrency(InvoiceTotal, -1, -2, -0, -2) & ""
 copy_order_header = "Invoice # " & rsGetOrder.Fields.Item("ID").Value & "&nbsp;&nbsp;&nbsp;&nbsp;" & rsGetOrder.Fields.Item("shipped").Value & "&nbsp;&nbsp;&nbsp;&nbsp;" & rsGetOrder.Fields.Item("date_sent").Value & "&nbsp;&nbsp;&nbsp;&nbsp;" & rsGetOrder.Fields.Item("shipping_type").Value

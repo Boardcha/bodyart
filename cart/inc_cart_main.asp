@@ -171,7 +171,7 @@ end if ' if var_process_order <> "yes"
 ' ------- Get FREE o-rings
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "SELECT jewelry.ProductID, jewelry.title, ProductDetails.ProductDetailID, ProductDetails.qty, ProductDetails.ProductDetail1, ProductDetails.Gauge, jewelry.picture, ProductDetails.detail_code, ProductDetails.Free_QTY, ProductDetails.free FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID WHERE (jewelry.ProductID = 530 OR (jewelry.ProductID = 1649 AND ProductDetails.Gauge <> '1-1/8" & """" & "') OR jewelry.ProductID = 15385) AND ProductDetails.qty > 0 ORDER BY title, item_order ASC"
+		objCmd.CommandText = "SELECT jewelry.ProductID, jewelry.title, ProductDetails.ProductDetailID, ProductDetails.qty, ProductDetails.ProductDetail1, ProductDetails.Gauge, jewelry.picture, ProductDetails.detail_code, ProductDetails.Free_QTY, ProductDetails.wlsl_price, ProductDetails.free FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID WHERE (jewelry.ProductID = 530 OR (jewelry.ProductID = 1649 AND ProductDetails.Gauge <> '1-1/8" & """" & "') OR jewelry.ProductID = 15385) AND ProductDetails.qty > 0 ORDER BY title, item_order ASC"
 		Set rsGetOrings = objCmd.Execute()
 
 ' -------- END getting free o-rings

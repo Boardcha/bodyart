@@ -27,15 +27,26 @@ Set rsGetPurchaseOrders = objCmd.Execute()
     Continue bulk order
 <% end if %>
 </button>
+<div class="custom-control custom-checkbox">
+  <input name="needs-review" id="needs-review" type="checkbox" class="custom-control-input" value="yes">
+  <label class="custom-control-label" for="needs-review">To be reviewed by manager</label>
+</div>
 <table class="table table-striped table-borderless table-hover mt-4">
                   <% 
     While NOT rsGetPurchaseOrders.EOF
     %>
                     <tr>
-                      <td class="align-middle">
-                          <%= FormatDateTime(rsGetPurchaseOrders.Fields.Item("DateOrdered").Value,2)%>
-                          <a class="ml-5" href="inventory/view-print-bulk-order.asp?ID=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>">
+                      <td width="1%">
+                        <%= FormatDateTime(rsGetPurchaseOrders.Fields.Item("DateOrdered").Value,2)%>
+                      </td>
+                      <td>
+                          <a class="btn btn-sm btn-info ml-5" href="inventory/view-print-bulk-order.asp?ID=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>">
                             Print order to pull</a>
+                            <% if rsGetPurchaseOrders("po_needs_review") = "True" then %>
+
+                            <a class="btn btn-sm btn-outline-secondary ml-3" href="/admin/inventory/view-inprogress-bulk-order.asp?ID=<%= rsGetPurchaseOrders("PurchaseOrderID") %>">Manager review order</a>
+  
+                        <% end if %>
                       </td>
                     </tr>
                     <% 
@@ -50,7 +61,10 @@ Set rsGetPurchaseOrders = objCmd.Execute()
 	<div class="modal-dialog mw-100 w-75" role="document">
 	  <div class="modal-content">
 		<div class="modal-header">
-		  <h5 class="modal-title">Add items to pull <button class="btn btn-sm btn-primary ml-5" id="finalize-order" type="button">Finalize order to pull</button><span class="mr-2" id="msg-finalize"></span></h5>
+		  <div class="modal-title">
+            <h5>Add items to pull</h5> <button class="btn btn-sm btn-primary" id="finalize-order" type="button">Finalize order to pull</button><a href="/admin/inventory/view-inprogress-bulk-order.asp" class="btn btn-sm btn-secondary ml-2" id="view-order" target="_blank">View order in progress</a>
+            <span class="mr-2" id="msg-finalize"></span>
+        </div>
 		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
 			<span aria-hidden="true">&times;</span>
 		  </button>
@@ -73,7 +87,14 @@ Set rsGetPurchaseOrders = objCmd.Execute()
 </body>
 </html>
 <script type="text/javascript">
-
+$("#start-order").click(function(){
+  if ($('#needs-review').prop("checked")) {
+    $('#msg-finalize').show().html('<div class="alert alert-info mt-2 font-weight-bold">Quantities will be deducted after a manager reviews the order</div>')
+    } else {
+      $('#msg-finalize').show().html('<div class="alert alert-warning mt-2 font-weight-bold">Quantities will be deducted now ... no manager review</div>')
+    }
+    
+});
 
 $("#btn-search-product").click(function(){
     var productid = $('#product-id').val();
@@ -88,14 +109,26 @@ $(document).on("click", ".btn-add-item", function(){
     
     $('.msg-btn-add-' + detailid).show().html('<i class="fa fa-spinner fa-spin"></i>')
 
+    if ($('#needs-review').prop("checked")) {
+      var_needs_review = "yes"
+    } else {
+      var_needs_review = "no"
+    }
+
     $.ajax({
     method: "post",
     url: "inventory/ajax-bulk-add-item.asp",
-    data: {detailid: detailid, qty: qty}
+    data: {detailid: detailid, qty: qty, var_needs_review: var_needs_review}
     })
     .done(function( msg ) {
+
+      if (var_needs_review == "no") {
         $('.msg-btn-add-' + detailid).html("<div class='alert alert-success p-1'>" + qty + " deducted from stock</div>").delay(8000).fadeOut('slow');
         $('#on-hand-' + detailid).html(qty_on_hand - qty);
+      } else {
+        $('.msg-btn-add-' + detailid).html("<div class='alert alert-success p-1'>" + qty + " added to order</div>").delay(8000).fadeOut('slow');
+      }
+        
         
     })
     .fail(function(msg) {
@@ -105,11 +138,16 @@ $(document).on("click", ".btn-add-item", function(){
 
 $(document).on("click", "#finalize-order", function(){
     $('#msg-finalize').show().html('<i class="fa fa-spinner fa-spin mr-3"></i>Building order ...')
+    if ($('#needs-review').prop("checked")) {
+      var_needs_review = "yes"
+    } else {
+      var_needs_review = "no"
+    }
 
     $.ajax({
     method: "post",
     url: "inventory/ajax-bulk-finalize-order.asp",
-    data: {}
+    data: {var_needs_review: var_needs_review}
     })
     .done(function( msg ) {
         window.location.href = "inventory-bulk-pull-po.asp";
@@ -117,6 +155,7 @@ $(document).on("click", "#finalize-order", function(){
     .fail(function(msg) {
         alert("CODE ERROR");
     });
+    
 });
 </script>
 <%

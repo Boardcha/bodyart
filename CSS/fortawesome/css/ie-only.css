@@ -432,6 +432,10 @@
       content: '\f03b';
   }
 
+  .fa-alert:before {
+      content: '\f03c';
+  }
+
 
 .sr-only {
     position: absolute;

@@ -377,8 +377,8 @@ if var_addons_active <> "yes" then
 			objCmd.Parameters.Append(objCmd.CreateParameter("@pay_method",200,1,30,strCardType))
 			objCmd.Parameters.Append(objCmd.CreateParameter("@shipped",200,1,50,"Pending..."))
 
-			objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,now())) 'UGUR: This doesn't work on my local, see below line
-			'objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,Cstr(now())))
+			'objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,now())) 'UGUR: This doesn't work on my local, see below line
+			objCmd.Parameters.Append(objCmd.CreateParameter("@date_order_placed",200,1,30,Cstr(now())))
 
 			if session("preferred") = "yes" then
 				var_store_coupon = "YTG89R57"
@@ -460,34 +460,54 @@ if var_addons_active <> "yes" then
 	set rsGetInvoiceNum = nothing
 	
 	'Save order details -- array is generated in inc_orderdetails_toarray.asp
-	For i = 0 to (ubound(array_details_2, 2) - 1) ' loop through array
-		set objCmd = Server.CreateObject("ADODB.command")
-		objCmd.ActiveConnection = DataConn
-		'objCmd.CommandType = 4
-		'objCmd.CommandText = "Proc_Checkout4_InsertOrder"
+
+	While Not rs_getCart.EOF
 		
+		var_preorder_text = ""
+		var_itemPrice = 0
 		'If ProductID flagged as "waiting-list", meaning if customer comes from waiting-list email notification, save this info to the "referrer" field.
 		If Session(array_details_2(6,i)) = "waiting-list" Then 
 			var_referrer = "'waiting-list'" 
-		ElseIf array_details_2(13,i) = 2 Then ' 2 = it is added to cart back from saved items
+		ElseIf rs_getCart("cart_save_for_later") = 2 Then ' 2 = it is added to cart back from saved items
 			var_referrer = "'save-for-later'" 
 		Else 
 			var_referrer = "NULL"
 		End If
-		objCmd.CommandText = "INSERT INTO TBL_OrderSummary (InvoiceID, ProductID, DetailID, qty, item_price, notes, PreOrder_Desc, anodization_id_ordered, item_wlsl_price, referrer) VALUES (?,?,?,?,?,?,?,?,?," & var_referrer & ")"
-				objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,15,session("invoiceid")))
-				objCmd.Parameters.Append(objCmd.CreateParameter("productid",3,1,15,array_details_2(6,i)))
-				objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,15,array_details_2(0,i)))
-				objCmd.Parameters.Append(objCmd.CreateParameter("qty",3,1,10,array_details_2(1,i)))
-				objCmd.Parameters.Append(objCmd.CreateParameter("item_price",6,1,10,array_details_2(4,i)))
-				objCmd.Parameters.Append(objCmd.CreateParameter("item_notes",200,1,50,array_details_2(7,i)))
-				objCmd.Parameters.Append(objCmd.CreateParameter("preorder_notes",200,1,2000,array_details_2(5,i)))
-				objCmd.Parameters.Append(objCmd.CreateParameter("anodization_id_ordered",3,1,15,array_details_2(14,i)))
-				objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10,array_details_2(8,i)))  'UGUR: This doesn't work on my local, see below line
-				'objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10,1))
-		objCmd.Execute()
-	next ' loop through array
 
+		var_SavePrice_USdollars =  FormatNumber(rs_getCart.Fields.Item("price").Value, -1, -2, -2, -2)
+		if (rs_getCart("SaleDiscount") > 0 AND rs_getCart("secret_sale") = 0) OR (rs_getCart("secret_sale") = 1 AND session("secret_sale") = "yes") then
+			var_SavePrice_USdollars = FormatNumber(var_SavePrice_USdollars - (rs_getCart("price") * rs_getCart("SaleDiscount")/100), -1, -2, -2, -2)
+		end if
+
+		set objCmd = Server.CreateObject("ADODB.command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "SELECT * FROM TBL_Anodization_Colors_Pricing WHERE anodID = ?"
+		objCmd.Parameters.Append(objCmd.CreateParameter("id",200,1,70,rs_getCart.Fields.Item("anodID").Value))
+		Set rsAnodizeFee = objCmd.Execute()
+
+		If Not rsAnodizeFee.EOF Then 
+			var_anodization_fee = rsAnodizeFee("base_price")
+		else
+			var_anodization_fee = 0
+		end if
+
+
+		set objCmd = Server.CreateObject("ADODB.command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "INSERT INTO TBL_OrderSummary (InvoiceID, ProductID, DetailID, qty, item_price,  PreOrder_Desc, anodization_id_ordered, item_wlsl_price, referrer, anodization_fee) VALUES (?,?,?,?,?,?,?,?," & var_referrer & ", ?)"
+				objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,15,session("invoiceid")))
+				objCmd.Parameters.Append(objCmd.CreateParameter("productid",3,1,15, rs_getCart("ProductID") ))
+				objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,15, rs_getCart("ProductDetailID") ))
+				objCmd.Parameters.Append(objCmd.CreateParameter("qty",3,1,10, rs_getCart("cart_qty") ))
+				objCmd.Parameters.Append(objCmd.CreateParameter("item_price",6,1,10, FormatNumber(var_SavePrice_USdollars, -1, -2, -2, -2) ))
+				objCmd.Parameters.Append(objCmd.CreateParameter("preorder_notes",200,1,2000, replace(rs_getCart("cart_preorderNotes"),"{}", "   ") ))
+				objCmd.Parameters.Append(objCmd.CreateParameter("anodization_id_ordered",3,1,15, rs_getCart("anodID") ))
+				objCmd.Parameters.Append(objCmd.CreateParameter("item_wlsl_price",6,1,10, FormatNumber(rs_getCart("wlsl_price"), -1, -2, -2, -2) ))
+				objCmd.Parameters.Append(objCmd.CreateParameter("anodization_fee",6,1,10, var_anodization_fee ))
+		objCmd.Execute()
+	rs_getCart.MoveNext()
+	wend
+	
 ' END store order
 ' =================================================================================
 end if 'if var_addons_active

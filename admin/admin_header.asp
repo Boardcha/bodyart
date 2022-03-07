@@ -163,7 +163,7 @@ Set rsOrderOver150 = objcmd.Execute()
 
 <%
 '=========== START PRODUCT MANAGEMENT MENU ========================================
-If var_access_level = "Admin" or var_access_level = "Manager" or var_access_level = "Inventory" then  
+If var_access_level = "Admin" or var_access_level = "Manager" or var_access_level = "Inventory" or user_name = "Melissa" then  
 
 set objcmd = Server.CreateObject("ADODB.command")
 objcmd.ActiveConnection = DataConn
@@ -179,6 +179,11 @@ set objcmd = Server.CreateObject("ADODB.command")
 objcmd.ActiveConnection = DataConn
 objcmd.CommandText = "SELECT Count(*) AS total_inventory_issues FROM TBL_OrderSummary WHERE inventory_issue_toggle = 1"
 Set rsInventoryIssues = objcmd.Execute()
+
+set objcmd = Server.CreateObject("ADODB.command")
+objcmd.ActiveConnection = DataConn
+objcmd.CommandText = "SELECT DISTINCT TOP (100) PERCENT Count(*) AS total_to_anodize FROM dbo.TBL_OrderSummary AS ORS LEFT OUTER JOIN  dbo.sent_items AS SNT ON SNT.ID = ORS.InvoiceID AND ORS.item_price > 0 AND ORS.anodized_completed = 0 AND ORS.anodization_id_ordered > 0 WHERE (SNT.anodize = 1)"
+Set rsAnodizeCount = objcmd.Execute()
 %>
 
 	<li class="nav-item dropdown position-static border-right border-secondary">
@@ -243,7 +248,7 @@ Set rsInventoryIssues = objcmd.Execute()
 				</div>
 				<div class="col">
 					<h5>Anodizing</h5>
-					<a href="/admin/anodization-orders.asp">Custom orders that need anodizing</a><br/>
+					<a href="/admin/anodization-orders.asp"><span class=" badge badge-danger mr-2"><%= rsAnodizeCount("total_to_anodize") %></span>Custom orders that need anodizing</a><br/>
 					<a href="/admin/inventory-anodize.asp">Anodized products list</a><br/>
 					<a href="/admin/available-empty-bins.asp">Available empty bins</a><br/>
 					<br>
@@ -515,8 +520,12 @@ If var_access_level = "Admin" then  %>
 	<ul class="navbar-nav ml-auto">
 	<%  
 	If user_name <> "Rebekah" and total_backorders_to_review > 0  then  %>
-	<li class="nav-item"><a class="nav-link border-right border-secondary bg-danger" href="/admin/review-backorders.asp">Backorders (<%= total_backorders_to_review %>)</a></li>
+	<li class="nav-item"><a class="nav-link border-right border-light bg-secondary" href="/admin/review-backorders.asp">Backorders<span class="badge badge-warning ml-2"><%= total_backorders_to_review %></span> </a></li>
 	<% end if  %>	
+
+<% if  user_name = "Adrienne" or user_name = "Melissa" or user_name = "Andres" or  user_name = "Amanda" or  user_name = "Ellen"    then %>
+<li class="nav-item"><a class="nav-link border-right border-light bg-secondary" href="/admin/anodization-orders.asp">Anodization<span class="badge badge-warning ml-2"><%= rsAnodizeCount("total_to_anodize") %></span></a></li>
+<% end if %>
 <%
 if var_access_level = "Admin" or var_access_level = "Manager" or user_name = "Nathan" or user_name = "Melissa" or user_name = "Anna" or user_name = "Rebekah" or user_name = "Sarena" then
 
@@ -532,7 +541,7 @@ total_products_to_review = rsGetProductsToReview.RecordCount
 
 if total_products_to_review > 0 then
 %>
-<li class="nav-item"><a class="nav-link border-right border-secondary bg-primary" href="/admin/review-products.asp">Products (<%= total_products_to_review %>)</a></li>
+<li class="nav-item"><a class="nav-link border-right border-light bg-secondary" href="/admin/review-products.asp">Products<span class="badge badge-warning ml-2"><%= total_products_to_review %></span></a></li>
 <%
 end if
 
@@ -541,7 +550,7 @@ Set rsGetPhotoReviewCount = DataConn.Execute(SqlString)
 
 if rsGetPhotoReviewCount.Fields.Item("TotalPhotos").Value > 0 then
 %>
- <li class="nav-item"><a class="nav-link border-right border-secondary bg-warning" style="color:#000!important" href="/admin/approve-photos.asp">Photos (<%= rsGetPhotoReviewCount.Fields.Item("TotalPhotos").Value %>)</a></li>
+ <li class="nav-item"><a class="nav-link border-right border-light bg-secondary" href="/admin/approve-photos.asp">Photos<span class="badge badge-warning ml-2"><%= rsGetPhotoReviewCount.Fields.Item("TotalPhotos").Value %></span></a></li>
 <%
 end if
 
@@ -550,7 +559,7 @@ Set rsGetJewelryReviewCount = DataConn.Execute(SqlString)
 
 if rsGetJewelryReviewCount.Fields.Item("TotalReviews").Value > 0 then
 %>
-      <li class="nav-item"><a class="nav-link border-right border-secondary bg-warning" style="color:#000!important" href="/admin/approve-reviews.asp">Reviews (<%= rsGetJewelryReviewCount.Fields.Item("TotalReviews").Value %>)</a></li>
+      <li class="nav-item"><a class="nav-link border-right border-light bg-secondary" href="/admin/approve-reviews.asp">Reviews<span class="badge badge-warning ml-2"><%= rsGetJewelryReviewCount.Fields.Item("TotalReviews").Value %></span></a></li>
 <%
 end if
 

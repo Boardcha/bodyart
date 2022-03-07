@@ -7,9 +7,9 @@
     </select>
 	</p>
 	<p>
-  Jewelry is measured through a gauge system (see chart below). The <strong>higher</strong> the gauge number the <strong>smaller</strong> the wire is. A standard &quot;earring&quot; is usually 20 gauge. Jewelry gauges/sizes can vary between manufacturers. There is no universal regulation on companies to make a standard size in body jewelry. A big part of this is that some jewelry is made overseas and measured in millimeters. And in the USA jewelry is measured in inches/gauges. So many times jewelry can be anywhere from .5mm to 1mm different.</p>
-  <img class="d-block mb-3 img-fluid" src="/images/jewelry-how-to-measure.png">
-<strong>CONVERSION CHART:</strong>
+  Jewelry is measured through a gauge system (conversion chart below). The <strong>higher</strong> the gauge number the <strong>smaller</strong> the wire is. For reference, a standard &quot;earring&quot; is usually 20 gauge. Jewelry gauges can vary between manufacturers. There is no universal regulation on companies to make a standard size in body jewelry. This is because some jewelry is made outside of the USA and measured in millimeters. And in the USA jewelry is measured in inches.</p>
+
+  <strong>GAUGE CONVERSION CHART:</strong>
   <table class="table w-auto">
   <thead class="thead-dark">
 		<tr>
@@ -18,6 +18,16 @@
 		  <th class="table-cell">Inch</th>
 		</tr>
 	</thead>
+  <tr>
+    <td>20g</td>
+    <td>.81mm</td>
+    <td></td>
+  </tr>
+  <tr>
+    <td>18g</td>
+    <td>1mm</td>
+    <td></td>
+  </tr>
     <tr>
       <td>16g</td>
       <td>1.2mm</td>
@@ -104,6 +114,14 @@
       <td>1&quot;</td>
     </tr>
     <tr>
+      <td class="text-center" colspan="3">
+        <span class="btn btn-sm btn-outline-secondary" id="toggle-above-1inch">
+          Show sizes above 1 inch
+        </span>
+      </td>
+    </tr>
+    <tbody style="display:none" id="above-1inch">
+    <tr>
       <td>&nbsp;</td>
       <td>26.9mm</td>
       <td>1-1/16&quot;</td>
@@ -168,29 +186,112 @@
       <td>51mm</td>
       <td>2&quot;</td>
     </tr>
+  </tbody>
   </table>
+
+    <div class="container-fluid p-3 border border-secondary bg-light" style="border-radius: 10px;border-width:3px!important">
+      <div class="row">
+        <div class="col-12 col-xl-2 col-lg-3 col-md-4 col-sm-6">
+          <img class="img-fluid" src="/images/measurement-guide/illustration-captive-bead-ring.png">
+        </div>
+        <div class="col-12 col-xl-10 col-lg-9 col-md-8 col-sm-6">
+          <h4 class="m-0 p-0">Rings</h4>
+          <div>Rings are an essential item that can be worn in many piercings. They come in various styles:
+            <ul>
+              <li>Captive bead rings - These use tension to hold a bead in place.</li>
+              <li>Clickers - These use a hinge to open and close the ring.</li>
+              <li>Segment rings - These have a "segment" that comes completely out of the jewelry similar to removing a bead. But it looks like a completely seamless piece of jewelry.</li>
+              <li>Seamless rings - These rings require bending to open & close.</li>
+            </ul>
+            <h5 class="text-secondary">How to measure rings</h5>
+            <ul>
+              <li>Gauge - This is the <i>thickness</i> of the ring itself.</li>
+              <li>Diameter/Length - Measure directly across the <i>inside</i> center of the ring.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid p-3 border border-secondary bg-light mt-4" style="border-radius: 10px;border-width:3px!important">
+      <div class="row">
+        <div class="col-12 col-xl-2 col-lg-3 col-md-4 col-sm-6">
+          <img class="img-fluid" src="/images/measurement-guide/illustration-straight-barbell.png">
+        </div>
+        <div class="col-12 col-xl-10 col-lg-9 col-md-8 col-sm-6">
+          <h4 class="m-0 p-0">Straight Barbells</h4>
+          <div>Straight barbells are commonly worn in various ear projects, nipples, and tongue piercings.
+            <h5 class="text-secondary mt-2">How to measure straight barbells</h5>
+            <ul>
+              <li>Gauge - This is the <i>thickness</i> of the post/bar itself.</li>
+              <li>Length - Measure directly across the post <i>between</i> the ends.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid p-3 border border-secondary bg-light mt-4" style="border-radius: 10px;border-width:3px!important">
+      <div class="row">
+        <div class="col-12 col-xl-2 col-lg-3 col-md-4 col-sm-6">
+          <img class="img-fluid" src="/images/measurement-guide/illustration-curved-barbell.png">
+        </div>
+        <div class="col-12 col-xl-10 col-lg-9 col-md-8 col-sm-6">
+          <h4 class="m-0 p-0">Curved Barbells</h4>
+          <div>Curved barbells are commonly worn in various ear projects & eyebrows.
+            <h5 class="text-secondary mt-2">How to measure curved barbells</h5>
+            <ul>
+              <li>Gauge - This is the <i>thickness</i> of the post/bar itself.</li>
+              <li>Length - Measure directly across the post <i>between</i> the ends.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="container-fluid p-3 border border-secondary bg-light mt-4" style="border-radius: 10px;border-width:3px!important">
+      <div class="row">
+        <div class="col-12 col-xl-2 col-lg-3 col-md-4 col-sm-6">
+          <img class="img-fluid" src="/images/measurement-guide/illustration-circular-barbell.png">
+        </div>
+        <div class="col-12 col-xl-10 col-lg-9 col-md-8 col-sm-6">
+          <h4 class="m-0 p-0">Circular Barbells</h4>
+          <div>Circular barbells are commonly worn in various ear projects, septums, nipples, and lips.
+            <h5 class="text-secondary mt-2">How to measure circular barbells</h5>
+            <ul>
+              <li>Gauge - This is the <i>thickness</i> of the post itself.</li>
+              <li>Diameter/Length - Measure directly across the <i>inside</i> center of the circular.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
   <% end if ' do not show for finger rings %>
   <% if var_sizing_type = "all" or var_sizing_type = "septum" or var_sizing_type = "captive" then %>
-	<h5>
+	<h5 class="mt-4">
 		Measuring septum jewelry
   </h5>
   Septum jewelry is measured by the diameter straight across the center of a ring. How far it sits below your nose will be dependant on where you're pierced. We've given an example below of a septum that's pierced a bit lower (see the side shot) and how it will look with different diameters. The general rule is, the smaller the diameter the tighter the fit.
   
 <div class="container-fluid">
   <div class="row text-center">
-    <div class="col text-center">
+    <div class="col-6 text-center">
         <img class="img-fluid lazyload" data-src="/images/sizing/septum-sizing-516inch.jpg">
         <h6 class="alert alert-info">5/16" (~8mm) diameter</h6>
     </div>
-    <div class="col text-center">
+    <div class="col-6 text-center">
         <img class="img-fluid lazyload" data-src="/images/sizing/septum-sizing-38inch.jpg">
         <h6 class="alert alert-info">3/8" (~10mm) diameter</h6>
     </div>
-    <div class="col text-center">
+    <div class="col-6 text-center">
         <img class="img-fluid lazyload" data-src="/images/sizing/septum-sizing-12mm.jpg">
         <h6 class="alert alert-info">1/2" (~12mm diameter)</h6>
     </div>
-    <div class="col text-center">
+    <div class="col-6 text-center">
         <img class="lazyload" data-src="/images/sizing/septum-sizing-side.jpg">
     </div>
   </div>

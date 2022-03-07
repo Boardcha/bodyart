@@ -111,8 +111,10 @@ If instr(shipping_label, "R0lGOD") > 0 then
   </tr>
 </table>
 
-<% if rsGetInvoice.Fields.Item("pay_method").Value = "Etsy" then %>
-<center><h1>ETSY</h1></center>
+<% if rsGetInvoice.Fields.Item("pay_method").Value = "Etsy" OR rsGetInvoice.Fields.Item("pay_method").Value = "Instagram" OR rsGetInvoice.Fields.Item("pay_method").Value = "Facebook" then %>
+<center><h1><%= Ucase(rsGetInvoice("pay_method")) %> ORDER</h1>
+<h3>Find thousands of more styles at Bodyartforms.com</h3>
+</center>
 <% end if %>
  
 <table>
@@ -126,7 +128,7 @@ If instr(shipping_label, "R0lGOD") > 0 then
 
 Set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
-objCmd.CommandText = "SELECT OrderDetailID, TBL_OrderSummary.qty, title, ProductDetail1, PreOrder_Desc, ProductDetails.price, notes, TBL_OrderSummary.item_price, DetailCode, ProductDetailID, ID_Description, ID_SortOrder, ID_Number, type, autoclavable, BinNumber_Detail, Gauge, Length, location FROM TBL_OrderSummary INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID INNER JOIN ProductDetails ON TBL_OrderSummary.DetailID = ProductDetails.ProductDetailID INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number WHERE ID = ? ORDER BY ID_SortOrder ASC, BinNumber_Detail ASC, ProductDetailID ASC"
+objCmd.CommandText = "SELECT OrderDetailID, TBL_OrderSummary.qty, title, ProductDetail1, PreOrder_Desc, ProductDetails.price, notes, TBL_OrderSummary.item_price, DetailCode, ProductDetailID, ID_Description, anodization_id_ordered, anodization_fee, ID_SortOrder, ID_Number, type, autoclavable, BinNumber_Detail, Gauge, Length, location FROM TBL_OrderSummary INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID INNER JOIN ProductDetails ON TBL_OrderSummary.DetailID = ProductDetails.ProductDetailID INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number WHERE ID = ? ORDER BY ID_SortOrder ASC, BinNumber_Detail ASC, ProductDetailID ASC"
 objCmd.Parameters.Append(objCmd.CreateParameter("invoice",3,1,10,rsGetInvoice.Fields.Item("ID").Value))
 Set rsGetOrderDetails = objCmd.Execute()
 
@@ -144,16 +146,20 @@ ItemsTotal = 0
 		<% if rsGetOrderDetails.Fields.Item("notes").Value <> "" then %>
 			<strong><%= rsGetOrderDetails.Fields.Item("notes").Value %> &nbsp;</strong>
 		<% end if %>
-				<% if rsGetOrderDetails.Fields.Item("autoclavable").Value = 1 and rsGetInvoice.Fields.Item("autoclave").Value = 1 then %>
+		<% if rsGetOrderDetails.Fields.Item("autoclavable").Value = 1 and rsGetInvoice.Fields.Item("autoclave").Value = 1 then %>
 			<strong>
 		<% end if %>
 		<%=(rsGetOrderDetails.Fields.Item("title").Value)%>
 				<% if rsGetOrderDetails.Fields.Item("autoclavable").Value = 1 then %>
 			</strong>
 		<% end if %>
+		
 		&nbsp;&nbsp;<%=(rsGetOrderDetails.Fields.Item("ProductDetail1").Value)%>&nbsp;<%=(rsGetOrderDetails.Fields.Item("Gauge").Value)%>&nbsp;<%=(rsGetOrderDetails.Fields.Item("Length").Value)%>
-        <% if InStr( 1, (rsGetOrderDetails.Fields.Item("title").Value), "CUSTOM ORDER", vbTextCompare) then %>
-        <br>
+		<% if rsGetOrderDetails("anodization_fee") > 0 then %>
+		<strong>COLOR ADDED</strong>
+		<% end if %>
+        <% if rsGetOrderDetails.Fields.Item("PreOrder_Desc").Value <> "" then %>
+		 - 
         <%= (rsGetOrderDetails.Fields.Item("PreOrder_Desc").Value) %>
         <% end if %>
 		
@@ -172,6 +178,10 @@ ItemsTotal = 0
     </td>
     <td class="line-total">
         <%= FormatCurrency((rsGetOrderDetails.Fields.Item("item_price").Value)*(rsGetOrderDetails.Fields.Item("qty").Value), -1, -2, -0, -2) %>
+		<% if rsGetOrderDetails("anodization_fee") > 0 then %>
+		<br>
+		 + <%= FormatCurrency(rsGetOrderDetails("qty") * rsGetOrderDetails("anodization_fee"),2) %> color add-on fee
+		<% end if %>
     </td>
 	<% end if %>
   </tr>
@@ -179,6 +189,7 @@ ItemsTotal = 0
 	LineItem = rsGetOrderDetails.Fields.Item("item_price").Value * rsGetOrderDetails.Fields.Item("qty").Value
 	
 	SumLineItem = SumLineItem + LineItem
+	sum_anodization_fees = sum_anodization_fees + rsGetOrderDetails("qty") * rsGetOrderDetails("anodization_fee")
 	rsGetOrderDetails.Movenext()
 	InvoiceTotal = SumLineItem + (rsGetInvoice.Fields.Item("shipping_rate").Value) - (rsGetInvoice.Fields.Item("coupon_amt").Value)
 Wend
@@ -249,7 +260,7 @@ Set rsGetOrderDetails = Nothing
 	next ' loop through totals array
 
 
-	InvoiceTotal = (SumLineItem - total_preferred_discount - total_coupon_discount - total_free_credits + rsGetInvoice.Fields.Item("shipping_rate").Value + total_sales_tax - total_store_credit - total_gift_cert)
+	InvoiceTotal = (SumLineItem + sum_anodization_fees - total_preferred_discount - total_coupon_discount - total_free_credits + rsGetInvoice.Fields.Item("shipping_rate").Value + total_sales_tax - total_store_credit - total_gift_cert)
 	%>
 	<% end if ' if gift order don't show pricing BUT DO show shipping method below 
 	%>

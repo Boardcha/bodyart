@@ -390,7 +390,7 @@ If rsGetOrderTotals.Fields.Item("subtotal").Value + rsGetOrderTotals.Fields.Item
 <%
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT TOP (100) PERCENT TBL_OrderSummary.InvoiceID AS ID, TBL_OrderSummary.OrderDetailID, TBL_OrderSummary.qty, jewelry.title, ProductDetails.ProductDetail1, TBL_OrderSummary.returned, TBL_OrderSummary.item_price, TBL_OrderSummary.backorder, TBL_OrderSummary.ProductReviewed, TBL_OrderSummary.ProductPhotographed, TBL_OrderSummary.PreOrder_Desc, ProductDetails.Gauge, ProductDetails.Length, ProductDetails.free, jewelry.picture, TBL_PhotoGallery.status, TBLReviews.status AS ReviewStatus, TBLReviews.review_rating, TBLReviews.review, TBLReviews.review_edited, jewelry.jewelry, TBL_PhotoGallery.PhotoID, ISNULL(TBL_OrderSummary.notes,'') as notes, ProductDetails.ProductDetailID, ProductDetails.ProductID, title + ' ' + Gauge + ' ' + Length + ' ' + ProductDetail1 as 'concat-title' FROM  dbo.TBL_OrderSummary INNER JOIN dbo.ProductDetails ON dbo.TBL_OrderSummary.DetailID = dbo.ProductDetails.ProductDetailID INNER JOIN dbo.jewelry ON dbo.ProductDetails.ProductID = dbo.jewelry.ProductID FULL OUTER JOIN dbo.TBLReviews ON dbo.TBL_OrderSummary.OrderDetailID = dbo.TBLReviews.ReviewOrderDetailID FULL OUTER JOIN dbo.TBL_PhotoGallery ON dbo.TBL_OrderSummary.OrderDetailID = dbo.TBL_PhotoGallery.OrderDetailID WHERE TBL_OrderSummary.InvoiceID = ? ORDER BY OrderDetailID ASC"
+objCmd.CommandText = "SELECT TOP (100) PERCENT TBL_OrderSummary.InvoiceID AS ID, TBL_OrderSummary.OrderDetailID, TBL_OrderSummary.qty, jewelry.title, ProductDetails.ProductDetail1, TBL_OrderSummary.returned, TBL_OrderSummary.item_price, TBL_OrderSummary.backorder, TBL_OrderSummary.anodization_fee, TBL_OrderSummary.ProductReviewed, TBL_OrderSummary.ProductPhotographed, TBL_OrderSummary.PreOrder_Desc, ProductDetails.Gauge, ProductDetails.Length, ProductDetails.free, jewelry.picture, TBL_PhotoGallery.status, TBLReviews.status AS ReviewStatus, TBLReviews.review_rating, TBLReviews.review, TBLReviews.review_edited, jewelry.jewelry, TBL_PhotoGallery.PhotoID, ISNULL(TBL_OrderSummary.notes,'') as notes, ProductDetails.ProductDetailID, ProductDetails.ProductID, title + ' ' + Gauge + ' ' + Length + ' ' + ProductDetail1 as 'concat-title' FROM  dbo.TBL_OrderSummary INNER JOIN dbo.ProductDetails ON dbo.TBL_OrderSummary.DetailID = dbo.ProductDetails.ProductDetailID INNER JOIN dbo.jewelry ON dbo.ProductDetails.ProductID = dbo.jewelry.ProductID FULL OUTER JOIN dbo.TBLReviews ON dbo.TBL_OrderSummary.OrderDetailID = dbo.TBLReviews.ReviewOrderDetailID FULL OUTER JOIN dbo.TBL_PhotoGallery ON dbo.TBL_OrderSummary.OrderDetailID = dbo.TBL_PhotoGallery.OrderDetailID WHERE TBL_OrderSummary.InvoiceID = ? ORDER BY OrderDetailID ASC"
 objCmd.Parameters.Append(objCmd.CreateParameter("InvoiceID",3,1,10,rsGetOrders.Fields.Item("ID").Value))
 Set rsGetOrderDetails = objCmd.Execute()
 
@@ -469,7 +469,11 @@ While not rsGetOrderDetails.eof
 				<button class="btn btn-sm btn-outline-secondary btn-block my-1 btn-moreInfo-modal" type="button" data-toggle="modal" data-target="#MoreInfoModal" data-preorderSpecs="<%= Server.HTMLEncode(rsGetOrderDetails.Fields.Item("PreOrder_Desc").Value) %>">Custom Order Details</button>
 			<% end if %>
 			<%= var_bo_text %>
-			<div class="small font-weight-bold"><span class="pr-3">Qty <%= rsGetOrderDetails.Fields.Item("qty").Value %></span><%=FormatCurrency((rsGetOrderDetails.Fields.Item("item_price").Value)*(rsGetOrderDetails.Fields.Item("qty").Value),2)%></div>
+			<div class="small font-weight-bold"><span class="pr-3">Qty <%= rsGetOrderDetails.Fields.Item("qty").Value %></span><%=FormatCurrency((rsGetOrderDetails.Fields.Item("item_price").Value)*(rsGetOrderDetails.Fields.Item("qty").Value),2)%>
+			<% if rsGetOrderDetails("anodization_fee") > 0 then %>
+			+ <%= FormatCurrency(rsGetOrderDetails("qty") * rsGetOrderDetails("anodization_fee"), -1, -2, -0, -2) %> color add-on
+			<% end if %>
+			</div>
 			<div class="small item-info">
 			<%=(rsGetOrderDetails.Fields.Item("Gauge").Value)%>&nbsp;<%=(rsGetOrderDetails.Fields.Item("Length").Value)%>&nbsp;<%=(rsGetOrderDetails.Fields.Item("ProductDetail1").Value)%>&nbsp;<%=(rsGetOrderDetails.Fields.Item("title").Value)%>
 		</div>
@@ -481,6 +485,7 @@ While not rsGetOrderDetails.eof
 	</div><!-- flex column -->
 <%
 end if ' don't display free items
+	sum_anodization_fees = sum_anodization_fees + rsGetOrderDetails("qty") * rsGetOrderDetails("anodization_fee")
 rsGetOrderDetails.Movenext()
 
 wend
@@ -562,7 +567,7 @@ next ' loop through totals array
 			<% end if %>&nbsp;
 			<%= FormatCurrency(rsGetOrders.Fields.Item("shipping_rate").Value, -1, -2, -0, -2) %>
 			<div class="font-weight-bold">
-			TOTAL <% if InvoiceTotal < 0 then %>0<% else %><%= FormatCurrency(rsGetOrderTotals.Fields.Item("subtotal").Value + rsGetOrderTotals.Fields.Item("total_discount_taxes").Value, -1, -2, -0, -2)  %><% end if %>
+			TOTAL <% if InvoiceTotal < 0 then %>0<% else %><%= FormatCurrency(rsGetOrderTotals.Fields.Item("subtotal").Value + sum_anodization_fees + rsGetOrderTotals.Fields.Item("total_discount_taxes").Value, -1, -2, -0, -2)  %><% end if %>
 		</div>
 
 <% end if %><!-- if not rsGetOrderTotals.eof then -->

@@ -21,12 +21,26 @@
 	objCmd.Parameters.Append(objCmd.CreateParameter("add_price",6,1,10,request("add_price")))	
 	objCmd.Execute()
 
+	' Retrieve order
+	Set objCmd = Server.CreateObject ("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "SELECT qty FROM ProductDetails WHERE ProductDetailID = ?" 
+	objCmd.Parameters.Append(objCmd.CreateParameter("detail_id",3,1,20, request("add_detailid") ))
+	Set rsGetCurrentQty = objCmd.Execute()
+
 	' Deduct inventory
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - " & request("add_qty") & ", DateLastPurchased = '"& date() &"' WHERE ProductDetailID = ?"
 	objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,15,request("add_detailid")))
 	objCmd.Execute()
+
+	'Write info to edits log	
+	set objCmd = Server.CreateObject("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & request("add_detailid") & ",'Automated - Deducted " & request("add_qty") & " from stock. Updated from " & rsGetCurrentQty("qty") & " to " & rsGetCurrentQty("qty") - request("add_qty") & " - adding item to order from invoice edit page','" & now() & "')"
+	objCmd.Execute()
+	Set objCmd = Nothing
 	
 	' Retrieve order
 	Set objCmd = Server.CreateObject ("ADODB.Command")

@@ -60,7 +60,7 @@ if request.cookies("oringsid") <> "" then ' add o-ring item to details array ---
 
 	rsGetOrings.MoveNext()
 	Loop
-	Set rsGetOrings = Nothing
+	rsGetOrings.MoveFirst()
 	
 end if ' add o-ring to array -------------------------------------------------------------------
 

@@ -112,12 +112,13 @@ if request.querystring("step") = "1" then
 			' WRITE TO PAYPAL LOG
 			set objCmd = Server.CreateObject("ADODB.command")
 			objCmd.ActiveConnection = DataConn
-			objCmd.CommandText = "INSERT INTO tbl_paypal_logs (invoice_id, total, payflow_step, api_message, email) VALUES (?,?,?,?,?)"
+			objCmd.CommandText = "INSERT INTO tbl_checkout_logs (invoice_id, total, payflow_step, api_message, email, payment_method) VALUES (?,?,?,?,?,?)"
 			objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15, session("invoiceid")))
 			objCmd.Parameters.Append(objCmd.CreateParameter("total",6,1,10, paypal_amt))
 			objCmd.Parameters.Append(objCmd.CreateParameter("payflow_step",200,1,200, "step 1 - NOT APPROVED"))
 			objCmd.Parameters.Append(objCmd.CreateParameter("api_message",200,1,2000, var_message))
 			objCmd.Parameters.Append(objCmd.CreateParameter("email",200,1,100, session("email")))
+			objCmd.Parameters.Append(objCmd.CreateParameter("payment_method",200,1,50, "PayPal"))
 			objCmd.Execute()
 		
 		end if
@@ -130,12 +131,13 @@ if request.querystring("step") = "1" then
 		' WRITE TO PAYPAL LOG
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "INSERT INTO tbl_paypal_logs (invoice_id, total, payflow_step, api_message, email) VALUES (?,?,?,?,?)"
+		objCmd.CommandText = "INSERT INTO tbl_checkout_logs (invoice_id, total, payflow_step, api_message, email, payment_method) VALUES (?,?,?,?,?,?)"
 		objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15, session("invoiceid")))
 		objCmd.Parameters.Append(objCmd.CreateParameter("total",6,1,10, paypal_amt))
 		objCmd.Parameters.Append(objCmd.CreateParameter("payflow_step",200,1,200, "step 1 - ERROR"))
 		objCmd.Parameters.Append(objCmd.CreateParameter("api_message",200,1,2000, var_message))
 		objCmd.Parameters.Append(objCmd.CreateParameter("email",200,1,100, session("email")))
+		objCmd.Parameters.Append(objCmd.CreateParameter("payment_method",200,1,50, "PayPal"))
 		objCmd.Execute()
 		
 	end if
@@ -183,7 +185,7 @@ if request.querystring("step") = 2 then
 			' WRITE TO PAYPAL LOG
 			set objCmd = Server.CreateObject("ADODB.command")
 			objCmd.ActiveConnection = DataConn
-			objCmd.CommandText = "INSERT INTO tbl_paypal_logs (invoice_id, payflow_step, api_message, payerID, transaction_id,total, email) VALUES (?,?,?,?,?,?,?)"
+			objCmd.CommandText = "INSERT INTO tbl_checkout_logs (invoice_id, payflow_step, api_message, payerID, transaction_id,total, email, payment_method) VALUES (?,?,?,?,?,?,?,?)"
 			objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15, session("invoiceid")))
 			objCmd.Parameters.Append(objCmd.CreateParameter("payflow_step",200,1,200, "step 2 - ERROR"))
 			objCmd.Parameters.Append(objCmd.CreateParameter("api_message",200,1,2000, var_message))
@@ -191,6 +193,7 @@ if request.querystring("step") = 2 then
 			objCmd.Parameters.Append(objCmd.CreateParameter("transaction_id",200,1,200, session("paypal_transid")))
 			objCmd.Parameters.Append(objCmd.CreateParameter("total",6,1,10, paypal_amt))
 			objCmd.Parameters.Append(objCmd.CreateParameter("email",200,1,100, session("email")))
+			objCmd.Parameters.Append(objCmd.CreateParameter("payment_method",200,1,50, "PayPal"))
 			objCmd.Execute()
 		
 		end if
@@ -317,12 +320,13 @@ if request.cookies("OrderAddonsActive") = "" then
 	' WRITE TO PAYPAL LOG
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "INSERT INTO tbl_paypal_logs (invoice_id, payflow_step, api_message, total, email) VALUES (?,?,?,?,?)"
+	objCmd.CommandText = "INSERT INTO tbl_checkout_logs (invoice_id, payflow_step, api_message, total, email, payment_method) VALUES (?,?,?,?,?,?)"
 	objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15, session("invoiceid")))
 	objCmd.Parameters.Append(objCmd.CreateParameter("payflow_step",200,1,200, "PAYMENT COMPLETE"))
 	objCmd.Parameters.Append(objCmd.CreateParameter("api_message",200,1,2000, var_message))
 	objCmd.Parameters.Append(objCmd.CreateParameter("total",6,1,10, paypal_amt))
 		objCmd.Parameters.Append(objCmd.CreateParameter("email",200,1,100, session("email")))
+		objCmd.Parameters.Append(objCmd.CreateParameter("payment_method",200,1,50, "PayPal"))
 	objCmd.Execute()
 
 %>
@@ -360,7 +364,7 @@ end if ' If payment is a success
 ' WRITE TO PAYPAL LOG
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "INSERT INTO tbl_paypal_logs (invoice_id, payflow_step, api_message, payerID, transaction_id,total, email) VALUES (?,?,?,?,?,?,?)"
+objCmd.CommandText = "INSERT INTO tbl_checkout_logs (invoice_id, payflow_step, api_message, payerID, transaction_id,total, email, payment_method) VALUES (?,?,?,?,?,?,?,?)"
 objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15, session("invoiceid")))
 objCmd.Parameters.Append(objCmd.CreateParameter("payflow_step",200,1,200, "BOTTOM OF PAGE"))
 objCmd.Parameters.Append(objCmd.CreateParameter("api_message",200,1,2000, "DEBUGGER - CODE HAS PROCESSED THROUGH THE END OF THE PAGE"))
@@ -368,6 +372,7 @@ objCmd.Parameters.Append(objCmd.CreateParameter("payerID",200,1,200, 0))
 objCmd.Parameters.Append(objCmd.CreateParameter("transaction_id",200,1,200, 0))
 objCmd.Parameters.Append(objCmd.CreateParameter("total",6,1,10, 0))
 objCmd.Parameters.Append(objCmd.CreateParameter("email",200,1,100, session("email")))
+objCmd.Parameters.Append(objCmd.CreateParameter("payment_method",200,1,50, "PayPal"))
 objCmd.Execute()
 %>
 <!--#include virtual="/bootstrap-template/footer.asp" -->

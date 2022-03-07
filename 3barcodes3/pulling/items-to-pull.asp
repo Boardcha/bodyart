@@ -14,7 +14,7 @@ Set rsGetOrder = objCmd.Execute()
 
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT TBL_OrderSummary.InvoiceID, TBL_OrderSummary.OrderDetailID, jewelry.ProductID, ProductDetails.ProductDetailID, ProductDetails.location,  TBL_OrderSummary.qty, TBL_OrderSummary.item_price, jewelry.title, ProductDetails.Gauge, ProductDetails.Length, ProductDetails.ProductDetail1, jewelry.picture, img_thumb, jewelry.customorder, jewelry.pair, ProductDetails.qty AS AmtInStock, jewelry.type, ProductDetails.BinNumber_Detail, ProductDetails.Free_QTY, TBL_Barcodes_SortOrder.ID_Number, TBL_Barcodes_SortOrder.ID_Description, TBL_Barcodes_SortOrder.ID_SortOrder, TBL_OrderSummary.TimesScanned, TBL_OrderSummary.ScanItem_Timestamp FROM TBL_OrderSummary INNER JOIN ProductDetails ON TBL_OrderSummary.DetailID = ProductDetails.ProductDetailID INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number LEFT OUTER JOIN tbl_images ON  ProductDetails.img_id = tbl_images.img_id WHERE (jewelry.ProductID <> 3704) AND (jewelry.ProductID <> 3611) AND (jewelry.ProductID <> 3587) AND (jewelry.ProductID <> 2890)  AND (jewelry.ProductID <> 3704) AND (jewelry.ProductID <> 3612) AND (jewelry.ProductID <> 3143) AND (jewelry.ProductID <> 3144) AND (jewelry.ProductID <> 10171) AND (jewelry.ProductID <> 6733) AND (jewelry.ProductID <> 3146) AND (jewelry.ProductID <> 3145) AND InvoiceID = ? ORDER BY ProductDetails.BinNumber_Detail ASC, TBL_Barcodes_SortOrder.ID_SortOrder, ID_Description ASC, location ASC, ProductDetails.ProductDetailID"
+objCmd.CommandText = "SELECT TBL_OrderSummary.InvoiceID, TBL_OrderSummary.OrderDetailID, jewelry.ProductID, ProductDetails.ProductDetailID, ProductDetails.location,  TBL_OrderSummary.qty, TBL_OrderSummary.item_price, jewelry.title, ProductDetails.Gauge, ProductDetails.Length, ProductDetails.ProductDetail1, jewelry.picture, img_thumb, jewelry.customorder, jewelry.pair, ProductDetails.qty AS AmtInStock, jewelry.type, anodization_fee,  ProductDetails.BinNumber_Detail, ProductDetails.Free_QTY, TBL_Barcodes_SortOrder.ID_Number, TBL_Barcodes_SortOrder.ID_Description, TBL_Barcodes_SortOrder.ID_SortOrder, TBL_OrderSummary.TimesScanned, TBL_OrderSummary.ScanItem_Timestamp FROM TBL_OrderSummary INNER JOIN ProductDetails ON TBL_OrderSummary.DetailID = ProductDetails.ProductDetailID INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number LEFT OUTER JOIN tbl_images ON  ProductDetails.img_id = tbl_images.img_id WHERE (jewelry.ProductID <> 3704) AND (jewelry.ProductID <> 3611) AND (jewelry.ProductID <> 3587) AND (jewelry.ProductID <> 2890)  AND (jewelry.ProductID <> 3704) AND (jewelry.ProductID <> 3612) AND (jewelry.ProductID <> 3143) AND (jewelry.ProductID <> 3144) AND (jewelry.ProductID <> 10171) AND (jewelry.ProductID <> 6733) AND (jewelry.ProductID <> 3146) AND (jewelry.ProductID <> 3145) AND InvoiceID = ? ORDER BY customorder ASC, anodization_fee ASC, ProductDetails.BinNumber_Detail ASC, TBL_Barcodes_SortOrder.ID_SortOrder, ID_Description ASC, location ASC, ProductDetails.ProductDetailID"
 objCmd.Parameters.Append(objCmd.CreateParameter("invoice",3,1,20, request.form("invoices")))
 
 set rsGetItems = Server.CreateObject("ADODB.Recordset")
@@ -122,6 +122,8 @@ end if '==== rsGetItems.eof
 
     If rsGetItems.Fields.Item("ProductID").Value = 2180 OR rsGetItems.Fields.Item("ProductID").Value = 25324 OR rsGetItems.Fields.Item("BinNumber_Detail").Value <> 0 OR rsGetItems.Fields.Item("customorder").Value = "yes" then
         var_location = rsGetItems.Fields.Item("ProductDetailID").Value
+    elseif  rsGetItems("anodization_fee") > 0 then
+        var_location = rsGetItems("OrderDetailID")
     else
         var_location = rsGetItems.Fields.Item("ID_Number").Value & rsGetItems.Fields.Item("location").Value
     end if
@@ -132,7 +134,7 @@ end if '==== rsGetItems.eof
         var_thumbnail = rsGetItems.Fields.Item("picture").Value
     end if
     %>
-    <% if var_previous_detailid = rsGetItems.Fields.Item("ProductDetailID").Value then 
+    <% if var_previous_detailid = rsGetItems.Fields.Item("ProductDetailID").Value AND rsGetItems("anodization_fee") = 0 then 
         var_addqty = rsGetItems.Fields.Item("qty").Value
     %>
 <script type="text/javascript">
@@ -144,12 +146,18 @@ end if '==== rsGetItems.eof
 
     $("tr[data-productdetailid='" + <%= rsGetItems.Fields.Item("productdetailid").Value %> + "']:first").attr('data-qty', new_qty);
 </script>
-    <% else %>
+    <% else  '===var_previous_detailid %>
     <tr class="item-information" id="<%= rsGetItems.Fields.Item("OrderDetailID").Value %>" data-invoice="<%= rsGetItems.Fields.Item("InvoiceID").Value %>" data-productdetailid="<%= rsGetItems.Fields.Item("ProductDetailID").Value %>" data-orderdetailid="<%= rsGetItems.Fields.Item("OrderDetailID").Value %> "data-location="<%= var_location %>" data-qty="<%= rsGetItems.Fields.Item("Qty").Value %>" data-matchqty="<%= var_matchqty %>" data-timescanned="0" data-status="not fullfilled">
         <td class="py-0 align-middle pl-0 pr-1" style="width:50px">
             <img src="http://bodyartforms-products.bodyartforms.com/<%= var_thumbnail %>" class="expand" data-orderdetailid="<%= rsGetItems.Fields.Item("OrderDetailID").Value %>" style="width:50px;height:auto">
         </td>
         <td class="py-0 align-middle">
+            <% 
+                'response.write "<br>DEBUG - # SCAN " & var_location
+            if rsGetItems("anodization_fee") = 0   then 
+                'response.write "<br>DEBUG - No anodization needed" 
+            end if
+                %>
                 <span class="alert alert-secondary py-0 px-1 font-weight-bold">
                   <%
                     if rsGetItems.Fields.Item("Free_QTY").Value > 0 AND rsGetItems.Fields.Item("item_price").Value <= 0 then
@@ -158,7 +166,7 @@ end if '==== rsGetItems.eof
         <%
         end if
         
-         if rsGetItems.Fields.Item("ID_Description").Value <> "Main" AND rsGetItems.Fields.Item("ID_Description").Value <> "Free" AND rsGetItems.Fields.Item("BinNumber_Detail").Value = 0  then %>
+         if rsGetItems.Fields.Item("ID_Description").Value <> "Main" AND rsGetItems.Fields.Item("ID_Description").Value <> "Free" AND rsGetItems.Fields.Item("BinNumber_Detail").Value = 0 AND rsGetItems("anodization_fee") = 0  then %>
                 <span class="mr-1 border-secondary border-right">
                     <%= rsGetItems.Fields.Item("ID_Description").Value %>
                 </span>
@@ -184,7 +192,7 @@ end if '==== rsGetItems.eof
         End if '--- if bin # is not zero
     
                 
-        if rsGetItems.Fields.Item("customorder").Value <> "yes" then 
+        if rsGetItems.Fields.Item("customorder").Value <> "yes" AND rsGetItems("anodization_fee") = 0 then 
             If rsGetItems.Fields.Item("BinNumber_Detail").Value <> 0 then
             '==== Show detail id for items in limited bins
             %>   
@@ -249,7 +257,15 @@ end if '==== rsGetItems.eof
     end if ' not autoclave
 
     var_addqty = 0
-    var_previous_detailid = rsGetItems.Fields.Item("ProductDetailID").Value
+
+    '==== ONLY COMBINE ITEMS IF THEY ARE NOT HAVING CUSTOM COLOR SERVICE ADDED ON
+    if rsGetItems("anodization_fee") = 0   then 
+        var_previous_detailid = rsGetItems.Fields.Item("ProductDetailID").Value
+    else
+        var_previous_detailid = rsGetItems("OrderDetailID")
+    end if
+
+    
     rsGetItems.movenext()
     wend
     end if ' === var_orderissue = 0

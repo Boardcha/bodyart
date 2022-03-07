@@ -943,7 +943,7 @@ end if
 			
 			<% if rs_getCart.Fields.Item("cart_preorderNotes").Value <> "" then %>	  
 				<% if rs_getCart.Fields.Item("ProductID").Value <> 2424 then ' if item is not a gift certificate %>
-					<strong>Your specs:</strong> <span class="spectext<%= rs_getCart.Fields.Item("cart_id").Value %>"><%= rs_getCart.Fields.Item("cart_preorderNotes").Value %></span>
+					<strong><% if rs_getCart("anodID") = 0 then %>Custom color:<% else %>Your specs:<% end if %></strong> <span class="spectext<%= rs_getCart.Fields.Item("cart_id").Value %>"><%= rs_getCart.Fields.Item("cart_preorderNotes").Value %></span>
 				
 				<% else ' show gift certificate information 
 					certificate_array =split(rs_getCart.Fields.Item("cart_preorderNotes").Value,"{}")				
@@ -962,9 +962,12 @@ end if
 					<span class="d-inline-block my-1 bg-info text-white p-2">
 						<%= rs_getCart.Fields.Item("preorder_timeframes").Value %> to receive
 					</span>	
-			<% else %>
-			
 			<% end if %>
+			<%If var_anodizationSubTotal >0 Then %>
+				<span class="d-inline-block my-1 bg-info text-white p-2">
+					Custom color add-on
+				</span>	
+			<%End If%>
 			<% end if %>
 		
       </div><!-- end col / item information -->
@@ -980,7 +983,11 @@ end if
 					%>
 					<strike class="mr-1" data-price="<%= FormatNumber(rs_getCart.Fields.Item("price").Value * exchange_rate, -1, -2, -2, -2) %>"><%= exchange_symbol %><%= FormatNumber(rs_getCart.Fields.Item("price").Value * exchange_rate, -1, -2, -2, -2) %></strike>
 					<% end if %>					                
-
+					<%If var_anodizationSubTotal >0 Then %>
+					<div class="d-inline d-xl-block">
+							<span class="badge badge-info">+ <%= exchange_symbol %><span class="anodization_line_total_<%= rs_getCart.Fields.Item("ProductDetailID").Value %>" data-price="<%= FormatNumber(var_anodizationSubTotal, -1, -2, -2, -2) %>"><%= FormatNumber(var_anodizationSubTotal, -1, -2, -2, -2) %></span> color add-on</span>
+					</div>
+				<%End If%>
 
 </div><!-- end qty display -->
 <div class="d-inline d-xl-block">

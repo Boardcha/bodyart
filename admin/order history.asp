@@ -226,7 +226,7 @@ End If
 					Set rsGetOrderDetails = Server.CreateObject("ADODB.Recordset")
 					With rsGetOrderDetails
 					rsGetOrderDetails.ActiveConnection = MM_bodyartforms_sql_STRING
-					rsGetOrderDetails.Source = "SELECT OrderDetailID, qty, title, ProductDetail1, ProductID, item_price, PreOrder_Desc, notes, backorder, Gauge, Length, jewelry, returned FROM QRY_OrderDetails WHERE ID = " & rsGetOrders.Fields.Item("ID").Value & ""
+					rsGetOrderDetails.Source = "SELECT OrderDetailID, qty, title, ProductDetail1, ProductID, item_price, PreOrder_Desc, notes, backorder, Gauge, Length, jewelry, returned, anodization_fee FROM QRY_OrderDetails WHERE ID = " & rsGetOrders.Fields.Item("ID").Value & ""
 					rsGetOrderDetails.CursorLocation = 3 'adUseClient
 					rsGetOrderDetails.LockType = 1 'Read-only records
 					rsGetOrderDetails.Open()
@@ -256,6 +256,9 @@ End If
 							</td>
 							<td>
 								  $<%= FormatNumber(rsGetOrderDetails.Fields.Item("item_price").Value *rsGetOrderDetails.Fields.Item("qty").Value, -1, -2, -0, -2)%>
+								  <% if rsGetOrderDetails("anodization_fee") > 0 then %>
+								  + <%= FormatCurrency(rsGetOrderDetails("qty") * rsGetOrderDetails("anodization_fee"), -1, -2, -0, -2) %> color add-on
+								  <% end if %>
 							</td>
 						</tr>
 					<%
@@ -266,6 +269,7 @@ End If
 						LineItem = rsGetOrderDetails.Fields.Item("item_price").Value * rsGetOrderDetails.Fields.Item("qty").Value
 						
 						SumLineItem = SumLineItem + LineItem
+						sum_anodization_fees = sum_anodization_fees + rsGetOrderDetails("qty") * rsGetOrderDetails("anodization_fee")
 						.Movenext()
 						InvoiceTotal = SumLineItem + (rsGetOrders.Fields.Item("shipping_rate").Value) - (rsGetOrders.Fields.Item("coupon_amt").Value)
 					Loop
@@ -344,7 +348,7 @@ End If
 						end if ' if i > 2 or values not 0
 					next ' loop through totals array
 					
-					InvoiceTotal = (SumLineItem - total_preferred_discount - total_coupon_discount - total_free_credits + rsGetOrders.Fields.Item("shipping_rate").Value + total_sales_tax - total_store_credit - total_gift_cert - total_returns)
+					InvoiceTotal = (SumLineItem + sum_anodization_fees - total_preferred_discount - total_coupon_discount - total_free_credits + rsGetOrders.Fields.Item("shipping_rate").Value + total_sales_tax - total_store_credit - total_gift_cert - total_returns)
 					
 					%>
 						<tr>

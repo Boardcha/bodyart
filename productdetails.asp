@@ -1563,6 +1563,7 @@ end if
 		</div>
 	</div>
 	<!-- END REPORT PHOTO MODAL WINDOW -->	
+
 	
 <!--#include virtual="/bootstrap-template/footer.asp" -->
 

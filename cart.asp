@@ -240,9 +240,12 @@ Wend
 					<span class="d-inline-block my-1 bg-info text-white p-2">
 						<%= rs_getCart.Fields.Item("preorder_timeframes").Value %> to receive
 					</span>	
-			<% else %>
-			
 			<% end if %>
+			<%If var_anodizationSubTotal >0 Then %>
+				<span class="d-inline-block my-1 bg-info text-white p-2">
+					Custom color add-on
+				</span>	
+			<%End If%>
 			<% end if %>
 		
       </div><!-- end col / item information -->
@@ -578,6 +581,12 @@ end if ' show if free sticker cookie has not been set to "no"
 														<span class="exchange-price"><span class="currency-type bold"></span> <span class="convert-total convert-price bold" data-price=""></span> is a close estimate</span>. The total billed will be for <span class="bold">$<span class="cart_grand-total"><%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %></span> in US Dollars</span> and your bank will convert to the most current exchange rate.
 												</div>
 										</div>
+										<% if var_anodization_added = 1 then 
+										%>
+												<div class="bg-warning p-2 rounded my-2 text-center">
+													<i class="fa fa-alert fa-2x"></i><div class="small font-weight-bold">Custom color added<br>Order will be delayed by up to 1 week</div>
+												</div>	
+										<% end if %>
 									<% If toggle_checkout_cards = true Then %>
 											<div class="checkout_now" style="display:none">
 												<a id="btn-checkout" class="btn btn-block btn-primary mb-2 checkout_button" href="checkout.asp?type=card" ><h6>CHECKOUT WITH <span class="payment-options">CREDIT CARD

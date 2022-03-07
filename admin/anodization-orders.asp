@@ -6,8 +6,7 @@ bootstrapped = "yes"
 
 set rsGetRecords = Server.CreateObject("ADODB.Recordset")
 rsGetRecords.ActiveConnection = MM_bodyartforms_sql_STRING
-rsGetRecords.Source = "SELECT DISTINCT ID, customer_first, customer_last, date_order_placed, convert(nvarchar(max), our_notes) as our_notes " & _
-	"FROM TBL_OrderSummary ORS LEFT JOIN sent_items SNT ON SNT.ID = ORS.InvoiceID AND item_price > 0 AND anodized_completed = 0 AND anodization_id_ordered > 0 WHERE SNT.anodize = 1 ORDER BY date_order_placed ASC"
+rsGetRecords.Source = "SELECT DISTINCT TOP (100) PERCENT SNT.ID, SNT.customer_first, SNT.customer_last, SNT.date_order_placed, SNT.preorder, CONVERT(nvarchar(MAX), SNT.our_notes) AS our_notes, pay_method, shipped FROM dbo.TBL_OrderSummary AS ORS LEFT OUTER JOIN  dbo.sent_items AS SNT ON SNT.ID = ORS.InvoiceID AND ORS.item_price > 0 AND ORS.anodized_completed = 0 AND ORS.anodization_id_ordered > 0 WHERE (SNT.anodize = 1) ORDER BY SNT.date_order_placed"
 rsGetRecords.CursorLocation = 3 'adUseClient
 rsGetRecords.LockType = 1 'Read-only records
 rsGetRecords.Open()
@@ -60,7 +59,8 @@ While NOT rsGetRecords.EOF
   <tr> 
         <td style="width:20%"><%=(rsGetRecords.Fields.Item("customer_first").Value)%> &nbsp;<%=(rsGetRecords.Fields.Item("customer_last").Value)%><br>
         <a  href="invoice.asp?ID=<%= rsGetRecords.Fields.Item("ID").Value %>" target="_blank">Invoice <%=(rsGetRecords.Fields.Item("ID").Value)%></a><br>
-        Placed: <%=FormatDateTime((rsGetRecords.Fields.Item("date_order_placed").Value),2)%>
+        Placed: <%=FormatDateTime((rsGetRecords.Fields.Item("date_order_placed").Value),2)%><br>
+		<span class="small"><%= rsGetRecords("pay_method") %>&nbsp;&nbsp;<%= rsGetRecords("shipped") %></span>
         </td>
         <td>
           <%
@@ -70,7 +70,7 @@ Dim rsGetOrderDetails2_numRows
 Set rsGetOrderDetails2 = Server.CreateObject("ADODB.Recordset")
 With rsGetOrderDetails2
 rsGetOrderDetails2.ActiveConnection = MM_bodyartforms_sql_STRING
-rsGetOrderDetails2.Source = "SELECT OrderDetailID, qty, title, ProductDetail1, PreOrder_Desc, notes, backorder, ProductID, Gauge, Length, brandname, anodized_completed FROM dbo.QRY_OrderDetails WHERE anodization_id_ordered > 0 AND item_price > 0 AND ID = " & rsGetRecords.Fields.Item("ID").Value & " ORDER BY item_ordered_date ASC"
+rsGetOrderDetails2.Source = "SELECT OrderDetailID, QRY_OrderDetails.qty, title, QRY_OrderDetails.ProductDetail1, PreOrder_Desc, notes, backorder, QRY_OrderDetails.ProductID, QRY_OrderDetails.Gauge, QRY_OrderDetails.Length, brandname, anodized_completed, dbo.ProductDetails.DetailCode, dbo.ProductDetails.location, dbo.TBL_Barcodes_SortOrder.ID_Description FROM dbo.QRY_OrderDetails INNER JOIN dbo.ProductDetails ON dbo.QRY_OrderDetails.ProductDetailID = dbo.ProductDetails.ProductDetailID INNER JOIN dbo.TBL_Barcodes_SortOrder ON dbo.ProductDetails.DetailCode = dbo.TBL_Barcodes_SortOrder.ID_Number WHERE anodization_id_ordered > 0 AND item_price > 0 AND ID = " & rsGetRecords.Fields.Item("ID").Value & " ORDER BY item_ordered_date ASC"
 rsGetOrderDetails2.CursorLocation = 3 'adUseClient
 rsGetOrderDetails2.LockType = 1 'Read-only records
 rsGetOrderDetails2.Open()
@@ -85,7 +85,17 @@ if rsGetOrderDetails2.Fields.Item("anodized_completed").Value = true then
 end if
 %>
 	<div class="row h-100 my-2">
-		<div class="col my-auto <% if anodized_completed <> "" then %>small<% end if %>">
+		<div class="col-1">
+			<span class="badge badge-secondary p-1"><%= rsGetOrderDetails2("ID_description") %>&nbsp;&nbsp;<%= rsGetOrderDetails2("location") %></span>
+		</div>
+		<div class="col-1">
+			<span class="badge badge-primary p-1"><%= rsGetOrderDetails2("PreOrder_Desc") %></span>
+		</div>
+		<div class="col-10 my-auto <% if anodized_completed <> "" then %>small<% end if %>">
+<% if rsGetRecords("preorder") = 1 then %>
+<span class="badge badge-warning p-1 mb-1">This order is also waiting on custom items</span><br>
+<% end if %>
+
 			<% if anodized_completed = "" then %>
 				<input class="mr-2 checkbox_item_id" type="checkbox" name="item_id" invoice="<%=(rsGetRecords.Fields.Item("ID").Value)%>" id="<%=(rsGetOrderDetails2.Fields.Item("OrderDetailID").Value)%>" value="<%=(rsGetOrderDetails2.Fields.Item("OrderDetailID").Value)%>">
 			<% end if %>
@@ -94,7 +104,7 @@ end if
 				<a class="mx-1" href="../productdetails.asp?ProductID=<%=(rsGetOrderDetails2.Fields.Item("ProductID").Value)%>" target="_blank"><%=(rsGetOrderDetails2.Fields.Item("title").Value)%></a>
 				<span class="mr-1"><%=(rsGetOrderDetails2.Fields.Item("Gauge").Value)%></span>
 				<span class="mr-1"><%=(rsGetOrderDetails2.Fields.Item("Length").Value)%></span>
-				<%=(rsGetOrderDetails2.Fields.Item("ProductDetail1").Value)%> (<%=(rsGetOrderDetails2.Fields.Item("PreOrder_Desc").Value)%>)
+				<%=(rsGetOrderDetails2.Fields.Item("ProductDetail1").Value)%>
 				<span class="badge badge-info ml-2"><%=(rsGetOrderDetails2.Fields.Item("notes").Value)%></span>
 		</div>
 	</div><!-- row -->
@@ -133,7 +143,7 @@ $(document).ready(function(){
 		var explode_invoice_id = invoice_id.split('_');
 				   $.ajax({
 				   type: "POST",
-				   url: "set-anodized-order-status.asp?completed=yes&id=" + explode[0] + "&invoice=" + explode_invoice_id[0] + "",
+				   url: "/admin/invoices/set-anodized-order-status.asp?completed=yes&id=" + explode[0] + "&invoice=" + explode_invoice_id[0] + "",
 				   success: function(data)
 				   {
 						$('#item_block_' + explode[0]).addClass("gray-text");

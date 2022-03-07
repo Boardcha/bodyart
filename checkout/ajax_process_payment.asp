@@ -63,7 +63,10 @@ if cart_status = "not-empty" Then
 <%' ************************  DO NOT MOVE THE ORDER OF THESE LINKS AROUND BELOW. IT SCREWS STUFF UP **********************
 %>
 <!--#include virtual="checkout/inc_save_order.asp" -->
-<% if var_addons_active <> "yes" then %>
+<!--#include virtual="checkout/inc_save_freeitems_to_order.asp"--> 
+<% 
+Set rsGetOrings = Nothing
+if var_addons_active <> "yes" then %>
 <!--#include virtual="functions/hash_extra_key.asp"-->
 <!--#include virtual="accounts/inc_create_cim_account.asp"-->
 <!--#include virtual="/functions/token.asp"-->
@@ -101,13 +104,14 @@ if payment_approved = "yes" then
 	' WRITE TO CREDIT CARD LOG
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "INSERT INTO tbl_creditcard_logs (invoice_id, payflow_step, api_message, transaction_id,total, email) VALUES (?,?,?,?,?,?)"
+	objCmd.CommandText = "INSERT INTO tbl_checkout_logs (invoice_id, payflow_step, api_message, transaction_id,total, email, payment_method) VALUES (?,?,?,?,?,?,?)"
 	objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15, session("invoiceid")))
-	objCmd.Parameters.Append(objCmd.CreateParameter("payflow_step",200,1,200, "ORDER APPROVED"))
-	objCmd.Parameters.Append(objCmd.CreateParameter("api_message",200,1,2000, "DEBUGGER - ORDER APPROVED"))
+	objCmd.Parameters.Append(objCmd.CreateParameter("payflow_step",200,1,200, "PAYMENT COMPLETE"))
+	objCmd.Parameters.Append(objCmd.CreateParameter("api_message",200,1,2000, "DEBUGGER - PAYMENT COMPLETE"))
 	objCmd.Parameters.Append(objCmd.CreateParameter("transaction_id",200,1,200, 0))
 	objCmd.Parameters.Append(objCmd.CreateParameter("total",6,1,10, var_grandtotal))
 	objCmd.Parameters.Append(objCmd.CreateParameter("email",200,1,100, session("email")))
+	objCmd.Parameters.Append(objCmd.CreateParameter("payment_method",200,1,50, "Credit card"))
 	objCmd.Execute()
 %>
 <% if var_addons_active <> "yes" then %>
@@ -143,25 +147,28 @@ mailer_type = save_mailer_type
 <!--#include virtual="emails/function-send-email.asp"-->
 <!--#include virtual="emails/email_variables.asp"-->
 <%
-end if ' if Not rs_getCart.EOF
-end if ' If no stock changes have occurred
-%>
-	}
-<%
-	' ^^ END build { for .json return throughout this page}
-
-	
+if payment_approved = "yes" then
 	' WRITE TO CREDIT CARD LOG
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "INSERT INTO tbl_creditcard_logs (invoice_id, payflow_step, api_message, transaction_id,total, email) VALUES (?,?,?,?,?,?)"
+	objCmd.CommandText = "INSERT INTO tbl_checkout_logs (invoice_id, payflow_step, api_message, transaction_id,total, email, payment_method) VALUES (?,?,?,?,?,?,?)"
 	objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15, session("invoiceid")))
 	objCmd.Parameters.Append(objCmd.CreateParameter("payflow_step",200,1,200, "BOTTOM OF PAGE"))
 	objCmd.Parameters.Append(objCmd.CreateParameter("api_message",200,1,2000, "DEBUGGER - CODE HAS PROCESSED THROUGH THE END OF THE PAGE"))
 	objCmd.Parameters.Append(objCmd.CreateParameter("transaction_id",200,1,200, 0))
 	objCmd.Parameters.Append(objCmd.CreateParameter("total",6,1,10, var_grandtotal))
 	objCmd.Parameters.Append(objCmd.CreateParameter("email",200,1,100, session("email")))
+	objCmd.Parameters.Append(objCmd.CreateParameter("payment_method",200,1,50, "Credit card"))
 	objCmd.Execute()
+end if
+
+
+end if ' if Not rs_getCart.EOF
+end if ' If no stock changes have occurred
+%>
+	}
+<%
+	' ^^ END build { for .json return throughout this page}
 	
 DataConn.Close()
 Set DataConn = Nothing

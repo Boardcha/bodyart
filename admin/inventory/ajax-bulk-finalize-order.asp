@@ -13,6 +13,17 @@ objCmd.ActiveConnection = DataConn
 objCmd.CommandText = "SELECT TOP 1 PurchaseOrderID FROM TBL_PurchaseOrders ORDER BY PurchaseOrderID DESC"
 set rsGetPO_ID = objCmd.Execute()
 
+'====== IF THE PURCHASE ORDER NEEDS TO BE REVIEWED BY A MANAGER FLAG THE ORDER =================
+if request.form("var_needs_review") = "yes" then
+    set objCmd = Server.CreateObject("ADODB.command")
+    objCmd.ActiveConnection = DataConn
+    objCmd.CommandText = "UPDATE TBL_PurchaseOrders SET po_needs_review = 1 WHERE PurchaseOrderID = ?"
+    objCmd.Parameters.Append(objCmd.CreateParameter("po_new_id",3,1,20,rsGetPO_ID.Fields.Item("PurchaseOrderID").Value))
+    objCmd.Execute()
+end if
+
+
+
 ' Replace all temp ID's ordered with new purchase order #	
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
