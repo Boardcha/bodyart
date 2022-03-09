@@ -216,9 +216,16 @@ Do While i < count_i
         '------- Deduct quantities on order items ---------------
         set objCmd = Server.CreateObject("ADODB.Command")
         objCmd.ActiveConnection = DataConn
-        objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - " & our_qty & " WHERE ProductDetailID = ?"
+        objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - " & our_qty & ", DateLastPurchased = '" & date() & "'  WHERE ProductDetailID = ?"
         objCmd.Parameters.Append(objCmd.CreateParameter("product_detailid",200,1,100,var_product_detailid))
         objCmd.Execute()
+
+        '=========== Write info to edits log ===================	
+        set objCmd = Server.CreateObject("ADODB.Command")
+        objCmd.ActiveConnection = DataConn
+        objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & var_product_detailid & ",'Automated - Etsy import deducted " & our_qty & " from stock','" & now() & "')"
+        objCmd.Execute()
+        Set objCmd = Nothing
 
         Set objCmd = Nothing
         j = j + 1

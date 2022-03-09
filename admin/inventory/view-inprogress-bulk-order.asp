@@ -12,7 +12,7 @@ end if
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT (jewelry.title + ' ' + ISNULL(ProductDetails.Gauge, '') + ' ' + ISNULL(ProductDetails.Length, '') + ' ' + ISNULL(ProductDetails.ProductDetail1, '')) as description, picture, jewelry.ProductID, tbl_po_details.po_qty, tbl_po_details.po_qty_vendor, ProductDetails.detail_code, ProductDetails.ProductDetailID FROM dbo.jewelry INNER JOIN dbo.ProductDetails ON dbo.jewelry.ProductID = dbo.ProductDetails.ProductID INNER JOIN dbo.tbl_po_details ON dbo.ProductDetails.ProductDetailID = dbo.tbl_po_details.po_detailid  WHERE " & sql & " = ? AND tbl_po_details.po_qty > 0 ORDER BY 'description' ASC"
+objCmd.CommandText = "SELECT (jewelry.title + ' ' + ISNULL(ProductDetails.Gauge, '') + ' ' + ISNULL(ProductDetails.Length, '') + ' ' + ISNULL(ProductDetails.ProductDetail1, '')) as description, picture, jewelry.ProductID, tbl_po_details.po_qty, tbl_po_details.po_qty_vendor, ProductDetails.detail_code, ProductDetails.ProductDetailID, wlsl_price, qty, DateLastPurchased FROM dbo.jewelry INNER JOIN dbo.ProductDetails ON dbo.jewelry.ProductID = dbo.ProductDetails.ProductID INNER JOIN dbo.tbl_po_details ON dbo.ProductDetails.ProductDetailID = dbo.tbl_po_details.po_detailid  WHERE " & sql & " = ? AND tbl_po_details.po_qty > 0 ORDER BY 'description' ASC"
 objCmd.Parameters.Append(objCmd.CreateParameter("po_new_id",3,1,10, var_po_id ))
 set rsGetItems = objCmd.Execute()
 %>
@@ -27,12 +27,16 @@ set rsGetItems = objCmd.Execute()
 <% if request.querystring("ID") <> "" then %>
 <button class="btn btn-sm btn-primary mr-3" id="approve-order" type="button" data-po_id="<%= request.querystring("ID") %>">Approve inventory deduction</button><span class="mr-2" id="msg-finalize"></span>
 <% end if %>
-<table class="table table-striped table-borderless table-hover mt-4">
-<thead>
+
+<table class="table table-sm table-striped table-borderless table-hover mt-4">
+<thead class="thead-dark sticky-top">
   <tr>
     <th></th>
-    <th class="text-center">Qty</th>
+    <th class="text-center">Ordered qty</th>
+    <th class="text-center">Qty on hand</th>
 	<th>Item</th>
+  <th>Wholesale</th>
+  <th>Sale dates</th>
   </tr>
 </thead>
 <%
@@ -40,15 +44,28 @@ While NOT rsGetItems.EOF
 %>
   <tr>
     <td class="text-center" width="1%">
-      <a href="../productdetails.asp?ProductID=<%=(rsGetItems.Fields.Item("ProductID").Value)%>" target="_blank"><img id="main_img" src="http://bodyartforms-products.bodyartforms.com/<%=(rsGetItems.Fields.Item("picture").Value)%>" width="90" height="90"> </a>
+      <a href="/admin/product-edit.asp?ProductID=<%=(rsGetItems.Fields.Item("ProductID").Value)%>" target="_blank"><img id="main_img" src="http://bodyartforms-products.bodyartforms.com/<%=(rsGetItems.Fields.Item("picture").Value)%>" width="90" height="90"> </a>
 	
 	</td>
-    <td class="text-center" width="1%">
-		<%= rsGetItems("po_qty") %>
+    <td class="text-center" width="10%">
+		<span class="alert alert-secondary font-weight-bold py-0 px-1"><%= rsGetItems("po_qty") %></span>
     </td>
+    <td class="text-center" width="10%">
+      <span class="alert alert-success font-weight-bold py-0 px-1"><%= rsGetItems("qty") %></span>
+    </td>	
     <td class="text-left">
       <%= rsGetItems.Fields.Item("description").Value %>
-    </td>	
+    </td>
+    <td class="text-center" width="1%">
+      $<%= rsGetItems("wlsl_price") %>
+    </td>
+    <td>
+      <% if rsGetItems.Fields.Item("DateLastPurchased").Value <> "" then %>
+      <span role="button" class="date_expand" id="last_sold_<%= rsGetItems.Fields.Item("ProductDetailID").Value %>" data-container="body" data-toggle="popover" data-placement="left" data-html="true" data-trigger="focus" data-content='Loading <i class="fa fa-spinner fa-spin ml-3"></i>' data-detailid="<%= rsGetItems.Fields.Item("ProductDetailID").Value %>">
+        <%= FormatDateTime(rsGetItems.Fields.Item("DateLastPurchased").Value,2)%>
+      </span>
+    <% end if %>
+    </td>
   </tr>
 <%
   rsGetItems.MoveNext()

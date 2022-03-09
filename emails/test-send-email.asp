@@ -7,9 +7,7 @@
 %>
 
 	<!--#include virtual="/cart/inc_cart_loopitems-begin.asp"-->
-	<!--#include virtual="/checkout/inc_orderdetails_toarray.asp"--> 
 <!--#include virtual="/cart/inc_cart_loopitems-end.asp"-->
-<!--#include virtual="/checkout/inc_freeitems_toarray.asp"--> 
 
 <%
 done_mailing_certs = "no"

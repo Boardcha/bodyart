@@ -100,7 +100,7 @@
 			<div class="badge badge-secondary">Customer Service</div>
 		</div>
 		<div class="col-lg-3 col-6 py-4">
-			<img class="img-fluid" src="images/employees/empty-avatar.png" alt="Charles" />
+			<img class="img-fluid" src="images/employees/charles-circle.png" alt="Charles" />
 			<h5  class="mb-0">Charles</h5>
 			<div class="badge badge-secondary">Social Media</div>
 		</div>
@@ -115,11 +115,6 @@
 			<div class="badge badge-secondary">Packing & Shipping</div>
 		</div>
 		<div class="col-lg-3 col-6 py-4">
-			<img class="img-fluid" src="images/employees/michael-circle.png" alt="Michael" />
-			<h5  class="mb-0">Michael</h5>
-			<div class="badge badge-secondary">Packing & Shipping</div>
-		</div>
-		<div class="col-lg-3 col-6 py-4">
 			<img class="img-fluid" src="images/employees/gary-circle.png" alt="Gary" />
 			<h5  class="mb-0">Gary</h5>
 			<div class="badge badge-secondary">Packing & Shipping</div>
@@ -127,11 +122,6 @@
 		<div class="col-lg-3 col-6 py-4">
 			<img class="img-fluid" src="images/employees/paty-circle.png" alt="Paty" />
 			<h5  class="mb-0">Paty</h5>
-			<div class="badge badge-secondary">Packing & Shipping</div>
-		</div>
-		<div class="col-lg-3 col-6 py-4">
-			<img class="img-fluid" src="images/employees/heather-circle.png" alt="Heather" />
-			<h5  class="mb-0">Heather</h5>
 			<div class="badge badge-secondary">Packing & Shipping</div>
 		</div>
 		<div class="col-lg-3 col-6 py-4">

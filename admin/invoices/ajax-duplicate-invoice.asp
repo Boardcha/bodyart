@@ -39,6 +39,13 @@ var_orig_invoiceid = request.form("invoiceid")
         objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - " & rsGetOrderDetails("qty") & " WHERE ProductDetailID = " & rsGetOrderDetails("DetailID")
         objCmd.Execute()
 
+        '========  Write info to edits log	 ==========
+        set objCmd = Server.CreateObject("ADODB.Command")
+        objCmd.ActiveConnection = DataConn
+        objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & rsGetOrderDetails("DetailID") & ",'Automated - Deducted " & rsGetOrderDetails("qty") & " from stock -- duplicating invoice','" & now() & "')"
+        objCmd.Execute()
+        Set objCmd = Nothing
+
     rsGetOrderDetails.MoveNext()
     Wend
 

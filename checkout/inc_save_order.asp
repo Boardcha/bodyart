@@ -466,7 +466,7 @@ if var_addons_active <> "yes" then
 		var_preorder_text = ""
 		var_itemPrice = 0
 		'If ProductID flagged as "waiting-list", meaning if customer comes from waiting-list email notification, save this info to the "referrer" field.
-		If Session(array_details_2(6,i)) = "waiting-list" Then 
+		If Session(rs_getCart("ProductID")) = "waiting-list" Then 
 			var_referrer = "'waiting-list'" 
 		ElseIf rs_getCart("cart_save_for_later") = 2 Then ' 2 = it is added to cart back from saved items
 			var_referrer = "'save-for-later'" 

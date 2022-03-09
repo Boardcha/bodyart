@@ -6,7 +6,7 @@ bootstrapped = "yes"
 
 set rsGetRecords = Server.CreateObject("ADODB.Recordset")
 rsGetRecords.ActiveConnection = MM_bodyartforms_sql_STRING
-rsGetRecords.Source = "SELECT DISTINCT TOP (100) PERCENT SNT.ID, SNT.customer_first, SNT.customer_last, SNT.date_order_placed, SNT.preorder, CONVERT(nvarchar(MAX), SNT.our_notes) AS our_notes, pay_method, shipped FROM dbo.TBL_OrderSummary AS ORS LEFT OUTER JOIN  dbo.sent_items AS SNT ON SNT.ID = ORS.InvoiceID AND ORS.item_price > 0 AND ORS.anodized_completed = 0 AND ORS.anodization_id_ordered > 0 WHERE (SNT.anodize = 1) ORDER BY SNT.date_order_placed"
+rsGetRecords.Source = "SELECT DISTINCT TOP (100) PERCENT SNT.ID, SNT.customer_first, SNT.customer_last, SNT.date_order_placed, SNT.preorder, CONVERT(nvarchar(MAX), SNT.our_notes) AS our_notes, pay_method, shipped FROM dbo.TBL_OrderSummary AS ORS LEFT OUTER JOIN  dbo.sent_items AS SNT ON SNT.ID = ORS.InvoiceID AND ORS.item_price > 0 AND ORS.anodized_completed = 0 AND ORS.anodization_id_ordered > 0 WHERE (SNT.anodize = 1) ANd ship_code = 'paid' ORDER BY SNT.date_order_placed"
 rsGetRecords.CursorLocation = 3 'adUseClient
 rsGetRecords.LockType = 1 'Read-only records
 rsGetRecords.Open()

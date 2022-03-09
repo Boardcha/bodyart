@@ -45,21 +45,15 @@ end if
 if stock_display = "" then 
 
 if cart_status = "not-empty" Then
-'Set array to store all order details (FOR CHECKOUT STORAGE INTO DATABASE)
-	reDim array_details_2(14,0)
-	Dim array_add_new : array_add_new = 0 
-	
 %>
 
 <!--#include virtual="checkout/inc_random_code_generator.asp"--> 
-	<!--#include virtual="cart/inc_cart_loopitems-begin.asp"-->
-	<!--#include virtual="checkout/inc_orderdetails_toarray.asp"--> 
+<!--#include virtual="cart/inc_cart_loopitems-begin.asp"-->
 <!--#include virtual="cart/inc_cart_loopitems-end.asp"-->
 <% rs_getCart.ReQuery() 
 %>
 <!--#include virtual="checkout/inc_store_shipping_selection.asp" -->
 <!--#include virtual="cart/inc_cart_grandtotal.asp"-->
-<!--#include virtual="checkout/inc_freeitems_toarray.asp"--> 
 <%' ************************  DO NOT MOVE THE ORDER OF THESE LINKS AROUND BELOW. IT SCREWS STUFF UP **********************
 %>
 <!--#include virtual="checkout/inc_save_order.asp" -->
@@ -116,10 +110,10 @@ if payment_approved = "yes" then
 %>
 <% if var_addons_active <> "yes" then %>
 <!--#include virtual="/checkout/inc-set-to-pending.asp" -->
+<!--#include virtual="checkout/inc_deduct_quantities.asp" -->
 <% end if %>
 <!--#include virtual="checkout/inc_credits.asp" -->
 <!--#include virtual="checkout/inc_use_discounts.asp"-->
-<!--#include virtual="checkout/inc_deduct_quantities.asp" -->
 <%
 if request.cookies("OrderAddonsActive") <> "" then
 	mailer_type = "addons approved"
@@ -144,6 +138,7 @@ end if ' payment is approved
 done_mailing_certs = "yes"
 mailer_type = save_mailer_type
 %>
+<!--#include virtual="checkout/inc_items_to_email_array.asp"-->
 <!--#include virtual="emails/function-send-email.asp"-->
 <!--#include virtual="emails/email_variables.asp"-->
 <%

@@ -271,10 +271,7 @@ End If ' end step 2 ----------------------------------------
 
 <!--#include virtual="checkout/inc_random_code_generator.asp"--> 
 <%
-'Set array to store all order details (FOR CHECKOUT STORAGE INTO DATABASE)
-	reDim array_details_2(14,0)
-	Dim array_add_new : array_add_new = 0 
-	
+
 'ORDER IS ALREADY STORED ON /checkout/ajax_process_payment.asp and if Json returns PayPal then it goes to this page
 %>
 <!--#include virtual="checkout/inc_credits.asp" -->
@@ -284,18 +281,17 @@ End If ' end step 2 ----------------------------------------
 mailer_type = ""
 %>
 <!--#include virtual="cart/inc_cart_loopitems-begin.asp"-->
-<!--#include virtual="checkout/inc_orderdetails_toarray.asp"--> 
 <!--#include virtual="checkout/inc_giftcert_create.asp"--> 
 <!--#include virtual="checkout/inc_wishlist_update.asp"--> 
 <!--#include virtual="cart/inc_cart_loopitems-end.asp"-->
 <!--#include virtual="cart/inc_cart_grandtotal.asp"-->
-<!--#include virtual="checkout/inc_freeitems_toarray.asp"--> 
-<!--#include virtual="checkout/inc_deduct_quantities.asp" -->
-
 <%
 if request.cookies("OrderAddonsActive") <> "" then
 %>
 <!--#include virtual="checkout/inc-save-addon-items.asp" -->
+<%
+else %>
+<!--#include virtual="checkout/inc_deduct_quantities.asp" -->
 <%
 end if
 
@@ -310,14 +306,13 @@ if request.cookies("OrderAddonsActive") = "" then
 	' Update order with status and insert the PayPal transaction ID #
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "UPDATE sent_items SET shipped = ?, ship_code = 'paid', transactionID = ? WHERE ID = ?"
-	objCmd.Parameters.Append(objCmd.CreateParameter("status",200,1,30,"Review"))
+	objCmd.CommandText = "UPDATE sent_items SET shipped = 'Review', ship_code = 'paid', transactionID = ? WHERE ID = ?"
 	objCmd.Parameters.Append(objCmd.CreateParameter("TransactionID",200,1,30,session("paypal_transid")))
 	objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15,session("invoiceid")))
 	objCmd.Execute()
 
 	
-	' WRITE TO PAYPAL LOG
+	' WRITE TO CHECKOUT LOG
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "INSERT INTO tbl_checkout_logs (invoice_id, payflow_step, api_message, total, email, payment_method) VALUES (?,?,?,?,?,?)"
@@ -330,6 +325,7 @@ if request.cookies("OrderAddonsActive") = "" then
 	objCmd.Execute()
 
 %>
+<!--#include virtual="checkout/inc_items_to_email_array.asp"-->
 <!--#include virtual="emails/function-send-email.asp"-->
 <!--#include virtual="emails/email_variables.asp"-->
 <!--#include virtual="/checkout/inc-set-to-pending.asp" -->	
@@ -361,7 +357,7 @@ end if ' If payment is a success
 
 <div style="height: 200px"></div>
 <%
-' WRITE TO PAYPAL LOG
+' WRITE TO CHECKOUT LOG
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
 objCmd.CommandText = "INSERT INTO tbl_checkout_logs (invoice_id, payflow_step, api_message, payerID, transaction_id,total, email, payment_method) VALUES (?,?,?,?,?,?,?,?)"
