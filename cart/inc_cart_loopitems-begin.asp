@@ -113,7 +113,8 @@ end if
 
 'Set gift certificate purchases to no discount
 var_giftcert = "no" ' default state
-If Instr(lcase(rs_getCart.Fields.Item("title").Value), lcase("Digital gift certificate")) > 0 Then
+'If Instr(lcase(rs_getCart.Fields.Item("title").Value), lcase("Digital gift certificate")) > 0 Then
+if rs_getCart("ProductID") = 2424 then
 '		response.write "gift cert found"
 		var_discount_preferred = 0
 		var_discount_coupon = 0

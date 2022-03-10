@@ -61,11 +61,12 @@ var_customer_email = rsGetInfo.Fields.Item("email").Value
 var_invoice_number = rsGetInfo.Fields.Item("InvoiceID").Value
 var_jewelry_status = rsGetInfo("type")
 var_bo_reason = Request.Form("bo_reason")
+If var_bo_reason <> "" Then param_bo_reason = ", reason_for_backorder = '" + var_bo_reason + "'"
 
 ' Set item to backorder status (and not on review)
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "UPDATE TBL_OrderSummary SET backorder = 1, backorder_tracking = 1, BackorderReview = 'N' WHERE OrderDetailID = ?"
+objCmd.CommandText = "UPDATE TBL_OrderSummary SET backorder = 1, backorder_tracking = 1, BackorderReview = 'N'" & param_bo_reason & " WHERE OrderDetailID = ?"
 objCmd.Parameters.Append(objCmd.CreateParameter("orderdetailid",3,1,20, orderdetailid))
 objCmd.Execute()
 

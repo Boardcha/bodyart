@@ -182,7 +182,7 @@ Set rsInventoryIssues = objcmd.Execute()
 
 set objcmd = Server.CreateObject("ADODB.command")
 objcmd.ActiveConnection = DataConn
-objcmd.CommandText = "SELECT DISTINCT TOP (100) PERCENT Count(*) AS total_to_anodize FROM dbo.TBL_OrderSummary AS ORS LEFT OUTER JOIN  dbo.sent_items AS SNT ON SNT.ID = ORS.InvoiceID AND ORS.item_price > 0 AND ORS.anodized_completed = 0 AND ORS.anodization_id_ordered > 0 WHERE (SNT.anodize = 1)"
+objcmd.CommandText = "SELECT DISTINCT TOP (100) PERCENT Count(*) AS total_to_anodize FROM dbo.TBL_OrderSummary AS ORS LEFT OUTER JOIN  dbo.sent_items AS SNT ON SNT.ID = ORS.InvoiceID AND ORS.item_price > 0 AND ORS.anodized_completed = 0 AND ORS.anodization_id_ordered > 0 WHERE (SNT.anodize = 1) ANd ship_code = 'paid'"
 Set rsAnodizeCount = objcmd.Execute()
 %>
 

@@ -1104,7 +1104,7 @@ end if
 
 <% if rsHowManyInCarts("currently_in_all_carts") > 10 then 
 	if rsHowManyInCarts("currently_in_all_carts") >= 50 then
-		var_display_currently_in_carts = 50
+		var_display_currently_in_carts = "50+"
 	else
 		var_display_currently_in_carts = rsHowManyInCarts("currently_in_all_carts")
 	end if

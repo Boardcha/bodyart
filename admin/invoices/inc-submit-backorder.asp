@@ -17,22 +17,25 @@
 						  <option value="10">10</option>
 					  </select>
 					</div>
-					
-					<h6>Reason for backorder:</h6>
-					<div class="custom-control custom-radio">
-						<input class="custom-control-input" name="BOReason" type="radio" id="radio" value="our inventory was off and we have none left" checked>
-						<label class="custom-control-label" for="radio">Not enough items left in stock</label>
-					</div>
-					<div class="custom-control custom-radio">
-						<input class="custom-control-input" type="radio" name="BOReason" id="radio2" value="the last ones we had did not match well enough to send out">
-						<label class="custom-control-label" for="radio2">Last pair did not match</label>
-					</div>
-					<div class="custom-control custom-radio">
-						<input class="custom-control-input" type="radio" name="BOReason" id="radio3" value="the last ones we had were not the right size">
-						<label class="custom-control-label" for="radio3">Last ones were not the right size</label>
-					</div>
-					<div class="custom-control custom-radio">
-						<input class="custom-control-input" type="radio" name="BOReason" id="radio5" value="it was broken">
-						<label class="custom-control-label" for="radio5">It was broken </label>
-					</div>
+					<% If Not hide_reasons = true Then %>
+						<h6>Reason for backorder:</h6>
+						<div class="custom-control custom-radio">
+							<input class="custom-control-input" name="BOReason" type="radio" id="radio" value="there were not  enough items left in stock" checked>
+							<label class="custom-control-label" for="radio">Not enough items left in stock</label>
+						</div>
+						<div class="custom-control custom-radio">
+							<input class="custom-control-input" type="radio" name="BOReason" id="radio2" value="the last pair did not match">
+							<label class="custom-control-label" for="radio2">Last pair did not match</label>
+						</div>
+						<div class="custom-control custom-radio">
+							<input class="custom-control-input" type="radio" name="BOReason" id="radio3" value="the last ones were not the right size">
+							<label class="custom-control-label" for="radio3">Last ones were not the right size</label>
+						</div>
+						<div class="custom-control custom-radio">
+							<input class="custom-control-input" type="radio" name="BOReason" id="radio5" value="it was broken">
+							<label class="custom-control-label" for="radio5">It was broken</label>
+						</div>
+					<% else %>
+
+					<% End If%>
 				  </form>

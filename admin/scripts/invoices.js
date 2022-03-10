@@ -96,13 +96,14 @@
 	// Submit a new backorder
 	$(document).on("click", "#btn-submit-bo", function(event){
 		var orderdetailid = $(this).attr("data-itemid");
-		var bo_reason = $("input:radio[name='BOReason']:checked").val();
+		var checkedRadioId = $("input:radio[name='BOReason']:checked").attr("id");
+		var bo_reason = $("label[for='" + checkedRadioId + "']").text();	
 		var bo_qty = $("#bo-qty").val();
 		
 		$("#frm-submit-backorder").hide();
 		$('#new-bo-message').html('<i class="fa fa-spinner fa-2x fa-spin"></i>');
 		$('#btn-submit-bo').hide();
-
+	
 		$.ajax({
 		method: "POST",
 		url: "invoices/ajax-backorder-submit.asp",

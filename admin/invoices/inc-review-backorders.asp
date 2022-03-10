@@ -1,7 +1,7 @@
 <%
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT InvoiceID, jewelry.ProductID, DetailID, TBL_OrderSummary.qty, title, ProductDetail1, ProductDetails.qty AS stock_qty, OrderDetailID, backorder, notes, customer_first, email, ID_Description, BinNumber_Detail, Gauge, Length, ProductDetails.ProductDetailID, BackorderReview, PackagedBy, location, ISNULL(replace(jewelry.type,'None',''),'') + ' ' + ISNULL(jewelry.title,'') + ' ' + ISNULL(ProductDetails.ProductDetail1,'') + ' ' + ISNULL(ProductDetails.Gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') as 'item_description' FROM TBL_OrderSummary INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID INNER JOIN ProductDetails ON TBL_OrderSummary.DetailID = ProductDetails.ProductDetailID INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number WHERE BackorderReview = 'Y' ORDER BY InvoiceID ASC" 
+objCmd.CommandText = "SELECT InvoiceID, jewelry.ProductID, DetailID, TBL_OrderSummary.qty, title, ProductDetail1, ProductDetails.qty AS stock_qty, OrderDetailID, backorder, notes, customer_first, email, ID_Description, BinNumber_Detail, Gauge, Length, ProductDetails.ProductDetailID, BackorderReview, reason_for_backorder, PackagedBy, location, ISNULL(replace(jewelry.type,'None',''),'') + ' ' + ISNULL(jewelry.title,'') + ' ' + ISNULL(ProductDetails.ProductDetail1,'') + ' ' + ISNULL(ProductDetails.Gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') as 'item_description' FROM TBL_OrderSummary INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID INNER JOIN ProductDetails ON TBL_OrderSummary.DetailID = ProductDetails.ProductDetailID INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number WHERE BackorderReview = 'Y' ORDER BY InvoiceID ASC" 
 
 set rsGetBackorderReviews = Server.CreateObject("ADODB.Recordset")
 rsGetBackorderReviews.CursorLocation = 3 'adUseClient
@@ -18,6 +18,7 @@ If Not rsGetBackorderReviews.EOF Or Not rsGetBackorderReviews.BOF Then %>
 			<th class="no-print">Invoice</th>
 			<th>Qty Ordered</th>
 			<th>Current Stock</th>
+			<th>Backorder Reason</th>			
 			<th>Item</th>
 			<th>Location</th>
 			<th class="no-print">Notes</th>
@@ -28,7 +29,7 @@ If Not rsGetBackorderReviews.EOF Or Not rsGetBackorderReviews.BOF Then %>
 While NOT rsGetBackorderReviews.EOF 
 %>        <tr id="row_<%=(rsGetBackorderReviews.Fields.Item("OrderDetailID").Value)%>">
 		  <td class="no-print">
-			<button class="btn btn-success btn-sm btn-submit-bo mr-3 btn-update-bo-modal" data-toggle="modal" data-target="#modal-submit-backorder" data-itemid="<%=(rsGetBackorderReviews.Fields.Item("OrderDetailID").Value)%>" data-qty="<%= rsGetBackorderReviews.Fields.Item("stock_qty").Value %>" data-title="<%= Server.HTMLEncode(rsGetBackorderReviews.Fields.Item("item_description").Value) %>"><strong>APPROVE</strong></button><button class="btn btn-danger btn-sm  btn-clear-bo" data-item="<%=(rsGetBackorderReviews.Fields.Item("OrderDetailID").Value)%>" data-invoiceid="<%=(rsGetBackorderReviews.Fields.Item("InvoiceID").Value)%>" data-productdetailid="<%=rsGetBackorderReviews.Fields.Item("ProductDetailID").Value %>" data-agenda="clear">Deny</button>&nbsp;&nbsp;&nbsp;&nbsp;<strong>
+			<button class="btn btn-success btn-sm btn-submit-bo mr-3 btn-update-bo-modal" data-toggle="modal" data-target="#modal-submit-backorder" data-itemid="<%=(rsGetBackorderReviews.Fields.Item("OrderDetailID").Value)%>" data-qty="<%= rsGetBackorderReviews.Fields.Item("stock_qty").Value %>" data-title="<%= Server.HTMLEncode(rsGetBackorderReviews.Fields.Item("item_description").Value) %>" data-reason="<%= rsGetBackorderReviews("reason_for_backorder") %>"><strong>APPROVE</strong></button><button class="btn btn-danger btn-sm  btn-clear-bo" data-item="<%=(rsGetBackorderReviews.Fields.Item("OrderDetailID").Value)%>" data-invoiceid="<%=(rsGetBackorderReviews.Fields.Item("InvoiceID").Value)%>" data-productdetailid="<%=rsGetBackorderReviews.Fields.Item("ProductDetailID").Value %>" data-agenda="clear">Deny</button>&nbsp;&nbsp;&nbsp;&nbsp;<strong>
 				<span id="spinner_<%=(rsGetBackorderReviews.Fields.Item("OrderDetailID").Value)%>" style="display:none"><i class="fa fa-spinner fa-lg fa-spin"></i></span>
 			</td>
           <td class="no-print">
@@ -36,10 +37,13 @@ While NOT rsGetBackorderReviews.EOF
 		  </td>
 		  <td>
 			<span class="alert alert-success py-1 px-2"><%=(rsGetBackorderReviews.Fields.Item("qty").Value)%></span>
-		  </td>
+		  </td>  
 			<td>
 				<input class="form-control form-control-sm" style="width: 40px" type="text" id="deny_qty_<%=rsGetBackorderReviews.Fields.Item("ProductDetailID").Value %>" value="<%=(rsGetBackorderReviews.Fields.Item("stock_qty").Value)%>">
 			</td>
+		  <td>
+			<span class="py-1 px-2"><%=(rsGetBackorderReviews.Fields.Item("reason_for_backorder").Value)%></span>
+		  </td>				
 		  <td>
 			<%=(rsGetBackorderReviews.Fields.Item("title").Value)%>&nbsp;<%=(rsGetBackorderReviews.Fields.Item("Gauge").Value)%>&nbsp;<%=(rsGetBackorderReviews.Fields.Item("Length").Value)%>&nbsp;&nbsp;<%=(rsGetBackorderReviews.Fields.Item("ProductDetail1").Value)%>
 		</td>
@@ -74,10 +78,11 @@ Wend
 		</div>
 		<div class="modal-body small">
 			<div id="new-bo-message"></div>
+			<% hide_reasons = true %>
 			<!--#include virtual="/admin/invoices/inc-submit-backorder.asp"-->
 		</div>
 		<div class="modal-footer">
-			<button type="button" class="btn btn-primary" id="btn-submit-bo" data-itemid="">Submit</button>
+			<button type="button" class="btn btn-primary" id="btn-submit-bo" data-itemid="" data-reason="">Submit</button>
 		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 		</div>
 	  </div>

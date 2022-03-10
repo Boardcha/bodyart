@@ -179,11 +179,13 @@ $(document).on("click", ".bo-button", function(){
 $(document).on("click", "#btn-submit-bo", function(){
     var notes = $('input[name=entireorder]:checked').val() + ' ' + $('#partial option:selected').val();
     var orderdetailid = $(this).attr('data-orderdetailid');
-
+	var checkedRadioId = $("input:radio[name='BOReason']:checked").attr("id");
+	var bo_reason = $("input:radio[name='BOReason']:checked").val();	
+		console.log(bo_reason);
       $.ajax({
 		method: "post",
 		url: "pulling/backorder-item.asp",
-		data: {notes: notes, orderdetailid: orderdetailid}
+		data: {notes: notes, bo_reason: bo_reason, orderdetailid: orderdetailid}
 		})
 		.done(function(msg) {
             $('#new-bo-message').html('<div class="alert alert-success">ITEM SUCCESSFULLY BACKORDERED</div>');

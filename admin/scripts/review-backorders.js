@@ -3,9 +3,11 @@ $(document).on("click", ".btn-update-bo-modal", function(event){
     var orderdetailid = $(this).attr("data-itemid");
     var qty = $(this).attr("data-qty");
     var title = $(this).attr("data-title");
+    var reason = $(this).attr("data-reason");
     $("#frm-submit-backorder, #btn-submit-bo").show();
     $('#new-bo-message').html('');
     $('#btn-submit-bo').attr("data-itemid", orderdetailid);
+    $('#btn-submit-bo').attr("data-reason", reason);
     $("#radio").prop("checked", true);
     $('#bo-qty').prop('selectedIndex',0);
     $('#bo-qty-instock').html(qty);
@@ -16,7 +18,7 @@ $(document).on("click", ".btn-update-bo-modal", function(event){
 // Submit a new backorder
 $(document).on("click", "#btn-submit-bo", function(event){
     var orderdetailid = $(this).attr("data-itemid");
-    var bo_reason = $("input:radio[name='BOReason']:checked").val();
+    var bo_reason = $(this).attr("data-reason");
     var bo_qty = $("#bo-qty").val();
     
     $("#frm-submit-backorder").hide();

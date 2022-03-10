@@ -204,6 +204,7 @@ end if
   </div>
 
             <div class="container-fluid">
+            <%If Not IsNull(rsGetTrackType("international_tracking_num")) Then %>
             <% if display_international_track_link = "yes" and rsGetTrackType("international_tracking_url") <> "" then
             international_link = replace(rsGetTrackType("international_tracking_url"), "{}", rsGetTrackType("international_tracking_num"))
             %>
@@ -213,6 +214,7 @@ end if
                     Now that your package has officially left the USA, you can use the button below to track the package inside your country<br>
                     <a class="btn btn-sm btn-secondary" href="<%=  international_link %>" target="_blank">Track your package</a>
                 </div>
+            <% end if %> 
             <% end if %> 
         <%= var_message %>
     </div><!-- container-->
