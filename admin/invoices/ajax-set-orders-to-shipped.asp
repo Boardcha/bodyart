@@ -98,7 +98,7 @@ WHILE NOT rsGetInvoice.EOF
 		array_details_2(5,array_add_new) = var_preorder_text
 		array_details_2(6,array_add_new) = rsGetItems("ProductID")
 		array_details_2(7,array_add_new) = "" ' item notes
-		array_details_2(8,array_add_new) = 0
+		array_details_2(8,array_add_new) = "" '=== anodization fee
 		array_details_2(9,array_add_new)= rsGetItems("picture")
 		array_details_2(10,array_add_new) = array_length
 		array_details_2(11,array_add_new) = array_detail

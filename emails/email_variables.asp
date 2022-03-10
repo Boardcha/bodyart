@@ -76,11 +76,18 @@
 					if array_details_2(5,i) <> "" then 
 						mail_order_details = mail_order_details & " <br>" & array_details_2(5,i)
 					end if
+
 					mail_order_details = mail_order_details & "<br><br>Quantity " & array_details_2(1,i)
 
 					'====== ONLY SEND OUT PRICE DATA ON INITIAL ORDER PLACEMENT ==========
 					if mailer_type = "cc approved" Then
 						mail_order_details = mail_order_details & " @ " & FormatCurrency(array_details_2(4,i)) & "<br><span style='font-weight:bold;font-size:1.1em'>" & FormatCurrency(array_details_2(4,i) * array_details_2(1,i),2)
+
+							'==== IF ANODIZATION FEE FOUND ==================
+							if array_details_2(8,i) > 0 then 
+								mail_order_details = mail_order_details & " <br>+ " & FormatCurrency(array_details_2(8,i) * array_details_2(1,i),2) & " color add-on fee"
+							end if
+
 					end if
 
 					mail_order_details = mail_order_details & "</span></td></tr>"

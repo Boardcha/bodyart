@@ -3,7 +3,7 @@
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT TBL_OrderSummary.qty, gauge, length, ProductDetail1, title, ProductDetailID, TBL_OrderSummary.ProductID, picture, PreOrder_Desc, item_price, free  FROM TBL_OrderSummary INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID INNER JOIN ProductDetails ON TBL_OrderSummary.DetailID = ProductDetails.ProductDetailID WHERE TBL_OrderSummary.InvoiceID = ?"
+objCmd.CommandText = "SELECT TBL_OrderSummary.qty, gauge, length, ProductDetail1, title, ProductDetailID, TBL_OrderSummary.ProductID, picture, PreOrder_Desc, item_price, free, anodization_fee  FROM TBL_OrderSummary INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID INNER JOIN ProductDetails ON TBL_OrderSummary.DetailID = ProductDetails.ProductDetailID WHERE TBL_OrderSummary.InvoiceID = ?"
 objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, Session("invoiceid")))
 set rsBuildEmailArray = objCmd.Execute()
 
@@ -43,7 +43,7 @@ while NOT rsBuildEmailArray.EOF
         array_details_2(5,array_add_new) = email_preorder_specs
         array_details_2(6,array_add_new) = rsBuildEmailArray("ProductID")
         array_details_2(7,array_add_new) = "" ' item notes
-        array_details_2(8,array_add_new) = 0
+        array_details_2(8,array_add_new) = rsBuildEmailArray("anodization_fee")
         array_details_2(9,array_add_new)= rsBuildEmailArray("picture")
         array_details_2(10,array_add_new) = email_length
         array_details_2(11,array_add_new) = email_detail

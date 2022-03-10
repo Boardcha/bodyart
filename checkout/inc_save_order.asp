@@ -459,8 +459,6 @@ if var_addons_active <> "yes" then
 	
 	set rsGetInvoiceNum = nothing
 	
-	'Save order details -- array is generated in inc_orderdetails_toarray.asp
-
 	While Not rs_getCart.EOF
 		
 		var_preorder_text = ""

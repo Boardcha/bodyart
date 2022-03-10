@@ -436,6 +436,14 @@
       content: '\f03c';
   }
 
+  .fa-lock:before {
+      content: '\f03d';
+  }
+
+  .fa-unlock:before {
+      content: '\f03e';
+  }
+
 
 .sr-only {
     position: absolute;
