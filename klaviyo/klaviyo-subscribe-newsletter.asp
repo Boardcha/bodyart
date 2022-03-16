@@ -3,8 +3,7 @@
 <!--#include virtual="/Connections/chilkat.asp" -->
 
 <%
-' ======= FEB 2022
-' ======= THOUGHT THERE WAS AN ISSUE WITH CODE BECAUSE I COULD SUBSCRIBE AN EMAIL OVER AND OVER TO GET THE DISCOUNT EMAIL. HOWEVER, AFTER DIGGING IT APPEARS THAT A PROFILE IS NOT CREATED IMMEDIATELY. IT'S ONLY CREATED ONCE THE EMAIL IS CONFIRMED. AFTER THE PROFILE IS CREATED THEN AN EMAIL WON'T BE GENERATED A 2ND TIME. ALSO, IT TAKES A WHILE TO RECEIVE THE OPT-IN EMAIL FROM KLAVIYO. SO ITS NOT IMMEDIATE ===================================================
+' ======= MARCH 2022
 
 var_email = request("email")
 '=====  UTEZqk is the list ID for the basic Newsletter
@@ -69,6 +68,41 @@ End If
 		<!--#include virtual="/emails/function-send-email.asp"-->
 		<!--#include virtual="/emails/email_variables.asp"-->
 <%
+	' =================== START CREATE NEW PROFILE ====================
+	'  Connect to the REST server.
+	set rest = Server.CreateObject("Chilkat_9_5_0.Rest")
+	bTls = 1
+	port = 443
+	bAutoReconnect = 1
+	success = rest.Connect("https://a.klaviyo.com/",port,bTls,bAutoReconnect)
+	success = rest.AddHeader("Content-Type","application/x-www-form-urlencoded")
+	success = rest.AddHeader("Accept","application/json")
+	If (success = 0) Then
+		Response.Write "<pre>" & Server.HTMLEncode( rest.LastErrorText) & "</pre>"
+		Response.End
+	End If
+
+		var_profile = "data={" & _
+		" ""token"" : """ & klaviyo_private_key & """," & _
+        " ""properties"": {" & _
+		" ""$email"" : " & _
+			" """ & var_email &""" " & _
+		"}}"
+		
+		set http = Server.CreateObject("Chilkat_9_5_0.Http")
+		http.SetRequestHeader "Content-Type", "application/x-www-form-urlencoded"
+		http.Accept = "application/json"
+		
+        Set resp = http.PostJson2("https://a.klaviyo.com/api/identify" ,"application/json", var_profile)
+		If (http.LastMethodSuccess = 0) Then
+			Response.Write "<pre>" & Server.HTMLEncode( http.LastErrorText) & "</pre>"
+			Response.End
+		End If
+		jsonResponseStr = resp.BodyStr
+		'Response.Write "<br>Create profile result: " & jsonResponseStr
+
+	'===== END CREATE NEW PROFILE ====================
+
 	' =================== SUBSCRIBE NEW MEMBER TO NEWSLETTER
 	'  Connect to the REST server.
 	set rest = Server.CreateObject("Chilkat_9_5_0.Rest")

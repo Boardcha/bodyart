@@ -134,6 +134,15 @@ end if '==== rsGetItems.eof
         var_thumbnail = rsGetItems.Fields.Item("picture").Value
     end if
     %>
+	<%
+	TimesScanned = rsGetItems("TimesScanned")
+	If TimesScanned >= rsGetItems("qty") Then 
+		TimesScanned = rsGetItems("qty")
+		ItemScanCompleted = true
+	Else
+		ItemScanCompleted = false
+	End If
+	%>	
     <% if var_previous_detailid = rsGetItems.Fields.Item("ProductDetailID").Value AND rsGetItems("anodization_fee") = 0 then 
         var_addqty = rsGetItems.Fields.Item("qty").Value
     %>
@@ -147,7 +156,7 @@ end if '==== rsGetItems.eof
     $("tr[data-productdetailid='" + <%= rsGetItems.Fields.Item("productdetailid").Value %> + "']:first").attr('data-qty', new_qty);
 </script>
     <% else  '===var_previous_detailid %>
-    <tr class="item-information" id="<%= rsGetItems.Fields.Item("OrderDetailID").Value %>" data-invoice="<%= rsGetItems.Fields.Item("InvoiceID").Value %>" data-productdetailid="<%= rsGetItems.Fields.Item("ProductDetailID").Value %>" data-orderdetailid="<%= rsGetItems.Fields.Item("OrderDetailID").Value %> "data-location="<%= var_location %>" data-qty="<%= rsGetItems.Fields.Item("Qty").Value %>" data-matchqty="<%= var_matchqty %>" data-timescanned="0" data-status="not fullfilled">
+    <tr class="item-information <%If TimesScanned > 0 AND TimesScanned < rsGetItems("qty") Then Response.Write "table-warning"%>" id="<%= rsGetItems.Fields.Item("OrderDetailID").Value %>" data-invoice="<%= rsGetItems.Fields.Item("InvoiceID").Value %>" data-productdetailid="<%= rsGetItems.Fields.Item("ProductDetailID").Value %>" data-orderdetailid="<%= rsGetItems.Fields.Item("OrderDetailID").Value %> "data-location="<%= var_location %>" data-qty="<%= rsGetItems.Fields.Item("Qty").Value %>" data-matchqty="<%= var_matchqty %>" data-timescanned="0" data-status="not fullfilled">
         <td class="py-0 align-middle pl-0 pr-1" style="width:50px">
             <img src="http://bodyartforms-products.bodyartforms.com/<%= var_thumbnail %>" class="expand" data-orderdetailid="<%= rsGetItems.Fields.Item("OrderDetailID").Value %>" style="width:50px;height:auto">
         </td>
@@ -239,13 +248,13 @@ end if '==== rsGetItems.eof
         </td>
         <td class="py-0 align-middle">
             <span class="alert alert-success py-0 px-1 h5 font-weight-bold">
-                    <span class="mr-1 pr-1 border-success border-right">QTY</span><span id="still_need_<%= rsGetItems.Fields.Item("OrderDetailID").Value %>">0</span> of <span class="mr-1" id="duplicate_<%= rsGetItems.Fields.Item("OrderDetailID").Value %>"><%= rsGetItems.Fields.Item("Qty").Value %></span><% if  rsGetItems.Fields.Item("pair").Value = "yes" then %>pair<% end if %>
+                    <span class="mr-1 pr-1 border-success border-right">QTY</span><span id="still_need_<%= rsGetItems.Fields.Item("OrderDetailID").Value %>"><%=TimesScanned%></span> of <span class="mr-1" id="duplicate_<%= rsGetItems.Fields.Item("OrderDetailID").Value %>"><%= rsGetItems.Fields.Item("Qty").Value %></span><% if  rsGetItems.Fields.Item("pair").Value = "yes" then %>pair<% end if %>
             </span>
-            <i class="fa fa-check-circle fa-lg ml-1 scan_complete toggle-done" style="color:#BDBDBD" id="check_<%= rsGetItems.Fields.Item("OrderDetailID").Value %>" data-orderdetailid="<%= rsGetItems.Fields.Item("OrderDetailID").Value %>"></i>
+            <i class="fa fa-check-circle fa-lg ml-1 scan_complete toggle-done <%If ItemScanCompleted = true Then Response.Write "text-success" %>" style="color:#BDBDBD" id="check_<%= rsGetItems.Fields.Item("OrderDetailID").Value %>" data-orderdetailid="<%= rsGetItems.Fields.Item("OrderDetailID").Value %>"></i>
         </td>
     </tr>
-    <tr id="<%= rsGetItems.Fields.Item("OrderDetailID").Value %>_sub" style="display:none">    
-        <td class="border-top-0 pt-0 align-top" style="border-bottom: 3px solid grey" colspan="3">
+    <tr id="<%= rsGetItems.Fields.Item("OrderDetailID").Value %>_sub" <%If TimesScanned = 0 Then %>style="display:none"<%End If%>>    
+        <td class="border-top-0 pt-0 align-top <%If TimesScanned > 0 AND TimesScanned < rsGetItems("qty") Then Response.Write "table-warning"%>" style="border-bottom: 3px solid grey" colspan="3">
                 <%= rsGetItems.Fields.Item("title").Value %>&nbsp;<%= rsGetItems.Fields.Item("ProductDetail1").Value %>&nbsp;<%= rsGetItems.Fields.Item("Gauge").Value %>&nbsp;<%= rsGetItems.Fields.Item("Length").Value %><br>
                 <span class="alert alert-info py-0 px-1 font-weight-bold"><span class="mr-1 pr-1 border-info border-right bo-button"  data-toggle="modal" data-target="#modal-submit-backorder" data-orderdetailid="<%= rsGetItems.Fields.Item("OrderDetailID").Value %>">BO</span>In stock: <%= rsGetItems.Fields.Item("AmtInStock").Value %></span>
 

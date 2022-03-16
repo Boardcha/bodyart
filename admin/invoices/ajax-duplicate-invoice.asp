@@ -36,7 +36,7 @@ var_orig_invoiceid = request.form("invoiceid")
         '===== DEDUCT INVENTORY =============
         set objCmd = Server.CreateObject("ADODB.command")
         objCmd.ActiveConnection = DataConn
-        objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - " & rsGetOrderDetails("qty") & " WHERE ProductDetailID = " & rsGetOrderDetails("DetailID")
+        objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - " & rsGetOrderDetails("qty") & ", DateLastPurchased = '" & now() & "' WHERE ProductDetailID = " & rsGetOrderDetails("DetailID")
         objCmd.Execute()
 
         '========  Write info to edits log	 ==========

@@ -104,7 +104,7 @@ If var_other_items = 1 Then
 				Else
 					estimated_delivery_output = Replace(Replace(rsGetShippingOptions("ShippingDesc_Public"), "<br>", ". "), vbCrlf, "")
 				End If					
-				options = options & "{""label"": """ & rsGetShippingOptions("ShippingName") & """, ""amount"": " & rsGetShippingOptions("price") & ", ""detail"": """ & Replace(Replace(rsGetShippingOptions("ShippingDesc_Public"), "<br>", ". "), vbCrlf, "") & """, ""identifier"": """ & estimated_delivery_output & """},"
+				options = options & "{""label"": """ & rsGetShippingOptions("ShippingName") & """, ""amount"": " & rsGetShippingOptions("price") & ", ""detail"": """ & Replace(Replace(estimated_delivery_output, "<br>", ". "), vbCrlf, "") & """, ""identifier"": """ & rsGetShippingOptions("IDShipping") & """},"
 				'Example: {label: 'Expedited Shipping', amount: getShippingCosts('domestic_exp'), detail: '1-3 days', identifier: 'domestic_exp'}
 			End If ' If <> "ONLY gift certificate"
 			rsGetShippingOptions.MoveNext()

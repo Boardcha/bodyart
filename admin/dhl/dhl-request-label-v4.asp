@@ -13,7 +13,7 @@ Response.CodePage = 28591
 '==================== REMOVE ALL BASE64 IMAGES FROM DATABASE THAT ARE OVER 1 WEEK OLD ============
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
-objCmd.CommandText = "UPDATE sent_items SET dhl_base64_shipping_label = '', date_sent = NULL WHERE CAST(date_sent AS date) < CAST(GETDATE()-120 AS date)"
+objCmd.CommandText = "UPDATE sent_items SET dhl_base64_shipping_label = '' WHERE CAST(date_sent AS date) < CAST(GETDATE()-120 AS date)"
 objCmd.Execute()
 
 

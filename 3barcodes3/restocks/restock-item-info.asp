@@ -57,11 +57,12 @@ if request.form("item") <> "" then
     '====== UPDATE EDITS LOG WITH QTY UPDATE INFORMATION ===================
     Set objCmd = Server.CreateObject ("ADODB.Command")
     objCmd.ActiveConnection = DataConn
-    objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, edit_date, product_id, detail_id, description) VALUES(?, GETDATE(), ?, ?, ?)"
+    objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, edit_date, product_id, detail_id, description, po_detailid) VALUES(?, GETDATE(), ?, ?, ?, ?)"
     objCmd.Parameters.Append(objCmd.CreateParameter("user_id",3,1,15, rsGetUser.Fields.Item("user_id").Value ))
     objCmd.Parameters.Append(objCmd.CreateParameter("product_id",3,1,15, rsGetItem.Fields.Item("ProductID").Value ))
     objCmd.Parameters.Append(objCmd.CreateParameter("detail_id",3,1,15, request.form("item")))
     objCmd.Parameters.Append(objCmd.CreateParameter("var_qty_log_text",200,1,100, var_qty_log_text))
+    objCmd.Parameters.Append(objCmd.CreateParameter("po_detailid",3,1,20, request.form("item") ))
     objCmd.Execute 
 
 end if '==== if info in scanned field is present

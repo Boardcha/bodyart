@@ -16,7 +16,7 @@ Set rsPrintByPerson = objCmd.Execute()
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
-objCmd.CommandText = "SELECT name FROM TBL_AdminUsers WHERE toggle_packer = 1 ORDER BY name ASC"
+objCmd.CommandText = "SELECT name FROM TBL_AdminUsers WHERE toggle_packer = 1 AND archived = 0 ORDER BY name ASC"
 Set rsGetPackers = objCmd.Execute()
 %>
 <!DOCTYPE html> 

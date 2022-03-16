@@ -60,6 +60,7 @@ $( document ).ready(function() {
 		 
 		 function getShippingCosts(selectedShippingId){
 			var shippingCost = 0;
+			console.log("11|" + selectedShippingId);
 			$.ajax({
 				method: "post",
 				dataType: "json",
@@ -281,22 +282,30 @@ $( document ).ready(function() {
 							console.log("stock_status: fail");
 							$('#btn-applepay').show();
 							calcAllTotals();
-							alert("Unfortunately we do not have enough quantity in stock for some of the item(s) in your cart.");
+							$('#pay-api-error-message').html("Unfortunately we do not have enough quantity in stock for some of the item(s) in your cart.");
+							$('#pay-api-error-message').show();		
+							$('#pay-api-processing-message').hide();							
 							reject;
 						}else if (json.flagged === "yes") {
 							console.log("ORDER or USER is FLAGGED !!!");
 							$('#btn-applepay').show();
-							alert("This order can not be processed online. Please contact customer service for assistance.");							
+							$('#pay-api-error-message').html("This order can not be processed online. Please contact customer service for assistance.");
+							$('#pay-api-error-message').show();		
+							$('#pay-api-processing-message').hide();	
 							reject;
 						} else { // If items are in stock 
 							if (json.cc_approved === "yes") {
+								$('#pay-api-error-message').hide();	
+								$('#pay-api-processing-message').hide();
 								resolve(true);
 								window.location = "/checkout_final.asp";
 								console.log("Payment successful");
 							} else {				
 								console.log("Payment declined");
 								$('#btn-applepay').show();
-								alert("Payment declined. " + json.cc_reason);
+								$('#pay-api-error-message').html("Payment declined. " + json.cc_reason);
+								$('#pay-api-error-message').show();		
+								$('#pay-api-processing-message').hide();								
 								reject;
 								
 							}				
@@ -304,7 +313,9 @@ $( document ).ready(function() {
 					})
 					.fail(function(xmlHttpRequest, textStatus) {
 						$('#btn-applepay').show();
-						alert("Payment declined. Please review your information and try again.");
+						$('#pay-api-error-message').html("Payment declined. Please review your information and try again.");
+						$('#pay-api-error-message').show();		
+						$('#pay-api-processing-message').hide();						
 						reject;
 					});			
 			});

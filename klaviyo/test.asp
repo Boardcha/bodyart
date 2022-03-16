@@ -85,7 +85,8 @@ End If
 
 		var_profile = "data={" & _
 		" ""token"" : """ & klaviyo_private_key & """," & _
-		" ""$email"" : { " & _
+        " ""properties"": {" & _
+		" ""$email"" : " & _
 			" """ & var_email &""" " & _
 		"}}"
 		
@@ -96,7 +97,8 @@ End If
 		http.Accept = "application/json"
 		
 	
-		Set resp = http.PostJson2("https://a.klaviyo.com/api/identify" ,"application/x-www-form-urlencoded", var_profile)
+		'Set resp = http.PostJson2("https://a.klaviyo.com/api/identify" ,"application/x-www-form-urlencoded", var_profile)
+        Set resp = http.PostJson2("https://a.klaviyo.com/api/identify" ,"application/json", var_profile)
 		If (http.LastMethodSuccess = 0) Then
 			Response.Write "<pre>" & Server.HTMLEncode( http.LastErrorText) & "</pre>"
 			Response.End

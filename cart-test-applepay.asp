@@ -594,7 +594,8 @@ end if ' show if free sticker cookie has not been set to "no"
 									<% else %>
 										<div class="alert alert-danger">We're sorry, but our <b>PayPal</b> checkout is temporarily unavailable. As soon as PayPal comes back online, we will accept orders again. Please check back later.</div>
 									<% end if %>
-									<div id="pay-api-processing-message" style="display:none"></div>	
+									<div id="pay-api-processing-message" style="display:none"></div>
+									<div id="pay-api-error-message" class="alert alert-danger" style="display:none"></div>									
 									<div id="btn-googlepay" class="mb-3 checkout_button" style="width: 100%; height: 45px; display: none;"></div>
 									<apple-pay-button id="btn-applepay" buttonstyle="<%= var_applepay_color %>" type="check-out" locale="en" style="height: 45px"></apple-pay-button>
 									<%
@@ -761,7 +762,7 @@ if NOT rsGetAddOns.eof then
 
 <!-- Apple Pay Javascript -->
 <script src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js"></script>
-<script src="/js/apple-pay-api.js?ver=3"></script>
+<script src="/js/apple-pay-api.js?ver=5"></script>
 
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
 <script type="text/javascript" src="/js-pages/cart.min.js?v=03032023"></script>
