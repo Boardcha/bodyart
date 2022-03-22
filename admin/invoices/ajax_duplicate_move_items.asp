@@ -69,7 +69,7 @@ if request.form("toggle_type") = "copy" then
 			if strItem <> "" then 
 				set objCmd = Server.CreateObject("ADODB.Command")
 				objCmd.ActiveConnection = DataConn
-				objCmd.CommandText = "INSERT INTO TBL_OrderSummary(InvoiceID, ProductID, DetailID, qty, item_price) SELECT ? , ProductID, DetailID, qty, item_price FROM TBL_OrderSummary WHERE OrderDetailID = " + strItem 
+				objCmd.CommandText = "INSERT INTO TBL_OrderSummary(InvoiceID, ProductID, DetailID, qty, item_price, PreOrder_Desc, anodization_id_ordered, anodization_fee) SELECT ? , ProductID, DetailID, qty, item_price, PreOrder_Desc, anodization_id_ordered, anodization_fee FROM TBL_OrderSummary WHERE OrderDetailID = " + strItem 
 				objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,15,move_to_invoice))
 				objCmd.Execute()
 

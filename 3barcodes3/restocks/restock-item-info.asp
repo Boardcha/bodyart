@@ -62,7 +62,7 @@ if request.form("item") <> "" then
     objCmd.Parameters.Append(objCmd.CreateParameter("product_id",3,1,15, rsGetItem.Fields.Item("ProductID").Value ))
     objCmd.Parameters.Append(objCmd.CreateParameter("detail_id",3,1,15, request.form("item")))
     objCmd.Parameters.Append(objCmd.CreateParameter("var_qty_log_text",200,1,100, var_qty_log_text))
-    objCmd.Parameters.Append(objCmd.CreateParameter("po_detailid",3,1,20, request.form("item") ))
+    objCmd.Parameters.Append(objCmd.CreateParameter("po_id",3,1,20, request.form("po_id")))
     objCmd.Execute 
 
 end if '==== if info in scanned field is present

@@ -11,6 +11,18 @@ function refreshMenu() {
 		return deferred.promise();
 	} 	// end refreshMenu() function
 	
+	function refreshOptionalColorMenu() {
+		var productid = $('#productid').val();
+		var deferred = $.Deferred();
+
+		$('#select-anodization').load("products/ajax-anodize-dropdown-addtocart.asp", {productid: productid}, function() {
+			$('#select-addtocart').show();			
+			$('#loading-addtocart').hide();
+			deferred.resolve();
+		});
+		return deferred.promise();
+	} 
+	
 	function updateSalePrice() {
 		var qty = $('input[name="qty"]').val();
 		var discount_amount = $('input[name="discount_amount"]').val();
@@ -40,6 +52,9 @@ function refreshMenu() {
 		$('#select-addtocart').hide();
 		$('#loading-addtocart').show();
 		refreshMenu().done(function(){
+			updateSalePrice();
+		});
+		refreshOptionalColorMenu().done(function(){
 			updateSalePrice();
 		});
 	});
@@ -286,6 +301,7 @@ function refreshMenu() {
 			$('.ajax-currency').html(selected_symbol + ' ' + selected_currency);
 			updateCurrency().done(function(){
 				refreshMenu();
+				refreshOptionalColorMenu();
 			});
 		
 		});

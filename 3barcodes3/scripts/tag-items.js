@@ -19,7 +19,7 @@ $(document).on("keypress", "#scan-item", function(event){
         scanned_item = scanned_item_array[1];
         $('#load-message').html('');
 
-        $('#load-body').load("restocks/tag-item-info.asp", {item:scanned_item});
+        $('#load-body').load("restocks/tag-item-info.asp", {item:scanned_item, po_id:po_id});
             ResetItemField();
     }
 });

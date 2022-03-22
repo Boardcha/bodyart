@@ -159,7 +159,7 @@ ItemsTotal = 0
 		<% end if %>
 		&nbsp;&nbsp;<%=(rsGetOrderDetails.Fields.Item("ProductDetail1").Value)%>&nbsp;<%=(rsGetOrderDetails.Fields.Item("Gauge").Value)%>&nbsp;<%=(rsGetOrderDetails.Fields.Item("Length").Value)%>
 		<% if rsGetOrderDetails("anodization_fee") > 0 then %>
-		<strong>COLOR ADDED</strong>
+		<span style="font-weight:bold;background-color:#d6d6d6;border-radius:5px;padding:3px">CUSTOM COLOR</span>
 		<% end if %>
         <% if rsGetOrderDetails.Fields.Item("PreOrder_Desc").Value <> "" then %>
 		 - 

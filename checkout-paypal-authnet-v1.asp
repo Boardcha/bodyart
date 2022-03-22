@@ -287,17 +287,20 @@ mailer_type = ""
 <!--#include virtual="cart/inc_cart_grandtotal.asp"-->
 <%
 if request.cookies("OrderAddonsActive") <> "" then
+rs_getCart.ReQuery()
+mailer_type = "addons approved"
 %>
 <!--#include virtual="checkout/inc-save-addon-items.asp" -->
 <%
-else %>
+else 
+mailer_type = "cc approved"
+%>
 <!--#include virtual="checkout/inc_deduct_quantities.asp" -->
 <%
 end if
 
 payment_approved = "yes"
 done_mailing_certs = "yes"
-mailer_type = "cc approved"
 strCardType = "PayPal"
 session("cc_status") = "approved" 
 
@@ -325,12 +328,12 @@ if request.cookies("OrderAddonsActive") = "" then
 	objCmd.Execute()
 
 %>
+<!--#include virtual="checkout/inc-set-to-pending.asp" -->	
+<% end if 'if not OrderAddonsActive
+%>
 <!--#include virtual="checkout/inc_items_to_email_array.asp"-->
 <!--#include virtual="emails/function-send-email.asp"-->
 <!--#include virtual="emails/email_variables.asp"-->
-<!--#include virtual="/checkout/inc-set-to-pending.asp" -->	
-<% end if 'if not OrderAddonsActive
-%>
 <!--#include virtual="checkout/inc_remove_items_from_cart.asp" -->
 <!--#include virtual="checkout/inc_google_scripts.asp"--> 
 <!--#include virtual="checkout/inc_remove_all_sessions_cookies.asp"-->

@@ -30,4 +30,4 @@ end if
 </html>
 <script src="/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../js/bootstrap-v4.min.js"></script>
-<script type="text/javascript" src="scripts/tag-items.js?v=040121"></script>
+<script type="text/javascript" src="scripts/tag-items.js?v=031622"></script>

@@ -292,6 +292,7 @@ if not rsGetOrder.eof then
 						<option value="CUSTOM ORDER IN REVIEW">Custom items in review</option>
 						<option value="CUSTOM ORDER APPROVED">Custom items approved to order</option>
 						<option value="ON ORDER">Custom items have been ordered</option>
+						<option value="CUSTOM COLOR IN PROGRESS">Items need anodizing</option>
 						<option value="RETURN">Return (Waiting for return)</option>
 						<option value="RETURN (EXCEPTION)">Return (New orders allowed)</option>
 						<option value="Shipped">Shipped</option>

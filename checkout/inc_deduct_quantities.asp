@@ -11,7 +11,7 @@ while NOT rsDeductItems.EOF
 		
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - ?, DateLastPurchased = '" & date() & "' WHERE ProductDetailID = ?"
+	objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - ?, DateLastPurchased = '" & now() & "' WHERE ProductDetailID = ?"
 	objCmd.Parameters.Append(objCmd.CreateParameter("QtyPurchased",3,1,10, rsDeductItems("qty") ))		
 	objCmd.Parameters.Append(objCmd.CreateParameter("DetailID",3,1,12, rsDeductItems("DetailID") ))		
 	objCmd.Execute()

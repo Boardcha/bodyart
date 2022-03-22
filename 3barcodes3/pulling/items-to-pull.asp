@@ -101,9 +101,18 @@ end if '==== rsGetItems.eof
     <% if autoclave = "yes" then %>
         <i class="fa fa-first-aid fa-2x text-primary px-1 d-inline-block align-top"></i>
     <% END IF %>
-    <% if rsGetOrder.Fields.Item("customer_comments").Value <> "" then %>
+    <%
+    if rsGetOrder("item_description") <> "" then 
+        var_public_comments = REPLACE(rsGetOrder("item_description"), "<b><font size=3>BACKORDER SHIPMENT</font></B><br>", "")
+        var_public_comments = REPLACE(var_public_comments, "CONSERVE PLASTIC BAGS<br>", "")
+        var_public_comments = REPLACE(var_public_comments, "ORDER UPDATED", "")
+        var_public_comments = REPLACE(var_public_comments, "ADDRESS UPDATED", "")
+        var_public_comments = REPLACE(var_public_comments, "SHIPPING METHOD UPDATED", "")
+        var_public_comments = REPLACE(var_public_comments, "GIFT ORDER<br>", "")
+    
+    %>
     <div class="d-inline-block small text-primary p-0 m-0 align-top">
-        <%= rsGetOrder.Fields.Item("customer_comments").Value %>
+        <%= var_public_comments %>
     </div>
     <% end if %>
 <% if NOT rsGetItems.eof then %>
@@ -223,7 +232,13 @@ end if '==== rsGetItems.eof
         <span class="d-block ml-1">Old location <%= rsGetItems("location") %></span>
         <% end if '  also show old location for limited bin labels IF DETAIL ID DOESNT MATCH %>
         <% else %>
-            CUSTOM ORDER FOR | <%= rsGetOrder.Fields.Item("customer_first").Value %></span>
+            <% if rsGetItems("customorder") = "yes" then %>
+            CUSTOM ORDER FOR
+            <% end if %>
+            <% if rsGetItems("anodization_fee") > 0 then %>
+            CUSTOM ANODIZATION FOR
+            <% end if %>
+             | <%= rsGetOrder.Fields.Item("customer_first").Value %></span>
             <div>Invoice # <%= rsGetOrder.Fields.Item("ID").Value %></div>
         <% end if %> 
         <% ' If a returned package is in the order

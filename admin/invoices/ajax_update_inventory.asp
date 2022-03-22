@@ -3,7 +3,7 @@
 <%
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT qty, DetailID, InvoiceID, title, ProductDetail1 FROM QRY_OrderDetails  WHERE ID = ?"
+	objCmd.CommandText = "SELECT qty, DetailID, InvoiceID FROM TBL_OrderSummary WHERE InvoiceID = ?"
 	objCmd.Parameters.Append(objCmd.CreateParameter("id",3,1,10,request("invoiceid")))
 	set rsUpdate = objCmd.Execute()
 
@@ -34,6 +34,7 @@ While NOT rsUpdate.EOF
 		objCmd.ActiveConnection = DataConn
 		objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - " & rsUpdate.Fields.Item("qty").Value & ", DateLastPurchased = '"& date() &"' WHERE ProductDetailID = " & rsUpdate.Fields.Item("DetailID").Value
 		objCmd.Execute()
+		
 
 			
 		'Write info to edits log	

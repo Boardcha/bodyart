@@ -11,10 +11,10 @@
 	special_district_tax_collectable = 0
 
 	
-	' Get information to deduct inventory
+	' Get information to add back inventory
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT qty, DetailID FROM QRY_OrderDetails WHERE OrderDetailID = ?" 
+	objCmd.CommandText = "SELECT qty, DetailID, InvoiceID, title FROM TBL_OrderSummary  INNER JOIN jewelry ON jewelry.ProductID = TBL_OrderSummary.ProductID  WHERE OrderDetailID = ?" 
 	objCmd.Parameters.Append(objCmd.CreateParameter("id",3,1,10,request("detailid")))
 	set rsUpdate = objCmd.Execute()
 	
@@ -25,14 +25,6 @@
 	objCmd.Execute()
 
 			
-	'Write info to edits log	
-	set objCmd = Server.CreateObject("ADODB.Command")
-	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (?, " & rsUpdate("DetailID") & ",'Automated - Added " & rsUpdate("qty") & " to qty by deleting item from invoice page','" & now() & "')"
-	objCmd.Parameters.Append(objCmd.CreateParameter("user_id",3,1,15, rsGetUser.Fields.Item("user_id").Value ))
-	objCmd.Execute()
-	Set objCmd = Nothing
-	
 	' Reactive main product listing
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn  
@@ -45,6 +37,24 @@
 	objCmd.CommandText = "DELETE FROM TBL_OrderSummary WHERE OrderDetailID = ?"
 	objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,15,request("detailid")))
 	objCmd.Execute()
+
+	'Write info to edits log	
+	set objCmd = Server.CreateObject("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (?, " & rsUpdate("DetailID") & ",'Automated - Added " & rsUpdate("qty") & " to qty by deleting item from invoice page','" & now() & "')"
+	objCmd.Parameters.Append(objCmd.CreateParameter("user_id",3,1,15, rsGetUser.Fields.Item("user_id").Value ))
+	objCmd.Execute()
+	Set objCmd = Nothing
+
+	'===== INSERT NOTE ABOUT AUTOMATED UPDATE ================
+	set objCmd = Server.CreateObject("ADODB.command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "INSERT INTO tbl_invoice_notes (user_id, invoice_id, note) VALUES (?,?,?)"
+	objCmd.Parameters.Append(objCmd.CreateParameter("user_id",3,1,10,user_id))
+	objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, rsUpdate("invoiceid") ))
+	objCmd.Parameters.Append(objCmd.CreateParameter("note",200,1,250,"Automated message - Removed " & rsUpdate("qty") & " " &   rsUpdate("title") & " (Detail # " & rsUpdate("DetailID") & ") from order" ))
+	objCmd.Execute()
+	Set objCmd = Nothing
 	
 	
 	

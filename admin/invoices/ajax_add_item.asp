@@ -21,10 +21,10 @@
 	objCmd.Parameters.Append(objCmd.CreateParameter("add_price",6,1,10,request("add_price")))	
 	objCmd.Execute()
 
-	' Retrieve order
+	' Get current in stock qty
 	Set objCmd = Server.CreateObject ("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT qty FROM ProductDetails WHERE ProductDetailID = ?" 
+	objCmd.CommandText = "SELECT qty, title + ' ' + isnull(Gauge, '') as title FROM ProductDetails INNER JOIN jewelry ON jewelry.ProductID = ProductDetails.ProductID WHERE ProductDetailID = ?" 
 	objCmd.Parameters.Append(objCmd.CreateParameter("detail_id",3,1,20, request("add_detailid") ))
 	Set rsGetCurrentQty = objCmd.Execute()
 
@@ -39,6 +39,16 @@
 	set objCmd = Server.CreateObject("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & request("add_detailid") & ",'Automated - Deducted " & request("add_qty") & " from stock. Updated from " & rsGetCurrentQty("qty") & " to " & rsGetCurrentQty("qty") - request("add_qty") & " - adding item to order from invoice edit page','" & now() & "')"
+	objCmd.Execute()
+	Set objCmd = Nothing
+
+	'===== INSERT NOTE ABOUT AUTOMATED UPDATE ================
+	set objCmd = Server.CreateObject("ADODB.command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "INSERT INTO tbl_invoice_notes (user_id, invoice_id, note) VALUES (?,?,?)"
+	objCmd.Parameters.Append(objCmd.CreateParameter("user_id",3,1,10,user_id))
+	objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, request("invoiceid") ))
+	objCmd.Parameters.Append(objCmd.CreateParameter("note",200,1,250,"Automated message - Added " & request("add_qty") & " " &   rsGetCurrentQty("title") & " to order" ))
 	objCmd.Execute()
 	Set objCmd = Nothing
 	

@@ -19,7 +19,7 @@ var_orig_invoiceid = request.form("invoiceid")
     '===== Copy ordered items ======
     set objCmd = Server.CreateObject("ADODB.Command")
     objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
-    objCmd.CommandText = "INSERT INTO TBL_OrderSummary (InvoiceID, ProductID, DetailID, qty, item_price) SELECT " & rsGetNewInvoiceID("ID") & ", ProductID, DetailID, qty, 0 FROM TBL_OrderSummary WHERE InvoiceID = ?" 
+    objCmd.CommandText = "INSERT INTO TBL_OrderSummary (InvoiceID, ProductID, DetailID, qty, item_price, PreOrder_Desc, anodization_id_ordered, anodization_fee) SELECT " & rsGetNewInvoiceID("ID") & ", ProductID, DetailID, qty, 0, PreOrder_Desc, anodization_id_ordered, anodization_fee FROM TBL_OrderSummary WHERE InvoiceID = ?" 
     objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,15, var_orig_invoiceid ))
     objCmd.Execute() 
     var_new_invoiceid = rsGetNewInvoiceID("ID")

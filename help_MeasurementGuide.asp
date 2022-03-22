@@ -34,3 +34,4 @@
 		$('#above-1inch').toggle();
 	})
 </script>
+<script src="/js/jquery.fancybox.min.js"></script>

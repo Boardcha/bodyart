@@ -6,7 +6,7 @@ bootstrapped = "yes"
 
 set rsGetRecords = Server.CreateObject("ADODB.Recordset")
 rsGetRecords.ActiveConnection = MM_bodyartforms_sql_STRING
-rsGetRecords.Source = "SELECT DISTINCT TOP (100) PERCENT SNT.ID, SNT.customer_first, SNT.customer_last, SNT.date_order_placed, SNT.preorder, CONVERT(nvarchar(MAX), SNT.our_notes) AS our_notes, pay_method, shipped FROM dbo.TBL_OrderSummary AS ORS LEFT OUTER JOIN  dbo.sent_items AS SNT ON SNT.ID = ORS.InvoiceID AND ORS.item_price > 0 AND ORS.anodized_completed = 0 AND ORS.anodization_id_ordered > 0 WHERE (SNT.anodize = 1) ANd ship_code = 'paid' ORDER BY SNT.date_order_placed"
+rsGetRecords.Source = "SELECT DISTINCT TOP (100) PERCENT SNT.ID, SNT.customer_first, SNT.customer_last, SNT.date_order_placed, SNT.preorder, CONVERT(nvarchar(MAX), SNT.our_notes) AS our_notes, pay_method, shipped, item_received FROM dbo.TBL_OrderSummary AS ORS LEFT OUTER JOIN  dbo.sent_items AS SNT ON SNT.ID = ORS.InvoiceID AND ORS.item_price > 0 AND ORS.anodized_completed = 0 AND ORS.anodization_id_ordered > 0 WHERE (SNT.anodize = 1) ANd ship_code = 'paid' ORDER BY SNT.date_order_placed"
 rsGetRecords.CursorLocation = 3 'adUseClient
 rsGetRecords.LockType = 1 'Read-only records
 rsGetRecords.Open()
@@ -70,19 +70,25 @@ Dim rsGetOrderDetails2_numRows
 Set rsGetOrderDetails2 = Server.CreateObject("ADODB.Recordset")
 With rsGetOrderDetails2
 rsGetOrderDetails2.ActiveConnection = MM_bodyartforms_sql_STRING
-rsGetOrderDetails2.Source = "SELECT OrderDetailID, QRY_OrderDetails.qty, title, QRY_OrderDetails.ProductDetail1, PreOrder_Desc, notes, backorder, QRY_OrderDetails.ProductID, QRY_OrderDetails.Gauge, QRY_OrderDetails.Length, brandname, anodized_completed, dbo.ProductDetails.DetailCode, dbo.ProductDetails.location, dbo.TBL_Barcodes_SortOrder.ID_Description FROM dbo.QRY_OrderDetails INNER JOIN dbo.ProductDetails ON dbo.QRY_OrderDetails.ProductDetailID = dbo.ProductDetails.ProductDetailID INNER JOIN dbo.TBL_Barcodes_SortOrder ON dbo.ProductDetails.DetailCode = dbo.TBL_Barcodes_SortOrder.ID_Number WHERE anodization_id_ordered > 0 AND item_price > 0 AND ID = " & rsGetRecords.Fields.Item("ID").Value & " ORDER BY item_ordered_date ASC"
+rsGetOrderDetails2.Source = "SELECT OrderDetailID, QRY_OrderDetails.qty, title, QRY_OrderDetails.ProductDetail1, PreOrder_Desc, notes, backorder, QRY_OrderDetails.ProductID, QRY_OrderDetails.Gauge, QRY_OrderDetails.Length, brandname, anodized_completed, dbo.ProductDetails.DetailCode, dbo.ProductDetails.location, TBL_Barcodes_SortOrder.ID_Description, customorder, item_received, anodization_id_ordered FROM dbo.QRY_OrderDetails INNER JOIN dbo.ProductDetails ON dbo.QRY_OrderDetails.ProductDetailID = dbo.ProductDetails.ProductDetailID INNER JOIN dbo.TBL_Barcodes_SortOrder ON dbo.ProductDetails.DetailCode = dbo.TBL_Barcodes_SortOrder.ID_Number WHERE item_price > 0 AND ID = " & rsGetRecords.Fields.Item("ID").Value & " ORDER BY item_ordered_date ASC"
 rsGetOrderDetails2.CursorLocation = 3 'adUseClient
 rsGetOrderDetails2.LockType = 1 'Read-only records
 rsGetOrderDetails2.Open()
 %>
 <div class="container">
 <%
+custom_item_in_order = ""
 Do While Not.Eof
 
 	anodized_completed = ""
 if rsGetOrderDetails2.Fields.Item("anodized_completed").Value = true then
 	anodized_completed = "yes"
 end if
+if rsGetOrderDetails2("customorder") = "yes" and rsGetOrderDetails2("item_received") = 0 then
+	custom_item_in_order = "yes"
+end if
+
+if cint(rsGetOrderDetails2("anodization_id_ordered")) > 0 then
 %>
 	<div class="row h-100 my-2">
 		<div class="col-1">
@@ -92,10 +98,6 @@ end if
 			<span class="badge badge-primary p-1"><%= rsGetOrderDetails2("PreOrder_Desc") %></span>
 		</div>
 		<div class="col-10 my-auto <% if anodized_completed <> "" then %>small<% end if %>">
-<% if rsGetRecords("preorder") = 1 then %>
-<span class="badge badge-warning p-1 mb-1">This order is also waiting on custom items</span><br>
-<% end if %>
-
 			<% if anodized_completed = "" then %>
 				<input class="mr-2 checkbox_item_id" type="checkbox" name="item_id" invoice="<%=(rsGetRecords.Fields.Item("ID").Value)%>" id="<%=(rsGetOrderDetails2.Fields.Item("OrderDetailID").Value)%>" value="<%=(rsGetOrderDetails2.Fields.Item("OrderDetailID").Value)%>">
 			<% end if %>
@@ -109,10 +111,14 @@ end if
 		</div>
 	</div><!-- row -->
           <%
+	end if '===== anodization_id_ordered > 0
 .Movenext()
 Loop
 End With 
 %>
+	<% if custom_item_in_order = "yes" then %>
+	<span class="badge badge-warning p-1 mb-1">This order is also waiting on custom items</span><br>
+	<% end if %>
 </div><!-- container -->
 <%
 rsGetOrderDetails2.Close()

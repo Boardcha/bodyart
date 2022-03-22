@@ -299,6 +299,7 @@ i = i + 1
 </td>
 <td class="Description">
 <a href="product-edit.asp?ProductID=<%=(rsGetRestockItems.Fields.Item("ProductID").Value)%>&info=less" target="_blank">
+	<img src="https://bafthumbs-400.bodyartforms.com/<%=rsGetRestockItems("picture")%>" class="rounded float-left mr-2" style="height:50px;width:50px">
 <%=(rsGetRestockItems.Fields.Item("title").Value)%>&nbsp;<%=(rsGetRestockItems.Fields.Item("gauge").Value)%>&nbsp;<%=(rsGetRestockItems.Fields.Item("length").Value)%><%=(rsGetRestockItems.Fields.Item("ProductDetail1").Value)%></a>             
 
   </td>

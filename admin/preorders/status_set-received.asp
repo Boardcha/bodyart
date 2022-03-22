@@ -12,8 +12,9 @@ if request.querystring("received") = "yes" then
 	  
 	  set objCmd = Server.CreateObject("ADODB.command")
 	  objCmd.ActiveConnection = DataConn
-	  objCmd.CommandText = "SELECT TBL_OrderSummary.InvoiceID, TBL_OrderSummary.OrderDetailID, TBL_OrderSummary.item_received, jewelry.customorder FROM TBL_OrderSummary INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID WHERE (TBL_OrderSummary.item_received = 0) AND (TBL_OrderSummary.InvoiceID = ?) AND (jewelry.customorder = 'yes')"
-	  objCmd.Parameters.Append(objCmd.CreateParameter("invoiceID",3,1,10,request.querystring("invoice")))
+	  objCmd.CommandText = "SELECT TBL_OrderSummary.InvoiceID, TBL_OrderSummary.OrderDetailID, TBL_OrderSummary.item_received, jewelry.customorder FROM TBL_OrderSummary INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID WHERE (TBL_OrderSummary.item_received = 0 AND TBL_OrderSummary.InvoiceID = ? AND jewelry.customorder = 'yes') OR ( TBL_OrderSummary.InvoiceID = ? AND anodization_id_ordered > 0 AND anodized_completed = 0 ) "
+	  objCmd.Parameters.Append(objCmd.CreateParameter("invoiceID",3,1,20,request.querystring("invoice")))
+	  objCmd.Parameters.Append(objCmd.CreateParameter("invoiceID",3,1,20,request.querystring("invoice")))
 	  Set rsOrderStatus = objCmd.Execute()
 	  
 	  ' Set order to pending if no items are found

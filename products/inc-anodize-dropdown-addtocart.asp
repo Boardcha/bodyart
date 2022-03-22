@@ -1,10 +1,16 @@
 <%
-If rsProduct("standard_anodization") = True Then
+Set objCmd = Server.CreateObject("ADODB.command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "SELECT * FROM jewelry WHERE ProductID = ?"
+objCmd.Parameters.Append(objCmd.CreateParameter("ProductID",3,1,10,request("productid")))
+Set rsAnodization = objCmd.Execute()
+	
+If rsAnodization("standard_anodization") = True Then
 	sqlWhere = "WHERE standard_anodization = 1"
 Else
 	sqlWhere = "WHERE standard_anodization = 0"
 End IF	
-If rsProduct("high_voltage_anodization") = True Then
+If rsAnodization("high_voltage_anodization") = True Then
 	sqlWhere = sqlWhere & " OR high_voltage = 1"
 Else
 	sqlWhere = sqlWhere & " OR high_voltage = 0"
@@ -14,9 +20,7 @@ End IF
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-	
 objCmd.CommandText = "SELECT * FROM TBL_Anodization_Colors_Pricing " & sqlWhere & "  ORDER BY color_name ASC"
-
 set rsGetItems = Server.CreateObject("ADODB.Recordset")
 rsGetItems.CursorLocation = 3 'adUseClient
 rsGetItems.Open objCmd
@@ -42,12 +46,14 @@ if not rsGetItems.eof then
 			While NOT rsGetItems.EOF	
 			
 				base_price = formatnumber(rsGetItems("base_price"),2)
+				option_sale_price = 0
+				option_actual_price = FormatNumber(base_price * exchange_rate , -1, -2, -0, -2)
 				anodId = rsGetItems("anodID")
 				%>
 				<label class="btn rounded-0 py-3 py-lg-2 border-bottom text-left btn-select-menu">
-					<input class="add-anodization" type="radio" name="add-anodization" value="<%=(rsGetItems("anodID").Value)%>" data-anod-id="<%= anodId %>" data-base-price="<%= base_price %>"  data-title="<%= replace(rsGetItems("color_name").Value, """", "") %>" dropdown-title="<%= exchange_symbol %><%= base_price %>
+					<input class="add-anodization" type="radio" name="add-anodization" value="<%=(rsGetItems("anodID").Value)%>" data-anod-id="<%= anodId %>" data-base-price="<%= base_price %>" data-actual-price="<%= option_actual_price %>" data-title="<%= replace(rsGetItems("color_name").Value, """", "") %>" dropdown-title="<%= exchange_symbol %><%= base_price %>
 					&nbsp;&nbsp;&nbsp;&nbsp;<%= server.htmlencode(rsGetItems("color_name").Value) %>" data-variant="<%= trim(server.htmlencode(rsGetItems("color_name").Value)) %>">
-					<%= exchange_symbol %><%= base_price %>&nbsp;&nbsp;&nbsp;&nbsp; <%=rsGetItems("color_name").Value%>&nbsp;&nbsp;&nbsp;&nbsp
+					<%= exchange_symbol %><%= option_actual_price %>&nbsp;&nbsp;&nbsp;&nbsp; <%=rsGetItems("color_name").Value%>&nbsp;&nbsp;&nbsp;&nbsp
 				</label> 
 				<%
 				

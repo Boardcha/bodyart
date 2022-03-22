@@ -1576,7 +1576,7 @@ end if
 <% end if %>
 <script src="/js/jquery.fancybox.min.js"></script>
 <script type="text/javascript" src="/js/slick.min.js"></script>
-<script type="text/javascript" src="/js-pages/product-details.js?v=111722" ></script>
+<script type="text/javascript" src="/js-pages/product-details.min.js?v=111722" ></script>
 
 <!-- Start Afterpay Javascript -->
 <!--

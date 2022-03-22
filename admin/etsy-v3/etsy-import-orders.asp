@@ -216,7 +216,7 @@ Do While i < count_i
         '------- Deduct quantities on order items ---------------
         set objCmd = Server.CreateObject("ADODB.Command")
         objCmd.ActiveConnection = DataConn
-        objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - " & our_qty & ", DateLastPurchased = '" & date() & "'  WHERE ProductDetailID = ?"
+        objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - " & our_qty & ", DateLastPurchased = '" & now() & "'  WHERE ProductDetailID = ?"
         objCmd.Parameters.Append(objCmd.CreateParameter("product_detailid",200,1,100,var_product_detailid))
         objCmd.Execute()
 
