@@ -5,7 +5,7 @@
         <div class="text-right">
 <button class="btn btn-outline-danger btn-sm m-1 mr-3 d-lg-none" data-toggle="collapse" data-target="#filters" type="button">Close <i class="fa fa-times"></i></button> 
 </div>
-        <form action="products.asp" method="get" id="form-filters">
+        <form action="/products.asp" method="get" id="form-filters">
         <div class="form-group pt-2 pl-2 pr-2 m-0">
         <input class="form-control border-secondary" name="keywords" id="filter-keywords" type="search" placeholder="Enter keywords" value="<%=  Server.HTMLEncode(request.querystring("keywords")) %>"  /></span>
 

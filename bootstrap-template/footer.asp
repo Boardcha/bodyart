@@ -21,6 +21,9 @@
                     <li class="py-1 py-md-0">
                             <a class="text-light" href="/faqs.asp">Help / FAQs</a>
                         </li>
+                        <li class="py-1 py-md-0">
+                            <a class="text-light" href="/help_MeasurementGuide.asp">Sizing & Measurements</a>
+                        </li>
                         <li class="text-capitalize py-1 py-md-0 d-md-block">
                             <a class="text-light" href="/returns.asp">Return policy</a>
                         </li>

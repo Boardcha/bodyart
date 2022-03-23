@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="/CSS/jquery.fancybox.min.css" />
 <% if  var_sizing_type <> "finger" then %>
   In our drop-down menus for adding to cart, we show the gauge of the item you are ordering, then the length/diameter, then the ball size if it has any:
 	<p>
@@ -191,7 +192,7 @@
 
     <div class="container-fluid p-3 border border-secondary bg-light" style="border-radius: 10px;border-width:3px!important">
       <div class="row">
-        <div class="col-12 col-xl-2 col-lg-3 col-md-4 col-sm-6">
+        <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6">
           <img class="img-fluid" src="/images/measurement-guide/illustration-captive-bead-ring.png">
         </div>
         <div class="col-12 col-xl-10 col-lg-9 col-md-8 col-sm-6">
@@ -216,7 +217,7 @@
 
     <div class="container-fluid p-3 border border-secondary bg-light mt-4" style="border-radius: 10px;border-width:3px!important">
       <div class="row">
-        <div class="col-12 col-xl-2 col-lg-3 col-md-4 col-sm-6">
+        <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6">
           <img class="img-fluid" src="/images/measurement-guide/illustration-straight-barbell.png">
         </div>
         <div class="col-12 col-xl-10 col-lg-9 col-md-8 col-sm-6">
@@ -235,7 +236,7 @@
 
     <div class="container-fluid p-3 border border-secondary bg-light mt-4" style="border-radius: 10px;border-width:3px!important">
       <div class="row">
-        <div class="col-12 col-xl-2 col-lg-3 col-md-4 col-sm-6">
+        <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6">
           <img class="img-fluid" src="/images/measurement-guide/illustration-curved-barbell.png">
         </div>
         <div class="col-12 col-xl-10 col-lg-9 col-md-8 col-sm-6">
@@ -254,7 +255,7 @@
 
     <div class="container-fluid p-3 border border-secondary bg-light mt-4" style="border-radius: 10px;border-width:3px!important">
       <div class="row">
-        <div class="col-12 col-xl-2 col-lg-3 col-md-4 col-sm-6">
+        <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6">
           <img class="img-fluid" src="/images/measurement-guide/illustration-circular-barbell.png">
         </div>
         <div class="col-12 col-xl-10 col-lg-9 col-md-8 col-sm-6">
@@ -271,38 +272,61 @@
     </div>
 
   <% end if ' do not show for finger rings %>
+
+
   <% if var_sizing_type = "all" or var_sizing_type = "septum" or var_sizing_type = "captive" then %>
-	<h5 class="mt-4">
-		Measuring septum jewelry
-  </h5>
-  Septum jewelry is measured by the diameter straight across the center of a ring. How far it sits below your nose will be dependant on where you're pierced. We've given an example below of a septum that's pierced a bit lower (see the side shot) and how it will look with different diameters. The general rule is, the smaller the diameter the tighter the fit.
+  <% end if ' septum %>
   
-<div class="container-fluid">
-  <div class="row text-center">
-    <div class="col-6 text-center">
-        <img class="img-fluid lazyload" data-src="/images/sizing/septum-sizing-516inch.jpg">
-        <h6 class="alert alert-info">5/16" (~8mm) diameter</h6>
-    </div>
-    <div class="col-6 text-center">
-        <img class="img-fluid lazyload" data-src="/images/sizing/septum-sizing-38inch.jpg">
-        <h6 class="alert alert-info">3/8" (~10mm) diameter</h6>
-    </div>
-    <div class="col-6 text-center">
-        <img class="img-fluid lazyload" data-src="/images/sizing/septum-sizing-12mm.jpg">
-        <h6 class="alert alert-info">1/2" (~12mm diameter)</h6>
-    </div>
-    <div class="col-6 text-center">
-        <img class="lazyload" data-src="/images/sizing/septum-sizing-side.jpg">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6 text-center">
+        <a data-fancybox="size-guides" data-caption="Rings size guide" href="/images/measurement-guide/measurement-guide-rings-1000px.jpg" >
+          <img class="img-fluid p-2 lazyload" data-src="/images/measurement-guide/measurement-guide-rings-1000px.jpg">
+          <button class="btn btn-sm btn-secondary">Ring size comparisons</button>
+        </a>
+      </div>
+      <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6 text-center">
+        <a data-fancybox="size-guides" data-caption="Ball size guide" href="/images/measurement-guide/measurement-guide-balls-1000px.jpg" >
+          <img class="img-fluid p-2 lazyload" data-src="/images/measurement-guide/measurement-guide-balls-1000px.jpg">
+          <button class="btn btn-sm btn-secondary">Ball size comparisons</button>
+        </a>
+      </div>
+      <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6 text-center">
+        <a data-fancybox="size-guides" data-caption="Straight barbells size guide" href="/images/measurement-guide/measurement-guide-straight-barbells-1000px.jpg" >
+          <img class="img-fluid p-2 lazyload" data-src="/images/measurement-guide/measurement-guide-straight-barbells-1000px.jpg">
+          <button class="btn btn-sm btn-secondary">Barbell size comparisons</button>
+        </a>
+      </div>
+      <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6 text-center">
+        <a data-fancybox="size-guides" data-caption="Labrets size guide" href="/images/measurement-guide/measurement-guide-labret-1000px.jpg" >
+          <img class="img-fluid p-2 lazyload" data-src="/images/measurement-guide/measurement-guide-labret-1000px.jpg">
+          <button class="btn btn-sm btn-secondary">Labret size comparisons</button>
+        </a>
+      </div>
+      <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6 text-center">
+        <a data-fancybox="size-guides" data-caption="Circular barbells size guide" href="/images/measurement-guide/measurement-guide-circulars-1000px.jpg" >
+          <img class="img-fluid p-2 lazyload " data-src="/images/measurement-guide/measurement-guide-circulars-1000px.jpg">
+          <button class="btn btn-sm btn-secondary">Circular size comparisons</button>
+        </a>
+      </div>
+      <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6 text-center">
+        <a data-fancybox="size-guides" data-caption="Plugs size guide" href="/images/measurement-guide/measurement-guide-plugs-1000px.jpg" >
+         <img class="img-fluid p-2 lazyload" data-src="/images/measurement-guide/measurement-guide-plugs-1000px.jpg">
+         <button class="btn btn-sm btn-secondary">Plug size comparisons</button>
+        </a>
+      </div>
+      <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6 text-center">
+        <a data-fancybox="size-guides" data-caption="Nosescrew size guide" href="/images/measurement-guide/measurement-guide-nosescrew-1000px.jpg" >
+          <img class="img-fluid p-2 lazyload" data-src="/images/measurement-guide/measurement-guide-nosescrew-1000px.jpg">
+          <button class="btn btn-sm btn-secondary">Nosescrew size comparisons</button>
+        </a>
+      </div>
     </div>
   </div>
-</div>
 
-  <img class="d-block img-fluid py-4 lazyload" data-src="/images/sizing/septum-sizing-diameter-comparisons.jpg">
-  <% end if ' septum %>
-  <img class="d-block img-fluid py-4 lazyload" data-src="/images/sizing/ball-sizing-chart.jpg">
-  
+
   <% if var_sizing_type = "all" or var_sizing_type = "finger" then %>
-	<h5>
+	<h5 class="mt-4">
 		Global finger ring conversions / measurements
   </h5>
   <table class="table w-auto">
@@ -458,3 +482,5 @@
   <% end if %>
 		<h6 class="pt-5">Enlarged example of 1&quot; on ruler</h6>
 		<img class="img-fluid pb-5 lazyload dark-invert-color" data-src="images/RULER.png" alt="Ruler example" />
+
+  

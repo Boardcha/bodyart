@@ -80,6 +80,11 @@
 				</a>
 			</div>
 			<div class="card">
+				<a class="card-header text-dark faq-header" href="/landing/threadless-jewelry.asp" data-gtm="How threadless jewelry works">
+					How threadless jewelry works
+				</a>
+			</div>
+			<div class="card">
 				<div class="card">
 					<a class="card-header text-dark faq-header" href="/blog/how-to-stretch-your-piercing.asp" data-gtm="How to stretch a piercing (blog)">
 						How to stretch a piercing (blog)

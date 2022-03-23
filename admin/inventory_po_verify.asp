@@ -10,10 +10,9 @@ var_po_id = request("po_id")
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn  
-objCmd.CommandText = "SELECT dbo.ProductDetails.ProductDetailID, dbo.jewelry.title, dbo.ProductDetails.ProductDetail1, dbo.jewelry.ProductID, dbo.ProductDetails.Gauge, dbo.ProductDetails.Length, dbo.jewelry.picture, dbo.ProductDetails.location, dbo.TBL_Barcodes_SortOrder.ID_Description, dbo.ProductDetails.BinNumber_Detail, dbo.tbl_po_details.po_detailid, dbo.jewelry.brandname, dbo.tbl_edits_log.description FROM dbo.ProductDetails INNER JOIN dbo.jewelry ON dbo.ProductDetails.ProductID = dbo.jewelry.ProductID INNER JOIN dbo.TBL_Barcodes_SortOrder ON dbo.ProductDetails.DetailCode = dbo.TBL_Barcodes_SortOrder.ID_Number INNER JOIN dbo.tbl_po_details ON dbo.ProductDetails.ProductDetailID = dbo.tbl_po_details.po_detailid FULL OUTER JOIN dbo.tbl_edits_log ON dbo.tbl_po_details.po_detailid = dbo.tbl_edits_log.po_detailid WHERE (dbo.tbl_po_details.po_orderid = ?)"
-objCmd.Prepared = true
-objCmd.Parameters.Append objCmd.CreateParameter("param1", 5, 1, -1, Session("po_id"))
-Set rsGetRestockItems = objCmd.Execute		  
+objCmd.CommandText = "SELECT ProductDetails.ProductDetailID, jewelry.title, ProductDetails.ProductDetail1, jewelry.ProductID, ProductDetails.Gauge, ProductDetails.Length, jewelry.picture, ProductDetails.location, TBL_Barcodes_SortOrder.ID_Description, ProductDetails.BinNumber_Detail, tbl_po_details.po_detailid, jewelry.brandname, tbl_edits_log.description FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number INNER JOIN tbl_po_details ON ProductDetails.ProductDetailID = tbl_po_details.po_detailid FULL OUTER JOIN tbl_edits_log ON tbl_po_details.po_detailid = tbl_edits_log.po_detailid WHERE tbl_edits_log.po_detailid = ?"
+objCmd.Parameters.Append(objCmd.CreateParameter("po_orderid",3,1,20, var_po_id  ))
+Set rsGetRestockItems = objCmd.Execute()	  
 Set objCmd = Nothing
 %>
 <html>

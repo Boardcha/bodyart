@@ -11,40 +11,63 @@
 <link rel="stylesheet" type="text/css" href="/CSS/slick.css"/>
 <!--#include virtual="/bootstrap-template/filters.asp" -->
 
-
+<div class="p-2">
 <h4>How threadless body jewelry works</h4>
-What is threadless jewelry? Give a description and why it's great.
+<div class="mb-4">
+Threadless body jewelry is a great alternative to standard threaded jewelry. Instead of tiny frustrating ends that you have to screw on, threadless ends use a thin "pin" that you push & pull on order to get a secure fit.
+</div>
 
-<div class="container-fluid">
-	<div class="row">
-		<div class="col-xl-6 col-12">
+<div class="container-fluid text-center">
+	<div class="row justify-content-center">
+		<div class="col-xl-6 col-lg-6 col-md-6 col-12">
 			<video class="mw-100" width="560" height="315" preload="metadata" controls muted>
 				<source src="https://videos.bodyartforms.com/video-threadless-ends-how-to.mp4#t=0.5" type="video/mp4">
 			  Your browser does not support playing embedded videos
 			  </video>
 		</div>
-	</div>
-	<div class="row">
-		<div class="col-lg-3 col-6 rounded" style="background-color: #E6E6E6">
-			<img class="img-fluid" src="/images/threadless-end-01.png">
-			<div>text</div>
+		<div class="col-xl-6 col-lg-6 col-md-6 col-12">
+			<div class="row justify-content-center">
+			<div class="col-5 col-xl-5 col-lg-5 col-md-5 col-sm-5 p-2 mr-1 rounded border border-secondary">
+				<img class="img-fluid" src="/images/landing-pages/threadless/threadless-how-to-1.png">
+				<div>Insert the pin about 1/3 to halfway into the post and gently bend it downward.</div>
+			</div>	
+			<div class="col-5 col-xl-5 col-lg-5 col-md-5 col-sm-5 p-2 ml-1 rounded border border-secondary">
+				<img class="img-fluid" src="/images/landing-pages/threadless/threadless-how-to-2.png">
+				<div>Push the end all the way into the post to test the fit.<br>
+					<strong>More bend = tighter fit</strong></div>
+			</div>
+		</div>
 		</div>	
-		<div class="col-lg-3 col-6 rounded mx-1" style="background-color: #E6E6E6">
-			<img class="img-fluid" src="/images/threadless-end-02.png">
-			<div>text</div>
-		</div>	
-		<div class="col-lg-3 col-6 rounded mx-1" style="background-color: #E6E6E6">
-			<img class="img-fluid" src="/images/threadless-end-03.png">
-			<div>text</div>
-		</div>	
-		<div class="col-lg-3 col-6 rounded" style="background-color: #E6E6E6">
-			<img class="img-fluid" src="/images/threadless-end-04.png">
-			<div>text</div>
 		</div>	
 	</div><!-- row -->
 </div><!-- container-->
 
-<h4>Threadless Best Sellers</h4>
+<h4 class="mt-4">Quick Links <a class="btn btn-sm btn-secondary ml-3" href="/products.asp?threading=Threadless">All threadless jewelry</a></h4>
+<div class="container-fluid text-center">
+	<div class="row justify-content-center">
+		<div class="col-6 col-md-auto">
+			<a class="btn btn-sm btn-secondary m-1" href="/products.asp?jewelry=balls&threading=Threadless">Threadless balls & ends</a>
+		</div>
+		<div class="col-6 col-md-auto">
+			<a class="btn btn-sm btn-secondary m-1" href="/products.asp?jewelry=labret&threading=Threadless">Threadless labrets</a>
+		</div>
+		<div class="col-6 col-md-auto">
+			<a class="btn btn-sm btn-secondary m-1" href="/products.asp?jewelry=nose-ring&price=0%3B100&threading=Threadless">Threadless nose jewelry</a>
+		</div>
+		<div class="col-6 col-md-auto">
+			<a class="btn btn-sm btn-secondary m-1" href="/products.asp?jewelry=chains-necklace">Threadless barbells</a>
+		</div>
+		<div class="col-6 col-md-auto">
+			<a class="btn btn-sm btn-secondary m-1" href="/products.asp?jewelry=curved&threading=Threadless">Threadless curved barbells</a>
+		</div>
+		<div class="col-6 col-md-auto">
+			<a class="btn btn-sm btn-secondary m-1" href="/products.asp?jewelry=barbell&threading=Threadless">Threadless straight barbells</a>
+		</div>
+	</div>
+
+</div><!-- container -->
+
+<h4 class="mt-4">Threadless Best Sellers</h4>
   <div class="mt-2 full-width-block">
 	<div class="baf-carousel" id="BestSellers">
 				<% 
@@ -82,7 +105,7 @@ What is threadless jewelry? Give a description and why it's great.
 					DisplayPrice = DisplayPrice & " - $" & max_price
 					end if
 					%>
-						<a class="slide text-dark homepage-graphic" href="productdetails.asp?productid=<%= rsGetThreadless.Fields.Item("ProductID").Value %>" id="new-<%= replace(lcase(rsGetThreadless.Fields.Item("title").Value)," ", "-") %>-<%=(rsGetThreadless.Fields.Item("ProductID").Value)%>">
+						<a class="slide text-dark homepage-graphic" href="/productdetails.asp?productid=<%= rsGetThreadless.Fields.Item("ProductID").Value %>" id="new-<%= replace(lcase(rsGetThreadless.Fields.Item("title").Value)," ", "-") %>-<%=(rsGetThreadless.Fields.Item("ProductID").Value)%>">
 							<% if i < 9 then %>
 							<img class="img-fluid" src="https://bafthumbs-400.bodyartforms.com/<%= rsGetThreadless.Fields.Item("picture").Value %>" alt="<%=(rsGetThreadless.Fields.Item("title").Value)%>" title="<%=(rsGetThreadless.Fields.Item("title").Value)%>">
 							<% else %><!-- lazy load in images beyond 8-->
@@ -112,36 +135,7 @@ Wend
 				</div>
 </div><!-- full-width-block -->
 
-
-<div class="container-fluid">
-
-	<div class="col-6">
-		<a href="/products.asp?threading=Threadless">Link to all threadless jewelry</a>
-	</div>
-	<div class="row text-center py-3">
-		<div class="col-6">
-			<a href="/products.asp?jewelry=balls&threading=Threadless">Threadless ends</a>
-		</div>
-		<div class="col-6">
-			<a href="/products.asp?jewelry=labret&threading=Threadless">Threadless labrets</a>
-		</div>
-	
-		<div class="col-6">
-			<a href="/products.asp?jewelry=nose-ring&price=0%3B100&threading=Threadless">Threadless nose jewelry</a>
-		</div>
-		<div class="col-6">
-			<a href="/products.asp?jewelry=chains-necklace">Threadless barbells</a>
-		</div>
-		<div class="col-6">
-			<a href="/products.asp?jewelry=curved&threading=Threadless">Threadless curved barbells</a>
-		</div>
-		<div class="col-6">
-			<a href="/products.asp?jewelry=barbell&threading=Threadless">Threadless straight barbells</a>
-		</div>
-	</div>
-
-</div><!-- container -->
-
+</div><!-- full page div -->
 
 <!--#include virtual="/bootstrap-template/footer.asp" -->
 <script type="text/javascript" src="/js/slick.min.js"></script>

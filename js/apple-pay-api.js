@@ -96,7 +96,7 @@ $( document ).ready(function() {
 			  amount: runningTotal()
 		   },
 		   supportedNetworks: ['masterCard', 'visa', 'amex', 'discover'],
-		   merchantCapabilities: [ 'supports3DS', 'supportsEMV', 'supportsCredit', 'supportsDebit' ]
+		   merchantCapabilities: [ 'supports3DS', 'supportsCredit', 'supportsDebit' ]  //make sure this is not included 'supportsEMV'
 		};
 		
 		var session = new ApplePaySession(1, paymentRequest);

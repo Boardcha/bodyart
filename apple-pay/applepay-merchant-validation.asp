@@ -1,10 +1,7 @@
 <!--#include virtual="/connections/chilkat.asp"-->
 <%
 
-Mode = "PRODUCTION" '============= TEST OR PRODUCTION =================
-'Note: Apple Pay does not work on localhost since they require domain verification.
-
-If Mode = "PRODUCTION" Then domain = "bodyartforms.com" else domain = "dev5.bodyartforms.com"
+domain = "bodyartforms.com"
 
 set objUrl = Server.CreateObject("Chilkat_9_5_0.Url")
 validation_url = Request.QueryString("url")

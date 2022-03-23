@@ -68,7 +68,7 @@ Set rsNavWaitingList = objCmd.Execute()
                                 </a>
                         </div>
                         <div class="col-5 col-sm-6 col-lg-10 px-0 my-auto text-right">
-                                <form class="form-inline d-none d-lg-inline pr-4" action="products.asp" method="get">
+                                <form class="form-inline d-none d-lg-inline pr-4" action="/products.asp" method="get">
                                         <input class="form-control mr-2 bg-lightgrey shadow-none border-secondary text-dark"
                                                 name="keywords" id="desktop-keywords" type="search" placeholder="Search">
                                         <button class="btn btn-sm my-2 text-light border-none bg-dark" type="submit"
