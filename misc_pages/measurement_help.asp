@@ -334,8 +334,8 @@
       <tr>
         <th class="w-25">USA, Canada & Mexico</th>
         <th class="w-25">UK, Ireland, Australia & New Zealand </th>
-        <th class="w-25">Japan & South America</th>
-        <th class="w-25">Italy, Spain & Switzerland</th>
+        <th class="w-25">Japan</th>
+        <th class="w-25">Italy, Spain & Switz</th>
       </tr>
     </thead>
     <tbody>

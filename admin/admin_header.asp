@@ -198,6 +198,7 @@ Set rsAnodizeCount = objcmd.Execute()
 				<div class="col">
 					<h5>Products</h5>
 						<a href="/admin/product-edit.asp?add-new-product=yes">Add new product</a><br/>
+						<a href="/admin/new-products-sortable.asp">New product sorting</a><br/>
 						<a href="/admin/inventory-issues.asp">Reported inventory issues</a>
 							<span class=" badge badge-danger ml-2"><%= rsInventoryIssues.Fields.Item("total_inventory_issues").Value %></span><br/>
 						<a href="/admin/inventory-not-moving.asp">Manage inventory not selling</a><br/>
@@ -332,7 +333,13 @@ If var_access_level = "Packaging" or var_access_level = "Admin" or var_access_le
 						<a href="/admin/batch-shipping.asp">Print Shipping Forms</a><br/><br/>
 				</div>
 				<div class="col">
-		
+					<h5>SOPs</h5>
+					<a href="https://docs.google.com/document/d/1YDJ1B9LrZ8r6kMcXQY3wgQ0yzSC_iHd68wUuhrE0hDQ/" target="_blank">Printing orders</a><br/>
+					<a href="https://docs.google.com/document/d/1miw4HWpPNfhGSMG2GtI2k_AqiQyHmkAUhPfIrEPgS70/" target="_blank">Packaging orders</a><br/>
+					<a href="https://docs.google.com/document/d/1AmX9Y5OB6Gy_v_EuPTrdNIl3WsmERy-JK7sroNydtEc/" target="_blank">Print training</a><br/>
+					<a href="https://docs.google.com/document/d/1e9mHO6ZIWFKqswdSXbzMZ_RfZHhJfo4y989ZX5kUNDw/" target="_blank">Return mailers</a><br/>
+					<a href="https://docs.google.com/document/d/1eYfo1Q6aJ1PlbMnste5rJFWyqGq3hrQim-fIrRQn9hs/" target="_blank">Autoclave maintenance</a><br/>
+					<a href="https://docs.google.com/document/d/11iQkTsdzyZhuk2NPcZr94ejdptP_YwGkQfV5tJcnCXw/" target="_blank">Making distilled water</a><br/>
 				</div>
 			</div>
 		</div>

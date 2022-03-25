@@ -136,6 +136,7 @@ Wend
   });
 </script>
 <!--#include file="inc-product-sales-line-graph.inc" -->
+<!--#include file="inc-last-sold-dates-popover.inc" -->
 <%
 DataConn.Close()
 %>

@@ -12,7 +12,7 @@ end if
 %>
 	{
 <!--#include virtual="/template/inc_includes_ajax.asp" -->
-
+<!--#include virtual="/cart/fraud_checks/inc-auto-flag-order.asp" -->
 <!--#include virtual="Connections/authnet.asp"-->
 <!--#include virtual="functions/encrypt.asp"-->
 <!--#include virtual="/cart/inc_cart_main.asp" -->

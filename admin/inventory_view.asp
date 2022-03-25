@@ -252,7 +252,7 @@ ORDER CREATED
 <div class="text-center paging paging-div">
 <!--#include file="inventory/inc-new-po-paging.asp" -->
 </div>
-<div class="loader-div" style="display:none"></div>
+
 <table class="table table-striped table-borderless mt-3">
 <thead class="thead-dark">
   <tr class="text-nowrap">
@@ -758,6 +758,7 @@ $(document).ready(function(){
 });
 </script>
 <!--#include file="inventory/inc-product-sales-line-graph.inc" -->
+<!--#include file="inventory/inc-last-sold-dates-popover.inc" -->
 <%
 DataConn.Close()
 %>

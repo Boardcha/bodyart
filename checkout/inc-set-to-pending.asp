@@ -1,6 +1,4 @@
 <% 
-' this line needs to remain under the google scripts include because it uses the google total variable
-
 ' Set an order to pending (bypass the review stage in the admin) only if one of these scenarios occur:
 '- Order is below $150
 '- Order does not have customer comments
@@ -66,29 +64,40 @@ if request.form("Comments") = "" and session("customer_comments") = "" then
 			objCmd.Execute()
 	end if  ' var_total_orders >= 10
 	
-end if  ' var_grandtotal > 150
+end if  ' if comments = 
 
 end if  '  rsLastHoursInvoices.eof
 
-'========= ALWAYS SET CUSTOM ANODIZATION TO IN PROGRESS ====================
-if var_anodization_added = 1  then
-		
-		set objCmd = Server.CreateObject("ADODB.command")
-		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "UPDATE sent_items SET shipped = 'CUSTOM COLOR IN PROGRESS' WHERE ID = ?"
-		objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, Session("invoiceid")))
-		objCmd.Execute()
+'====== RETRIEVE INVOICE INFORMATION ====================
+set objCmd = Server.CreateObject("ADODB.command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "SELECT * FROM sent_items WHERE ID = ?"
+objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, Session("invoiceid")))
+set rsGetInvoiceInfo = objCmd.Execute()
 
-end if
+if NOT rsGetInvoiceInfo.EOF then
 
-'========= ALWAYS PUSH CUSTOM ORDERS TO BE REVIEWED NO MATTER WHAT ====================
-if preorder_shipping_notice = "yes"  then ' If there's a preorder push it into review
-		
-		set objCmd = Server.CreateObject("ADODB.command")
-		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "UPDATE sent_items SET shipped = 'CUSTOM ORDER IN REVIEW' WHERE ID = ?"
-		objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, Session("invoiceid")))
-		objCmd.Execute()
+	'========= ALWAYS SET CUSTOM ANODIZATION TO IN PROGRESS ====================
+	if rsGetInvoiceInfo("anodize") = 1  then
+			
+			set objCmd = Server.CreateObject("ADODB.command")
+			objCmd.ActiveConnection = DataConn
+			objCmd.CommandText = "UPDATE sent_items SET shipped = 'CUSTOM COLOR IN PROGRESS' WHERE ID = ?"
+			objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, Session("invoiceid")))
+			objCmd.Execute()
 
-end if  ' preorder_shipping_notice = "yes"
+	end if
+
+	'========= ALWAYS PUSH CUSTOM ORDERS TO BE REVIEWED NO MATTER WHAT ====================
+	if rsGetInvoiceInfo("preorder") = 1  then
+			
+			set objCmd = Server.CreateObject("ADODB.command")
+			objCmd.ActiveConnection = DataConn
+			objCmd.CommandText = "UPDATE sent_items SET shipped = 'CUSTOM ORDER IN REVIEW' WHERE ID = ?"
+			objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, Session("invoiceid")))
+			objCmd.Execute()
+
+	end if
+
+end if '=====  NOT rsGetInvoiceInfo.EOF
 %>

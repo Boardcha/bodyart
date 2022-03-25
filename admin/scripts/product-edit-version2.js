@@ -250,7 +250,7 @@ $("#description").redactor({
 				if ($(this).is(':checked')) {
 					$("#opt-video").removeClass("d-none").show();
 					$("#img_description").hide();
-					$(".dz-button").html('Drop <span>VIDEO</span> and images here or click to upload.');
+					$(".dz-button").html('Drop <span>MP4 VIDEO</span> and images here or click to upload.');
 					$(".note").html('Upload the video and thumbnails together<br>90 x 90, 400 x 400, and video');
 					myDropzone.removeAllFiles(true);
 				}   
