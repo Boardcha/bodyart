@@ -8,9 +8,13 @@
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->
 <!--#include virtual="/bootstrap-template/header-navigation.asp" -->
 <!--#include virtual="/bootstrap-template/filters.asp" -->
-
+<style>
+	.img-circles img{border-width:3px!important}
+	.img-circles img:hover{border-color: #696887!important;border-width:10px!important}
+</style>
 
 <div class="slider-container text-center">
+	<a href="/products.asp?jewelry=bracelet&jewelry=earring&jewelry=necklace&jewelry=finger-ring">
 	<picture>
 		<source media="(max-width: 550px)" sizes="100vw" srcset="/images/landing-pages/regular-jewelry/landing-regular-jewelry-550x350.jpg">
 		<source media="(max-width: 850px)" sizes="100vw" srcset="/images/landing-pages/regular-jewelry/landing-regular-jewelry-850x350.jpg">
@@ -26,37 +30,35 @@
 		sizes="100vw"
 		alt="Regular jewelry top main landing image" />
 	</picture>
+	</a>
 </div>
-LINK MAIN BANNER TO ALL products
 
-<div class="container-fluid">
-	<div class="row text-center">
-		<div class="col-6 col-lg-3 col-xl-2 py-3">
+<div class="container-fluid img-circles">
+	<div class="row  justify-content-center text-center">
+		<div class="col-6 col-lg-3 col-xl-3 col-md-3 py-3">
 			<a class="track-click" id="landing-regular-rings-image" href="/products.asp?jewelry=finger-ring">
-				<img class="img-fluid border border-secondary rounded-circle" style="border-width: 3px !important;" src="/images/landing-pages/regular-jewelry/rings.jpg">
+				<img class="img-fluid border border-secondary rounded-circle" src="/images/landing-pages/regular-jewelry/rings.jpg">
 				</a>
-			
 				<h4>RINGS</h4>
-			
-			
 		</div>
-		<div class="col-6 col-lg-3 col-xl-2 py-3">
+		<div class="col-6 col-lg-3 col-xl-3 col-md-3 py-3">
 			<a href="/products.asp?jewelry=necklace">
-				<img class="img-fluid border border-secondary rounded-circle" style="border-width: 3px !important;" src="/images/landing-pages/regular-jewelry/necklaces.jpg">
+				<img class="img-fluid border border-secondary rounded-circle" src="/images/landing-pages/regular-jewelry/necklaces.jpg">
 			</a>
 			<h4>NECKLACES</h4>
-			<a class="d-block" href="/products.asp?jewelry=chains-necklace">Necklace chains</a>
-			Pendants
+			<a class="btn btn-sm btn-secondary d-block" href="/products.asp?jewelry=chains-necklace">Necklace chains</a>
 		</div>
-		<div class="col-6 col-lg-3 col-xl-2 py-3">
+		<div class="col-6 col-lg-3 col-xl-3 col-md-3 py-3">
 			<a href="/products.asp?jewelry=bracelet">
-				<img class="img-fluid border border-secondary rounded-circle" style="border-width: 3px !important;" src="/images/landing-pages/regular-jewelry/bracelets.jpg">
+				<img class="img-fluid border border-secondary rounded-circle" src="/images/landing-pages/regular-jewelry/bracelets.jpg">
 			</a>
 			<h4>BRACELETS</h4>
 		</div>
-		<div class="col-6 col-lg-3 col-xl-2 py-3">
-			<img class="img-fluid border border-secondary rounded-circle" style="border-width: 3px !important;" src="/images/landing-pages/regular-jewelry/ear-cuffs.jpg">
+		<div class="col-6 col-lg-3 col-xl-3 col-md-3 py-3">
+			<a href="/products.asp?keywords=ear+cuff">
+			<img class="img-fluid border border-secondary rounded-circle" src="/images/landing-pages/regular-jewelry/ear-cuffs.jpg">
 			<h4>EAR CUFFS</h4>
+		</a>
 		</div>
 	</div>
 
