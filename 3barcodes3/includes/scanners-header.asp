@@ -12,3 +12,4 @@
                         <% end if %>
                       </span>
               </nav>
+<script src="https://use.fortawesome.com/dc98f184.js"></script>

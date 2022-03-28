@@ -138,6 +138,8 @@ if var_other_items <> 1 then ' if only gift certs are found erase all free gift 
 	response.cookies("freegift3id") = ""
 	response.cookies("freegift4id") = ""
 	response.cookies("freegift5id") = ""
+	response.cookies("freegift6id") = ""
+	response.cookies("freegift7id") = ""
 end if
 
 if rs_getCart.Fields.Item("customorder").Value = "yes" then 

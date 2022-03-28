@@ -16,30 +16,49 @@ $(document).on("click", "#btn-reset", function(){
     $('#load-message, #load-body').html('');
 })
 
+// Clicking clear button
+$(document).on("click", "#btn-clear", function(){ 
+	var invoiceid = $('#display-invoice').html();
+	if(invoiceid != ""){
+		$('#load-message, #load-body').html('');
+		// Reset times scanned
+		$.ajax({
+            method: "post",
+            url: "pulling/reset-times-scanned.asp",
+            data: {invoiceid: invoiceid}
+        });
+		loadItemsToPull(invoiceid);
+	}
+})
+
 // Load page that shows all items to be pulled
 $(document).on("keypress", "#scan-invoice", function(event){
     if(event.which === 13){ // detect enter keypress
-    $('#load-message').html('');
-    var scanned_invoicenum = $('#scan-invoice').val();
-
-    $('#load-body').load("pulling/items-to-pull.asp", {invoices:scanned_invoicenum});
-    console.log(event.type + ": " +  event.which);
-    if(event.which === 13){ // detect enter keypress after page load as well
-        console.log("enter key pressed");
-        //stuff goes here after page load
-        //$('#btn-load-items').hide();
-        // Set form field focus
-        $(this).val('');
-        $(this).prop('id', 'scan-item');    
-        $(this).prop('placeholder', 'Scan ITEM');    
-        $("#scan-item").focus();
-        $('#sort-section').show();
-        $('#display-invoice').html(scanned_invoicenum);
-    }
+		var scanned_invoicenum = $('#scan-invoice').val();
+		loadItemsToPull(scanned_invoicenum);
+		console.log(event.type + ": " +  event.which);
+		if(event.which === 13){ // detect enter keypress after page load as well
+			console.log("enter key pressed");
+			//stuff goes here after page load
+			//$('#btn-load-items').hide();
+			// Set form field focus
+			$(this).val('');
+			$(this).prop('id', 'scan-item');    
+			$(this).prop('placeholder', 'Scan ITEM');    
+			$("#scan-item").focus();
+			$('#sort-section').show();
+			$('#display-invoice').html(scanned_invoicenum);
+		}
     } // detect enter key on main invoice scan 1st
 })
 
+function loadItemsToPull(invoice_number){
+    $('#load-message').html('');
+    $('#load-body').load("pulling/items-to-pull.asp", {invoices:invoice_number});
+}
+	
 $(document).on("keypress", "#scan-item", function(event){
+
     if(event.which === 13){ // detect enter keypress
     $('#load-message').html('');
         $('#scan-item').prop('readonly', true);
@@ -85,36 +104,38 @@ $(document).on("keypress", "#scan-item", function(event){
             }, 0);
         } else {
 
-        //Highlight and move screen to top of row
-        $('#' + row_found + ', #' + row_found + '_sub').addClass('table-warning');
-        $('html, body').animate({
-            scrollTop: $('#' + row_found).offset().top
-        }, 0);
-        $('#' + row_found + '_sub').show();
+			//Highlight and move screen to top of row
+            console.log(row_found);
+			$('#' + row_found + ', #' + row_found + '_sub').addClass('table-warning');
+			var row = $('#' + row_found);
+			var row_sub = $('#' + row_found + '_sub');
+			row_sub.prependTo('table tbody');
+			row.prependTo('table tbody');		
+			$('#' + row_found + '_sub').show();
 
-        // increment the scans attribute
-        var times_scanned = parseInt($('#' + row_found).attr('data-timescanned'));
-        var orig_qty = parseInt($('#' + row_found).attr('data-qty'));
-        var row_match_qty = $('#' + row_found).attr('data-matchqty');
+			// increment the scans attribute
+			var times_scanned = parseInt($('#' + row_found).attr('data-timescanned'));
+			var orig_qty = parseInt($('#' + row_found).attr('data-qty'));
+			var row_match_qty = $('#' + row_found).attr('data-matchqty');
 
-        if (row_match_qty === 'no') {
-            // Most items will need incrementing
-            var incrememt_scan = times_scanned + 1;
-        } else {
-            // Items like orings that we don't want to scan a zillion times
-            var incrememt_scan = orig_qty;
-        }
-        $('#' + row_found).attr('data-timescanned', incrememt_scan);
-        //var qty_to_pull = parseInt($('#' + row_found).attr('data-qty'));
-        $('#still_need_' + row_found).html(incrememt_scan);
-        
-        // If the amount scanned and qty are equal set the row to a finished status to be hidden next time a scan is made
-        if($('#' + row_found).attr('data-timescanned') === $('#' + row_found).attr('data-qty')) {
-            $('#' + row_found + ', #' + row_found + '_sub').addClass('done');
-            $('#' + row_found + ', #' + row_found + '_sub').removeClass('table-warning');
-            $('#' + row_found + ', #' + row_found + '_sub').addClass('table-secondary');
-            $('#check_' + row_found).addClass('complete text-success');
-        }
+			if (row_match_qty === 'no') {
+				// Most items will need incrementing
+				var incrememt_scan = times_scanned + 1;
+			} else {
+				// Items like orings that we don't want to scan a zillion times
+				var incrememt_scan = orig_qty;
+			}
+			$('#' + row_found).attr('data-timescanned', incrememt_scan);
+			//var qty_to_pull = parseInt($('#' + row_found).attr('data-qty'));
+			$('#still_need_' + row_found).html(incrememt_scan);
+			
+			// If the amount scanned and qty are equal set the row to a finished status to be hidden next time a scan is made
+			if($('#' + row_found).attr('data-timescanned') === $('#' + row_found).attr('data-qty')) {
+				$('#' + row_found + ', #' + row_found + '_sub').addClass('done');
+				$('#' + row_found + ', #' + row_found + '_sub').removeClass('table-secondaryg');
+				$('#' + row_found + ', #' + row_found + '_sub').addClass('table-warnin');
+				$('#check_' + row_found).addClass('complete text-success');
+			}
         } // if has class done is not found, display too many scans error
     } 
     // if item not found, then either it's a no scan match OR an overscan
@@ -232,10 +253,4 @@ $(document).on("click", "#btn-submit-error", function(){
             $('#message-error').html('<div class="alert alert-danger">SUBMIT FAILED</div>');
         })
 })
-
-
-
-
-
-
 

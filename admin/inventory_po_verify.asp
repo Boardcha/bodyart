@@ -10,7 +10,7 @@ var_po_id = request("po_id")
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn  
-objCmd.CommandText = "SELECT ProductDetails.ProductDetailID, jewelry.title, ProductDetails.ProductDetail1, jewelry.ProductID, ProductDetails.Gauge, ProductDetails.Length, jewelry.picture, ProductDetails.location, TBL_Barcodes_SortOrder.ID_Description, ProductDetails.BinNumber_Detail, tbl_po_details.po_detailid, jewelry.brandname, tbl_edits_log.description FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number INNER JOIN tbl_po_details ON ProductDetails.ProductDetailID = tbl_po_details.po_detailid LEFT OUTER JOIN tbl_edits_log ON tbl_po_details.po_detailid = tbl_edits_log.detail_id WHERE tbl_edits_log.po_detailid = ?"
+objCmd.CommandText = "SELECT ProductDetails.ProductDetailID, jewelry.title, ProductDetails.ProductDetail1, jewelry.ProductID, ProductDetails.Gauge, ProductDetails.Length, jewelry.picture, ProductDetails.location, TBL_Barcodes_SortOrder.ID_Description, ProductDetails.BinNumber_Detail, tbl_po_details.po_detailid, jewelry.brandname, tbl_edits_log.description FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number INNER JOIN tbl_po_details ON ProductDetails.ProductDetailID = tbl_po_details.po_detailid LEFT OUTER JOIN tbl_edits_log ON tbl_po_details.po_detailid = tbl_edits_log.detail_id WHERE tbl_po_details.po_orderid = ?"
 objCmd.Parameters.Append(objCmd.CreateParameter("po_orderid",3,1,20, var_po_id  ))
 Set rsGetRestockItems = objCmd.Execute()	  
 Set objCmd = Nothing
@@ -24,7 +24,7 @@ Set objCmd = Nothing
 <!--#include file="admin_header.asp"-->
 <div class="p-3">
 <h5>
- Verify QC & Restocking of order BRAND NAME
+ Verify QC & Restocking of order <%= rsGetRestockItems("brandname") %>
  &nbsp;&nbsp;| &nbsp;&nbsp;Purchase order #<%= var_po_id %>
 </h5>
 
@@ -39,9 +39,9 @@ Set objCmd = Nothing
 <% While NOT rsGetRestockItems.EOF %>
  <tr>
         <td>
-            <% if instr(rsGetRestockItems("description"), "match") > 0 then %>
+            <%'' if instr(rsGetRestockItems("description"), "match") > 0 then %>
             <%= rsGetRestockItems("description") %>
-            <% end if %>
+            <%'' end if %>
         </td>
         <td>
             <%=(rsGetRestockItems.Fields.Item("location").Value)%> - <%=(rsGetRestockItems.Fields.Item("ID_Description").Value)%>

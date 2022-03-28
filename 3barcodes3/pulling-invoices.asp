@@ -27,7 +27,7 @@ Set rs_getsections = objCmd.Execute()
  <nav class="navbar navbar-expand navbar-light small py-1" style="background-color: #D8D8D8"> 
         <div class="navbar-nav mr-auto">
                  <div class="form-inline">
-                  <button class="btn btn-sm btn-info mr-2" id="btn-reset" type="button"><i class="fa fa-refresh fa-lg"></i></button><input  class="form-control form-control-sm mr-1" type="text" id="scan-invoice" placeholder="Scan INVOICE" style="max-width:120px">
+                  <button class="btn btn-sm btn-info mr-2" id="btn-clear" type="button"><i class="fa fa-eraser fa-lg"></i></button> <button class="btn btn-sm btn-info ml-1 mr-2" id="btn-reset" type="button"><i class="fa fa-refresh fa-lg"></i></button><input  class="form-control form-control-sm ml-1 mr-1" type="text" id="scan-invoice" placeholder="Scan INVOICE" style="max-width:120px">
                  <div class="ml-2" style="line-height: 100%">
                     #<span id="display-invoice"></span>
                 </div>
