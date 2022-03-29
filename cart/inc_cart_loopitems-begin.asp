@@ -184,6 +184,7 @@ If var_anodization_added = 1 Then
 End If
 
 var_anodizationSubTotal = var_anodizationPrice * rs_getCart.Fields.Item("cart_qty").Value
+var_lineTotal_USdollars = var_itemPrice_USdollars * rs_getCart.Fields.Item("cart_qty").Value 
 var_lineTotal = var_itemPrice * rs_getCart.Fields.Item("cart_qty").Value 
 var_lineTotal = var_lineTotal + var_anodizationSubTotal
 var_lineTotal_subtotal = var_itemPrice_USdollars * rs_getCart.Fields.Item("cart_qty").Value

@@ -8,7 +8,7 @@
 <footer>
     <div class="container-fluid text-light pb-2 pt-4 mt-5 px-md-4">
         <div class="row">
-            <div class="col-6 col-lg-4 px-md-3">
+            <div class="col-6 col-lg-3 px-md-3">
                 <div class="border-bottom pb-1 h5">
                         SUPPORT
                 </div>
@@ -45,7 +45,7 @@
                     </label>
                 </div>
             </div>
-            <div class="col-6 col-lg-4 px-md-4">
+            <div class="col-6 col-lg-3 px-md-3">
                 <div class="border-bottom pb-1 h5">
                     ACCOUNT
                 </div>
@@ -69,7 +69,38 @@
                     </li>
                 </ul>
             </div>
-            <div class="col-12 col-md-6 col-lg-4 px-md-4">
+            <div class="col-6 col-lg-3 px-md-3">
+                <div class="border-bottom pb-1 h5">
+                    SHOP
+                </div>
+                <ul class="list-unstyled pt-2">
+                    <li class="text-capitalize py-1 py-md-0">
+                        <a class="text-light" href="/products.asp?new=Yes">New jewelry</a>
+                    </li>
+                    <li class="text-capitalize py-1 py-md-0">
+                        <a class="text-light" href="/products.asp?feature=top_seller">Top sellers</a>
+                    </li>
+                    <li class="text-capitalize py-1 py-md-0">
+                        <a class="text-light" href="/products.asp?jewelry=captive">Rings</a>
+                    </li>
+                    <li class="text-capitalize py-1 py-md-0">
+                        <a class="text-light" href="/products.asp?jewelry=septum">Septum jewelry</a>
+                    </li>
+                    <li class="text-capitalize py-1 py-md-0">
+                        <a class="text-light" href="/products.asp?jewelry=nose-ring">Nose jewelry</a>
+                    </li>
+                    <li class="text-capitalize py-1 py-md-0">
+                        <a class="text-light" href="/products.asp?jewelry=plugs">Plugs & stretched piercings</a>
+                    </li>
+                    <li class="text-capitalize py-1 py-md-0">
+                        <a class="text-light" href="/products.asp?jewelry=balls">Balls, ends, & beads</a>
+                    </li>
+                    <li class="text-capitalize py-1 py-md-0">
+                        <a class="text-light" href="/landing/earrings-rings-necklaces-bracelets.asp">Rings, necklaces, & bracelets</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-12 col-md-6 col-lg-3 px-md-3">
                 <div class="border-bottom pb-1 h5">
                     STAY CONNECTED
                 </div>

@@ -855,7 +855,9 @@ end if
 			<%= FormatCurrency(rsGetOrderItems("qty") * rsGetOrderItems("anodization_fee"), -1, -2, -0, -2) %>
 		</td>
 		<td>
+			<% if rsGetOrderItems("DateLastPurchased") <> "" then %>
 			<%= FormatDateTime(rsGetOrderItems("DateLastPurchased"),2) %>
+			<% end if %>
 		</td>
 		<td>
 			<input class="form-control form-control-sm" name="item_notes_<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>" type="text" value="<%= rsGetOrderItems.Fields.Item("notes").Value %>" data-column="notes" data-friendly="Item notes" data-detailid="<%= rsGetOrderItems.Fields.Item("OrderDetailID").Value %>" data-productdetailid="<%= rsGetOrderItems.Fields.Item("ProductDetailID").Value %>" data-productid="<%= rsGetOrderItems.Fields.Item("ProductID").Value %>">

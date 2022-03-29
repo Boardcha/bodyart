@@ -1,4 +1,5 @@
 <%@LANGUAGE="VBSCRIPT" CODEPAGE="1252"%>
+<%Response.Buffer = False%>
 <!--#include file="../Connections/bodyartforms_sql_ADMIN.asp" -->
 <%
 '==== PAGE HAS BEEN BOOSTRAPPED =======
@@ -85,13 +86,26 @@ rsGetPurchaseOrders_numRows = rsGetPurchaseOrders_numRows + Repeat1__numRows
 	<tr>
               <th class="align-middle">Delete</th>
               <th class="align-middle">Date placed</th>
-			        <th class="align-middle">Amount</th>
+              <th class="align-middle">Amount</th>
+			        <th class="align-middle">Stats</th>
               <th class="align-middle" >Company</th>
               <th class="align-middle">Received</th>
             </tr>
 </thead>
               <% 
 While NOT rsGetPurchaseOrders.EOF
+
+set objCmd = Server.CreateObject("ADODB.command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "SELECT Count(*) AS total_items FROM tbl_po_details WHERE po_orderid = " & rsGetPurchaseOrders("PurchaseOrderID")
+Set rsTotalItems = objCmd.Execute()
+
+set objCmd = Server.CreateObject("ADODB.command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "SELECT Count(*) AS total_items FROM tbl_po_details WHERE po_received = 1 AND  po_orderid = " & rsGetPurchaseOrders("PurchaseOrderID")
+Set rsTotalRestockedItems = objCmd.Execute()
+
+var_percentage_restocked = Round(rsTotalRestockedItems("total_items") / rsTotalItems("total_items") * 100)
 %>
                 <tr id="<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>">
                   <td class="align-middle">
@@ -129,6 +143,11 @@ While NOT rsGetPurchaseOrders.EOF
 				  <td class="align-middle">
 					<%= FormatCurrency(rsGetPurchaseOrders.Fields.Item("po_total").Value, -1, -2, -0, -2) %>
 				  </td>
+          <td class="align-middle">
+            <%= rsTotalItems("total_items") %> items ordered<br>
+            <%= rsTotalRestockedItems("total_items") %> items restocked <strong><%= var_percentage_restocked %>%</strong><br>
+            <a href="/admin/inventory_po_verify.asp?po_id=<%= rsGetPurchaseOrders("PurchaseOrderID") %>">Verify restocks</a>
+            </td>
                   <td class="align-middle"><p><strong><%=(rsGetPurchaseOrders.Fields.Item("Brand").Value)%></strong>
                     <% if (rsGetPurchaseOrders.Fields.Item("Received").Value) = "N" then %><br>
 
@@ -137,7 +156,7 @@ While NOT rsGetPurchaseOrders.EOF
 					<a href="inventory_po_process.asp?po_id=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>&new=yes">
 					Process order</a>&nbsp;&nbsp;| &nbsp;&nbsp;
 					<a href="inventory/create_csv_po.asp?po_id=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>">
-					Download .CSV (Excel)</a>
+					Download Order</a>
 					&nbsp;&nbsp;|&nbsp;&nbsp;
 					
 					<a href="barcodes_modifyviews.asp?ID=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>&type=new_po_system">Update barcode query</a>

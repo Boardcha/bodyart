@@ -12,7 +12,7 @@ If var_giftcert = "yes"  Then
 
 		' Set variables
 		done_mailing_certs = "no" ' send out an email variable
-		gift_amount = FormatNumber(var_lineTotal, -1, -2, -2, -2)
+		gift_amount = FormatNumber(var_lineTotal_USdollars, -1, -2, -2, -2)
 		message = certificate_array(2)
 		your_name = certificate_array(1)
 		rec_name = certificate_array(3)

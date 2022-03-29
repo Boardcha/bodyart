@@ -10,7 +10,8 @@ var_po_id = request("po_id")
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn  
-objCmd.CommandText = "SELECT ProductDetails.ProductDetailID, jewelry.title, ProductDetails.ProductDetail1, jewelry.ProductID, ProductDetails.Gauge, ProductDetails.Length, jewelry.picture, ProductDetails.location, TBL_Barcodes_SortOrder.ID_Description, ProductDetails.BinNumber_Detail, tbl_po_details.po_detailid, jewelry.brandname, tbl_edits_log.description FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number INNER JOIN tbl_po_details ON ProductDetails.ProductDetailID = tbl_po_details.po_detailid LEFT OUTER JOIN tbl_edits_log ON tbl_po_details.po_detailid = tbl_edits_log.detail_id WHERE tbl_po_details.po_orderid = ?"
+objCmd.CommandText = "SELECT TOP (100) PERCENT ProductDetails.ProductDetailID, jewelry.title, ProductDetails.ProductDetail1, jewelry.ProductID, ProductDetails.Gauge, ProductDetails.Length, jewelry.picture, ProductDetails.location, TBL_Barcodes_SortOrder.ID_Description, ProductDetails.BinNumber_Detail, tbl_po_details.po_detailid, jewelry.brandname, Editslog.description, Editslog.detail_id, Editslog.edit_date, TBL_AdminUsers.name FROM TBL_AdminUsers INNER JOIN (SELECT description, detail_id, po_detailid AS 'po_id', edit_date, user_id FROM tbl_edits_log WHERE (po_detailid = ?)) AS Editslog ON TBL_AdminUsers.ID = Editslog.user_id RIGHT OUTER JOIN ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number INNER JOIN tbl_po_details ON ProductDetails.ProductDetailID = tbl_po_details.po_detailid ON Editslog.detail_id = tbl_po_details.po_detailid WHERE (tbl_po_details.po_orderid = ?) AND (Editslog.description LIKE '%MATCHED%' OR Editslog.description IS NULL) ORDER BY Editslog.description ASC, ProductDetails.ProductDetailID"
+objCmd.Parameters.Append(objCmd.CreateParameter("po_detailid",3,1,20, var_po_id  ))
 objCmd.Parameters.Append(objCmd.CreateParameter("po_orderid",3,1,20, var_po_id  ))
 Set rsGetRestockItems = objCmd.Execute()	  
 Set objCmd = Nothing
@@ -31,17 +32,18 @@ Set objCmd = Nothing
 <table  class="table table-sm table-striped table-hover mt-2">
 	<thead class="thead-dark">  
 	<tr>
-            <th>Restocked on floor</th>
-            <th>Location</th>
-            <th class="Description">Description</th>
+            <th class="col-6">Restocked on floor</th>
+            <th class="col-2">Location</th>
+            <th class="col-4">Description</th>
 		  </tr>
 		</thead>	
 <% While NOT rsGetRestockItems.EOF %>
  <tr>
         <td>
-            <%'' if instr(rsGetRestockItems("description"), "match") > 0 then %>
+            <% if rsGetRestockItems("description") <> "" then  %>
+            <strong><%= rsGetRestockItems("edit_date") %> by <%= rsGetRestockItems("name") %></strong><br>
             <%= rsGetRestockItems("description") %>
-            <%'' end if %>
+            <% end if %>
         </td>
         <td>
             <%=(rsGetRestockItems.Fields.Item("location").Value)%> - <%=(rsGetRestockItems.Fields.Item("ID_Description").Value)%>
