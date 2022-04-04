@@ -49,7 +49,6 @@ bootstrapped = "yes"
 					<option value="Inventory">Inventory</option>
 					<option value="Packaging">Packaging</option>
 					<option value="Photography">Photography</option>
-					<option value="Custom orders">Custom orders</option>
 					<option value="Social Media">Social Media</option>
 					<option value="Admin">Admin</option>
 				</select>
@@ -80,7 +79,6 @@ bootstrapped = "yes"
 					<option value="Inventory">Inventory</option>
 					<option value="Packaging">Packaging</option>
 					<option value="Photography">Photography</option>
-					<option value="Custom orders">Custom orders</option>
 					<option value="Manager">Manager</option>
 					<option value="Admin">Admin</option>
 				</select>

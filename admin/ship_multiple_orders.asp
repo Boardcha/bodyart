@@ -20,7 +20,7 @@ commUpdate.CommandText = "UPDATE sent_items SET shipped = 'Pending shipment' WHE
 commUpdate.Execute()
 
 '========= ALWAYS SET CUSTOM ANODIZATION TO IN PROGRESS ====================
-if rsGetRecords("anodize") = 1  then
+if rsGetRecords("anodize") = true  then
       
       set commUpdate = Server.CreateObject("ADODB.Command")
       commUpdate.ActiveConnection = MM_bodyartforms_sql_STRING

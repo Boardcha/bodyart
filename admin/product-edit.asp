@@ -188,12 +188,6 @@ end select
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "SELECT country FROM TBL_Countries WHERE origin_toggle = 1 ORDER BY country ASC"
 	Set rs_getOriginCountries = objCmd.Execute()
-
-
-	Set objCmd = Server.CreateObject ("ADODB.Command")
-	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT * FROM TBL_Barcodes_SortOrder" 
-	Set rs_getsections = objCmd.Execute()
 	
 	Set objCmd = Server.CreateObject ("ADODB.Command")
 	objCmd.ActiveConnection = DataConn

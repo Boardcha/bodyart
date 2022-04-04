@@ -78,7 +78,7 @@ set rsGetInvoiceInfo = objCmd.Execute()
 if NOT rsGetInvoiceInfo.EOF then
 
 	'========= ALWAYS SET CUSTOM ANODIZATION TO IN PROGRESS ====================
-	if rsGetInvoiceInfo("anodize") = 1  then
+	if rsGetInvoiceInfo("anodize") = true  then
 			
 			set objCmd = Server.CreateObject("ADODB.command")
 			objCmd.ActiveConnection = DataConn

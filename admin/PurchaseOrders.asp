@@ -1,10 +1,9 @@
 <%@LANGUAGE="VBSCRIPT" CODEPAGE="1252"%>
-<%Response.Buffer = False%>
+
 <!--#include file="../Connections/bodyartforms_sql_ADMIN.asp" -->
 <%
-'==== PAGE HAS BEEN BOOSTRAPPED =======
-bootstrapped = "yes"
 
+If var_access_level = "Manager" or var_access_level = "Admin" or var_access_level = "Inventory" or var_access_level = "Customer service" then
 
 set cmd_rsGetWaitingList = Server.CreateObject("ADODB.command")
 cmd_rsGetWaitingList.ActiveConnection = DataConn
@@ -19,30 +18,13 @@ If (Request("MM_EmptyValue") <> "") Then
   rsGetPurchaseOrders__MMColParam = Request("MM_EmptyValue")
 End If
 
-
-
-Dim rsGetPurchaseOrders
-Dim rsGetPurchaseOrders_cmd
-Dim rsGetPurchaseOrders_numRows
-
 Set rsGetPurchaseOrders_cmd = Server.CreateObject ("ADODB.Command")
 rsGetPurchaseOrders_cmd.ActiveConnection = MM_bodyartforms_sql_STRING
-rsGetPurchaseOrders_cmd.CommandText = "SELECT * FROM dbo.TBL_PurchaseOrders where po_hide = 0 AND po_internal_bulk_pull = 0 ORDER BY Received ASC, PurchaseOrderID DESC" 
+rsGetPurchaseOrders_cmd.CommandText = "SELECT *, (SELECT Count(*) AS total_items FROM tbl_po_details WHERE po_orderid = Orders.PurchaseOrderID) AS total_ordered, (SELECT Count(*) AS total_items FROM tbl_po_details WHERE po_received = 1 AND  po_orderid = Orders.PurchaseOrderID) AS total_restocked FROM TBL_PurchaseOrders AS Orders where po_hide = 0 AND po_internal_bulk_pull = 0 ORDER BY Received ASC, PurchaseOrderID DESC" 
 rsGetPurchaseOrders_cmd.Prepared = true
 rsGetPurchaseOrders_cmd.Parameters.Append rsGetPurchaseOrders_cmd.CreateParameter("param1", 200, 1, 1, rsGetPurchaseOrders__MMColParam) ' adVarChar
 
 Set rsGetPurchaseOrders = rsGetPurchaseOrders_cmd.Execute
-rsGetPurchaseOrders_numRows = 0
-
-
-
-Dim Repeat1__numRows
-Dim Repeat1__index
-
-Repeat1__numRows = -1
-Repeat1__index = 0
-rsGetPurchaseOrders_numRows = rsGetPurchaseOrders_numRows + Repeat1__numRows
-
 %>
 
 <html>
@@ -55,7 +37,7 @@ rsGetPurchaseOrders_numRows = rsGetPurchaseOrders_numRows + Repeat1__numRows
 
 
 <% If Not rsGetWaitingList.EOF Or Not rsGetWaitingList.BOF Then %>
-
+<% if var_access_level <> "Customer service" then %>
 <div class="card mt-3">
   <div class="card-header h5">
     Total items in stock that can be notified:&nbsp;<span id="total-waiting"><%=(rsGetWaitingList.Fields.Item("Total_Waiting").Value)%></span>
@@ -64,11 +46,12 @@ rsGetPurchaseOrders_numRows = rsGetPurchaseOrders_numRows + Repeat1__numRows
     <a class="btn btn-purple text-light" id="notify-waiting-list">Notify customers</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="waitinglist_compare.asp" target="_top">View list</a></strong></strong>
   </div>
 </div>
+<% end if %>
 
    <% End If ' end Not rsGetWaitingList.EOF Or NOT rsGetWaitingList.BOF %>
 
 
-
+   <% if var_access_level <> "Customer service" then %>
 <div class="card my-3">
   <div class="card-header h5">
     Alter label queries
@@ -77,6 +60,7 @@ rsGetPurchaseOrders_numRows = rsGetPurchaseOrders_numRows + Repeat1__numRows
     <!--#include file="labels/inc-update-label-queries.asp" -->
   </div>
 </div> 
+<% end if %>
 
 
       <% If Not rsGetPurchaseOrders.EOF Or Not rsGetPurchaseOrders.BOF Then %>  
@@ -84,34 +68,36 @@ rsGetPurchaseOrders_numRows = rsGetPurchaseOrders_numRows + Repeat1__numRows
     <table class="table table-striped table-borderless table-hover">
 <thead class="thead-dark">
 	<tr>
-              <th class="align-middle">Delete</th>
+              <% if var_access_level <> "Customer service" then %>          
+                <th class="align-middle">Delete</th>
+              <% end if %>
               <th class="align-middle">Date placed</th>
-              <th class="align-middle">Amount</th>
+              <% if var_access_level <> "Customer service" then %>
+                <th class="align-middle">Amount</th>
+              <% end if %>
 			        <th class="align-middle">Stats</th>
               <th class="align-middle" >Company</th>
-              <th class="align-middle">Received</th>
+              <% if var_access_level <> "Customer service" then %>
+                <th class="align-middle">Received</th>
+              <% end if %>
             </tr>
 </thead>
               <% 
 While NOT rsGetPurchaseOrders.EOF
 
-set objCmd = Server.CreateObject("ADODB.command")
-objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT Count(*) AS total_items FROM tbl_po_details WHERE po_orderid = " & rsGetPurchaseOrders("PurchaseOrderID")
-Set rsTotalItems = objCmd.Execute()
-
-set objCmd = Server.CreateObject("ADODB.command")
-objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT Count(*) AS total_items FROM tbl_po_details WHERE po_received = 1 AND  po_orderid = " & rsGetPurchaseOrders("PurchaseOrderID")
-Set rsTotalRestockedItems = objCmd.Execute()
-
-var_percentage_restocked = Round(rsTotalRestockedItems("total_items") / rsTotalItems("total_items") * 100)
+var_percentage_restocked = Round(rsGetPurchaseOrders("total_restocked") / rsGetPurchaseOrders("total_ordered") * 100)
 %>
                 <tr id="<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>">
+                  <% if var_access_level <> "Customer service" then %>
                   <td class="align-middle">
+                    
                   <button type="button" class="btn btn-sm btn-info delete_po" data-po_id="<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>"><i class="fa fa-eye-slash"></i></button>
+                  
                 </td>
-                  <td class="align-middle"><%= FormatDateTime(rsGetPurchaseOrders.Fields.Item("DateOrdered").Value,2)%>&nbsp;&nbsp;&nbsp;#<a href="barcodes_modifyviews.asp?ID=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>&type=Order"><%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%></a>
+                <% end if %>
+                  <td class="align-middle"><%= FormatDateTime(rsGetPurchaseOrders.Fields.Item("DateOrdered").Value,2)%>
+                    <% if var_access_level <> "Customer service" then %>
+                    &nbsp;&nbsp;&nbsp;#<a href="barcodes_modifyviews.asp?ID=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>&type=Order"><%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%></a>
                   <%
                   display_hour = ""
                   display_minutes = ""
@@ -139,20 +125,29 @@ var_percentage_restocked = Round(rsTotalRestockedItems("total_items") / rsTotalI
                         <span class="mr-2"><%= display_hour %></span><%= display_minutes %>
                     </div>
                   <% end if %>
+                  <% end if %>
                   </td>
-				  <td class="align-middle">
+                  <% if var_access_level <> "Customer service" then %>
+                  <td class="align-middle">
+            
 					<%= FormatCurrency(rsGetPurchaseOrders.Fields.Item("po_total").Value, -1, -2, -0, -2) %>
+          
 				  </td>
+          <% end if %>
           <td class="align-middle">
-            <%= rsTotalItems("total_items") %> items ordered<br>
-            <%= rsTotalRestockedItems("total_items") %> items restocked <strong><%= var_percentage_restocked %>%</strong><br>
+            <%= rsGetPurchaseOrders("total_ordered") %> items ordered<br>
+            <%= rsGetPurchaseOrders("total_restocked") %> items restocked <strong><%= var_percentage_restocked %>%</strong><br>
+            <% if var_access_level <> "Customer service" then %>
             <a href="/admin/inventory_po_verify.asp?po_id=<%= rsGetPurchaseOrders("PurchaseOrderID") %>">Verify restocks</a>
+            <% end if %>
             </td>
                   <td class="align-middle"><p><strong><%=(rsGetPurchaseOrders.Fields.Item("Brand").Value)%></strong>
                     <% if (rsGetPurchaseOrders.Fields.Item("Received").Value) = "N" then %><br>
 
 					<a href="inventory/view_order.asp?ID=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>">
-					View order</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+					View order</a>
+          <% if var_access_level <> "Customer service" then %>
+          &nbsp;&nbsp;|&nbsp;&nbsp;
 					<a href="inventory_po_process.asp?po_id=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>&new=yes">
 					Process order</a>&nbsp;&nbsp;| &nbsp;&nbsp;
 					<a href="inventory/create_csv_po.asp?po_id=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>">
@@ -161,12 +156,19 @@ var_percentage_restocked = Round(rsTotalRestockedItems("total_items") / rsTotalI
 					
 					<a href="barcodes_modifyviews.asp?ID=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>&type=new_po_system">Update barcode query</a>
                     <% end if %>
+                    <% end if %>
                   </td>
-                  <td class="align-middle"><% if (rsGetPurchaseOrders.Fields.Item("Received").Value) = "Y" then %>
+                  <% if var_access_level <> "Customer service" then %>
+                  <td class="align-middle">
+                    
+                    <% if (rsGetPurchaseOrders.Fields.Item("Received").Value) = "Y" then %>
                     <span class="badge badge-success">Yes</span> <%=(rsGetPurchaseOrders.Fields.Item("DateReceived").Value)%>
                     <% else %><span class="badge badge-danger">No</span>
                     <span class="badge badge-info pointer po_received" data-po_id="<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>">Set to received</span>
-                    <% end if %></td>
+                    <% end if %>
+                  
+                  </td>
+                  <% end if %>
                 </tr>
                 <% 
   rsGetPurchaseOrders.MoveNext()
@@ -238,4 +240,9 @@ Wend
 <%
 rsGetPurchaseOrders.Close()
 Set rsGetPurchaseOrders = Nothing
+%>
+<%
+else
+    response.write "Access denied"
+end if ' permissions
 %>

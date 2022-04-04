@@ -1,20 +1,24 @@
 <%@LANGUAGE="VBSCRIPT"%>
 	<%
 	page_title = "Threadless body jewelry"
-	page_description = "Quality threadless jewelry. Make your life easier by avoiding tiny threaded jewelry slipping out of your fingers."
-	page_keywords = "threadless jewelry"
+	page_description = "Switch your body jewelry out quickly with quality threadless jewelry"
+	page_keywords = "threadless body jewelry"
 %>
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->
 <!--#include virtual="/bootstrap-template/header-navigation.asp" -->
 <link rel="stylesheet" type="text/css" href="/CSS/slick.css"/>
+<style>
+	.img-circles img{border-width:3px!important}
+	.img-circles img:hover{border-color: #696887!important;border-width:10px!important}
+</style>
 <!--#include virtual="/bootstrap-template/filters.asp" -->
 
 <div class="p-2">
-<h4>How threadless body jewelry works</h4>
+<h4 class="d-inline">How threadless body jewelry works</h4><a class="btn btn-sm btn-secondary ml-3" href="/products.asp?threading=Threadless">All threadless jewelry</a>
 <div class="mb-4">
-Threadless body jewelry is a great alternative to standard threaded jewelry. Instead of tiny frustrating ends that you have to screw on, threadless ends use a thin "pin" that you push & pull on order to get a secure fit.
+Threadless body jewelry is a great alternative to standard threaded jewelry. Threadless ends use a thin "pin" that you slightly bend to get a secure fit. Check out our video and images below to learn how threadless jewelry works.
 </div>
 
 <div class="container-fluid text-center">
@@ -42,32 +46,43 @@ Threadless body jewelry is a great alternative to standard threaded jewelry. Ins
 	</div><!-- row -->
 </div><!-- container-->
 
-<h4 class="mt-4">Quick Links <a class="btn btn-sm btn-secondary ml-3" href="/products.asp?threading=Threadless">All threadless jewelry</a></h4>
-<div class="container-fluid text-center">
-	<div class="row justify-content-center">
-		<div class="col-6 col-md-auto">
-			<a class="btn btn-sm btn-secondary m-1" href="/products.asp?jewelry=balls&threading=Threadless">Threadless balls & ends</a>
+
+<div class="container-fluid img-circles my-3">
+	<div class="row  justify-content-center text-center">
+		<div class="col-6 col-lg-3 col-xl-2 col-md-3 py-3">
+			<a class="text-secondary" class="track-click" id="landing-threadless-balls-image" href="/products.asp?jewelry=balls&threading=Threadless">
+				<img class="img-fluid border border-secondary rounded-circle" src="/images/landing-pages/threadless/threadless-balls-ends.jpg">
+				<h4>THREADLESS BALLS<br>& ENDS</h4>	
+			</a>
 		</div>
-		<div class="col-6 col-md-auto">
-			<a class="btn btn-sm btn-secondary m-1" href="/products.asp?jewelry=labret&threading=Threadless">Threadless labrets</a>
+		<div class="col-6 col-lg-3 col-xl-2 col-md-3 py-3">
+			<a class="text-secondary" class="track-click" id="landing-threadless-labrets-image" href="/products.asp?jewelry=labret&threading=Threadless">
+				<img class="img-fluid border border-secondary rounded-circle" src="/images/landing-pages/threadless/threadless-labrets.jpg">
+				<h4>THREADLESS LABRETS</h4>	
+			</a>
 		</div>
-		<div class="col-6 col-md-auto">
-			<a class="btn btn-sm btn-secondary m-1" href="/products.asp?jewelry=nose-ring&price=0%3B100&threading=Threadless">Threadless nose jewelry</a>
+		<div class="col-6 col-lg-3 col-xl-2 col-md-3 py-3">
+			<a class="text-secondary" class="track-click" id="landing-threadless-nosescrews-image" href="/products.asp?jewelry=nose-ring&price=0%3B100&threading=Threadless">
+				<img class="img-fluid border border-secondary rounded-circle" src="/images/landing-pages/threadless/threadless-nosescrews.jpg">
+				<h4>THREADLESS NOSE<br>JEWELRY</h4>	
+			</a>
 		</div>
-		<div class="col-6 col-md-auto">
-			<a class="btn btn-sm btn-secondary m-1" href="/products.asp?jewelry=chains-necklace">Threadless barbells</a>
+		<div class="col-6 col-lg-3 col-xl-2 col-md-3 py-3">
+			<a class="text-secondary" class="track-click" id="landing-threadless-straight-barbells-image" href="/products.asp?jewelry=barbell&threading=Threadless">
+				<img class="img-fluid border border-secondary rounded-circle" src="/images/landing-pages/threadless/threadless-straight-barbells.jpg">
+				<h4>THREADLESS STRAIGHT<BR>BARBELLS</h4>	
+			</a>
 		</div>
-		<div class="col-6 col-md-auto">
-			<a class="btn btn-sm btn-secondary m-1" href="/products.asp?jewelry=curved&threading=Threadless">Threadless curved barbells</a>
-		</div>
-		<div class="col-6 col-md-auto">
-			<a class="btn btn-sm btn-secondary m-1" href="/products.asp?jewelry=barbell&threading=Threadless">Threadless straight barbells</a>
+		<div class="col-6 col-lg-3 col-xl-2 col-md-3 py-3">
+			<a class="text-secondary" class="track-click" id="landing-threadless-curved-barbells-image" href="/products.asp?jewelry=curved&threading=Threadless">
+				<img class="img-fluid border border-secondary rounded-circle" src="/images/landing-pages/threadless/threadless-curved-barbells.jpg">
+				<h4>THREADLESS CURVED<BR>BARBELLS</h4>	
+			</a>
 		</div>
 	</div>
-
 </div><!-- container -->
 
-<h4 class="mt-4">Threadless Best Sellers</h4>
+<h4>Threadless Best Sellers</h4>
   <div class="mt-2 full-width-block">
 	<div class="baf-carousel" id="BestSellers">
 				<% 

@@ -4,7 +4,7 @@ objCmd.ActiveConnection = DataConn
 objCmd.CommandText = "SELECT * FROM TBL_Barcodes_SortOrder" 
 Set rs_getsections = objCmd.Execute()
 %>
-<form action="barcodes_modifyviews.asp" method="post">
+<form action="/admin/barcodes_modifyviews.asp" method="post">
   <div class="form-inline mb-3">
 <select class="form-control form-control-sm mr-4" name="type" id="type">
   <option value="-">None</option>
