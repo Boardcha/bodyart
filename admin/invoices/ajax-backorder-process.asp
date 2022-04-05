@@ -230,6 +230,14 @@ if request.form("agenda") = "clear" then
 		objCmd.Parameters.Append(objCmd.CreateParameter("qty",3,1,12, request.form("stock_qty") ))
 		objCmd.Parameters.Append(objCmd.CreateParameter("ProductDetailID",3,1,12, var_detailid )) 
 		objCmd.Execute()
+	
+	'Write info to edits log	
+	set objCmd = Server.CreateObject("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & var_detailid & ",'Automated - Updated qty from " & cint(rsGetCurrentQty("qty")) & " to " & request.form("stock_qty") & " - cleared backorder item','" & now() & "')"
+	objCmd.Execute()
+	Set objCmd = Nothing	
+
 	end if 
 
 %>

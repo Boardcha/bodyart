@@ -474,6 +474,16 @@ If var_access_level = "Manager" or var_access_level = "Admin" then
                         </div><!-- card body -->
                       </div><!-- card -->
                 </div><!-- col -->
+                <div class="col-3 pr-2 pb-3">
+                    <div class="card">
+                        <div class="card-header">
+                          <h5>Quick Links</h5>
+                        </div>
+                        <div class="card-body">
+                            <a href="https://docs.google.com/document/d/1-b-Id7gYClynkQPyNYitjaG0mhYQ9ey7FP3b1x6dlrI/" target="_blank"><img class="mr-1" src="/images/icons/google-drive.png" height="20px">Manager handbook</a><br/>
+                        </div><!-- card body -->
+                      </div><!-- card -->
+                </div><!-- column-->
                 <% If var_access_level = "Admin" then %>
                 <div class="col">
                     <div class="card">

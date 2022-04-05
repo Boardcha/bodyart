@@ -132,8 +132,8 @@ $(document).on("keypress", "#scan-item", function(event){
 			// If the amount scanned and qty are equal set the row to a finished status to be hidden next time a scan is made
 			if($('#' + row_found).attr('data-timescanned') === $('#' + row_found).attr('data-qty')) {
 				$('#' + row_found + ', #' + row_found + '_sub').addClass('done');
-				$('#' + row_found + ', #' + row_found + '_sub').removeClass('table-secondaryg');
-				$('#' + row_found + ', #' + row_found + '_sub').addClass('table-warnin');
+				$('#' + row_found + ', #' + row_found + '_sub').removeClass('table-secondary table-warning');
+				$('#' + row_found + ', #' + row_found + '_sub').addClass('table-success');
 				$('#check_' + row_found).addClass('complete text-success');
 			}
         } // if has class done is not found, display too many scans error

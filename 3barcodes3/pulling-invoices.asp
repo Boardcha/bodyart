@@ -145,4 +145,4 @@ Set rs_getsections = objCmd.Execute()
 </html>
 <script src="/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../js/bootstrap-v4.min.js"></script>
-<script type="text/javascript" src="scripts/pull-orders.js?v=030922"></script>
+<script type="text/javascript" src="scripts/pull-orders.js?v=040422"></script>

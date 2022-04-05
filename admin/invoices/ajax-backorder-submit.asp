@@ -66,7 +66,8 @@ If var_bo_reason <> "" Then param_bo_reason = ", reason_for_backorder = '" + var
 ' Set item to backorder status (and not on review)
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "UPDATE TBL_OrderSummary SET backorder = 1, backorder_tracking = 1, BackorderReview = 'N'" & param_bo_reason & " WHERE OrderDetailID = ?"
+objCmd.CommandText = "UPDATE TBL_OrderSummary SET backorder = 1, backorder_tracking = 1, BackorderReview = 'N'" & param_bo_reason & ", archive_bo_checked_by_who = ? WHERE OrderDetailID = ?"
+objCmd.Parameters.Append(objCmd.CreateParameter("archive_bo_checked_by_who",200,1,50, user_name ))
 objCmd.Parameters.Append(objCmd.CreateParameter("orderdetailid",3,1,20, orderdetailid))
 objCmd.Execute()
 

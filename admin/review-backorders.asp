@@ -22,9 +22,8 @@ objCmd.ActiveConnection = DataConn
 <style>
 @page{size:landscape}
 </style>
-<div class="p-3">
-        <h5 class="mb-3">Review backorders</h5>
-         
+<div class="p-2">
+        
 <% If Session("SubAccess") <> "N" then ' DISPLAY ONLY TO PEOPLE WHO HAVE ACCESS TO THIS PAGE %>
 
 <!--#include file="invoices/inc-review-backorders.asp"-->
@@ -37,7 +36,7 @@ Not accessible
 <!--#include file="includes/inc_scripts.asp"-->
 <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap-v4.min.js"></script>
-<script type="text/javascript" src="scripts/review-backorders.js?v=030922"></script>
+<script type="text/javascript" src="/admin/scripts/review-backorders.js?v=040522"></script>
 <script type="text/JavaScript" src="/js/jQuery.print.min.js"></script>
 <script type="text/javascript">
 
