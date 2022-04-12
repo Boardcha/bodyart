@@ -1,5 +1,5 @@
 <%@LANGUAGE="VBSCRIPT" CODEPAGE="1252"%>
-<!--#include file="../Connections/bodyartforms_sql_ADMIN.asp" -->
+<!--#include virtual="/Connections/bodyartforms_sql_ADMIN.asp" -->
 <%
 '==== PAGE HAS BEEN BOOSTRAPPED =======
 bootstrapped = "yes"
@@ -26,7 +26,7 @@ objCmd.ActiveConnection = DataConn
         
 <% If Session("SubAccess") <> "N" then ' DISPLAY ONLY TO PEOPLE WHO HAVE ACCESS TO THIS PAGE %>
 
-<!--#include file="invoices/inc-review-backorders.asp"-->
+<!--#include virtual="/includes/inc-review-backorders.inc"-->
 
 
 <% else ' unathorized access error %>
@@ -36,7 +36,7 @@ Not accessible
 <!--#include file="includes/inc_scripts.asp"-->
 <script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="/js/bootstrap-v4.min.js"></script>
-<script type="text/javascript" src="/admin/scripts/review-backorders.js?v=040522"></script>
+<!--#include virtual="/includes/review-backorders.asp"-->
 <script type="text/JavaScript" src="/js/jQuery.print.min.js"></script>
 <script type="text/javascript">
 

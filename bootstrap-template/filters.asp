@@ -64,8 +64,8 @@
                     <label class="form-check-label d-block" for="filter-ends">Balls/Ends</label>
                   </div>
                   <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="jewelry" value="beads" id="filter-beads" data-friendly="Beads">
-                    <label class="form-check-label d-block" for="filter-beads">Beads</label>
+                    <input class="form-check-input" type="checkbox" name="jewelry" value="beads" id="filter-beads" data-friendly="Replacement Captive Beads">
+                    <label class="form-check-label d-block" for="filter-beads">Replacement Captive Beads</label>
                   </div>
                   <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="jewelry" value="belly" id="filter-belly" data-friendly="Belly">
@@ -1190,7 +1190,7 @@ color_array = array("amber", "aqua", "black", "blue", "bone", "brass", "bronze",
         objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,10, request.cookies("OrderAddonsActive")))
         Set rsVerifyAddonOrder = objCmd.Execute()
         
-        if rsVerifyAddonOrder.Fields.Item("ship_code").Value = "paid" AND ISNULL(rsVerifyAddonOrder.Fields.Item("ScanInvoice_Timestamp").Value) AND (rsVerifyAddonOrder.Fields.Item("shipped").Value = "CUSTOM ORDER IN REVIEW" OR rsVerifyAddonOrder.Fields.Item("shipped").Value = "CUSTOM ORDER APPROVED" OR rsVerifyAddonOrder.Fields.Item("shipped").Value = "Pending..." OR rsVerifyAddonOrder.Fields.Item("shipped").Value = "Review" OR rsVerifyAddonOrder.Fields.Item("shipped").Value = "Pending shipment") then
+        if rsVerifyAddonOrder.Fields.Item("ship_code").Value = "paid" AND ISNULL(rsVerifyAddonOrder.Fields.Item("ScanInvoice_Timestamp").Value) AND (rsVerifyAddonOrder.Fields.Item("shipped").Value = "CUSTOM ORDER IN REVIEW" OR rsVerifyAddonOrder.Fields.Item("shipped").Value = "Pending..." OR rsVerifyAddonOrder.Fields.Item("shipped").Value = "Review" OR rsVerifyAddonOrder.Fields.Item("shipped").Value = "Pending shipment") then
         %>
         <div class="alert alert-info" id="addon-alert">
           <h4>ADDING ITEMS TO YOUR ORDER #<%= request.cookies("OrderAddonsActive") %></h4>

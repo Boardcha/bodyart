@@ -3,6 +3,10 @@
 <!--#include virtual="/Connections/authnet.asp" -->
 
 <%
+'====== SINCE THIS FILE IS IN ROOT DIRECTORY, MAKE SURE THAT USER IS LOGGED IN VIA ADMIN IN ORDER TO ACCESS CODE ON THIS page
+
+if request.cookies("adminuser") = "yes" then
+
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
 objCmd.CommandText = "SELECT customer_ID, total_preferred_discount, total_coupon_discount, total_sales_tax, transactionID, pay_method, email, customer_first, ID FROM sent_items WHERE ID = ?" 
@@ -662,6 +666,8 @@ end if
 	<!--#include virtual="emails/function-send-email.asp"-->
 	<!--#include virtual="/emails/email_variables.asp"-->
 	<%
+
+end if '==== request.cookies("adminuser") = "yes"
 
 DataConn.Close()
 %>

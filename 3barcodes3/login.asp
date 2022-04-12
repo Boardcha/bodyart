@@ -37,6 +37,10 @@ if request.form("username") <> "" and request.form("password") <> "" then
 					response.cookies("token").Expires = DATE + 7
 					response.cookies("selector") = cookie_selector
 					response.cookies("selector").Expires = DATE + 7
+					' set cookie to show live/sandbox mode message only for admin users
+					Response.Cookies("adminuser") = "yes"
+					Response.Cookies("adminuser").Path = "/"
+					Response.Cookies("adminuser").Expires =  DATE + 300
 					
 					set objCmd = Server.CreateObject("ADODB.command")
 					objCmd.ActiveConnection = DataConn

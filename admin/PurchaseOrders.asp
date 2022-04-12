@@ -5,13 +5,6 @@
 
 If var_access_level = "Manager" or var_access_level = "Admin" or var_access_level = "Inventory" or var_access_level = "Customer service" then
 
-set cmd_rsGetWaitingList = Server.CreateObject("ADODB.command")
-cmd_rsGetWaitingList.ActiveConnection = DataConn
-cmd_rsGetWaitingList.CommandText = "SELECT Count(*) AS Total_Waiting FROM dbo.QRYTopWaitingListItems WHERE qty >= waiting_qty"
-Set rsGetWaitingList = cmd_rsGetWaitingList.Execute()
-
-
-
 Dim rsGetPurchaseOrders__MMColParam
 rsGetPurchaseOrders__MMColParam = "N"
 If (Request("MM_EmptyValue") <> "") Then 
@@ -34,34 +27,7 @@ Set rsGetPurchaseOrders = rsGetPurchaseOrders_cmd.Execute
 <body>
 <!--#include file="admin_header.asp"-->
 <div class="p-3">
-
-
-<% If Not rsGetWaitingList.EOF Or Not rsGetWaitingList.BOF Then %>
-<% if var_access_level <> "Customer service" then %>
-<div class="card mt-3">
-  <div class="card-header h5">
-    Total items in stock that can be notified:&nbsp;<span id="total-waiting"><%=(rsGetWaitingList.Fields.Item("Total_Waiting").Value)%></span>
-  </div>
-  <div class="card-body">
-    <a class="btn btn-purple text-light" id="notify-waiting-list">Notify customers</a>&nbsp;&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;&nbsp;<a href="waitinglist_compare.asp" target="_top">View list</a></strong></strong>
-  </div>
-</div>
-<% end if %>
-
-   <% End If ' end Not rsGetWaitingList.EOF Or NOT rsGetWaitingList.BOF %>
-
-
-   <% if var_access_level <> "Customer service" then %>
-<div class="card my-3">
-  <div class="card-header h5">
-    Alter label queries
-  </div>
-  <div class="card-body">
-    <!--#include file="labels/inc-update-label-queries.asp" -->
-  </div>
-</div> 
-<% end if %>
-
+<h4>Purchase Orders</h4>
 
       <% If Not rsGetPurchaseOrders.EOF Or Not rsGetPurchaseOrders.BOF Then %>  
 
@@ -76,7 +42,9 @@ Set rsGetPurchaseOrders = rsGetPurchaseOrders_cmd.Execute
                 <th class="align-middle">Amount</th>
               <% end if %>
 			        <th class="align-middle">Stats</th>
-              <th class="align-middle" >Company</th>
+              <th class="align-middle" >Company
+                <span class="small"><i class="fa fa-diamond ml-4"></i> = Custom Order</span>
+              </th>
               <% if var_access_level <> "Customer service" then %>
                 <th class="align-middle">Received</th>
               <% end if %>
@@ -141,7 +109,11 @@ var_percentage_restocked = Round(rsGetPurchaseOrders("total_restocked") / rsGetP
             <a href="/admin/inventory_po_verify.asp?po_id=<%= rsGetPurchaseOrders("PurchaseOrderID") %>">Verify restocks</a>
             <% end if %>
             </td>
-                  <td class="align-middle"><p><strong><%=(rsGetPurchaseOrders.Fields.Item("Brand").Value)%></strong>
+            <td class="align-middle">
+              <% if rsGetPurchaseOrders("po_type") = "Custom Orders" then %>
+                <i class="fa fa-diamond fa-lg mr-1"></i>
+              <% end if %>
+              <strong><%=(rsGetPurchaseOrders.Fields.Item("Brand").Value)%></strong>
                     <% if (rsGetPurchaseOrders.Fields.Item("Received").Value) = "N" then %><br>
 
 					<a href="inventory/view_order.asp?ID=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>">
@@ -217,23 +189,6 @@ Wend
       })
       .fail(function(msg) {
           alert('FAILED');
-      });
-  });
-
-    // Notify customers on waiting list
-    $(document).on("click", "#notify-waiting-list", function(event){
-      $('#notify-waiting-list').html('<i class="fa fa-spinner fa-2x fa-spin"></i>');
-
-      $.ajax({
-      dataType: "json",
-      url: "/admin/WaitingList_Notify.asp"
-      })
-      .done(function(json, msg ) {
-          $('#total-waiting').html(json.total);
-          $('#notify-waiting-list').html('Notify customers');
-      })
-      .fail(function(json, msg) {
-         alert("Failed to notify customers, code error");
       });
   });
 </script>

@@ -22,7 +22,7 @@ end if
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn  
-objCmd.CommandText = "SELECT ProductDetails.ProductDetailID, jewelry.title, ProductDetails.ProductDetail1, ProductDetails.qty, stock_qty, restock_threshold,  CASE WHEN qty < restock_threshold THEN  stock_qty - qty ELSE 0 END as 'needed', jewelry.ProductID, ProductDetails.Gauge, ProductDetails.Length, jewelry.picture, ProductDetails.location,  TBL_Barcodes_SortOrder.ID_Description, ProductDetails.BinNumber_Detail, colors FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number  WHERE (brandname = 'Element' OR brandname = 'Lovers - Metal') ORDER BY CASE WHEN type = 'None' THEN 0 ELSE 1 END ASC, " & var_sortby
+objCmd.CommandText = "SELECT ProductDetails.ProductDetailID, jewelry.title, ProductDetails.ProductDetail1, ProductDetails.qty, stock_qty, restock_threshold,  CASE WHEN qty < restock_threshold THEN  stock_qty - qty ELSE 0 END as 'needed', jewelry.ProductID, ProductDetails.Gauge, ProductDetails.Length, jewelry.picture, ProductDetails.location,  TBL_Barcodes_SortOrder.ID_Description, ProductDetails.BinNumber_Detail, colors FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number  WHERE jewelry.tags LIKE '%bulkanodize%' ORDER BY CASE WHEN type = 'None' THEN 0 ELSE 1 END ASC, " & var_sortby
 
 set rsGetAnodizedList = Server.CreateObject("ADODB.Recordset")
 rsGetAnodizedList.CursorLocation = 3 'adUseClient

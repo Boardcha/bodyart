@@ -37,30 +37,7 @@ Set rsInventoryIssues = objcmd.Execute()
                   <h5>Searches</h5>
                 </div>
                 <div class="card-body">
-                    <form class="form-inline" name="invoice_search" action="/admin/product-edit.asp" method="get">
-						<input class="form-control form-control" name="ProductID" type="text" placeholder="Product ID #">
-						<button class="btn btn-sm btn-secondary ml-2" type="submit">Search</button>
-					</form>
-					<form class="form-inline" name="detailid_search" action="/admin/SearchDetailID.asp" method="post">
-						<input class="form-control form-control" name="DetailID" type="text" placeholder="Detail ID #">
-						<button class="btn btn-sm btn-secondary ml-2" type="submit">Search</button>
-					</form>
-                    <form class="form-inline" name="location_search" action="/admin/location_search.asp" method="post">
-                        <select class="form-control mb-1" name="section" id="search-section">
-                            <% While NOT rs_getsections.EOF %>                          
-                            <option value="<%=(rs_getsections.Fields.Item("ID_Description").Value)%>"><%=(rs_getsections.Fields.Item("ID_Description").Value)%></option>
-                          <% 
-                          rs_getsections.MoveNext()
-                          Wend
-                          %> 
-                      </select>
-                        <input class="form-control form-control" name="location" type="text" placeholder="Location #">
-                        <button class="btn btn-sm btn-secondary ml-2" type="submit">Search</button>
-                    </form>
-					<form class="form-inline" name="sku_search" action="/admin/SearchDetailID.asp" method="post">
-						<input class="form-control form-control" name="sku" type="text" placeholder="SKU #">
-						<button class="btn btn-sm btn-secondary ml-2" type="submit">Search</button>
-					</form>
+                    <!--#include virtual="/admin/landing/inc-product-searches.inc"-->
                 </div><!-- card body -->
               </div><!-- card -->
         </div>
@@ -90,7 +67,7 @@ Set rsInventoryIssues = objcmd.Execute()
                     <a href="/admin/edits_logs.asp"><i class="fa fa-angle-right mr-2"></i>Edit logs</a><br/>
 
                     <a href="/admin/new-products-sortable.asp"><i class="fa fa-angle-right mr-2"></i>New product sorting</a><br/>
-                    <a href="/admin/inventory-issues.asp"><i class="fa fa-angle-right mr-2"></i><span class=" badge badge-danger mr-2"><%= rsInventoryIssues.Fields.Item("total_inventory_issues").Value %></span>Reported inventory issues</a><br/>
+                    <a href="/admin/inventory-issues.asp"><i class="fa fa-angle-right mr-2"></i><span class=" badge badge-<% if rsInventoryIssues("total_inventory_issues") > 0 then %>danger<% else %>secondary<% end if %> mr-2"><%= rsInventoryIssues("total_inventory_issues") %></span>Reported inventory issues</a><br/>
 
                     <a href="/admin/inventory_freeitems.asp"><i class="fa fa-angle-right mr-2"></i>Free item stock</a><br/>
                     <a href="/admin/inventory-count-limited-bin.asp"><i class="fa fa-angle-right mr-2"></i>Limited bin inventory count</a><br/>
@@ -127,8 +104,7 @@ Set rsInventoryIssues = objcmd.Execute()
                 </div>
                 <div class="card-body">
                     <a href="/admin/custom_orders.asp"><i class="fa fa-angle-right mr-2"></i>Ship out custom orders</a><br/>
-                    <a href="/admin/preorder_approved.asp?Company=Industrial Strength"><i class="fa fa-angle-right mr-2"></i>Approved custom orders</a><br/>
-                    <a href="/admin/preorder_review.asp"><i class="fa fa-angle-right mr-2"></i>Review custom orders</a><br/>
+                    <a href="/admin/preorder-create-po.asp"><i class="fa fa-angle-right mr-2"></i>Create custom order purchase order</a><br/>
                     <a href="/admin/preorder_emails.asp"><i class="fa fa-angle-right mr-2"></i>E-mails for delays</a><br/>
                     <a href="/admin/one-time-coupons.asp"><i class="fa fa-angle-right mr-2"></i>One time use coupons</a>
                 </div><!-- card body -->
@@ -158,6 +134,20 @@ Set rsInventoryIssues = objcmd.Execute()
                   <h5>Misc</h5>
                 </div>
                 <div class="card-body">
+                    <% 
+                    set cmd_rsGetWaitingList = Server.CreateObject("ADODB.command")
+                    cmd_rsGetWaitingList.ActiveConnection = DataConn
+                    cmd_rsGetWaitingList.CommandText = "SELECT Count(*) AS Total_Waiting FROM dbo.QRYTopWaitingListItems WHERE qty >= waiting_qty"
+                    Set rsGetWaitingList = cmd_rsGetWaitingList.Execute()
+                    
+                    If Not rsGetWaitingList.EOF Then
+                    %>                    
+                    <div class="mb-4">
+                        <a class="btn btn-sm btn-<% if rsGetWaitingList("Total_Waiting") > 0 then %>danger<% else %>secondary<% end if %> mr-2" href="/admin/waitinglist_compare.asp"><span id="total-waiting"><%= rsGetWaitingList("Total_Waiting") %></span> waiting (view)</a><a class="btn btn-sm btn-purple text-light" id="notify-waiting-list">Notify customers</a>
+                    </div>
+                    <% 
+                    End If %>
+
                     <% if  var_access_level <> "Photography"  then %>
                     <a href="/admin/inventory-bulk-pull-po.asp"><i class="fa fa-angle-right mr-2"></i>Create internal purchase order</a><br/>
                     <% end if %>
@@ -201,330 +191,28 @@ Set rsInventoryIssues = objcmd.Execute()
                     <div class="row">
                         <% if user_name <> "Melissa" then %>
                         <div class="col-2 pb-2">
-                            <h6 class="border-bottom border-secondary text-center">SALES</h6>
-                            <ul class="list-unstyled">
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Orders & sales overview"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSection">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Orders & sales overview
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Shipping carriers"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSectionb0846350843d0cde9228">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Shipping carriers
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Shipping revenue"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSectionba4ce75b01d27f9f9abe">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Shipping revenue
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Payment methods"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSectionc3293043a32b093a128c">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                   Payment methods
-                                    </a>
-                            </li>
-                            <li>
-                            <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Wishlist revenue"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSection2eda8b01532747d16079">
-                                <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                Wishlist revenue
-                                </a>
-                                </li>
-                                <li>
-                                    <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Anodizing revenue"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSection8f49a326e363c433e68c">
-                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                        Anodizing revenue
-                                        </a>
-                                </li>
-                                <li>
-                                    <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Addons revenue"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSection339116b4a07fec0c33da">
-                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                        Addons revenue
-                                        </a>
-                                </li>
-                                <li>
-                                    <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Checkout addon sales"  data-report-url="reportEmbed?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSection5026a7dbdac7f77784cf">
-                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                        Checkout addon sales
-                                        </a>
-                                </li>
-                                <li>
-                                    <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Waiting list revenue"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSection94eca4f1a33202e657d8">
-                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                        Waiting list revenue
-                                        </a>
-                                </li>
-                                <li>
-                                    <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Save for later revenue"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSection68dea6dc51dbc909c598">
-                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                        Save for later revenue
-                                        </a>
-                                </li>
-                                <li>
-                                    <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Gift certificates"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSection3dbd565056bc0038ac64">
-                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                        Gift certificates
-                                        </a>
-                                </li>
-                                <li>
-                                    <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Free items"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSection7c15a4140d6f6facd1cf">
-                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                        Free items
-                                        </a>
-                                </li>
-                                <li>
-                                    <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Return losses"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSectioncc6939f9391d81c1ebf7">
-                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                        Return losses
-                                        </a>
-                                </li>
-                                <li>
-                                    <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Taxes collected"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSection57a2d0fa08566a3cb9b7">
-                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                        Taxes collected
-                                        </a>
-                                </li>
-                                <li>
-                                    <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="USA sales"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSectionccdec22c60ecc98573e0">
-                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                        USA sales
-                                        </a>
-                                </li>
-                                <li>
-                                    <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="International sales"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSectionb60b615e8ed65b97cd82">
-                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                        International sales
-                                        </a>
-                                </li>
-
-                            </ul>
+                            <!--#include virtual="/admin/power-bi/inc-report-sales.inc"-->
                         </div><!-- col -->
                         <div class="col-2 pb-2">
-                            <h6 class="border-bottom border-secondary text-center">POTENTIAL REVENUE</h6>
-                            <ul class="list-unstyled">
-                                
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Abandoned carts"  data-report-url="reportEmbed?reportId=2fe435c0-68e7-4698-bbf9-9fa6925746e9&pageName=ReportSection8da612ddfee8cd25cd84">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Abandoned carts
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Abandoned carts funnel"  data-report-url="reportEmbed?reportId=2fe435c0-68e7-4698-bbf9-9fa6925746e9&pageName=ReportSectiond4e6bafcae3e7bd89b9c">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Abandoned carts funnel
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Daily abandoned carts"  data-report-url="reportEmbed?reportId=2fe435c0-68e7-4698-bbf9-9fa6925746e9&pageName=ReportSectionebec3316370647bd9e02">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Daily abandoned carts
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Wishlist potential revenue"  data-report-url="reportEmbed?reportId=2fe435c0-68e7-4698-bbf9-9fa6925746e9&pageName=ReportSection94178c9682b7e127a75d">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Wishlist potential revenue
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Save for later potential revenue"  data-report-url="reportEmbed?reportId=2fe435c0-68e7-4698-bbf9-9fa6925746e9&pageName=ReportSectionac38b93470d606e28ed3">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Save for later potential revenue
-                                    </a>
-                            </li>
-                                
-                            </ul>
+                            <!--#include virtual="/admin/power-bi/inc-potential-revenue.inc"-->
                         </div><!-- col -->
                         <% end if ' user_name <> Melissa %>
                         <div class="col-2 pb-2">
-                            <h6 class="border-bottom border-secondary text-center">E-COMMERCE ANALYTICS</h6>
-                            <ul class="list-unstyled">
-                              
-                                <li>
-                                    <a href="https://datastudio.google.com/u/0/reporting/b0e4b497-15a9-491d-9134-6eaab615d3a6/page/5auqB" target="_blank">
-                                        <img class="mr-1" src="/images/icons/google-data-studio.png" height="20px">
-                                        Google dashboard
-                                        </a>
-                                </li>
-                                <li>
-                                    <a href="/admin/competitor-research.asp" >
-                                        <img class="mr-1" src="/images/icons/google-trends.png" height="20px">
-                                        Competitor trends
-                                        </a>
-                                </li>
-                            </ul>
+                            <!--#include virtual="/admin/power-bi/inc-analytics-links.inc"-->
                         </div><!-- col -->
                         <div class="col-2 pb-2">
-                            <h6 class="border-bottom border-secondary text-center ">INVENTORY</h6>
-                            <ul class="list-unstyled">
-                              
-                            <li>
-                                    <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Incoming vs outgoing"  data-report-url="reportEmbed?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSection781f072d6b16235e5969">
-                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                        Incoming vs outgoing
-                                        </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Wholesale movement"  data-report-url="reportEmbed?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSectionc8d3d89f753886d9893b">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Wholesale movement
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Incoming jewelry"  data-report-url="reportEmbed?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSection8f6da6f2f8fef955931f">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Incoming jewelry
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Wholesale stock on hand"  data-report-url="reportEmbed?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSectionbddd7e9b0e965ec3d95e">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Wholesale stock on hand
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Vendor profits"  data-report-url="reportEmbed?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSection40f4fdae8ccf16fc0e2b">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Vendor profits
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Inactive items with qty"  data-report-url="reportEmbed?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSectionc36c32481ac846171df1">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Inactive items with qty
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Top selling products"  data-report-url="reportEmbed?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSection60e33d96a371a3a00de0">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Top selling products
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Top gauges"  data-report-url="reportEmbed?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSection2dabdc6b693ab8a0b22e">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Top gauges
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Backorders"  data-report-url="reportEmbed?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSectiondb3e6db04e1c0fb1b26b">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Backorders
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Items rated below 4 stars"  data-report-url="reportEmbed?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSection0995471f3d43f1ec43b7">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Items rated below 4 stars
-                                    </a>
-                            </li>
-                            </ul>
+                           <!--#include virtual="/admin/power-bi/inc-inventory.inc"-->
                         </div><!-- col -->
                         <% if user_name <> "Melissa" then %>
                         <div class="col-2 pb-2">
-                            <h6 class="border-bottom border-secondary text-center">PACKING DEPARTMENT</h6>
-                            <ul class="list-unstyled">
-                                <li>
-                                    <a href="/admin/packing-errors.asp"><i class="fa fa-angle-right mr-2 ml-2"></i>&nbsp;Packer errors</a>
-                                </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Orders Overview"  data-report-url="reportEmbed?reportId=15766e9d-3dcc-415f-9d97-f4e9c66fb5e8&pageName=ReportSection" >
-                                <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                Orders overview
-                                </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Packing Stats"  data-report-url="reportEmbed?reportId=15766e9d-3dcc-415f-9d97-f4e9c66fb5e8&pageName=ReportSectionecb8bec0b16576690ac1" >
-                                <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                Packing stats
-                                </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Pulling Stats"  data-report-url="reportEmbed?reportId=15766e9d-3dcc-415f-9d97-f4e9c66fb5e8&pageName=ReportSection0cf58b6cd80c063e308a" >
-                                <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                Pulling stats
-                                </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Items Stats"  data-report-url="reportEmbed?reportId=15766e9d-3dcc-415f-9d97-f4e9c66fb5e8&pageName=ReportSectiona5059775a4468f737145" >
-                                <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                Items stats
-                                </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Product Restocks"  data-report-url="reportEmbed?reportId=15766e9d-3dcc-415f-9d97-f4e9c66fb5e8&pageName=ReportSectionb09c04b6b8ae803d9e39">
-                                <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                Product restocks
-                                </a>
-                            </li>
-                                
-                            </ul>
+                            <!--#include virtual="/admin/power-bi/inc-packing-dept.inc"-->
                         </div><!-- col -->
                         <% end if %>
                         <div class="col-2 pb-2">
-                            <h6 class="border-bottom border-secondary text-center">CUSTOM ORDERS</h6>
-                            <ul class="list-unstyled">
-                              
-                                <li>
-                                    <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Custom orders revenue"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSectionc4da01ec413cf108a641">
-                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                        Custom orders revenue
-                                        </a>
-                                </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Shipping status issues"  data-report-url="reportEmbed?reportId=e1acf509-fb33-4f12-937a-f23c0829fdf1&pageName=ReportSection">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Shipping status issues
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Custom orders with anodizing"  data-report-url="reportEmbed?reportId=e1acf509-fb33-4f12-937a-f23c0829fdf1&pageName=ReportSectionc65c7a14c8c54d39bab7">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    w/ Anodizing
-                                    </a>
-                            </li>
-                               
-                            </ul>
+                            <!--#include virtual="/admin/power-bi/inc-custom-orders.inc"-->
                         </div><!-- col -->
                         <div class="col-2 pb-2">
-                            <h6 class="border-bottom border-secondary text-center">CUSTOMERS</h6>
-                            <ul class="list-unstyled">
-                              
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Customer counts"  data-report-url="reportEmbed?reportId=1fbf5d3f-a940-4fbc-83c2-9b8140e3312c&pageName=ReportSectionc9486765338688687030">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Customer counts
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Account creation"  data-report-url="reportEmbed?reportId=1fbf5d3f-a940-4fbc-83c2-9b8140e3312c&pageName=ReportSectionc281d354339d98c1dda8">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Account creation
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Survey replies"  data-report-url="reportEmbed?reportId=1fbf5d3f-a940-4fbc-83c2-9b8140e3312c&pageName=ReportSection">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Survey replies
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Saved searches use"  data-report-url="reportEmbed?reportId=1fbf5d3f-a940-4fbc-83c2-9b8140e3312c&pageName=ReportSectionb93429d7140cc297392e">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Saved searches use
-                                    </a>
-                            </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Registrations & newsletters"  data-report-url="reportEmbed?reportId=2fe435c0-68e7-4698-bbf9-9fa6925746e9&pageName=ReportSection5897cea55cb9f1bdb43f">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Registrations & newsletters
-                                    </a>
-                            </li>
-                            </ul>
+                            <!--#include virtual="/admin/power-bi/inc-customers.inc"-->
                         </div><!-- col -->
 
 
@@ -574,6 +262,23 @@ Set rsInventoryIssues = objcmd.Execute()
         $("#load-report").attr("src",'https://app.powerbi.com/' + report_url + '&navContentPaneEnabled=false&filterPaneEnabled=false&autoAuth=true&ctid=06bc9374-9044-4ccb-8d1c-84eb80fc2e89&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLXVzLWNlbnRyYWwtYS1wcmltYXJ5LXJlZGlyZWN0LmFuYWx5c2lzLndpbmRvd3MubmV0LyJ9');
 	
 	}); 
+
+    // Notify customers on waiting list
+    $(document).on("click", "#notify-waiting-list", function(event){
+        $('#notify-waiting-list').html('<i class="fa fa-spinner fa-2x fa-spin"></i>');
+  
+        $.ajax({
+        dataType: "json",
+        url: "/admin/WaitingList_Notify.asp"
+        })
+        .done(function(json, msg ) {
+            $('#total-waiting').html(json.total);
+            $('#notify-waiting-list').html('Notify customers');
+        })
+        .fail(function(json, msg) {
+           alert("Failed to notify customers, code error");
+        });
+    });
 </script>
 <%
 else

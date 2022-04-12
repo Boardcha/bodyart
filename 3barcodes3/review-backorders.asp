@@ -26,7 +26,7 @@ Set rs_getsections = objCmd.Execute()
  <!--#include file="includes/scanners-header.asp" -->
 <div class="p-2">
 
-<!--#include virtual="/admin/invoices/inc-review-backorders.asp"-->
+<!--#include virtual="/includes/inc-review-backorders.inc"-->
 </div>
 
 
@@ -34,5 +34,5 @@ Set rs_getsections = objCmd.Execute()
 </body>
 </html>
 <script src="/js/jquery-3.3.1.min.js"></script>
-<script type="text/javascript" src="../js/bootstrap-v4.min.js"></script>
-<script type="text/javascript" src="/admin/scripts/review-backorders.js?v=040522"></script>
+<script type="text/javascript" src="/js/bootstrap-v4.min.js"></script>
+<!--#include virtual="/includes/review-backorders.asp"-->

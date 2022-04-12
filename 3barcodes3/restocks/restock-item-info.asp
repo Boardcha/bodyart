@@ -48,21 +48,27 @@ if request.form("item") <> "" then
         else 
             var_qty_log_text = "Scanned restock -  Duplicate item scan, did not add qtys again"
         end if '=== IF A PURCHASE ORDER IS FOUND
-    else '=== IF THE PURCHASE ORDER SCAN IS A 0 -- IF AN ITEM DOESN'T HAVE A PURCHASE ORDER, IT STILL NEEDS TO BE PUT IN STOCK. THESE ARE THINGS LIKE CUSTOMER RETURNS OR LOST AND FOUND ITEMS.=====================
-
-            var_qty_log_text = "Scanned restock -  Qty's were manually adjusted. Automated system did not adjust qty."
+    else '=== IF THE PURCHASE ORDER SCAN IS A 0 -- IF AN ITEM DOESN'T HAVE A PURCHASE ORDER, IT STILL NEEDS TO BE PUT IN STOCK. THESE ARE THINGS LIKE CUSTOMER RETURNS OR LOST AND FOUND ITEMS.=====================  
+    
+        var_qty_log_text = "New item or misc item scanned restock -  Qty's were manually inputted. Automated system did not adjust qty."
         
     end if '=== IF THE PURCHASE ORDER IS NOT 0
 
     '====== UPDATE EDITS LOG WITH QTY UPDATE INFORMATION ===================
+    if request.form("po_id") <> 0 then
+        var_po_id = request.form("po_id")
+    else
+        var_po_id = 0
+    end if
+
     Set objCmd = Server.CreateObject ("ADODB.Command")
     objCmd.ActiveConnection = DataConn
     objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, edit_date, product_id, detail_id, description, po_detailid) VALUES(?, GETDATE(), ?, ?, ?, ?)"
     objCmd.Parameters.Append(objCmd.CreateParameter("user_id",3,1,15, rsGetUser.Fields.Item("user_id").Value ))
     objCmd.Parameters.Append(objCmd.CreateParameter("product_id",3,1,15, rsGetItem.Fields.Item("ProductID").Value ))
     objCmd.Parameters.Append(objCmd.CreateParameter("detail_id",3,1,15, request.form("item")))
-    objCmd.Parameters.Append(objCmd.CreateParameter("var_qty_log_text",200,1,100, var_qty_log_text))
-    objCmd.Parameters.Append(objCmd.CreateParameter("po_id",3,1,20, request.form("po_id")))
+    objCmd.Parameters.Append(objCmd.CreateParameter("var_qty_log_text",200,1,200, var_qty_log_text))
+    objCmd.Parameters.Append(objCmd.CreateParameter("po_id",3,1,20, var_po_id ))
     objCmd.Execute 
 
 end if '==== if info in scanned field is present

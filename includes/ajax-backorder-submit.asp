@@ -1,8 +1,12 @@
 <%@LANGUAGE="VBSCRIPT" CODEPAGE="1252"%>
-<!--#include file="../../Connections/bodyartforms_sql_ADMIN.asp" -->
-<!--#include virtual="emails/function-send-email.asp"-->
+<!--#include virtual="/Connections/bodyartforms_sql_ADMIN.asp" -->
+<!--#include virtual="/emails/function-send-email.asp"-->
 
 <%
+'====== SINCE THIS FILE IS IN ROOT DIRECTORY, MAKE SURE THAT USER IS LOGGED IN VIA ADMIN IN ORDER TO ACCESS CODE ON THIS page
+
+if request.cookies("adminuser") = "yes" AND  request.form("orderdetailid") <> "" then
+
 orderdetailid = request.form("orderdetailid")
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
@@ -105,8 +109,13 @@ objCmd.Parameters.Append(objCmd.CreateParameter("Code",200,1,30,var_cert_code ))
 objCmd.Parameters.Append(objCmd.CreateParameter("Email",200,1,30, var_customer_email ))
 objCmd.Execute()
 %>
-<!--#include virtual="emails/email_variables.asp"-->
+<!--#include virtual="/emails/email_variables.asp"-->
 <%
+
+response.write "LOGGED IN"
+else
+response.write "NOT LOGGED IN"
+end if '===== user_name <> ""
 
 DataConn.Close()
 Set rsGetInfo = Nothing

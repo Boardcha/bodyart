@@ -212,7 +212,7 @@ Set rsNavWaitingList = objCmd.Execute()
                                                                         <div class="col-xxs-6 col-sm-4 col-lg-2 mx-lg-auto">
                                                                                 <a class="h6 d-block pb-1 border-bottom border-secondary track-basics-dropdown track-nav-loose-ends" href="/products.asp?jewelry=balls" id="image-loose-ends">
                                                                                     <img data-src="/images/navigation/navi-400-ends-o-rings.jpg" class="img-fluid img-75 d-block lazyload" />
-                                                                                        Balls, ends, &amp; beads <span class="d-block d-xl-inline  ml-xl-4"><span class="badge badge-secondary font-weight-normal">View
+                                                                                        Balls, ends, &amp; replacement captive beads <span class="d-block d-xl-inline  ml-xl-4"><span class="badge badge-secondary font-weight-normal">View
                                                                                                 all</span></span>
                                                                                 </a>
                                                                                 <a class="dropdown-item track-basics-dropdown track-nav-loose-ends" href="/products.asp?jewelry=basics&amp;jewelry=balls" id="ends-basic">
@@ -234,7 +234,7 @@ Set rsNavWaitingList = objCmd.Execute()
                                                                                                 Custom order ends
                                                                                         </a>
                                                                                         <a class="dropdown-item track-basics-dropdown track-nav-loose-ends" href="/products.asp?jewelry=beads" id="ends-beads">
-                                                                                                Replacement beads
+                                                                                                Replacement captive  beads
                                                                                         </a>
                                                                                         <a class="dropdown-item track-basics-dropdown track-nav-loose-ends" href="/products.asp?jewelry=charms" id="ends-charms">
                                                                                                 Charms

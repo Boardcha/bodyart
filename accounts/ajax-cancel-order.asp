@@ -5,13 +5,13 @@ invoiceid = request.form("id")
 
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT * FROM sent_items WHERE ID = ? AND ship_code = 'paid' AND (shipped = 'Pending...' OR shipped = 'Pending shipment' OR shipped = 'Review' OR shipped = 'CUSTOM ORDER IN REVIEW')"
+	objCmd.CommandText = "SELECT * FROM sent_items WHERE ID = ? AND ship_code = 'paid' AND (shipped = 'Pending...' OR shipped = 'Pending shipment' OR shipped = 'Review' OR shipped = 'CUSTOM ORDER IN REVIEW' OR shipped = 'CUSTOM COLOR IN PROGRESS')"
 	objCmd.Parameters.Append(objCmd.CreateParameter("InvoiceID",3,1,10,invoiceid))
 	Set rsGetOrder = objCmd.Execute()
 	
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT sent_items.shipping_rate - sent_items.total_preferred_discount - sent_items.total_coupon_discount - sent_items.total_free_credits - sent_items.total_returns + sent_items.total_sales_tax + sent_items.total_store_credit + sent_items.total_gift_cert AS total_discount_taxes, SUM(TBL_OrderSummary.qty * TBL_OrderSummary.item_price) AS subtotal FROM sent_items INNER JOIN TBL_OrderSummary ON sent_items.ID = TBL_OrderSummary.InvoiceID WHERE (sent_items.ID = ?) GROUP BY sent_items.shipping_rate - sent_items.total_preferred_discount - sent_items.total_coupon_discount - sent_items.total_free_credits - sent_items.total_returns + sent_items.total_sales_tax + sent_items.total_store_credit + sent_items.total_gift_cert"
+	objCmd.CommandText = "SELECT sent_items.shipping_rate - sent_items.total_preferred_discount - sent_items.total_coupon_discount - sent_items.total_free_credits - sent_items.total_returns + sent_items.total_sales_tax + sent_items.total_store_credit + sent_items.total_gift_cert AS total_discount_taxes, SUM(TBL_OrderSummary.qty * TBL_OrderSummary.item_price + (TBL_OrderSummary.qty * TBL_OrderSummary.anodization_fee)) AS subtotal FROM sent_items INNER JOIN TBL_OrderSummary ON sent_items.ID = TBL_OrderSummary.InvoiceID WHERE (sent_items.ID = ?) GROUP BY sent_items.shipping_rate - sent_items.total_preferred_discount - sent_items.total_coupon_discount - sent_items.total_free_credits - sent_items.total_returns + sent_items.total_sales_tax + sent_items.total_store_credit + sent_items.total_gift_cert"
 	objCmd.Parameters.Append(objCmd.CreateParameter("InvoiceID",3,1,10,invoiceid))
 	Set rsGetOrderTotal = objCmd.Execute()
 	

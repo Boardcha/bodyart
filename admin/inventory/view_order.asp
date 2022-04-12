@@ -22,12 +22,13 @@ end if
 ' Get most recent purchase order id #
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT (jewelry.title + ' ' + ISNULL(ProductDetails.Gauge, '') + ' ' + ISNULL(ProductDetails.Length, '') + ' ' + ISNULL(ProductDetails.ProductDetail1, '')) as description, tbl_po_details.po_qty, tbl_po_details.po_qty_vendor, ProductDetails.detail_code, ProductDetails.ProductDetailID, ProductDetails.BinNumber_Detail, ProductDetails.location, TBL_Barcodes_SortOrder.ID_Description, dbo.TBL_PurchaseOrders.Brand FROM dbo.jewelry INNER JOIN dbo.ProductDetails ON dbo.jewelry.ProductID = dbo.ProductDetails.ProductID INNER JOIN dbo.tbl_po_details ON dbo.ProductDetails.ProductDetailID = dbo.tbl_po_details.po_detailid INNER JOIN dbo.TBL_PurchaseOrders ON dbo.tbl_po_details.po_orderid = dbo.TBL_PurchaseOrders.PurchaseOrderID LEFT OUTER JOIN dbo.TBL_Barcodes_SortOrder ON dbo.ProductDetails.DetailCode = dbo.TBL_Barcodes_SortOrder.ID_Number WHERE tbl_po_details.po_orderid = ? AND tbl_po_details.po_qty > 0 ORDER BY 'description' ASC"
+objCmd.CommandText = "SELECT (jewelry.title + ' ' + ISNULL(ProductDetails.Gauge, '') + ' ' + ISNULL(ProductDetails.Length, '') + ' ' + ISNULL(ProductDetails.ProductDetail1, '')) as description, tbl_po_details.po_qty, tbl_po_details.po_qty_vendor, ProductDetails.detail_code, ProductDetails.ProductDetailID, ProductDetails.BinNumber_Detail, ProductDetails.location, po_invoice_number,  TBL_Barcodes_SortOrder.ID_Description, TBL_PurchaseOrders.Brand, (SELECT PreOrder_Desc FROM TBL_OrderSummary WHERE OrderDetailID = tbl_po_details.po_invoice_order_detailid) AS PreOrder_Desc  FROM jewelry INNER JOIN ProductDetails ON jewelry.ProductID = ProductDetails.ProductID INNER JOIN tbl_po_details ON ProductDetails.ProductDetailID = tbl_po_details.po_detailid INNER JOIN TBL_PurchaseOrders ON tbl_po_details.po_orderid = TBL_PurchaseOrders.PurchaseOrderID LEFT OUTER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number WHERE tbl_po_details.po_orderid = ? AND tbl_po_details.po_qty > 0 ORDER BY jewelry ASC, po_invoice_number ASC, 'description' ASC"
 objCmd.Parameters.Append(objCmd.CreateParameter("po_new_id",3,1,10,var_po_id))
 set rsGetItems = objCmd.Execute()
 %>
 <html class="simple-table">
 <head>
+	<title>View Order</title>
 <style>
 .simple-table body {background-color: #fff; color: #000; font-family: sans-serif,verdana,arial; font-size: 1em; padding: 20px;}
 .simple-table table {table-layout: fixed;}
@@ -45,9 +46,10 @@ Georgetown, TX  78626<br />
 <table class="simple-table" style="border-collapse:collapse;">
 <thead>
   <tr>
-    <th>Qty</th>
-    <th>Item</th>
+    <th>Invoice #</th>
+	<th>Qty</th>
 	<th>SKU / Code</th>
+    <th>Item</th>
 	<% if rsGetItems.Fields.Item("brand").Value = "Etsy" then %>
 	<th>Location</th>
 	<% end if%>
@@ -57,6 +59,11 @@ Georgetown, TX  78626<br />
 While NOT rsGetItems.EOF 
 %>
   <tr>
+	  <td align="left">
+		<% if  rsGetItems("po_invoice_number") > 0 then %>
+			<%= rsGetItems("po_invoice_number") %>
+		<% end if %>
+	</td>
     <td align="center">
 	<%If rsGetItems.Fields.Item("po_qty_vendor").Value > 0 Then
 		Response.Write rsGetItems.Fields.Item("po_qty_vendor").Value
@@ -64,12 +71,18 @@ While NOT rsGetItems.EOF
 		Response.Write rsGetItems.Fields.Item("po_qty").Value
 	End If%>
 	</td>
-    <td align="left">
-		<%= rsGetItems.Fields.Item("description").Value %>
-	</td>
-    <td align="left">
+	<td align="left">
 		<%= rsGetItems.Fields.Item("detail_code").Value %>
     </td>
+    <td align="left">
+		<% if  rsGetItems("po_invoice_number") > 0 then %>
+			<%=Replace(rsGetItems("description"), "CUSTOM ORDER ", "")%>
+			<br>
+			 Specs: <%= rsGetItems("PreOrder_Desc") %>
+		<% else %>
+			<%= rsGetItems("description") %>
+		<% end if %>
+	</td>
 	<% if rsGetItems.Fields.Item("brand").Value = "Etsy" then %>
     <td align="left">
 		<% if rsGetItems.Fields.Item("BinNumber_Detail").Value <> 0 then %> 

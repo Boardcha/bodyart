@@ -60,6 +60,7 @@ store_credit_refund_due = 0
 gift_cert_refund_due = 0
 cc_refund_due = 0
 authnet_settleAmount = 0
+color_addon_fee = 0
 
 ' ===== Get order authorized total from authorize.net 
 if db_transactionid <> "" then
@@ -100,6 +101,8 @@ end if
 
                 LineItem = rsGetOrderItems.Fields.Item("item_price").Value * request.form(item)
                 var_subtotal = var_subtotal + LineItem
+
+                color_addon_fee = color_addon_fee + (rsGetOrderItems("qty") * rsGetOrderItems("anodization_fee"))
 
                 if rsGetOrderItems.Fields.Item("customorder").Value = "yes" then
                     preorder_subtotal = (rsGetOrderItems.Fields.Item("item_price").Value * request.form(item)) + preorder_subtotal 
@@ -203,7 +206,7 @@ end if
     
 
     ' ====== Find out new total
-    subtotal_plus_shipping_and_salestax = subtotal_less_discounts + sales_tax + shipping_rate + additional_amount
+    subtotal_plus_shipping_and_salestax = subtotal_less_discounts + sales_tax + shipping_rate + additional_amount + color_addon_fee
     ' ========= CALCULATE whether refund goes all to auth.net or some goes to store credit / gift cert
     if CCur(subtotal_plus_shipping_and_salestax) <= CCur(authnet_settleAmount) then
         cc_refund_due = subtotal_plus_shipping_and_salestax
@@ -243,6 +246,7 @@ end if
     "shipping_rate": <%= formatnumber(shipping_rate) %>,
     "subtotal_plus_shipping_and_salestax": <%= replace(formatnumber(subtotal_plus_shipping_and_salestax), ",", "") %>,
     "additional_amount": <%= formatnumber(additional_amount) %>,
+    "color_addon_fee": <%= formatnumber(color_addon_fee) %>,
     "db_store_credit": <%= formatnumber(db_store_credit) %>,
     "store_credit_refund_due": <%= formatnumber(store_credit_refund_due) %>,
     "gift_cert_refund_due": <%= formatnumber(gift_cert_refund_due) %>,

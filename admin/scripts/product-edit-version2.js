@@ -1318,5 +1318,19 @@ $(document).on("click", '#reviewed', function() {
 
 });	
 
+	// BEGIN Alter barcode query for new item labels
+	$(document).on("click", '#update_query_newlabels', function() { 
+	
+		$.ajax({
+			method: "post",
+			url: "/admin/barcodes_modifyviews.asp?type=new_item_labels",
+			data: {productid: $('#productid').val()}
+		})
+		.done(function() {
+			$('#msg-query-update').html('<span class="alert alert-success px-2 py-0"><i class="fa fa-check"></i></span>').show().delay(2500).fadeOut("slow");
+		});
+	
+	});	// END Alter barcode query for new item labels
+
 
 

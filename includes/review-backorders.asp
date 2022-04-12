@@ -1,3 +1,8 @@
+<%
+'====== SINCE THIS FILE IS IN ROOT DIRECTORY, MAKE SURE THAT USER IS LOGGED IN VIA ADMIN IN ORDER TO ACCESS CODE ON THIS page
+if user_name <> "" then
+%>
+<script type="text/javascript">
 // Change submit backorder modal
 $(document).on("click", ".btn-update-bo-modal", function(event){
     var orderdetailid = $(this).attr("data-itemid");
@@ -27,7 +32,7 @@ $(document).on("click", "#btn-submit-bo", function(event){
 
     $.ajax({
     method: "POST",
-    url: "/admin/invoices/ajax-backorder-submit.asp",
+    url: "/includes/ajax-backorder-submit.asp",
     data: {orderdetailid:orderdetailid, bo_reason:bo_reason, bo_qty:bo_qty}
     })
     .done(function(msg ) {
@@ -56,7 +61,7 @@ $(document).on("click", ".btn-clear-bo", function(event){
 
     $.ajax({
     method: "POST",
-    url: "/admin/invoices/ajax-backorder-process.asp",
+    url: "/includes/ajax-backorder-process.asp",
     data: {item: item, agenda: agenda, invoice: invoice, stock_qty: stock_qty, detailid: productdetailid}
     })
     .done(function(msg ) {
@@ -67,3 +72,7 @@ $(document).on("click", ".btn-clear-bo", function(event){
         $('#spinner_' + item).hide();
     });
 }); // End CLear backorder
+</script>
+<%
+end if
+%>

@@ -31,14 +31,8 @@ rsGetRecords.Open objCmd
 <% If NOT rsGetRecords.EOF Then %>
 <h5 class="mt-3 mb-2"><%= rsGetRecords.RecordCount %> reported issues</h5>
 
-<div class="card my-3">
-    <div class="card-header h5">
-      Alter label queries
-    </div>
-    <div class="card-body">
-      <!--#include file="labels/inc-update-label-queries.asp" -->
-    </div>
-  </div> 
+  <button class="btn btn-sm btn-secondary d-inline-block mb-3" id="update_query_labels" title="Update barcode query for label printing"><i class="fa fa-label fa-lg mr-1"></i> Print requested replacement labels</button>
+  <span class="mb-3 ml-1" id="msg-query-update"></span>
 
 <table class="table table-striped table-hover">
 	<thead class="thead-dark">
@@ -53,6 +47,10 @@ rsGetRecords.Open objCmd
 	</thead>
             <% 
 While NOT rsGetRecords.EOF 
+
+if instr(rsGetRecords("inventory_issue_description"), "Print new scanning label") > 0 then
+  detailids = detailids & " OR ProductDetailID = " & rsGetRecords("ProductDetailID")
+end if
 %>
         
 	<tr id="row_<%= rsGetRecords.Fields.Item("OrderDetailID").Value %>">
@@ -80,7 +78,7 @@ While NOT rsGetRecords.EOF
 Wend
 %>
           </table>
-     
+          <input type="hidden" id="detailids" value="<%= replace(detailids, "OR", "AND",1 , 1) %>">
         <% else ' if there are no records to review %>
 		<h5 class="mt-3 mb-2">
 			No reported issues
@@ -110,6 +108,20 @@ Not accessible
                 
             })
     })
+
+    	// BEGIN Alter barcode query for item labels
+      $(document).on("click", '#update_query_labels', function() { 
+      
+      $.ajax({
+        method: "post",
+        url: "/admin/barcodes_modifyviews.asp?type=labels_by_detailid",
+        data: {detailids: $('#detailids').val()}
+      })
+      .done(function() {
+        $('#msg-query-update').html('<span class="alert alert-success px-2 py-0"><i class="fa fa-check"></i></span>').show().delay(2500).fadeOut("slow");
+      });
+
+    });	// END Alter barcode query for item labels
 
 </script>
 </body>

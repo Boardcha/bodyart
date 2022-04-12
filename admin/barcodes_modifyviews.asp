@@ -77,6 +77,21 @@ Set rsBarcodes = DataConn.Execute(SqlString)
 
 end if 
 
+if request.queryString("type") = "new_item_labels" then
+
+	SqlString = "ALTER VIEW QRY_Labels_Orders AS SELECT TOP (100) PERCENT ProductDetails.ProductDetailID, ProductDetails.ProductDetail1, ProductDetails.location,  ProductDetails.BinNumber_Detail, 0 as 'PurchaseOrderID', ProductDetails.qty as 'po_qty', ProductDetails.Gauge, ProductDetails.Length, ProductDetails.Gauge + ' ' + ProductDetails.Length + ' ' + ProductDetails.ProductDetail1 + ' ' + jewelry.title as title, jewelry.title as title_sort,  TBL_Barcodes_SortOrder.ID_Description FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number WHERE ProductDetails.ProductID = " & request.form("productid") & " ORDER BY title_sort" 
+	Set rsBarcodes = DataConn.Execute(SqlString)
+
+end if 
+
+'=========  LABELS BY PRODUCT DETAIL ID ONLY ============================
+if request.queryString("type") = "labels_by_detailid" then
+
+	SqlString = "ALTER VIEW QRY_Barcodes_Regular AS SELECT TOP (100) PERCENT CAST(dbo.ProductDetails.DetailCode AS varchar(15)) + '' + CAST(dbo.ProductDetails.location AS varchar(15)) AS locationBarcode, ProductDetails.location, dbo.ProductDetails.ProductDetailID, dbo.ProductDetails.ProductDetail1 + ' ' + dbo.ProductDetails.Length + ' ' + dbo.jewelry.title AS title, dbo.ProductDetails.ProductDetail1,  dbo.ProductDetails.Gauge, dbo.ProductDetails.Length, dbo.TBL_Barcodes_SortOrder.ID_Description FROM dbo.jewelry INNER JOIN dbo.ProductDetails ON dbo.jewelry.ProductID = dbo.ProductDetails.ProductID LEFT OUTER JOIN dbo.TBL_Barcodes_SortOrder ON dbo.ProductDetails.DetailCode = dbo.TBL_Barcodes_SortOrder.ID_Number WHERE (dbo.jewelry.customorder <> 'yes') " & request.form("detailids") & " ORDER BY dbo.ProductDetails.ProductDetailID DESC, dbo.ProductDetails.location ASC" 
+	Set rsBarcodes = DataConn.Execute(SqlString)
+
+end if
+
 
 if request.Form("type") <> "" then
 	

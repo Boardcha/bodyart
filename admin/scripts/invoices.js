@@ -106,7 +106,7 @@
 	
 		$.ajax({
 		method: "POST",
-		url: "invoices/ajax-backorder-submit.asp",
+		url: "/includes/ajax-backorder-submit.asp",
 		data: {orderdetailid:orderdetailid, bo_reason:bo_reason, bo_qty:bo_qty}
 		})
 		.done(function(msg ) {
@@ -164,7 +164,7 @@
 		$.ajax({
 		method: "POST",
 		dataType: "json",
-		url: "invoices/ajax-backorder-process.asp",
+		url: "/includes/ajax-backorder-process.asp",
 		data: {item: item, agenda: agenda, invoice: invoice, qty: qty, detailid: detailid, price: price, total: total, origprice: origprice, card_number: card_number, exchange_detailid: exchange_detailid, exchange_productid: exchange_productid, exchange_qty: exchange_qty, exchange_origitem: exchange_origitem, exchange_price_diff: exchange_price_diff, exchange_agenda: exchange_agenda}
 		})
 		.done(function( json, msg ) {
@@ -694,6 +694,7 @@ localStorage["copy_details"] = "" // set initial value to nothing
 				' + shipping $' + json.shipping_rate.toFixed(2) + 
 				' + additional amt $' + json.additional_amount.toFixed(2) +
 				' + tax $' + json.sales_tax.toFixed(2) + 
+				' + coloring fee $' + json.color_addon_fee.toFixed(2) + 
 				' ) $' + json.subtotal_plus_shipping_and_salestax.toFixed(2) + 
 				'<br/>Auth.net original charge $' + json.authnet_settleAmount.toFixed(2) +
 				'<br/>Gift cert refund due ( From code ' + json.gift_cert_code + 

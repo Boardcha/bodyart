@@ -114,7 +114,7 @@ If var_access_level = "Admin" or var_access_level = "Manager" or var_access_leve
 	<ul class="navbar-nav ml-auto">
 	<%  
 	If user_name <> "Rebekah" and total_backorders_to_review > 0  then  %>
-	<li class="nav-item"><a class="nav-link border-right border-light bg-secondary" href="/admin/review-backorders.asp">Backorders<span class="badge badge-warning ml-2"><%= total_backorders_to_review %></span> </a></li>
+	<li class="nav-item"><span class="nav-link text-light border-right border-light">Backorders<span class="badge badge-warning ml-2"><%= total_backorders_to_review %></span> </span></li>
 	<% end if  %>	
 
 <% if  user_name = "Adrienne" or user_name = "Melissa" or user_name = "Andres" or  user_name = "Amanda" or  user_name = "Ellen"    then %>

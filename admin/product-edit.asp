@@ -261,7 +261,10 @@ $(document).ready(function(){
 					  </div>
                     <div class="col"><h4>#<%=(rs_getproduct.Fields.Item("ProductID").Value)%>
                         <a class="btn btn-sm btn-secondary d-inline-block" href="?ProductID=<%= rs_getproduct.Fields.Item("ProductID").Value - 1%>"><i class="fa fa-angle-left fa-lg"></i></a>
-						<a class="btn btn-sm btn-secondary d-inline-block" href="?ProductID=<%= rs_getproduct.Fields.Item("ProductID").Value + 1%>"><i class="fa fa-angle-right fa-lg"></i></a></h4> 
+						<a class="btn btn-sm btn-secondary d-inline-block" href="?ProductID=<%= rs_getproduct.Fields.Item("ProductID").Value + 1%>"><i class="fa fa-angle-right fa-lg"></i></a>
+						<button class="btn btn-sm btn-secondary d-inline-block" id="update_query_newlabels" title="Update barcode query for label printing"><i class="fa fa-label fa-lg"></i></button>
+						<span class="ml-1" id="msg-query-update"></span>
+					</h4> 
 						<div class="">Added <%=(rs_getproduct.Fields.Item("date_added").Value)%> by <%= rs_getproduct("added_by") %></div>
 						<div>
 							<% if rs_getproduct("reviewed_by_1") <> "" then %>
@@ -1764,7 +1767,7 @@ end if
 <script type="text/javascript" src="/js/chosen/chosen.jquery.js"></script>
 <script type="text/javascript" src="scripts/dropzone.js"></script>
 <script type="text/javascript" src="scripts/jquery.validate.min.js"></script>
-<script type="text/javascript" src="scripts/product-edit-version2.js?v=102121"></script>
+<script type="text/javascript" src="scripts/product-edit-version2.js?v=040622"></script>
 </html>
 <% If var_access_level = "Packaging" then  %>
 	<script type="text/javascript">

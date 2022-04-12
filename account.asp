@@ -206,9 +206,6 @@ For intRecord = 1 To rsGetOrders.PageSize
 	if rsGetOrders.Fields.Item("shipped").Value = "CUSTOM ORDER IN REVIEW" then
 		var_order_status = "Your custom ordered items are currently under review for approval before being submitted to the manufacturer to be made."
 	end if
-	if rsGetOrders.Fields.Item("shipped").Value = "CUSTOM ORDER APPROVED" then
-		var_order_status = "Your custom ordered items have been reviewed and approved and will soon be sent to the manufacturer to be made for you."
-	end if
 	if rsGetOrders.Fields.Item("shipped").Value = "ON ORDER" then
 		var_order_status = "Your custom ordered items have been sent to the manufacturer to be made and at this time we are waiting for them to arrive. We'll ship them to you as soon as they come in!"
 	end if	
@@ -335,7 +332,7 @@ if paid_status = "paid" and isnull(orderscanned) and rsGetOrders.Fields.Item("pa
 <% 
 end if
 
-if paid_status = "paid" and rsGetOrderTotals.Fields.Item("store_credit").Value = 0 and rsGetOrderTotals.Fields.Item("gift_cert").Value = 0 and (varstatus = "Pending..." OR varstatus = "Pending shipment" OR varstatus = "Review" OR varstatus = "CUSTOM ORDER IN REVIEW") then
+if paid_status = "paid" and rsGetOrderTotals.Fields.Item("store_credit").Value = 0 and rsGetOrderTotals.Fields.Item("gift_cert").Value = 0 and (varstatus = "Pending..." OR varstatus = "Pending shipment" OR varstatus = "Review" OR varstatus = "CUSTOM ORDER IN REVIEW" OR varstatus = "CUSTOM COLOR IN PROGRESS") then
 
 if rsContainsGiftCert.BOF and rsContainsGiftCert.EOF then
 %>

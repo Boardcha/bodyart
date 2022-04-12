@@ -7,7 +7,7 @@ bootstrapped = "yes"
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
-objCmd.CommandText = "SELECT * FROM vw_sum_order_orderhistory WHERE over_150 = 1 AND shipped <> 'CUSTOM ORDER APPROVED' AND shipped <> 'On Order' AND shipped <> 'ON HOLD' ORDER BY ID DESC"
+objCmd.CommandText = "SELECT * FROM vw_sum_order_orderhistory WHERE over_150 = 1 AND shipped <> 'On Order' AND shipped <> 'ON HOLD' ORDER BY ID DESC"
 
 
 set rsGetRecords = Server.CreateObject("ADODB.Recordset")

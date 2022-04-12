@@ -290,7 +290,6 @@ if not rsGetOrder.eof then
 						<option value="Pending...">Pending...</option>
 						<option value="Lost package">Lost package</option>
 						<option value="CUSTOM ORDER IN REVIEW">Custom items in review</option>
-						<option value="CUSTOM ORDER APPROVED">Custom items approved to order</option>
 						<option value="ON ORDER">Custom items have been ordered</option>
 						<option value="CUSTOM COLOR IN PROGRESS">Items need anodizing</option>
 						<option value="RETURN">Return (Waiting for return)</option>
@@ -841,13 +840,13 @@ end if
 		</td>
 		<% if rsGetOrder.Fields.Item("total_preferred_discount").Value <> 0 or rsGetOrder.Fields.Item("total_coupon_discount").Value <> 0 then
 				' if a coupon was used pass the discounted price to the BO page, if not use the regular retail price
-				bo_price = discount_price
+				bo_price = discount_price + (rsGetOrderItems("qty") * rsGetOrderItems("anodization_fee"))
 		%>
 		<td>
 			<span class="alert alert-danger px-2 py-1"><%= FormatCurrency(discount_price, -1, -2, -0, -2) %></span>
 		</td>
 		<% else 
-			bo_price = LineItem
+			bo_price = LineItem + (rsGetOrderItems("qty") * rsGetOrderItems("anodization_fee"))
 		%>
 		<td>&nbsp;</td>
 		<% end if %>
@@ -950,7 +949,11 @@ end if
 	</tr>
 <%
 	SumLineItem = SumLineItem + LineItem
-	sum_anodization_fees = sum_anodization_fees + rsGetOrderItems("qty") * rsGetOrderItems("anodization_fee")
+
+	if rsGetOrderItems.Fields.Item("returned").Value = 0 then
+		sum_anodization_fees = sum_anodization_fees + rsGetOrderItems("qty") * rsGetOrderItems("anodization_fee")
+	end if
+	
 rsGetOrderItems.MoveNext()
 Wend
 	InvoiceTotal = SumLineItem + (rsGetOrder.Fields.Item("shipping_rate").Value) - (rsGetOrder.Fields.Item("coupon_amt").Value)
@@ -1478,7 +1481,7 @@ end if ' if not rsGetOrder.eof then
 
 </body>
 </html>
-<script type="text/javascript" src="scripts/invoices.js?v=122321"></script>
+<script type="text/javascript" src="scripts/invoices.js?v=040922"></script>
 <% if request.querystring("bo_item") <> "" then %>
 	<script type="text/javascript">
 		$('.bo_orange_' + <%= request.querystring("bo_item") %>).trigger('click');

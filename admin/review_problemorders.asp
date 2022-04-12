@@ -119,7 +119,6 @@ Not accessible
 </div>
 <!--#include file="includes/inc_scripts.asp"-->
 <script type="text/javascript" src="scripts/generic_auto_update_fields.js"></script>
-<script type="text/javascript" src="scripts/review-backorders.js?v=051720"></script>
 <script type="text/JavaScript" src="/js/jQuery.print.min.js"></script>
 <script type="text/javascript">
 	//url to to do auto updating

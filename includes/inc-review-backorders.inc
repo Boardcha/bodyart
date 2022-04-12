@@ -1,4 +1,6 @@
 <%
+if user_name <> "" then
+
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
 objCmd.CommandText = "SELECT InvoiceID, jewelry.ProductID, DetailID, TBL_OrderSummary.qty, title, ProductDetail1, ProductDetails.qty AS stock_qty, OrderDetailID, backorder, notes, customer_first, email, ID_Description, BinNumber_Detail, Gauge, Length, picture, ProductDetails.ProductDetailID, BackorderReview, reason_for_backorder, PackagedBy, location, ISNULL(replace(jewelry.type,'None',''),'') + ' ' + ISNULL(jewelry.title,'') + ' ' + ISNULL(ProductDetails.ProductDetail1,'') + ' ' + ISNULL(ProductDetails.Gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') as 'item_description' FROM TBL_OrderSummary INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID INNER JOIN ProductDetails ON TBL_OrderSummary.DetailID = ProductDetails.ProductDetailID INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number WHERE BackorderReview = 'Y' ORDER BY ProductDetails.BinNumber_Detail ASC, TBL_Barcodes_SortOrder.ID_SortOrder, ID_Description ASC, location ASC, ProductDetails.ProductDetailID" 
@@ -18,7 +20,7 @@ While NOT rsGetBackorderReviews.EOF
 		<div class="col-md-3 col-sm-12 p-1" id="row_<%= rsGetBackorderReviews("OrderDetailID") %>">
 			<div class="card  bg-light h-100">
 				<div class="card-header">
-					<div class="d-none d-md-block">
+					<div>
 						<a class="text-secondary" href="/admin/invoice.asp?ID=<%=(rsGetBackorderReviews.Fields.Item("InvoiceID").Value)%>">Invoice # <%=(rsGetBackorderReviews.Fields.Item("InvoiceID").Value)%></a>&nbsp;&nbsp;(<a class="text-secondary" href="/admin/order history.asp?var_email=<%=(rsGetBackorderReviews.Fields.Item("email").Value)%>" target="_blank">History</a>)
 					</div>
 					<div class="h5">
@@ -80,4 +82,6 @@ Wend
 	<% End If ' end Not rsGetBackorderReviews.EOF Or NOT rsGetBackorderReviews.BOF 
 rsGetBackorderReviews.Close()
 Set rsGetBackorderReviews = Nothing
+
+end if '======  user_name <> ""
 	%>
