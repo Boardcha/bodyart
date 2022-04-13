@@ -36,7 +36,7 @@ While NOT rsGetBackorderReviews.EOF
 					<div class=" clearfix">
 						<img class="float-left mr-2 mb-2" src="https://bafthumbs-400.bodyartforms.com/<%= rsGetBackorderReviews("picture") %>" style="width:70px;height:auto">
 				
-						<span class="d-block font-weight-bold">Current stock</span> <input class="form-control" style="width: 100px" type="text" id="deny_qty_<%=rsGetBackorderReviews.Fields.Item("ProductDetailID").Value %>" value="<%=(rsGetBackorderReviews.Fields.Item("stock_qty").Value)%>">
+						<span class="d-block font-weight-bold">Current stock</span> <input class="form-control" style="width: 100px" type="text" id="deny_qty_<%= rsGetBackorderReviews("ProductDetailID") %>" value="<%=(rsGetBackorderReviews.Fields.Item("stock_qty").Value)%>">
 					</div>
 					<div class="small">
 						<strong>Item:</strong> <%=(rsGetBackorderReviews.Fields.Item("title").Value)%>&nbsp;<%=(rsGetBackorderReviews.Fields.Item("Gauge").Value)%>&nbsp;<%=(rsGetBackorderReviews.Fields.Item("Length").Value)%>&nbsp;&nbsp;<%=(rsGetBackorderReviews.Fields.Item("ProductDetail1").Value)%><br>

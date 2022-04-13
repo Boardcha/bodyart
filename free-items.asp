@@ -9,7 +9,7 @@ var_photo_url = "https://bafthumbs-400.bodyartforms.com"
 
 SQL = _
 "SELECT * FROM(" & _
-	"SELECT jewelry.ProductID, jewelry.title, ProductDetails.ProductDetailID, ProductDetails.price, ProductDetails.qty, ProductDetails.ProductDetail1, ProductDetails.Gauge, jewelry.picture, ProductDetails.detail_code, ProductDetails.Free_QTY, ProductDetails.free, " & _
+	"SELECT jewelry.ProductID, jewelry.title, ProductDetails.ProductDetailID, ProductDetails.price, ProductDetails.qty, ProductDetails.ProductDetail1, ProductDetails.Gauge, jewelry.picture, jewelry.picture_400, ProductDetails.detail_code, ProductDetails.Free_QTY, ProductDetails.free, " & _
 	"ROW_NUMBER() OVER (PARTITION BY jewelry.ProductID, ProductDetails.free ORDER BY jewelry.ProductID DESC) AS [ROWNUMBER], " & _
 	"Count(jewelry.ProductID) OVER (PARTITION BY jewelry.ProductID) AS [ROWCOUNT] " & _
 	"FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID " & _
@@ -54,7 +54,7 @@ Set rsGetRecords = objCmd.Execute()
 						<div class="row">	
 								<div class="position-relative">
 									
-									<img class="img-fluid w-100 <% if lazy_count > 20 then %> lazyload <% end if %>" <% if lazy_count > 20 then %> src="/images/image-placeholder.png" data-src="<%= var_photo_url %>/<%=(rsGetRecords("picture"))%>" <% else %> src="<%= var_photo_url %>/<%=(rsGetRecords("picture"))%>" <% end if %> title="<%=(rsGetRecords("title"))%>" alt="<%=(rsGetRecords("title"))%>" />
+									<img class="img-fluid w-100 <% if lazy_count > 20 then %> lazyload <% end if %>" <% if lazy_count > 20 then %> src="/images/image-placeholder.png" data-src="<%= var_photo_url %>/<%=(rsGetRecords("picture_400"))%>" <% else %> src="<%= var_photo_url %>/<%=(rsGetRecords("picture_400"))%>" <% end if %> title="<%=(rsGetRecords("title"))%>" alt="<%=(rsGetRecords("title"))%>" />
 
 								</div>
 						</div>					

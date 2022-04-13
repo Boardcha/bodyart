@@ -16,7 +16,7 @@ if sql <> "" then
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT p.ProductDetailID, j.ProductID, j.title, j.largepic, j.picture, j.material, j.description, j.customorder, p.price, ShowTextLogo, brandname, SaleDiscount, flare_type, pair, gauge, length, img_full, ProductDetail1, qty, GaugeOrder, material FROM jewelry AS j INNER JOIN ProductDetails AS p ON j.ProductID = p.ProductID INNER JOIN dbo.TBL_Companies AS b ON j.brandname = b.name  LEFT OUTER JOIN tbl_images AS i ON p.img_id = i.img_id INNER JOIN TBL_GaugeOrder AS g ON p.Gauge = g.GaugeShow WHERE jewelry <> N'save' AND j.active = 1 AND p.active = 1 AND customorder <> 'yes' AND qty > 0 AND " + sql + " ORDER BY ProductID DESC, GaugeOrder ASC"
+objCmd.CommandText = "SELECT p.ProductDetailID, j.ProductID, j.title, j.largepic, j.picture, j.picture_400, j.material, j.description, j.customorder, p.price, ShowTextLogo, brandname, SaleDiscount, flare_type, pair, gauge, length, img_full, ProductDetail1, qty, GaugeOrder, material FROM jewelry AS j INNER JOIN ProductDetails AS p ON j.ProductID = p.ProductID INNER JOIN dbo.TBL_Companies AS b ON j.brandname = b.name  LEFT OUTER JOIN tbl_images AS i ON p.img_id = i.img_id INNER JOIN TBL_GaugeOrder AS g ON p.Gauge = g.GaugeShow WHERE jewelry <> N'save' AND j.active = 1 AND p.active = 1 AND customorder <> 'yes' AND qty > 0 AND " + sql + " ORDER BY ProductID DESC, GaugeOrder ASC"
 
 Set rsGetRecords = objCmd.Execute()
 
@@ -61,7 +61,7 @@ end if
 if rsGetRecords.Fields.Item("img_full").Value <> "" then
 	image = "<g:image_link>https://bodyartforms-products.bodyartforms.com/" & rsGetRecords.Fields.Item("img_full").Value & "</g:image_link>"
 else
-	image = "<g:image_link>https://bafthumbs-400.bodyartforms.com/" & rsGetRecords.Fields.Item("picture").Value & "</g:image_link>"
+	image = "<g:image_link>https://bafthumbs-400.bodyartforms.com/" & rsGetRecords.Fields.Item("picture_400").Value & "</g:image_link>"
 end if
 
 %>

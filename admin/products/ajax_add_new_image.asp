@@ -10,87 +10,99 @@
 	Upload.OverwriteFiles = True
 	Upload.SaveVirtual(photo_path)
 
-	Set File_1 = Upload.Files("file[0]")
-	Set File_2 = Upload.Files("file[1]")
-	Set File_3 = Upload.Files("file[2]")
+	i=0
+	While Not Upload.Files("file[" & i & "]") Is Nothing And i < 3
 	
-	If Not File_1 Is Nothing Then File1_ImgWidth = getImageWidth("img_temp\" & File_1.fileName)
-	If Not File_2 Is Nothing Then File2_ImgWidth = getImageWidth("img_temp\" & File_2.fileName)	
-	If Not File_3 Is Nothing Then File3_ImgWidth = getImageWidth("img_temp\" & File_3.fileName)	
-	
-	If File1_ImgWidth > 500 Then
-		fileName = Left(File_1.FileName, InstrRev(File_1.FileName, ".") - 1) & "." & Mid(File_1.FileName, InstrRev(File_1.FileName, ".") + 1)
-		thumbnailName = "thumbnail-" & Month(date) & Day(date) & Year(date) & Hour(time) & Minute(time) & Second(time) & "-" & Upload.form("productid") & "." & Mid(File_1.FileName, InstrRev(File_1.FileName, ".") + 1)
-	Elseif File2_ImgWidth > 500 Then	
-		fileName = Left(File_2.FileName, InstrRev(File_2.FileName, ".") - 1) & "." & Mid(File_2.FileName, InstrRev(File_2.FileName, ".") + 1)
-		thumbnailName = "thumbnail-" & Month(date) & Day(date) & Year(date) & Hour(time) & Minute(time) & Second(time) & "-" & Upload.form("productid") & "." & Mid(File_2.FileName, InstrRev(File_2.FileName, ".") + 1)
-	Elseif File3_ImgWidth > 500 Then	
-		fileName = Left(File_3.FileName, InstrRev(File_3.FileName, ".") - 1) & "." & Mid(File_3.FileName, InstrRev(File_3.FileName, ".") + 1)
-		thumbnailName = "thumbnail-" & Month(date) & Day(date) & Year(date) & Hour(time) & Minute(time) & Second(time) & "-" & Upload.form("productid") & "." & Mid(File_3.FileName, InstrRev(File_3.FileName, ".") + 1)
-	End If
-		
-	If Not File_1 Is Nothing Then
-		if File1_ImgWidth < 100 Then '90x90
-			File_1.Copy Server.MapPath(photo_path & "\90x90\" & thumbnailName)
-		elseif File1_ImgWidth < 500 Then '400x400
-			File_1.Copy Server.MapPath(photo_path & "\400x400\" & thumbnailName)
-		elseif File1_ImgWidth > 500 Then '1000x1000
-			File_1.Copy Server.MapPath(photo_path & "\1000x1000\" & fileName)
-		end if
-		File_1.Delete		
-	End If
-	
-	If Not File_2 Is Nothing Then
-		if File2_ImgWidth < 100 Then '90x90
-			File_2.Copy Server.MapPath(photo_path & "\90x90\" & thumbnailName)
-		elseif File2_ImgWidth < 500 Then '400x400
-			File_2.Copy Server.MapPath(photo_path & "\400x400\" & thumbnailName)
-		elseif File2_ImgWidth > 500 Then '1000x1000
-			File_2.Copy Server.MapPath(photo_path & "\1000x1000\" & fileName)
-		end if
-		File_2.Delete		
-	End If
-	
-	If Not File_3 Is Nothing Then
-		if File3_ImgWidth < 100 Then '90x90
-			File_3.Copy Server.MapPath(photo_path & "\90x90\" & thumbnailName)
-		elseif File3_ImgWidth < 500 Then '400x400
-			File_3.Copy Server.MapPath(photo_path & "\400x400\" & thumbnailName)
-		elseif File3_ImgWidth > 500 Then '1000x1000
-			File_3.Copy Server.MapPath(photo_path & "\1000x1000\" & fileName)
-		end if
-		File_3.Delete		
-	End If	
-		
-	
-	set objFs=Server.CreateObject("Scripting.FileSystemObject")
-	If objFs.FileExists(Server.MapPath(photo_path & "\1000x1000\" & fileName)) AND objFs.FileExists(Server.MapPath(photo_path & "\400x400\" & thumbnailName)) AND objFs.FileExists(Server.MapPath(photo_path & "\90x90\" & thumbnailName)) Then
-		' Upload files to S3 bucket
-		set http = Server.CreateObject("Chilkat_9_5_0.Http")
-		' Insert your AWS keys here:
-		http.AwsAccessKey = AWS_ACCESSKEY
-		http.AwsSecretKey = AWS_SECRETKEY
-		bucketName = "bodyartforms-products"
-		thumbnailBucketName = "baf-thumbs-400"
-		contentType = getContentTypeFromfileName(fileName) ' This is mandatory otherwise S3 cannot register mime type
+		Set File = Upload.Files("file[" & i & "]")	
+		File_ImgWidth = getImageWidth("img_temp\" & File.fileName)
 
-		success1 = http.S3_UploadFile(Replace(Server.MapPath(photo_path & "\1000x1000\" & fileName), "\", "/"), contentType, bucketName, fileName)
-		success2 = http.S3_UploadFile(Replace(Server.MapPath(photo_path & "\400x400\" & thumbnailName), "\", "/"), contentType, thumbnailBucketName, thumbnailName)
-		success3 = http.S3_UploadFile(Replace(Server.MapPath(photo_path & "\90x90\" & thumbnailName), "\", "/"), contentType, bucketName, thumbnailName)
-
-		If (success1 AND success2 AND success3) Then
-			set objCmd = Server.CreateObject("ADODB.Command")
+		'If there is already images in DB, use the file name in DB
+		If Upload.form("selected_img_id") <> "" Then
+			set objCmd = Server.CreateObject("ADODB.command")
 			objCmd.ActiveConnection = DataConn
-			objCmd.CommandText = "INSERT INTO tbl_images(product_id, img_full, img_thumb, img_description) VALUES (?, ?, ?, ?)"
-			objCmd.Parameters.Append(objCmd.CreateParameter("productid" ,3 ,1, 15, Upload.form("productid")))
-			objCmd.Parameters.Append(objCmd.CreateParameter("img_name", 200, 1, 100, fileName))
-			objCmd.Parameters.Append(objCmd.CreateParameter("img_thumb", 200, 1, 100, thumbnailName))
-			objCmd.Parameters.Append(objCmd.CreateParameter("img_description", 200, 1, 50, Upload.form("add_img_description")))
-			objCmd.Execute()
+			objCmd.CommandText = "SELECT product_id, img_full, img_thumb, img_thumb_400, img_description FROM tbl_images WHERE img_id = " &  Upload.form("selected_img_id")
+			Set rsImages = objCmd.Execute()
+			If Not rsImages.EOF Then
+				If File_ImgWidth <= 95 Then
+					fileName = rsImages("img_thumb")
+				ElseIf File_ImgWidth <= 405 Then	
+					fileName = rsImages("img_thumb_400")
+				Else ' 1000x1000	
+					fileName = rsImages("img_full")
+				End If
+			Else
+				Call ReleaseConnection()
+				Response.Write "Error"
+				Response.End
+			End If
 		Else
-			Response.Write "<pre>" & Server.HTMLEncode( http.LastErrorText) & "</pre>"	
+			'If there are no images in DB, generate a file name
+			If File_ImgWidth <= 95 Then
+				fileName = "thumbnail-90-" & Month(date) & Day(date) & Year(date) & Hour(time) & Minute(time) & Second(time) & "-" & Upload.form("productid") & "." & Mid(File.FileName, InstrRev(File.FileName, ".") + 1)				
+				fileName_90 = fileName
+			ElseIf File_ImgWidth <= 405 Then	
+				fileName = "thumbnail-400-" & Month(date) & Day(date) & Year(date) & Hour(time) & Minute(time) & Second(time) & "-" & Upload.form("productid") & "." & Mid(File.FileName, InstrRev(File.FileName, ".") + 1)
+				fileName_400 = fileName
+			Else '1000x1000
+				fileName = File.FileName
+				fileName_1000 = fileName
+			End If	
+		End If 	
+
+		If File_ImgWidth <= 95 Then '90x90
+			File.Copy Server.MapPath(photo_path & "\90x90\" & fileName)
+			ImageLocation = photo_path & "\90x90\" & fileName
+		elseif File_ImgWidth <= 405 Then '400x400
+			File.Copy Server.MapPath(photo_path & "\400x400\" & fileName)
+			ImageLocation = photo_path & "\400x400\" & fileName
+		else '1000x1000
+			File.Copy Server.MapPath(photo_path & "\1000x1000\" & fileName)
+			ImageLocation = photo_path & "\1000x1000\" & fileName
+		end if
+		File.Delete	
+		
+		
+		' Upload files to S3 bucket
+		set objFs=Server.CreateObject("Scripting.FileSystemObject")
+		If objFs.FileExists(Server.MapPath(ImageLocation)) Then
+			set http = Server.CreateObject("Chilkat_9_5_0.Http")
+			' Insert your AWS keys here:
+			http.AwsAccessKey = AWS_ACCESSKEY
+			http.AwsSecretKey = AWS_SECRETKEY
+			contentType = getContentTypeFromFileName(fileName) ' This is mandatory otherwise S3 cannot register mime type		
+			If Instr(ImageLocation, "\400x400\") > 0 Then bucketName = "baf-thumbs-400" Else bucketName = "bodyartforms-products"		
+			success = http.S3_UploadFile(Replace(Server.MapPath(ImageLocation), "\", "/"), contentType, bucketName, fileName)
 		End If
+		
+		If success = 1 Then
+			If Instr(ImageLocation, "\90x90\") > 0 Then
+				successfullyUploadedImages = successfullyUploadedImages & "90x90" & ", "
+			ElseIf Instr(ImageLocation, "\400x400\") > 0 Then
+				successfullyUploadedImages = successfullyUploadedImages & "400x400" & ", "
+			ElseIf Instr(ImageLocation, "\1000x1000\") > 0 Then
+				successfullyUploadedImages = successfullyUploadedImages & "1000x1000" & ", "
+			End If
+		End If			
+	
+		i = i + 1	
+	Wend
+	
+			
+	If fileName_90 <> "" And fileName_400 <> "" And fileName_1000 <> "" Then
+		set objCmd = Server.CreateObject("ADODB.Command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "INSERT INTO tbl_images(product_id, img_full, img_thumb_400, img_thumb, img_description) VALUES (?, ?, ?, ?, ?)"
+		objCmd.Parameters.Append(objCmd.CreateParameter("productid" ,3 ,1, 15, Upload.form("productid")))
+		objCmd.Parameters.Append(objCmd.CreateParameter("img_full", 200, 1, 100, fileName_1000))
+		objCmd.Parameters.Append(objCmd.CreateParameter("img_thumb_400", 200, 1, 100, fileName_400))
+		objCmd.Parameters.Append(objCmd.CreateParameter("img_thumb", 200, 1, 100, fileName_90))
+		objCmd.Parameters.Append(objCmd.CreateParameter("img_description", 200, 1, 50, Upload.form("add_img_description")))
+		objCmd.Execute()
 	End If
+	
+	'Remove last comma from successfullyUploadedImages
+	If Len(successfullyUploadedImages) > 0 Then successfullyUploadedImages = Left(successfullyUploadedImages, Len(successfullyUploadedImages) - 2)
+	Response.Write "{""uploadedimages"" : """ & successfullyUploadedImages & """}"
 	
 	' Delete images from temporary folder
 	Set objFolder = objFS.GetFolder(Server.MapPath(photo_path)) 
@@ -106,10 +118,13 @@
 		Next
 	Next	
 
-set objFs = nothing	
-Set Upload = nothing
-DataConn.Close()
+Call ReleaseConnection()
 
+Function ReleaseConnection
+	set objFs = nothing	
+	Set Upload = nothing
+	DataConn.Close()
+End Function
 Function getImageWidth(file)
 	Set Jpeg = Server.CreateObject("Persits.Jpeg")
 	Path = Server.MapPath(file)

@@ -8,7 +8,7 @@ bootstrapped = "yes"
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
 objCmd.Prepared = true
-objCmd.CommandText = "SELECT j.productid, j.brandname, j.active, fp.min_gauge, fp.max_gauge, j.picture, j.title, j.seo_meta_title, j.seo_meta_description, color_tags, j.material FROM FlatProducts AS fp INNER JOIN jewelry AS j ON fp.productid = j.ProductID WHERE j.active = 1 and (seo_meta_title IS NULL OR seo_meta_description IS NULL)  ORDER BY j.ProductID DESC"
+objCmd.CommandText = "SELECT j.productid, j.brandname, j.active, fp.min_gauge, fp.max_gauge, j.picture, j.picture_400, j.title, j.seo_meta_title, j.seo_meta_description, color_tags, j.material FROM FlatProducts AS fp INNER JOIN jewelry AS j ON fp.productid = j.ProductID WHERE j.active = 1 and (seo_meta_title IS NULL OR seo_meta_description IS NULL)  ORDER BY j.ProductID DESC"
 set rsGetSEO = Server.CreateObject("ADODB.Recordset")
 rsGetSEO.CursorLocation = 3 'adUseClient
 rsGetSEO.Open objCmd
@@ -61,7 +61,7 @@ For intRecord = 1 To rsGetSEO.PageSize
 %>
     <tr>
       <td style="width:25%">
-        <a class="text-dark" href="product-edit.asp?ProductID=<%= rsGetSEO.Fields.Item("productid").Value %>" target="_blank"><img class="pull-left mr-2" style="width:120px" src="https://bafthumbs-400.bodyartforms.com/<%= rsGetSEO.Fields.Item("picture").Value %>" alt="<%= rsGetSEO.Fields.Item("title").Value %>" />
+        <a class="text-dark" href="product-edit.asp?ProductID=<%= rsGetSEO.Fields.Item("productid").Value %>" target="_blank"><img class="pull-left mr-2" style="width:120px" src="https://bafthumbs-400.bodyartforms.com/<%= rsGetSEO.Fields.Item("picture_400").Value %>" alt="<%= rsGetSEO.Fields.Item("title").Value %>" />
         </a>
         <%= rsGetSEO.Fields.Item("min_gauge").Value %>
         <% if rsGetSEO.Fields.Item("max_gauge").Value <> rsGetSEO.Fields.Item("min_gauge").Value then %>

@@ -34,8 +34,10 @@ if request.form("username") <> "" and request.form("password") <> "" then
 					objCmd.Execute()
 				
 					response.cookies("token") = cookie_token
+					Response.Cookies("token").Path = "/"
 					response.cookies("token").Expires = DATE + 7
 					response.cookies("selector") = cookie_selector
+					Response.Cookies("selector").Path = "/"
 					response.cookies("selector").Expires = DATE + 7
 					' set cookie to show live/sandbox mode message only for admin users
 					Response.Cookies("adminuser") = "yes"

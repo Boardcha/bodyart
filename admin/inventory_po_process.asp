@@ -175,7 +175,7 @@ End if
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn  
-objCmd.CommandText = "SELECT ProductDetails.ProductDetailID, jewelry.title, ProductDetails.ProductDetail1, ProductDetails.qty, jewelry.ProductID, ProductDetails.Gauge, ProductDetails.Length, jewelry.picture, ProductDetails.location,  TBL_PurchaseOrders.Brand,  TBL_Barcodes_SortOrder.ID_Description, ProductDetails.BinNumber_Detail, tbl_po_details.po_qty, tbl_po_details.po_detailid, ProductDetails.price, ProductDetails.wlsl_price FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number INNER JOIN tbl_po_details ON ProductDetails.ProductDetailID = tbl_po_details.po_detailid INNER JOIN TBL_PurchaseOrders ON tbl_po_details.po_orderid = TBL_PurchaseOrders.PurchaseOrderID WHERE (tbl_po_details.po_orderid = ? AND tbl_po_details.po_qty > 0 AND tbl_po_details.po_received = 0)" & var_filter_build & " ORDER BY " & Session("SortBy")
+objCmd.CommandText = "SELECT ProductDetails.ProductDetailID, jewelry.title, ProductDetails.ProductDetail1, ProductDetails.qty, jewelry.ProductID, ProductDetails.Gauge, ProductDetails.Length, jewelry.picture, jewelry.picture_400, ProductDetails.location,  TBL_PurchaseOrders.Brand,  TBL_Barcodes_SortOrder.ID_Description, ProductDetails.BinNumber_Detail, tbl_po_details.po_qty, tbl_po_details.po_detailid, ProductDetails.price, ProductDetails.wlsl_price FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number INNER JOIN tbl_po_details ON ProductDetails.ProductDetailID = tbl_po_details.po_detailid INNER JOIN TBL_PurchaseOrders ON tbl_po_details.po_orderid = TBL_PurchaseOrders.PurchaseOrderID WHERE (tbl_po_details.po_orderid = ? AND tbl_po_details.po_qty > 0 AND tbl_po_details.po_received = 0)" & var_filter_build & " ORDER BY " & Session("SortBy")
 objCmd.Prepared = true
 objCmd.Parameters.Append objCmd.CreateParameter("param1", 5, 1, -1, Session("po_id"))
 Set rsGetRestockItems = objCmd.Execute		  
@@ -299,7 +299,7 @@ i = i + 1
 </td>
 <td class="Description">
 <a href="product-edit.asp?ProductID=<%=(rsGetRestockItems.Fields.Item("ProductID").Value)%>&info=less" target="_blank">
-	<img src="https://bafthumbs-400.bodyartforms.com/<%=rsGetRestockItems("picture")%>" class="rounded float-left mr-2" style="height:50px;width:50px">
+	<img src="https://bafthumbs-400.bodyartforms.com/<%=rsGetRestockItems("picture_400")%>" class="rounded float-left mr-2" style="height:50px;width:50px">
 <%=(rsGetRestockItems.Fields.Item("title").Value)%>&nbsp;<%=(rsGetRestockItems.Fields.Item("gauge").Value)%>&nbsp;<%=(rsGetRestockItems.Fields.Item("length").Value)%><%=(rsGetRestockItems.Fields.Item("ProductDetail1").Value)%></a>             
 
   </td>

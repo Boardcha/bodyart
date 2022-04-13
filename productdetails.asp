@@ -98,7 +98,7 @@ end if
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT ProductID, title, picture FROM jewelry WHERE ProductID = 0" & sql_recents & " " & sql_recents_orderby
+objCmd.CommandText = "SELECT ProductID, title, picture, picture_400 FROM jewelry WHERE ProductID = 0" & sql_recents & " " & sql_recents_orderby
 	For Each item In recents_array	
 			objCmd.Parameters.Append(objCmd.CreateParameter("ProductID",3,1,10,item))
 	Next
@@ -146,7 +146,7 @@ if not rsProduct.eof then
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "" & _
-		"SELECT TOP 50 ORD.ProductID AS ProductID, ORD2.ProductID AS bought_with, count(*) as times_bought_together, JEW.title, JEW.picture " & _
+		"SELECT TOP 50 ORD.ProductID AS ProductID, ORD2.ProductID AS bought_with, count(*) as times_bought_together, JEW.title, JEW.picture_400 " & _
 		"FROM TBL_OrderSummary AS ORD INNER JOIN TBL_OrderSummary AS ORD2 ON ORD.InvoiceID = ORD2.InvoiceID " & _
 		"AND ORD.ProductID != ORD2.ProductID AND ORD.ProductID = " & ProductID & " AND ORD2.ProductID in (SELECT ProductID FROM ProductDetails WHERE " & _
 		" ProductDetails.free = 0 " & _
@@ -172,7 +172,7 @@ if not rsProduct.eof then
 		" AND ORD2.ProductID <> 2991 " & _
 		"GROUP BY ProductID HAVING SUM(qty) > 0) " & _
 		"LEFT JOIN Jewelry JEW ON JEW.ProductID = ORD2.ProductID " & _
-		"GROUP BY ORD.ProductID, ORD2.ProductID, JEW.title, JEW.picture, JEW.active " & _
+		"GROUP BY ORD.ProductID, ORD2.ProductID, JEW.title, JEW.picture_400, JEW.active " & _
 		"HAVING count(*) > 5 AND JEW.active = 1 " & _
 		"ORDER BY times_bought_together DESC"
 	Set rsCrossSellingItems = objCmd.Execute()
@@ -1429,7 +1429,7 @@ end if
 	<% 	While NOT rsCrossSellingItems.EOF %>
 	<div class="slide">
 		<a href="productdetails.asp?ProductID=<%= rsCrossSellingItems("bought_with").Value %>">
-			<img class="img-fluid lazyload CrossSellingItems" src="/images/image-placeholder.png" data-src="https://bafthumbs-400.bodyartforms.com/<%=(rsCrossSellingItems("picture").Value)%>" alt="<%=(rsCrossSellingItems("title").Value)%>" />
+			<img class="img-fluid lazyload CrossSellingItems" src="/images/image-placeholder.png" data-src="https://bafthumbs-400.bodyartforms.com/<%=(rsCrossSellingItems("picture_400").Value)%>" alt="<%=(rsCrossSellingItems("title").Value)%>" />
 		</a>
 	</div>
 	<% rsCrossSellingItems.MoveNext()
@@ -1525,7 +1525,7 @@ end if
 	<% 	While NOT rsRecentlyViewed.EOF %>
 	<div class="slide">
 		<a href="productdetails.asp?ProductID=<%= rsRecentlyViewed.Fields.Item("ProductID").Value %>">
-			<img class="img-fluid lazyload" src="/images/image-placeholder.png" data-src="https://bafthumbs-400.bodyartforms.com/<%=(rsRecentlyViewed.Fields.Item("picture").Value)%>" alt="<%=(rsRecentlyViewed.Fields.Item("title").Value)%>" />
+			<img class="img-fluid lazyload" src="/images/image-placeholder.png" data-src="https://bafthumbs-400.bodyartforms.com/<%=(rsRecentlyViewed.Fields.Item("picture_400").Value)%>" alt="<%=(rsRecentlyViewed.Fields.Item("title").Value)%>" />
 		</a>
 	</div>
 	<% rsRecentlyViewed.MoveNext()

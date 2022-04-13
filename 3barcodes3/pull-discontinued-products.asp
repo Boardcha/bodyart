@@ -94,7 +94,7 @@ end select
             <thead class="thead-light">
                     <tr>
                       <th colspan="3">
-                            <a href="/productdetails.asp?ProductID=<%= rsGetProducts.Fields.Item("ProductID").Value %>" target="_blank"><img src="https://bafthumbs-400.bodyartforms.com/<%= rsGetProducts.Fields.Item("picture").Value %>" style="width:50px;height:auto"></a>  
+                            <a href="/productdetails.asp?ProductID=<%= rsGetProducts.Fields.Item("ProductID").Value %>" target="_blank"><img src="https://bafthumbs-400.bodyartforms.com/<%= rsGetProducts.Fields.Item("picture_400").Value %>" style="width:50px;height:auto"></a>  
                         <%= rsGetProducts.Fields.Item("title").Value %>
                         <% if ISNULL(rsGetProducts.Fields.Item("who_pulled").Value) then %>
                         <button class="btn btn-primary btn-sm ml-4" id="btn-assign" data-productid="<%= rsGetProducts.Fields.Item("ProductID").Value %>">Pull Items</button>

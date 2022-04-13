@@ -86,7 +86,9 @@ objCmd.Execute()
 'Write info to edits log	
 set objCmd = Server.CreateObject("ADODB.Command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & rsGetInfo("DetailID") & ",'Automated - Updated qty from " & rsGetInfo("stock_qty") & " to " & request.form("bo_qty") & " - backorder submit page','" & now() & "')"
+objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", ? , ? ,'" & now() & "')"
+objCmd.Parameters.Append(objCmd.CreateParameter("qty",3,1,20, rsGetInfo("DetailID") ))
+objCmd.Parameters.Append(objCmd.CreateParameter("description",200,1,250, "Automated - Updated qty from " & rsGetInfo("stock_qty") & " to " & request.form("bo_qty") & " - backorder submit page" ))
 objCmd.Execute()
 Set objCmd = Nothing
 

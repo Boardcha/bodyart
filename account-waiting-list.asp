@@ -40,7 +40,7 @@ If Not rsGetUser.EOF Or Not rsGetUser.BOF Then ' Only run this info if a match w
 ' Get waitlist items
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "SELECT dbo.TBLWaitingList.DetailID, dbo.ProductDetails.qty, dbo.TBLWaitingList.name, dbo.TBLWaitingList.email, dbo.ProductDetails.ProductID, ISNULL(ProductDetails.Gauge, '') + ' ' + ISNULL(ProductDetails.Length, '') + ' ' + ISNULL(ProductDetails.ProductDetail1, '') + ' ' + ISNULL(jewelry.title, '') AS title, dbo.jewelry.type, dbo.TBLWaitingList.ID, jewelry.picture, jewelry.largepic, dbo.ProductDetails.ProductDetail1, dbo.TBLWaitingList.customerID, dbo.jewelry.brandname, dbo.ProductDetails.active, dbo.jewelry.active AS ActiveProduct, dbo.jewelry.customorder, dbo.ProductDetails.Gauge, dbo.ProductDetails.Length, waiting_qty, TBL_Companies.ShowTextLogo, TBL_Companies.ProductLogo FROM dbo.ProductDetails INNER JOIN dbo.TBLWaitingList ON dbo.ProductDetails.ProductDetailID = dbo.TBLWaitingList.DetailID INNER JOIN dbo.jewelry ON dbo.ProductDetails.ProductID = dbo.jewelry.ProductID INNER JOIN TBL_Companies ON jewelry.brandname = TBL_Companies.name  WHERE customerID = ? ORDER BY title ASC"
+		objCmd.CommandText = "SELECT dbo.TBLWaitingList.DetailID, dbo.ProductDetails.qty, dbo.TBLWaitingList.name, dbo.TBLWaitingList.email, dbo.ProductDetails.ProductID, ISNULL(ProductDetails.Gauge, '') + ' ' + ISNULL(ProductDetails.Length, '') + ' ' + ISNULL(ProductDetails.ProductDetail1, '') + ' ' + ISNULL(jewelry.title, '') AS title, dbo.jewelry.type, dbo.TBLWaitingList.ID, jewelry.picture, jewelry.picture_400, jewelry.largepic, dbo.ProductDetails.ProductDetail1, dbo.TBLWaitingList.customerID, dbo.jewelry.brandname, dbo.ProductDetails.active, dbo.jewelry.active AS ActiveProduct, dbo.jewelry.customorder, dbo.ProductDetails.Gauge, dbo.ProductDetails.Length, waiting_qty, TBL_Companies.ShowTextLogo, TBL_Companies.ProductLogo FROM dbo.ProductDetails INNER JOIN dbo.TBLWaitingList ON dbo.ProductDetails.ProductDetailID = dbo.TBLWaitingList.DetailID INNER JOIN dbo.jewelry ON dbo.ProductDetails.ProductID = dbo.jewelry.ProductID INNER JOIN TBL_Companies ON jewelry.brandname = TBL_Companies.name  WHERE customerID = ? ORDER BY title ASC"
 		objCmd.Parameters.Append(objCmd.CreateParameter("CustID_Cookie",3,1,10,CustID_Cookie))
 		Set rsWaitingList = objCmd.Execute()
 	
@@ -78,7 +78,7 @@ if session("admin_tempcustid") <> "" then %>
 <div class="mx-1">
 	<a class="mb-2 d-block" href="/productdetails.asp?ProductID=<%= rsWaitingList.Fields.Item("ProductID").Value %>">
 		<div class="position-relative">
-            <img class="img-fluid"  src="https://bafthumbs-400.bodyartforms.com/<%= rsWaitingList.Fields.Item("picture").Value %>"  style="width:400px;height:auto" alt="Product photo">
+            <img class="img-fluid"  src="https://bafthumbs-400.bodyartforms.com/<%= rsWaitingList.Fields.Item("picture_400").Value %>"  style="width:400px;height:auto" alt="Product photo">
 		
 			<% if rsWaitingList.Fields.Item("ShowTextLogo").Value = "Y" then 
 			%>

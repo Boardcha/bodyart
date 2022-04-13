@@ -16,7 +16,7 @@ if sql <> "" then
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT j.ProductID, ProductDetailID, j.title, ISNULL(d.Gauge,'') + ' ' + ISNULL(d.Length,'') + ' ' + ISNULL(d.ProductDetail1,'') AS 'variant_description', j.brandname, d.Gauge, j.picture, j.largepic, i.img_thumb, d.wearable_material, j.seo_meta_description, f.min_gauge, f.max_gauge, d.price, f.min_price, f.max_price, f.ShowTextLogo, flare_type, j.customorder, j.description, j.pair, REPLACE(REPLACE(TRIM(d.colors),'  ', ' '),' ' ,'/') as color_tags, j.jewelry, j.SaleDiscount, j.secret_sale, f.variants, d.qty AS 'inventory', CASE WHEN d.qty >=1 THEN 'in stock' ELSE 'out of stock' END AS 'availability' FROM jewelry AS j INNER JOIN FlatProducts AS f ON j.ProductID = f.productid INNER JOIN ProductDetails as d ON f.productid = d.ProductID LEFT OUTER JOIN tbl_images AS i ON d.img_id = i.img_id WHERE j.jewelry <> N'save' AND j.active = 1 AND d.active = 1 AND j.customorder <> 'yes' " + sql + " ORDER BY ProductID DESC"
+objCmd.CommandText = "SELECT j.ProductID, ProductDetailID, j.title, ISNULL(d.Gauge,'') + ' ' + ISNULL(d.Length,'') + ' ' + ISNULL(d.ProductDetail1,'') AS 'variant_description', j.brandname, d.Gauge, j.picture, j.picture_400, j.largepic, i.img_thumb, i.img_thumb_400, d.wearable_material, j.seo_meta_description, f.min_gauge, f.max_gauge, d.price, f.min_price, f.max_price, f.ShowTextLogo, flare_type, j.customorder, j.description, j.pair, REPLACE(REPLACE(TRIM(d.colors),'  ', ' '),' ' ,'/') as color_tags, j.jewelry, j.SaleDiscount, j.secret_sale, f.variants, d.qty AS 'inventory', CASE WHEN d.qty >=1 THEN 'in stock' ELSE 'out of stock' END AS 'availability' FROM jewelry AS j INNER JOIN FlatProducts AS f ON j.ProductID = f.productid INNER JOIN ProductDetails as d ON f.productid = d.ProductID LEFT OUTER JOIN tbl_images AS i ON d.img_id = i.img_id WHERE j.jewelry <> N'save' AND j.active = 1 AND d.active = 1 AND j.customorder <> 'yes' " + sql + " ORDER BY ProductID DESC"
 
 Set rsGetRecords = objCmd.Execute()
 
@@ -60,9 +60,9 @@ else
 end if
 
 if rsGetRecords.Fields.Item("img_thumb").Value <> "" then
-	var_thumbnail_name = rsGetRecords.Fields.Item("img_thumb").Value
+	var_thumbnail_name = rsGetRecords.Fields.Item("img_thumb_400").Value
 else
-	var_thumbnail_name = rsGetRecords.Fields.Item("picture").Value
+	var_thumbnail_name = rsGetRecords.Fields.Item("picture_400").Value
 end if
 
 if rsGetRecords.Fields.Item("inventory").Value > 0 then

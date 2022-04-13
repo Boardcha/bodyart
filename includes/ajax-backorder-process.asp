@@ -54,6 +54,7 @@ var_exchange_qty = request.form("exchange_qty")
 var_exchange_origitem = request.form("exchange_origitem")
 var_exchange_newitem = ""
 var_exchange_price_diff = request.form("exchange_price_diff")
+var_new_qty = cint(rsGetCurrentQty("qty")) - cint(var_qty)
 
 ' Retrieve the current order
 Set objCmd = Server.CreateObject ("ADODB.Command")
@@ -81,13 +82,14 @@ function NewOrder
 	
 	set NewOrder = Server.CreateObject("ADODB.Command")
 	NewOrder.ActiveConnection = DataConn
-	NewOrder.CommandText = "INSERT INTO sent_items (shipped, customer_ID, customer_first, customer_last, company, address, address2, city, state, province, zip, country, email, date_order_placed, shipping_rate, shipping_type, item_description, ship_code, phone, UPS_Service) SELECT 'Pending...', customer_ID, customer_first, customer_last, company, address, address2, city, state, province, zip, country, email, '" & now() & "', 0,'" & shipping & "','<b><font size=3>BACKORDER SHIPMENT</font></B><br>', 'paid', phone, '' FROM sent_items WHERE ID =" & var_invoice 
+	NewOrder.CommandText = "INSERT INTO sent_items (shipped, customer_ID, customer_first, customer_last, company, address, address2, city, state, province, zip, country, email, date_order_placed, shipping_rate, shipping_type, item_description, ship_code, phone, UPS_Service) SELECT 'Pending...', customer_ID, customer_first, customer_last, company, address, address2, city, state, province, zip, country, email, '" & now() & "', 0,'" & shipping & "','<b><font size=3>BACKORDER SHIPMENT</font></B><br>', 'paid', phone, '' FROM sent_items WHERE ID = ?"
+	NewOrder.Parameters.Append(objCmd.CreateParameter("var_invoice",3,1,12, var_invoice))
 	NewOrder.Execute() 
 	
 	' Retrieve the newest order
 	Set objCmd = Server.CreateObject ("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT ID, email FROM dbo.sent_items WHERE email = '" & rsGetOrder.Fields.Item("email").Value & "' ORDER BY ID DESC" 
+	objCmd.CommandText = "SELECT ID, email FROM dbo.sent_items WHERE email = '" & rsGetOrder("email") & "' ORDER BY ID DESC" 
 	Set NewOrder = objCmd.Execute()
 
 end function ' new order
@@ -96,7 +98,9 @@ function DeductQuantities
 
 	set objCmd = Server.CreateObject("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - " & var_qty & ", DateLastPurchased = '"& date() &"' WHERE ProductDetailID = " & var_detailid 
+	objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - ?, DateLastPurchased = '"& date() &"' WHERE ProductDetailID = ?" 
+	objCmd.Parameters.Append(objCmd.CreateParameter("var_qty",3,1,12, var_qty ))
+	objCmd.Parameters.Append(objCmd.CreateParameter("var_detailid",3,1,12, var_detailid ))
 	objCmd.Execute()
 
 end function ' Deduct Quantities
@@ -106,7 +110,8 @@ function CancelOrder
 	' Update order to cancelled/ not paid
 	set objCmd = Server.CreateObject("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "UPDATE sent_items SET shipped = 'Cancelled', ship_code = 'not paid' WHERE ID = " & var_invoice
+	objCmd.CommandText = "UPDATE sent_items SET shipped = 'Cancelled', ship_code = 'not paid' WHERE ID = ?"
+	objCmd.Parameters.Append(objCmd.CreateParameter("var_invoice",3,1,12, var_invoice ))
 	objCmd.Execute()
 	
 end function ' 	Cancel Order
@@ -120,17 +125,17 @@ function CalcCoupons
 		
 			discount = ""
 		if var_coupon_discount <> 0 then
-			discount = "total_coupon_discount = total_coupon_discount - " & var_discount_difference
+			discount = "total_coupon_discount = total_coupon_discount - ?"
 			response.write "test"
 		end if
 		if var_preferred_discount <> 0 then
-			discount = "total_preferred_discount = total_preferred_discount - " & var_discount_difference
+			discount = "total_preferred_discount = total_preferred_discount - ?"
 		end if
 		if var_coupon_discount <> 0 or var_preferred_discount <> 0 then
 			add_comma = ", "
 		end if
 		if var_sales_tax > 0 then
-			write_tax = "total_sales_tax = total_sales_tax - " & item_tax
+			write_tax = "total_sales_tax = total_sales_tax - ?"
 		else
 			write_tax = "total_sales_tax = 0 "
 		end if
@@ -138,6 +143,10 @@ function CalcCoupons
 		set objCmd = Server.CreateObject("ADODB.Command")
 		objCmd.ActiveConnection = DataConn
 		objCmd.CommandText = "UPDATE sent_items SET " & discount & " " & add_comma & " " & write_tax & " WHERE ID = ?" 
+		objCmd.Parameters.Append(objCmd.CreateParameter("var_discount_difference",6,1,10, var_discount_difference ))
+		if var_sales_tax > 0 then
+			objCmd.Parameters.Append(objCmd.CreateParameter("item_tax",6,1,10, item_tax ))
+		end if
 		objCmd.Parameters.Append(objCmd.CreateParameter("string_id",3,1,12,var_invoice))
 		objCmd.Execute()
 
@@ -149,7 +158,8 @@ function SetQtyZero
 
 	set objCmd = Server.CreateObject("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "UPDATE TBL_OrderSummary SET item_price = 0 WHERE OrderDetailID = " & var_item 
+	objCmd.CommandText = "UPDATE TBL_OrderSummary SET item_price = 0 WHERE OrderDetailID = ?" 
+	objCmd.Parameters.Append(objCmd.CreateParameter("var_item",3,1,12,var_item))
 	objCmd.Execute()
 	
 end function	'	SetQtyZero
@@ -162,7 +172,8 @@ if request.form("agenda") = "ship-one" then
 
 	set CopyItem = Server.CreateObject("ADODB.Command")
 	CopyItem.ActiveConnection = DataConn
-	CopyItem.CommandText = "INSERT INTO TBL_OrderSummary (InvoiceID, ProductID, DetailID, qty) SELECT " & rsGetNewInvoice.Fields.Item("ID").Value & ", ProductID, DetailID, qty FROM TBL_OrderSummary WHERE OrderDetailID =" & var_item
+	CopyItem.CommandText = "INSERT INTO TBL_OrderSummary (InvoiceID, ProductID, DetailID, qty) SELECT " & rsGetNewInvoice.Fields.Item("ID").Value & ", ProductID, DetailID, qty FROM TBL_OrderSummary WHERE OrderDetailID = ?"
+	CopyItem.Parameters.Append(objCmd.CreateParameter("var_item",3,1,12,var_item))
 	CopyItem.Execute() 
 	
 	DeductQuantities()
@@ -182,7 +193,9 @@ if request.form("agenda") = "ship-one" then
 	'Write info to edits log	
 	set objCmd = Server.CreateObject("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & var_detailid & ",'Automated - Updated qty from " & rsGetCurrentQty("qty") & " to " & cint(rsGetCurrentQty("qty")) - cint(var_qty) & " - backorder came back in stock and set to ship out','" & now() & "')"
+	objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", ?, ? ,'" & now() & "')"
+	objCmd.Parameters.Append(objCmd.CreateParameter("var_detailid",3,1,12, var_detailid ))
+	objCmd.Parameters.Append(objCmd.CreateParameter("description",200,1,250, "Automated - Updated qty from " & rsGetCurrentQty("qty") & " to " & var_new_qty & " - backorder came back in stock and set to ship out" ))
 	objCmd.Execute()
 	Set objCmd = Nothing
 end if '	Reship just the backorder item 
@@ -193,7 +206,8 @@ if request.form("agenda") = "reship" then
  
 	set CopyItem = Server.CreateObject("ADODB.Command")
 	CopyItem.ActiveConnection = DataConn
-	CopyItem.CommandText = "UPDATE sent_items SET shipped = 'Pending...' WHERE ID = " & var_invoice
+	CopyItem.CommandText = "UPDATE sent_items SET shipped = 'Pending...' WHERE ID = ?"
+	CopyItem.Parameters.Append(objCmd.CreateParameter("var_invoice",3,1,12, var_invoice))
 	CopyItem.Execute() 
 	
 	DeductQuantities()
@@ -207,12 +221,14 @@ if request.form("agenda") = "reship" then
 	"status":"Current order has been set to ship out again.</br><strong><ul><li>CUSTOMER HAS BEEN EMAILED</li><li>Quantities have been deducted</li></ul></strong><a href='invoice.asp?ID=<%= var_invoice %>'>Click here</a> to refresh order"
 }
 <%
-'Write info to edits log	
-set objCmd = Server.CreateObject("ADODB.Command")
-objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & var_detailid & ",'Automated - Updated qty from " & rsGetCurrentQty("qty") & " to " & cint(rsGetCurrentQty("qty")) - cint(var_qty) & " - backorder came back in stock and set to ship out','" & now() & "')"
-objCmd.Execute()
-Set objCmd = Nothing
+	'Write info to edits log	
+	set objCmd = Server.CreateObject("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", ?, ? ,'" & now() & "')"
+	objCmd.Parameters.Append(objCmd.CreateParameter("var_detailid",3,1,12, var_detailid ))
+	objCmd.Parameters.Append(objCmd.CreateParameter("description",200,1,250, "Automated - Updated qty from " & rsGetCurrentQty("qty") & " to " & var_new_qty & " - backorder came back in stock and set to ship out" ))
+	objCmd.Execute()
+	Set objCmd = Nothing
 
 end if '	Reship the entire order
 
@@ -222,7 +238,8 @@ if request.form("agenda") = "clear" then
  
 	set objCmd = Server.CreateObject("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "UPDATE TBL_OrderSummary SET backorder = 0 WHERE OrderDetailID =" & var_item 
+	objCmd.CommandText = "UPDATE TBL_OrderSummary SET backorder = 0 WHERE OrderDetailID = ?" 
+	objCmd.Parameters.Append(objCmd.CreateParameter("var_item",3,1,12, var_item ))
 	objCmd.Execute()
 	
 	var_notes = "Automated message: Cleared backorder item # " & var_detailid
@@ -238,7 +255,9 @@ if request.form("agenda") = "clear" then
 	'Write info to edits log	
 	set objCmd = Server.CreateObject("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & var_detailid & ",'Automated - Updated qty from " & cint(rsGetCurrentQty("qty")) & " to " & request.form("stock_qty") & " - cleared backorder item','" & now() & "')"
+	objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", ? , ? ,'" & now() & "')"
+	objCmd.Parameters.Append(objCmd.CreateParameter("var_detailid",3,1,12, var_detailid ))
+	objCmd.Parameters.Append(objCmd.CreateParameter("description",200,1,250, "Automated - Updated qty from " & cint(rsGetCurrentQty("qty")) & " to " & request.form("stock_qty") & " - cleared backorder item" ))
 	objCmd.Execute()
 	Set objCmd = Nothing	
 
@@ -257,7 +276,9 @@ if request.form("agenda") = "item-storecredit" then
 	' Update customer credits 
 	set objCmd = Server.CreateObject("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "UPDATE customers SET credits = credits + " & var_price & " WHERE customer_ID = " & var_custid 
+	objCmd.CommandText = "UPDATE customers SET credits = credits + ? WHERE customer_ID = ?" 
+	objCmd.Parameters.Append(objCmd.CreateParameter("var_price",6,1,10, var_price ))
+	objCmd.Parameters.Append(objCmd.CreateParameter("var_custid",3,1,12, var_custid ))
 	objCmd.Execute()
 	
 	CalcCoupons()
@@ -283,7 +304,9 @@ if request.form("agenda") = "cancel-storecredit" then
 	' Update customer credits 
 	set objCmd = Server.CreateObject("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "UPDATE customers SET credits = credits + " & var_total & " WHERE customer_ID = " & var_custid 
+	objCmd.CommandText = "UPDATE customers SET credits = credits + ? WHERE customer_ID = ?" 
+	objCmd.Parameters.Append(objCmd.CreateParameter("var_total",6,1,10, var_total ))
+	objCmd.Parameters.Append(objCmd.CreateParameter("var_custid",3,1,12, var_custid ))
 	objCmd.Execute()
 	
 	var_notes = "Automated message: Customer opted to cancel the entire order for a store credit $" & var_total & " on backordered item # " & var_detailid
@@ -466,19 +489,27 @@ if request.form("agenda") = "exchange" then
 		' Add exchanged item into new order
 		set AddItem = Server.CreateObject("ADODB.Command")
 		AddItem.ActiveConnection = DataConn
-		AddItem.CommandText = "INSERT INTO TBL_OrderSummary (InvoiceID, ProductID, DetailID, qty, item_price) VALUES (" & rsGetNewInvoice.Fields.Item("ID").Value & ", " & var_exchange_productid & ", " & var_exchange_detailid & ", " & var_exchange_qty & ", " & var_add_price & ")"
+		AddItem.CommandText = "INSERT INTO TBL_OrderSummary (InvoiceID, ProductID, DetailID, qty, item_price) VALUES (" & rsGetNewInvoice.Fields.Item("ID").Value & ", ?, ?, ?, ?)"
+		AddItem.Parameters.Append(objCmd.CreateParameter("var_exchange_productid",3,1,12, var_exchange_productid ))
+		AddItem.Parameters.Append(objCmd.CreateParameter("var_exchange_detailid",3,1,12, var_exchange_detailid ))
+		AddItem.Parameters.Append(objCmd.CreateParameter("var_exchange_qty",3,1,12, var_exchange_qty ))
+		AddItem.Parameters.Append(objCmd.CreateParameter("item_price",6,1,10, item_price ))
 		AddItem.Execute() 
 		
 		' DEDUCT QUANTITIES FOR DIFFERENT PRODUCT
 		set objCmd = Server.CreateObject("ADODB.Command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - " & var_exchange_qty & ", DateLastPurchased = '"& date() &"' WHERE ProductDetailID = " & var_exchange_detailid 
+		objCmd.CommandText = "UPDATE ProductDetails SET qty = qty - ?, DateLastPurchased = '"& date() &"' WHERE ProductDetailID = ?" 
+		objCmd.Parameters.Append(objCmd.CreateParameter("var_exchange_qty",3,1,12, var_exchange_qty ))
+		objCmd.Parameters.Append(objCmd.CreateParameter("var_exchange_detailid",3,1,12, var_exchange_detailid ))
 		objCmd.Execute()
 
 		'Write info to edits log	
 		set objCmd = Server.CreateObject("ADODB.Command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", " & var_exchange_detailid & ",'Automated - Updated qty from " & rsGetExchangeItemDetails("qty") & " to " & cint(rsGetExchangeItemDetails("qty")) - cint(var_exchange_qty) & " - exchanged backorder item','" & now() & "')"
+		objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, detail_id, description, edit_date) VALUES (" & user_id & ", ?, ?,'" & now() & "')"
+		objCmd.Parameters.Append(objCmd.CreateParameter("var_exchange_detailid",3,1,12, var_exchange_detailid ))
+		objCmd.Parameters.Append(objCmd.CreateParameter("description",200,1,250, "Automated - Updated qty from " & rsGetExchangeItemDetails("qty") & " to " & cint(rsGetExchangeItemDetails("qty")) - cint(var_exchange_qty) & " - exchanged backorder item" ))
 		objCmd.Execute()
 		Set objCmd = Nothing
 	
@@ -493,7 +524,9 @@ if request.form("agenda") = "exchange" then
 		' Update customer credits 
 		set objCmd = Server.CreateObject("ADODB.Command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "UPDATE customers SET credits = credits + " & var_exchange_price_diff & " WHERE customer_ID = " & var_custid 
+		objCmd.CommandText = "UPDATE customers SET credits = credits + ? WHERE customer_ID = ?"
+		objCmd.Parameters.Append(objCmd.CreateParameter("var_exchange_price_diff",6,1,10, var_exchange_price_diff ))
+		objCmd.Parameters.Append(objCmd.CreateParameter("var_custid",3,1,12, var_custid ))
 		objCmd.Execute()
 		
 		SetQtyZero()
@@ -551,7 +584,9 @@ if request.form("agenda") = "exchange" then
 			' Update customer credits 
 			set objCmd = Server.CreateObject("ADODB.Command")
 			objCmd.ActiveConnection = DataConn
-			objCmd.CommandText = "UPDATE customers SET credits = credits + " & var_exchange_price_diff & " WHERE customer_ID = " & var_custid 
+			objCmd.CommandText = "UPDATE customers SET credits = credits + ? WHERE customer_ID = ?" 
+			objCmd.Parameters.Append(objCmd.CreateParameter("var_exchange_price_diff",6,1,10, var_exchange_price_diff ))
+			objCmd.Parameters.Append(objCmd.CreateParameter("var_custid",3,1,12, var_custid ))
 			objCmd.Execute()
 			
 			SetQtyZero()
@@ -659,7 +694,8 @@ end if
 ' Clear backorder status from any item that accesses this page
 	set clearbo = Server.CreateObject("ADODB.Command")
 	clearbo.ActiveConnection = MM_bodyartforms_sql_STRING
-	clearbo.CommandText = "UPDATE TBL_OrderSummary SET backorder = 0, BackorderReview = 'N', notes = 'Removed BO status' WHERE OrderDetailID =" & var_item 
+	clearbo.CommandText = "UPDATE TBL_OrderSummary SET backorder = 0, BackorderReview = 'N', notes = 'Removed BO status' WHERE OrderDetailID = ?" 
+	clearbo.Parameters.Append(objCmd.CreateParameter("v",3,1,12, var_item ))
 	clearbo.Execute()
 
 	%>

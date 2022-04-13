@@ -2,6 +2,7 @@
 <% response.Buffer = false %>
 <!--#include file="../Connections/bodyartforms_sql_ADMIN.asp" -->
 <!--#include file="../functions/iif.asp" -->
+<!--#include file="../functions/random_integer.asp" -->
 <%
 '==== PAGE HAS BEEN BOOSTRAPPED =======
 bootstrapped = "yes"
@@ -10,7 +11,7 @@ bootstrapped = "yes"
 	
 		set CopyProduct = Server.CreateObject("ADODB.Command")
 		CopyProduct.ActiveConnection = DataConn
-		CopyProduct.CommandText = "INSERT INTO jewelry(picture, largepic, active, new_page_date, date_added, added_by) VALUES ('nopic.gif', 'nopic.gif', " & 0 & ", '" & now() & "', '" & now() & "', '" & user_name & "')"
+		CopyProduct.CommandText = "INSERT INTO jewelry(picture, picture_400, largepic, active, new_page_date, date_added, added_by) VALUES ('nopic.gif', 'nopic.gif', 'nopic.gif', " & 0 & ", '" & now() & "', '" & now() & "', '" & user_name & "')"
 		CopyProduct.Execute() 
 		
 		Set objCmd = Server.CreateObject ("ADODB.Command")
@@ -257,7 +258,7 @@ $(document).ready(function(){
             <div class="container p-0 mb-2">
                 <div class="row">
 					<div class="col-auto">
-						<a href="../productdetails.asp?ProductID=<%=(rs_getproduct.Fields.Item("ProductID").Value)%>" target="_blank"><img id="main_img" src="http://bodyartforms-products.bodyartforms.com/<%=(rs_getproduct.Fields.Item("picture").Value)%>" width="90" height="90"> </a>
+						<a href="../productdetails.asp?ProductID=<%=(rs_getproduct.Fields.Item("ProductID").Value)%>" target="_blank"><img id="main_img" src="http://bodyartforms-products.bodyartforms.com/<%=(rs_getproduct.Fields.Item("picture").Value) & "?ver=" & getInteger(8)%>" width="90" height="90"> </a>
 					  </div>
                     <div class="col"><h4>#<%=(rs_getproduct.Fields.Item("ProductID").Value)%>
                         <a class="btn btn-sm btn-secondary d-inline-block" href="?ProductID=<%= rs_getproduct.Fields.Item("ProductID").Value - 1%>"><i class="fa fa-angle-left fa-lg"></i></a>
@@ -920,7 +921,7 @@ end if
 						<form action="#" class="dropzone needsclick dz-clickable" id="frmUpload">
 						  <div class="dz-message needsclick">
 							<button type="button" class="dz-button">Drop <span>MAIN</span> images here or click to upload.</button><br>
-							<span class="note needsclick">Upload all 3 image sizes together<br>
+							<span class="note needsclick">Allowed image dimensions: <br>
 								1000 x 1000, 400 x 400, and 90 x 90</span>
 						  </div>
 
@@ -929,6 +930,7 @@ end if
 					</div>
 					<div id="img_description" class="form-group d-none">
 					   <input class="form-control form-control-sm" type="text" name="add_img_description" id="add_img_description" placeholder="Color / Description" maxlength="50">
+					   <input class="form-control form-control-sm" type="hidden" name="selected_img_id" id="selected_img_id">
 					</div>
 					<div class="d-inline-flex w-100 justify-content-between">
 						<button class="btn btn-sm btn-secondary" type="button" id="clear_dropzone"> Clear </button>	
@@ -1767,7 +1769,7 @@ end if
 <script type="text/javascript" src="/js/chosen/chosen.jquery.js"></script>
 <script type="text/javascript" src="scripts/dropzone.js"></script>
 <script type="text/javascript" src="scripts/jquery.validate.min.js"></script>
-<script type="text/javascript" src="scripts/product-edit-version2.js?v=040622"></script>
+<script type="text/javascript" src="scripts/product-edit-version2.js?v=041322"></script>
 </html>
 <% If var_access_level = "Packaging" then  %>
 	<script type="text/javascript">

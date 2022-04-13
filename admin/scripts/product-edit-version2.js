@@ -220,9 +220,11 @@ $("#description").redactor({
 					formData.append(el.name, el.value);
 				});
 				var productid = $("#btn-upload").attr("data-productid");
+				var selected_img_id = $("#selected_img_id").val();
 				var add_img_description = $('#add_img_description').val();
 				formData.append('productid', productid);
 				formData.append('add_img_description', add_img_description);
+				formData.append('selected_img_id', selected_img_id);
 			
 			});
 			
@@ -230,18 +232,34 @@ $("#description").redactor({
 				myDropzone.removeFile(file);
 			});	
 			
-			myDropzone.on('success', function(file, response) {
-				if ($("#opt-main-image").is(':checked')) $("#main_img").attr("src", response);
-				if ($("#opt-additional-image").is(':checked')) load_img_footer();
-				if ($("#opt-video").is(':checked')) load_img_footer();
+			myDropzone.on('successmultiple', function(file, response) {
+				if ($("#opt-main-image").is(':checked')){
+					var json = $.parseJSON(response);
+					if(json.thumbnail != "")
+						$("#main_img").attr("src", json.thumbnail);
+					if(json.uploadedimages != "")
+						alert("Successfully uploaded images: " + json.uploadedimages);				
+				}else if ($("#opt-additional-image").is(':checked')){
+					var json = $.parseJSON(response);
+					if(json.uploadedimages != ""){
+						alert("Successfully uploaded images: " + json.uploadedimages);					
+					}	
+					load_img_footer();
+				}else if ($("#opt-video").is(':checked')){	
+					load_img_footer();
+				}
 			});	
 
 			$("#btn-upload").unbind().click(function (e) {
-				if (myDropzone.getQueuedFiles().length == 3) { 
-					myDropzone.processQueue();
+				if (myDropzone.getQueuedFiles().length >0 && myDropzone.getQueuedFiles().length <= 3) { 
+					if ($("#opt-additional-image").is(':checked') && myDropzone.getQueuedFiles().length < 3 && $("#selected_img_id").val() == ""){
+						alert("Please select which image you are updating!");
+					}else{
+						myDropzone.processQueue();
+					}
 				}
 				else {
-					alert("(3) media must be uploaded together!");
+					alert("Number of images allowed is (1, 2, or 3)!");
 					myDropzone.removeAllFiles(true);
 				}			
 			});
@@ -260,7 +278,7 @@ $("#description").redactor({
 				if ($(this).is(':checked')) {
 					$("#img_description").hide();
 					$(".dz-button").html('Drop <span>MAIN</span> images here or click to upload.');
-					$(".note").html('Upload all 3 image sizes together<br>1000 x 1000, 400 x 400, and 90 x 90');
+					$(".note").html('Allowed image dimensions: <br>1000 x 1000, 400 x 400, and 90 x 90');
 					myDropzone.removeAllFiles(true);
 				}   
 			});		
@@ -269,7 +287,7 @@ $("#description").redactor({
 				if ($(this).is(':checked')) {
 					$("#img_description").removeClass("d-none").show();
 					$(".dz-button").html('Drop <span>ADDITIONAL</span> images here or click to upload.');
-					$(".note").html('Upload all 3 image sizes together<br>1000 x 1000, 400 x 400, and 90 x 90');	
+					$(".note").html('Allowed image dimensions: <br>1000 x 1000, 400 x 400, and 90 x 90');	
 					myDropzone.removeAllFiles(true);
 				}   
 			});				
@@ -282,10 +300,12 @@ $("#description").redactor({
 
 	function load_img_footer() {
 		$('#detail_images').text('Loading images...');
+		$('.img-thumb-clone').html('');
 		setTimeout(function(){
 		$('#detail_images').load('products/ajax_get_image_thumbnails_row_bootstrapped.asp?productid=' + $('#productid').val());
 		$('#detail_images').text('');
 		$('#add_image_spinner').hide();
+		$("#selected_img_id").val("");
 		},5000); };
 	
 	load_img_footer();
@@ -342,7 +362,6 @@ $("#description").redactor({
 	$(document).on("click", '.mini-thumb', function() { 
 		$('.mini-thumb img').css('border', "0");  
 		$(this).find("img.thumb-activate").css('border', "2px dotted red");  
-		//if($(this).is('img')) $(this).css('border', "2px dotted red");  
 		$("#edit_images_link").show();
 		var imgid = $(this).attr("data-imgid");
 		var img_description = $(this).attr("data-description");
@@ -352,6 +371,14 @@ $("#description").redactor({
 		$('.img-thumb-clone').html('');
 		$(this).clone().appendTo('.img-thumb-clone');
 		$('#input-img-description').attr('data-imgid', imgid);
+		
+		if($("#selected_img_id").val() == imgid){
+			$('#selected_img_id').val("");
+			$("img.thumb-activate").css('border', "none");  
+		}else{
+			$('#selected_img_id').val(imgid);
+		}	
+			
 		$('#edit_images_link').attr('data-imgid', imgid);
 		$('#edit_images_link').attr('data-filename', filename);
 		$('#input-img-description').val(img_description);

@@ -58,7 +58,7 @@ $(document).on("click", ".btn-clear-bo", function(event){
     var stock_qty = $('#deny_qty_' + productdetailid).val();
     
     $('#spinner_' + item).show();
-
+    console.log('Qty we counted ' + stock_qty);
     $.ajax({
     method: "POST",
     url: "/includes/ajax-backorder-process.asp",
