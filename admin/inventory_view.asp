@@ -21,34 +21,31 @@ end if
 
 
 if readonly <> "yes" then
-
-' Retrieve the newest temp PO # to use for saving order details
-Set objCmd = Server.CreateObject ("ADODB.Command")
-objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT  TOP (1) po_temp_id FROM tbl_po_temp_ids ORDER BY po_temp_id DESC" 
-objCmd.Parameters.Append(objCmd.CreateParameter("value",200,1,100, var_brand))
-Set rsGetTempPONum = objCmd.Execute()
-
-
-' Create a new purchase order on page load if it's not resuming the last one
-if request.querystring("resume") = "yes" and request.cookies(var_brand) <> "" then
-	' Continue to use what was originally assigned to cookie below if it's not a new order
-	tempid = request.cookies(var_brand)
-
-else
-	' Insert a new temp PO id # to use while paging through and creating order since it will need to be saved into database
-	set objCmd = Server.CreateObject("ADODB.command")
-	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "INSERT INTO tbl_po_temp_ids DEFAULT VALUES"
-	objCmd.Execute()
-	
-	' Set cookie for brand to newest temp #
-	response.cookies(var_brand) = rsGetTempPONum.Fields.Item("po_temp_id").Value
-	tempid = request.cookies(var_brand)
-end if
+	' Create a new purchase order on page load if it's not resuming the last one
+	if request.querystring("resume") = "yes" and request.cookies(var_brand) <> "" then
+		' Continue to use what was originally assigned to cookie below if it's not a new order
+		tempid = request.cookies(var_brand)
+	else
+		' Insert a new temp PO id # to use while paging through and creating order since it will need to be saved into database
+		set objCmd = Server.CreateObject("ADODB.command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "INSERT INTO tbl_po_temp_ids DEFAULT VALUES"
+		objCmd.Execute()
+		
+		' Retrieve the newest temp PO # to use for saving order details
+		Set objCmd = Server.CreateObject ("ADODB.Command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "SELECT  TOP (1) po_temp_id FROM tbl_po_temp_ids ORDER BY po_temp_id DESC" 
+		objCmd.Parameters.Append(objCmd.CreateParameter("value",200,1,100, var_brand))
+		Set rsGetTempPONum = objCmd.Execute()
+		
+		' Set cookie for brand to newest temp #
+		response.cookies(var_brand) = rsGetTempPONum.Fields.Item("po_temp_id").Value
+		tempid = request.cookies(var_brand)
+	end if
 else
 	tempid = "0"
-end if '====== if readonly <> "yes" 
+end if
 
 ' If we need to reset the order refresh the page after the new temp ID has been created
 if request.querystring("reset") = "yes" then
@@ -171,7 +168,7 @@ Set rsGetCompanyInfo = rsGetCompanyInfo_cmd.Execute
 <link href="../CSS/fortawesome/css/external-min.css?v=031920" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/js/popper.min.js"></script>
 <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="scripts/generic_auto_update_fields.js?v=081221"></script>
+<script type="text/javascript" src="scripts/generic_auto_update_fields.js?ver=041522"></script>
 <script type="text/javascript">
 
 	//url to to do auto updating
@@ -240,10 +237,22 @@ Set rsGetCompanyInfo = rsGetCompanyInfo_cmd.Execute
 </form>
 
 <form class="ajax-update">
-	<% if readonly <> "yes" then %>
-<div class="wrapper-createpo">      
+<% if readonly <> "yes" then %>
+
+<div class="form-inline wrapper-createpo">   
+		<select class="form-control form-control-sm mr-2" id="for_how_many_months" name="for_how_many_months" style="width:195px">
+		<option disabled="disabled" selected="selected">For how many months:</option>
+			<option value="3">3 months</option>
+			<option value="4">4 months</option>
+			<option value="5">5 months</option>
+			<option value="6">6 months</option>
+			<option value="7">7 months</option>
+			<option value="8">8 months</option>
+			<option value="9">9 months</option>
+		</select>
+	
 	  <button class="btn btn-purple mr-4 create_po" type="button">Create order</button>
-	<span class="alert-success csv" style="display:none">
+	<span class="alert-success csv p-1 pl-2 pr-2 rounded" style="display:none">
 ORDER CREATED
 	</span>
 </div>
@@ -357,18 +366,16 @@ var_productid = rsGetDetail.Fields.Item("ProductID").Value
 	</td>
 	<td class="form-inline flex-nowrap">
 <% 
-show_check = "no"
+
 if rsGetDetail.Fields.Item("restock_threshold").Value <> 0 then
 	if rsGetDetail.Fields.Item("restock_threshold").Value >= rsGetDetail.Fields.Item("qty").Value then
 		var_restock = rsGetDetail.Fields.Item("stock_qty").Value - rsGetDetail.Fields.Item("qty").Value
-		show_check = "yes"
 	else
 		var_restock = 0
 	end if
 else
 	if rsGetDetail.Fields.Item("stock_qty").Value - rsGetDetail.Fields.Item("qty").Value > 0 then
 		var_restock = rsGetDetail.Fields.Item("stock_qty").Value - rsGetDetail.Fields.Item("qty").Value
-		show_check = "yes"
 	else
 		var_restock = 0
 	end if
@@ -392,6 +399,7 @@ If Not ISNULL(rsGetDetail.Fields.Item("amt_waiting")) Then
 End If
 
 if var_restock < 0 Then var_restock = 0
+if var_restock > 0 Then show_check = "yes" Else show_check = "no"
 
 if show_check = "no" then
 	var_reorder = ""
@@ -727,16 +735,21 @@ $(document).ready(function(){
 
 	// After pressing create order button, load in ajax file and show download link
 	$('.create_po').click(function() {
-		var brand = $("#brand").val();
-		var tempid = $("#tempid").val();
-		var pototal = $("#total").html();
-		
-		$.ajax({
-		method: "POST",
-		url: "inventory/ajax_update_po_numbers.asp",
-		data: {brand: brand, tempid: tempid, pototal: pototal}
-		})
-		$(".csv").show();
+		if($("#for_how_many_months").val() != null){
+			var brand = $("#brand").val();
+			var tempid = $("#tempid").val();
+			var pototal = $("#total").html();
+			var for_how_many_months = $("#for_how_many_months").val();
+			
+			$.ajax({
+			method: "POST",
+			url: "inventory/ajax_update_po_numbers.asp",
+			data: {brand: brand, tempid: tempid, pototal: pototal, for_how_many_months: for_how_many_months}
+			})
+			$(".csv").show();
+		}else {
+			alert("Please select for how many months!");
+		}
 	});	
 	
 		// Toggle grey row change for active/inactive

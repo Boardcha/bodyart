@@ -37,7 +37,7 @@ If Request.Form("Brand") <> "" Then
 		  'Create a new empty purchase order
 		  set objCmd = Server.CreateObject("ADODB.Command")
 		  objCmd.ActiveConnection = conn
-		  objCmd.CommandText = "INSERT INTO TBL_PurchaseOrders (DateOrdered, Brand) VALUES ('"& date() &"', '"& request.form("Brand") & "')" 
+		  objCmd.CommandText = "INSERT INTO TBL_PurchaseOrders (Brand) VALUES ('"& request.form("Brand") & "')" 
 		  objCmd.Execute()
 		  Set objCmd = Nothing		
 

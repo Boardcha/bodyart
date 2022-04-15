@@ -10,23 +10,72 @@ objCmd.CommandText= "SELECT T3._month, COALESCE(SUM(total_qty), 0) As total_qty 
 					"ON T1._month = T3._month AND T1.date_added > DATEADD(""m"", -12, GETDATE()) AND T1.DetailID = " & detailID & _
 					"GROUP BY T3._month " & _
 					"ORDER BY T3._month"
-objCmd.Parameters.Append(objCmd.CreateParameter("value", 200, 1, 50, detailID))
 Set rsSales = objCmd.Execute()
+
+Set objCmd = Server.CreateObject ("ADODB.Command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText= "SELECT T1._month, COALESCE(T2.po_qty, 0) As po_qty FROM " & _
+					"(SELECT DISTINCT YEAR(date_added) * 100 + MONTH(date_added) As _month FROM TBL_OrderSummary WHERE date_added > DATEADD(""m"", -12, GETDATE())) T1 " & _
+					"LEFT JOIN  " & _
+					"(SELECT COALESCE(SUM(po_qty), 0) As po_qty, YEAR(po_date_received) * 100 + MONTH(po_date_received) As _month FROM tbl_po_details  " & _
+					"WHERE po_detailid = " & detailID & " AND po_date_received > DATEADD(""m"", -12, GETDATE()) AND po_received = 1 GROUP BY YEAR(po_date_received) * 100 + MONTH(po_date_received)) T2 ON T1._month = T2._month " & _
+					"ORDER BY T1._month"
+Set rsRestock = objCmd.Execute()
+
+Set objCmd = Server.CreateObject ("ADODB.Command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "SELECT qty, DateLastPurchased, gauge, length, productdetail1 FROM productdetails WHERE ProductID = (Select TOP 1 ProductID FROM productdetails WHERE productdetailid= " & detailID & ")"
+Set rsProductInfo = objCmd.Execute()
+
 Dim month(12)
 Dim sales(12)
+Dim restock(12)
 %>
-<%	If Not rsSales.EOF Then
+<%	
+If Not rsSales.EOF Then
 		For i = 1 to 12
 			month(i) = GetMonth(RIGHT(rsSales("_month"), 2))
 			sales(i) = rsSales("total_qty")
 			total_sales = total_sales + sales(i)
 			rsSales.MoveNext 
 		Next 
-	End If %>
+End If 
+If Not rsRestock.EOF Then
+		For i = 1 to 12
+			restock(i) = rsRestock("po_qty")
+			total_restock = total_restock + restock(i)
+			rsRestock.MoveNext 
+		Next 
+End If
+%>
 <div class="col-md-6">
 <canvas id="lineChart_<%=detailID%>"></canvas>
+<%If Not rsProductInfo.EOF Then%>
+	<table>
+		<th>Qty</th>
+		<th>Gauge</th>
+		<th>Length</th>
+		<th>DateLastPurchased</th>
+		<th>Product Detail</th>
+		<%While Not rsProductInfo.EOF%>
+			<tr>
+				<td><%=rsProductInfo("qty")%></td>
+				<td><%=rsProductInfo("gauge")%></td>
+				<td><%=rsProductInfo("length")%></td>
+				<td><%=rsProductInfo("DateLastPurchased")%></td>
+				<td><%=rsProductInfo("productdetail1")%></td>
+			</tr>
+			<%rsProductInfo.MoveNext%>	
+		<%Wend%>		
+	</table>
+<%End If%>	
 </div>	
-<% DataConn.Close() %>
+<% 
+Set rsSales = Nothing
+Set rsRestock = Nothing
+Set rsProductInfo = Nothing
+DataConn.Close() 
+%>
 <%
 Function GetMonth(month)
 	Select Case month
@@ -74,7 +123,19 @@ var myLineChart = new Chart(ctxL, {
 			],
 			pointBackgroundColor: 'rgba(200, 99, 132, .7)',
 			borderWidth: 2
-		}
+		},
+{
+			label: "Total Restock: <%=total_restock%>",
+			data: [<%=restock(1)%>, <%=restock(2)%>, <%=restock(3)%>, <%=restock(4)%>, <%=restock(5)%>, <%=restock(6)%>, <%=restock(7)%>, <%=restock(8)%>, <%=restock(9)%>, <%=restock(10)%>, <%=restock(11)%>, <%=restock(12)%>],
+			backgroundColor: [
+			'rgba(255, 193, 7, .2)',
+			],
+			borderColor: [
+			'rgba(255, 183, 7, .7)',
+			],
+			pointBackgroundColor: 'rgba(255, 183, 7, .7)',
+			borderWidth: 2
+		}		
 		]
 	},
 	options: {  
@@ -92,7 +153,7 @@ var myLineChart = new Chart(ctxL, {
                 label: function (tooltipItem, data) {
 					let label = data.labels[tooltipItem.index];
                     let value = data.datasets[tooltipItem.datasetIndex].data[tooltipItem.index];
-                    return ' ' + label + '. sales: ' + value;
+                    return ' ' + label + '.: ' + value;
                 }
             }
         }		

@@ -20,10 +20,11 @@
 	' Insert new purchase order into table	
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "INSERT INTO TBL_PurchaseOrders (DateOrdered, Brand, po_total, po_time_started) VALUES ('"& now() &"', ?, ?, ?)"
+	objCmd.CommandText = "INSERT INTO TBL_PurchaseOrders (Brand, po_total, po_time_started, months_to_restock) VALUES (?, ?, ?, ?)"
 	objCmd.Parameters.Append objCmd.CreateParameter("brand",200,1,50, request("brand"))
 	objCmd.Parameters.Append(objCmd.CreateParameter("po_total",6,1,10,request("pototal")))
-	objCmd.Parameters.Append(objCmd.CreateParameter("po_time_started",200,1,30, po_start_date ))
+	objCmd.Parameters.Append(objCmd.CreateParameter("po_time_started",200,1,30, Cstr(po_start_date)))
+	objCmd.Parameters.Append(objCmd.CreateParameter("for_how_many_months",3,1,2, request("for_how_many_months")))
 	objCmd.Execute()
 
 	' Get most recent purchase order id #

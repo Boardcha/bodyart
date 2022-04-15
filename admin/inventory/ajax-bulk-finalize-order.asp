@@ -4,7 +4,7 @@
 ' Insert new purchase order into table	
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "INSERT INTO TBL_PurchaseOrders (DateOrdered, po_internal_bulk_pull) VALUES ('"& now() &"', 1)"
+objCmd.CommandText = "INSERT INTO TBL_PurchaseOrders (po_internal_bulk_pull) VALUES (1)"
 objCmd.Execute()
 
 ' Get most recent purchase order id #

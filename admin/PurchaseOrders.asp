@@ -53,7 +53,9 @@ Set rsGetPurchaseOrders = rsGetPurchaseOrders_cmd.Execute
               <% 
 While NOT rsGetPurchaseOrders.EOF
 
-var_percentage_restocked = Round(rsGetPurchaseOrders("total_restocked") / rsGetPurchaseOrders("total_ordered") * 100)
+if rsGetPurchaseOrders("total_ordered") > 0 then
+  var_percentage_restocked = Round(rsGetPurchaseOrders("total_restocked") / rsGetPurchaseOrders("total_ordered") * 100)
+end if
 %>
                 <tr id="<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>">
                   <% if var_access_level <> "Customer service" then %>
