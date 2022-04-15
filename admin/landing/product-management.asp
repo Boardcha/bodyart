@@ -96,7 +96,6 @@ Set rsInventoryIssues = objcmd.Execute()
               </div><!-- card -->
         </div><!-- col -->
         <% end if ' permissions on sales %>
-        <% if var_access_level <> "Photography" and user_name <> "Adrienne" and user_name <> "Jackie" then %>
         <div class="col-3 pr-2 pb-3">
             <div class="card h-100">
                 <div class="card-header">
@@ -110,8 +109,6 @@ Set rsInventoryIssues = objcmd.Execute()
                 </div><!-- card body -->
               </div><!-- card -->
         </div>
-        <% end if %>
-        <% if var_access_level <> "Photography" and user_name <> "Jackie" then %>
         <div class="col-3 px-2 pb-3">
             <div class="card h-100">
                 <div class="card-header">
@@ -127,7 +124,6 @@ Set rsInventoryIssues = objcmd.Execute()
                 </div><!-- card body -->
               </div><!-- card -->
         </div><!-- col -->
-        <% end if %>
         <div class="col-3 px-2 pb-3">
             <div class="card h-100">
                 <div class="card-header">

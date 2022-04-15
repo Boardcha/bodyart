@@ -129,10 +129,8 @@ end if '==== rsGetItems.eof
         var_matchqty = "no"
     end if
 
-    If rsGetItems.Fields.Item("ProductID").Value = 2180 OR rsGetItems.Fields.Item("ProductID").Value = 25324 OR rsGetItems.Fields.Item("BinNumber_Detail").Value <> 0 OR rsGetItems.Fields.Item("customorder").Value = "yes" then
+    If rsGetItems.Fields.Item("ProductID").Value = 2180 OR rsGetItems.Fields.Item("ProductID").Value = 25324 OR rsGetItems.Fields.Item("BinNumber_Detail").Value <> 0 OR rsGetItems.Fields.Item("customorder").Value = "yes" OR rsGetItems("anodization_fee") > 0 then
         var_location = rsGetItems.Fields.Item("ProductDetailID").Value
-    elseif  rsGetItems("anodization_fee") > 0 then
-        var_location = rsGetItems("OrderDetailID")
     else
         var_location = rsGetItems.Fields.Item("ID_Number").Value & rsGetItems.Fields.Item("location").Value
     end if

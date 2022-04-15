@@ -121,32 +121,39 @@ function CalcCoupons
 	' If there was a coupon used then reduce the coupon and  tax amount on the order
 	if var_price < var_origprice OR var_sales_tax > 0 then
 		var_discount_difference = var_origprice - var_price
-		item_tax = FormatNumber(var_price * .0825, -1, -2, -0, -2)
 		
 			discount = ""
 		if var_coupon_discount <> 0 then
 			discount = "total_coupon_discount = total_coupon_discount - ?"
-			response.write "test"
 		end if
 		if var_preferred_discount <> 0 then
 			discount = "total_preferred_discount = total_preferred_discount - ?"
 		end if
-		if var_coupon_discount <> 0 or var_preferred_discount <> 0 then
+		if discount <> "" then
 			add_comma = ", "
 		end if
 		if var_sales_tax > 0 then
+			item_tax = FormatNumber(var_price * .0825, -1, -2, -0, -2)
 			write_tax = "total_sales_tax = total_sales_tax - ?"
+			
 		else
-			write_tax = "total_sales_tax = 0 "
+			item_tax = 0
+			write_tax = "total_sales_tax = ?"
 		end if
+		
+		'response.write "item price " & var_price & "<br>"
+		'response.write "current tax in DB " & var_sales_tax & "<br>"
+		'response.write "var item_tax " & item_tax & "<br>"
+		'response.write "tax calc " & var_sales_tax - item_tax & "<br>"
 
 		set objCmd = Server.CreateObject("ADODB.Command")
 		objCmd.ActiveConnection = DataConn
 		objCmd.CommandText = "UPDATE sent_items SET " & discount & " " & add_comma & " " & write_tax & " WHERE ID = ?" 
-		objCmd.Parameters.Append(objCmd.CreateParameter("var_discount_difference",6,1,10, var_discount_difference ))
-		if var_sales_tax > 0 then
-			objCmd.Parameters.Append(objCmd.CreateParameter("item_tax",6,1,10, item_tax ))
+		
+		if discount <> "" then
+			objCmd.Parameters.Append(objCmd.CreateParameter("discount",6,1,10, var_discount_difference ))
 		end if
+		objCmd.Parameters.Append(objCmd.CreateParameter("item_tax",6,1,10, item_tax ))
 		objCmd.Parameters.Append(objCmd.CreateParameter("string_id",3,1,12,var_invoice))
 		objCmd.Execute()
 
