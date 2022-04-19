@@ -1,7 +1,7 @@
 	var totalWithoutShipping = 0;
 	var salesTax = 0;
 	var shippingWeight = 0;
-	
+	var free_items_count = 0;
 	
 	function calcAllTotals(e) {
 		
@@ -156,51 +156,51 @@
 				var subtotal_free_gifts = (json.fraudcheck_freegifts_subtotal);
 				// removed from line above  - json.var_totalvalue_certs_incart
 				
-				// Show/hide free gifts when grand total changes
+				free_items_count = 7;
+				freeGiftText = '';
+				
 				if(subtotal_free_gifts < 150) {
-
-					$('.freegift5').hide();
-				//	$('#freegift5 option:first-child').attr("selected", "selected").change();
-				} else {
-					$('.freegift5').show();
-					$(".freegift5").css('visibility', 'visible');
+					free_items_count = 6;
+					amountToGetAnotherGift = 150 - subtotal_free_gifts;
+					freeGiftText = '<br/><span class="font-weight-normal">You’ve <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift.<br><a href="#" data-toggle="modal" data-target="#free-items-page-modal">View our free gifts</a></span>';
+					clearFreeItemsCookie(7);
 				}
 				if(subtotal_free_gifts < 100) {
-					$('.freegift4').hide();	
-				//	$('#freegift4 option:first-child').attr("selected", "selected").change();
-				} else {
-					$('.freegift4').show();
-					$(".freegift4").css('visibility', 'visible');
+					free_items_count = 5;
+					amountToGetAnotherGift = 100 - subtotal_free_gifts;
+					freeGiftText = '<br/><span class="font-weight-normal">You’ve <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift.<br><a href="#" data-toggle="modal" data-target="#free-items-page-modal">View our free gifts</a></span>';
+					clearFreeItemsCookie(6);
 				}
 				if(subtotal_free_gifts < 75) {
-					$('.freegift3').hide();	
-				//	$('#freegift3 option:first-child').attr("selected", "selected").change();
-				} else {
-					$('.freegift3').show();
-					$(".freegift3").css('visibility', 'visible');
+					free_items_count = 4;
+					amountToGetAnotherGift = 75 - subtotal_free_gifts;
+					freeGiftText = '<br/><span class="font-weight-normal">You’ve <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift.<br><a href="#" data-toggle="modal" data-target="#free-items-page-modal">View our free gifts</a></span>';
+					clearFreeItemsCookie(5);
 				}
 				if(subtotal_free_gifts < 50) {
-					$('.freegift2').hide();
-				//	$('#freegift2 option:first-child').attr("selected", "selected").change();					
-				} else {
-					$('.freegift2').show();
-					$(".freegift2").css('visibility', 'visible');
+					free_items_count = 3;
+					amountToGetAnotherGift = 50 - subtotal_free_gifts;
+					freeGiftText = '<br/><span class="font-weight-normal">You’ve <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift.<br><a href="#" data-toggle="modal" data-target="#free-items-page-modal">View our free gifts</a></span>';
+					clearFreeItemsCookie(4);
+				}
+
+				if(subtotal_free_gifts < 30) {
+					free_items_count = 2;				
+					amountToGetAnotherGift = 30 - subtotal_free_gifts;
+					freeGiftText = '<br/><span class="font-weight-normal">You’ve <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to earn a free gift.<br><a href="#" data-toggle="modal" data-target="#free-items-page-modal">View our free gifts</a></span>';
+					clearFreeItemsCookie(3);
 				}
 				
-				if(subtotal_free_gifts < 30) {
-					$('.freegift1').hide();	
-				//	$('#freegift1 option:first-child').attr("selected", "selected").change();
-				} else {
-					$('.freegift1').show();
-					$(".freegift1").css('visibility', 'visible');
-					
-				}
-			} // Only run this code if cart has items other than gift certs	
-			else { // if only gift certs are found
-				$("#gaugecard, #freeorings, #freesticker, .freegift1,.freegift2,.freegift3,.freegift4,.freegift5").hide();
-		
+				if(free_items_count > 0){
+					let s = (free_items_count > 1) ? 's' : '';
+					$("#free-items-info").html('<span class="font-weight-bold"><i class="fa fa-gift"></i> You’ve earned ' + free_items_count + ' FREE GIFT' + s + ' <a href="#" id="btn-free-items" data-toggle="modal" data-target="#free-items-modal">Select it now</a></span>' + freeGiftText);
+				}	
+			}else{
+				free_items_count = 0;		
+				$("#free-items-info").html('');
+				clearFreeItemsCookie(1);
 			}
-
+			console.log(free_items_count);
 			// Disabling place order button by country or other restrictions
 			/*	
 			if (tax_country === 'Hong Kong' || tax_country === 'Slovenia') {
