@@ -61,7 +61,7 @@ if column_title = "po_qty" OR column_title ="po_qty_vendor" then
 	 
 else	
 	'Update a detail if it's not product level
-	if column_title <> "autoclavable" then
+	if column_title <> "autoclavable" AND column_title <> "SaleDiscount" AND column_title <> "type" then
 	
 		' update any other field as usual
 		set objCmd = Server.CreateObject("ADODB.command")
@@ -76,7 +76,12 @@ else
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn
 		objCmd.CommandText = "update jewelry set " & column_title & " = ? where ProductID = ?"
-		objCmd.Parameters.Append(objCmd.CreateParameter("value",3,1,10,column_value))
+		
+		if column_title = "type" then
+			objCmd.Parameters.Append(objCmd.CreateParameter("value",200,1,50,column_value))
+		else
+			objCmd.Parameters.Append(objCmd.CreateParameter("value",3,1,10,column_value))
+		end if
 		objCmd.Parameters.Append(objCmd.CreateParameter("id",3,1,10,id))
 		objCmd.Execute()
 	

@@ -5,13 +5,16 @@
 <%
 '====== SINCE THIS FILE IS IN ROOT DIRECTORY, MAKE SURE THAT USER IS LOGGED IN VIA ADMIN IN ORDER TO ACCESS CODE ON THIS page
 
+
 if request.cookies("adminuser") = "yes" then
 
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT customer_ID, total_preferred_discount, total_coupon_discount, total_sales_tax, transactionID, pay_method, email, customer_first, ID FROM sent_items WHERE ID = ?" 
+objCmd.CommandText = "SELECT customer_ID, total_preferred_discount, total_coupon_discount, total_sales_tax, transactionID, pay_method, email, customer_first, ID, combined_tax_rate FROM sent_items WHERE ID = ?" 
 objCmd.Parameters.Append(objCmd.CreateParameter("string_id",3,1,12,request.form("invoice")))
 Set rsGetOrder = objCmd.Execute()
+
+
 
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
@@ -30,6 +33,7 @@ if not rsGetOrder.eof then
 	var_sales_tax = rsGetOrder.Fields.Item("total_sales_tax").Value
 	transaction_id = rsGetOrder.Fields.Item("transactionID").Value
 	pay_method = rsGetOrder.Fields.Item("pay_method").Value
+	combined_tax_rate = rsGetOrder("combined_tax_rate")
 	
 	if pay_method <> "PayPal" then
 		var_card_info = "<payment><creditCard><cardNumber>" & request.form("card_number") & "</cardNumber><expirationDate>XXXX</expirationDate></creditCard></payment>"
@@ -133,7 +137,7 @@ function CalcCoupons
 			add_comma = ", "
 		end if
 		if var_sales_tax > 0 then
-			item_tax = FormatNumber(var_price * .0825, -1, -2, -0, -2)
+			item_tax = FormatNumber(var_price * combined_tax_rate, -1, -2, -0, -2)
 			write_tax = "total_sales_tax = total_sales_tax - ?"
 			
 		else
@@ -500,7 +504,7 @@ if request.form("agenda") = "exchange" then
 		AddItem.Parameters.Append(objCmd.CreateParameter("var_exchange_productid",3,1,12, var_exchange_productid ))
 		AddItem.Parameters.Append(objCmd.CreateParameter("var_exchange_detailid",3,1,12, var_exchange_detailid ))
 		AddItem.Parameters.Append(objCmd.CreateParameter("var_exchange_qty",3,1,12, var_exchange_qty ))
-		AddItem.Parameters.Append(objCmd.CreateParameter("item_price",6,1,10, item_price ))
+		AddItem.Parameters.Append(objCmd.CreateParameter("item_price",6,1,10, var_add_price ))
 		AddItem.Execute() 
 		
 		' DEDUCT QUANTITIES FOR DIFFERENT PRODUCT
@@ -674,7 +678,31 @@ if request.form("agenda") = "exchange" then
 end if '	End exchange item  ------------------------------------- 
 
 
+' ============== Clear backorder status from any item that accesses this page ==============
+'=============== LEAVE ABOVE THE UNDO CODE BELOW SO THAT IS STAYS OFF BACKORDER
+	set objCmd = Server.CreateObject("ADODB.Command")
+	objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
+	objCmd.CommandText = "UPDATE TBL_OrderSummary SET backorder = 0, BackorderReview = 'N', notes = 'Removed BO status' WHERE OrderDetailID = ?" 
+	objCmd.Parameters.Append(objCmd.CreateParameter("v",3,1,12, var_item ))
+	objCmd.Execute()
+' 	==========================================================================
 
+'	Undo the denying of a backorder (accidentally clicked) ------------------------------
+if request.form("agenda") = "undo" then
+ 
+	set objCmd = Server.CreateObject("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "UPDATE TBL_OrderSummary SET backorder = 1, BackorderReview = 'Y' WHERE OrderDetailID = ?" 
+	objCmd.Parameters.Append(objCmd.CreateParameter("var_item",3,1,12, var_item ))
+	objCmd.Execute()
+	
+	var_notes = "Automated message: Backorder has been re-activated # " & var_detailid
+%>
+{
+	"status":"Backorder has been re-activated</br><br/><a href='invoice.asp?ID=<%= var_invoice %>'>Click here</a> to refresh order"
+}
+<%
+end if ' Undo backorder deny 
 
 ' 	============== DO TASKS BELOW FOR EACH SCENARIO ======================
 ' Notes for original order
@@ -696,14 +724,6 @@ if new_invoice_id <> "" then
 	objCmd.Parameters.Append(objCmd.CreateParameter("note",200,1,250,"Automated message: Backorder shipment generated from another order"))
 	objCmd.Execute()
 end if
-
-
-' Clear backorder status from any item that accesses this page
-	set clearbo = Server.CreateObject("ADODB.Command")
-	clearbo.ActiveConnection = MM_bodyartforms_sql_STRING
-	clearbo.CommandText = "UPDATE TBL_OrderSummary SET backorder = 0, BackorderReview = 'N', notes = 'Removed BO status' WHERE OrderDetailID = ?" 
-	clearbo.Parameters.Append(objCmd.CreateParameter("v",3,1,12, var_item ))
-	clearbo.Execute()
 
 	%>
 	<!--#include virtual="emails/function-send-email.asp"-->

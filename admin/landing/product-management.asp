@@ -165,6 +165,16 @@ Set rsInventoryIssues = objcmd.Execute()
               </div><!-- card -->
         </div><!-- col -->
         <% end if %>
+        <div class="col-3 pl-2 pb-3">
+          <div class="card h-100">
+              <div class="card-header">
+                <h5>SOPs & Handbooks</h5>
+              </div>
+              <div class="card-body">
+                <a href="https://docs.google.com/document/d/1wq4u555TkT1SqR7q0gksNTbujsckIP-s1jCnyzylKkE/" target="_blank"><img class="mr-1" src="/images/icons/google-drive.png" height="20px">Listing Products</a><br/>
+              </div><!-- card body -->
+            </div><!-- card -->
+      </div><!-- col -->
     </div><!-- row -->
 </div><!-- container -->
 

@@ -1,5 +1,5 @@
 <form class="form-inline" action="/admin/invoice.asp" method="post">
-    <input class="form-control form-control" type="text" name="invoice_num" placeholder="Inovice #">
+    <input class="form-control form-control" type="text" name="invoice_num" placeholder="Invoice #">
     <button class="btn btn-sm btn-secondary ml-2" type="submit">Search</button>
 </form>
 <form class="form-inline" action="/admin/order history.asp" method="get">

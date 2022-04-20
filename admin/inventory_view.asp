@@ -168,7 +168,7 @@ Set rsGetCompanyInfo = rsGetCompanyInfo_cmd.Execute
 <link href="../CSS/fortawesome/css/external-min.css?v=031920" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/js/popper.min.js"></script>
 <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="scripts/generic_auto_update_fields.js?ver=041522"></script>
+<script type="text/javascript" src="scripts/generic_auto_update_fields.js?v=081221"></script>
 <script type="text/javascript">
 
 	//url to to do auto updating
@@ -310,8 +310,8 @@ end if
 if var_productid <> rsGetDetail.Fields.Item("ProductID").Value then
 %>
 <tbody class="tbody_header <%= rsGetDetail.Fields.Item("type").Value %> <%= var_class_qty %>">
-	<tr>
-		<td colspan="14" class="bg-secondary">
+	<tr class="bg-secondary">
+		<td colspan="6">
 		<a href="../productdetails.asp?ProductID=<%=(rsGetDetail.Fields.Item("ProductID").Value)%>" target="_blank"><img src="https://bafthumbs-400.bodyartforms.com/<%=(rsGetDetail.Fields.Item("picture").Value)%>" class="rounded float-left mr-2" style="height:50px;width:50px" <%= var_img_enlarge %>></a>
 		
 		<a class="text-light h5" href="product-edit.asp?ProductID=<%=(rsGetDetail.Fields.Item("ProductID").Value)%>" target="_blank"><%= rsGetDetail.Fields.Item("title").Value %><% if rsGetDetail.Fields.Item("type").Value <> "None" then %> - <%= rsGetDetail.Fields.Item("type").Value %><% end if %> (<%=(rsGetDetail.Fields.Item("ProductID").Value)%>)</a>
@@ -343,8 +343,57 @@ if var_productid <> rsGetDetail.Fields.Item("ProductID").Value then
 			i = i + 1
 		end if
 		%>
-<a href="http://bodyartforms-products.bodyartforms.com/<%= rsGetDetail.Fields.Item("largepic").Value %>" class="ml-3 enlarge" title="<%= rsGetDetail.Fields.Item("material").Value %>">img</a>
+			<a href="http://bodyartforms-products.bodyartforms.com/<%= rsGetDetail.Fields.Item("largepic").Value %>" class="btn btn-sm btn-outline-light enlarge" title="<%= rsGetDetail.Fields.Item("material").Value %>">Enlarge image</a>
 		</div>
+		</td>
+		<td>
+			<div>
+				<label class="font-weight-bold" style="color:white" for="vartype">Status</label>
+				<select class="form-control form-control-sm " name="vartype_<%=rsGetDetail("ProductID")%>" data-column="type" data-id="<%=rsGetDetail("ProductID")%>" data-friendly="Status"  style="width:150px">
+					<option>None</option>
+					<option value="Clearance">Clearance</option>
+					<option value="limited">Limited</option>
+					<option value="Discontinued">Discontinued</option>
+					<option value="One time buy">One time buy</option>
+					<option value="Consignment">Consignment</option>
+					<option value="<%=(rsGetDetail.Fields.Item("type").Value)%>" selected><%=(rsGetDetail.Fields.Item("type").Value)%></option>
+				</select>
+			</div>		
+		</td>
+		<td>
+            <div>
+                <label class="font-weight-bold" style="color:white" for="discount">Discount</label>
+                <select class="form-control form-control-sm" name="discount_<%=rsGetDetail("ProductID")%>" data-column="SaleDiscount" data-id="<%=rsGetDetail("ProductID")%>" data-friendly="Discount amount" style="width:100px">
+                    <option value="<%= (rsGetDetail.Fields.Item("SaleDiscount").Value) %>" selected><% if rsGetDetail.Fields.Item("SaleDiscount").Value = 0 then %>None<%else%><%= (rsGetDetail.Fields.Item("SaleDiscount").Value) %><% end if %></option>
+                    <option value="0">None</option>
+                    <option value="5">5%</option>
+                    <option value="10">10%</option>
+                    <option value="15">15%</option>
+                    <option value="20">20%</option>
+                    <option value="25">25%</option>
+                    <option value="30">30%</option>
+                    <option value="35">35%</option>
+                    <option value="40">40%</option>
+                    <option value="45">45%</option>
+                    <option value="50">50%</option>
+                    <option value="55">55%</option>
+                    <option value="60">60%</option>
+                    <option value="65">65%</option>
+                    <option value="70">70%</option>
+                    <option value="75">75%</option>
+                    <option value="80">80%</option>
+                    <option value="85">85%</option>
+                    <option value="90">90%</option>
+                    <option value="95">95%</option>
+				</select>
+			</div>		
+		</td>
+		<td class="text-center">
+			<label class="font-weight-bold" style="color:white" for="autoclavable_<%= i %>">Autoclavable?</label><br>
+			<input class="" type="checkbox" value="1" name="autoclavable_<%= i %>" data-id="<%= rsGetDetail.Fields.Item("ProductID").Value %>" data-column="autoclavable" data-friendly="Autoclavable" <%= var_autoclave_checked %>>
+		</td>
+		<td class="text-center" colspan="5">
+			&nbsp;
 		</td>
 	</tr>
 </tbody>

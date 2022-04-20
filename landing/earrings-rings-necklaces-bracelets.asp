@@ -1,7 +1,7 @@
 <%@LANGUAGE="VBSCRIPT"%>
 	<%
-	page_title = "Unique rings, necklaces, pendants, bracelets & ear cuffs"
-	page_description = "Shop our selection of necklaces, pendants, rings, ear cuffs, and bracelets. Express yourself."
+	page_title = "Unique earrings, rings, necklaces, pendants, bracelets & ear cuffs"
+	page_description = "Shop our selection of earrings, necklaces, pendants, rings, ear cuffs, and bracelets. Express yourself."
 	page_keywords = "regular finger rings, necklaces, necklace chains, bracelets"
 %>
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
@@ -36,6 +36,13 @@
 
 <div class="container-fluid img-circles">
 	<div class="row  justify-content-center text-center">
+		<div class="col-6 col-lg-3 col-xl-3 col-md-3 py-3">
+			<a class="text-secondary" class="track-click" id="landing-regular-rings-image" href="/products.asp?jewelry=earring">
+				<img class="img-fluid border border-secondary rounded-circle" src="/images/landing-pages/regular-jewelry/earrings2.jpg">
+				<h4>EARRINGS</h4>	
+			</a>
+				
+		</div>
 		<div class="col-6 col-lg-3 col-xl-3 col-md-3 py-3">
 			<a class="text-secondary" class="track-click" id="landing-regular-rings-image" href="/products.asp?jewelry=finger-ring">
 				<img class="img-fluid border border-secondary rounded-circle" src="/images/landing-pages/regular-jewelry/rings.jpg">

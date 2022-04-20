@@ -1769,7 +1769,7 @@ end if
 <script type="text/javascript" src="/js/chosen/chosen.jquery.js"></script>
 <script type="text/javascript" src="scripts/dropzone.js"></script>
 <script type="text/javascript" src="scripts/jquery.validate.min.js"></script>
-<script type="text/javascript" src="scripts/product-edit-version2.js?v=041322"></script>
+<script type="text/javascript" src="scripts/product-edit-version2.js?v=042022"></script>
 </html>
 <% If var_access_level = "Packaging" then  %>
 	<script type="text/javascript">

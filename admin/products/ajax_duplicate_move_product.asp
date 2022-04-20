@@ -6,7 +6,7 @@ if request.form("productid") <> "" and request.form("duplicate")= "product-only"
 	
 		set CopyProduct = Server.CreateObject("ADODB.Command")
 		CopyProduct.ActiveConnection = DataConn
-		CopyProduct.CommandText = "INSERT INTO jewelry(jewelry, type, title, description, picture, largepic, material, blackline, internal, customorder, brandname, retainer, pair, flare_type, active, new_page_date, date_added, added_by) SELECT jewelry, type, title, description, 'nopic.gif', 'nopic.gif', material, blackline, internal, customorder, brandname, retainer, pair, flare_type, " & 0 & ", '" & now() & "', '" & now() & "', '" & user_name & "' FROM jewelry WHERE ProductID =" & request.form("productid") 
+		CopyProduct.CommandText = "INSERT INTO jewelry(jewelry, type, title, description, picture, picture_400, largepic, material, blackline, internal, customorder, brandname, retainer, pair, flare_type, active, new_page_date, date_added, added_by) SELECT jewelry, type, title, description, 'nopic.gif', 'nopic.gif', 'nopic.gif', material, blackline, internal, customorder, brandname, retainer, pair, flare_type, " & 0 & ", '" & now() & "', '" & now() & "', '" & user_name & "' FROM jewelry WHERE ProductID =" & request.form("productid") 
 		CopyProduct.Execute() 
 		
 		Set objCmd = Server.CreateObject ("ADODB.Command")
@@ -28,7 +28,7 @@ if request.form("productid") <> "" and request.form("duplicate")= "all"  then
 	
 		set CopyProduct = Server.CreateObject("ADODB.Command")
 		CopyProduct.ActiveConnection = DataConn
-		CopyProduct.CommandText = "INSERT INTO jewelry(jewelry, type, title, description, picture, largepic, material, blackline, internal, customorder, brandname, retainer, pair, flare_type, active, new_page_date, date_added, added_by) SELECT jewelry, type, title, description, 'nopic.gif', 'nopic.gif', material, blackline, internal, customorder, brandname, retainer, pair, flare_type, " & 0 & ", '" & now() & "', '" & now() & "', '" & user_name & "' FROM jewelry WHERE ProductID =" & request.form("productid") 
+		CopyProduct.CommandText = "INSERT INTO jewelry(jewelry, type, title, description, picture, picture_400, largepic, material, blackline, internal, customorder, brandname, retainer, pair, flare_type, active, new_page_date, date_added, added_by) SELECT jewelry, type, title, description, 'nopic.gif', 'nopic.gif', 'nopic.gif', material, blackline, internal, customorder, brandname, retainer, pair, flare_type, " & 0 & ", '" & now() & "', '" & now() & "', '" & user_name & "' FROM jewelry WHERE ProductID =" & request.form("productid") 
 		CopyProduct.Execute() 
 		
 		Set objCmd = Server.CreateObject ("ADODB.Command")

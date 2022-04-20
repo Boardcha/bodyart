@@ -14,9 +14,27 @@
 	.img-circles img:hover{border-color: #696887!important;border-width:10px!important}
 </style>
 <!--#include virtual="/bootstrap-template/filters.asp" -->
-
+<div class="slider-container text-center">
+	<a href="/products.asp?threading=Threadless">
+	<picture>
+		<source media="(max-width: 550px)" sizes="100vw" srcset="/images/landing-pages/threadless/landing-threadless-jewelry-550x350.jpg">
+		<source media="(max-width: 850px)" sizes="100vw" srcset="/images/landing-pages/threadless/landing-threadless-jewelry-850x350.jpg">
+		<source media="(max-width: 1024px)" sizes="100vw" srcset="/images/landing-pages/threadless/landing-threadless-jewelry-1024x350.jpg">
+		<source media="(max-width: 1600px)" sizes="100vw" srcset="/images/landing-pages/threadless/landing-threadless-jewelry-1600x350.jpg">
+		<source media="(min-width: 1920px)" sizes="100vw" srcset="/images/landing-pages/threadless/landing-threadless-jewelry-1920x350.jpg">
+			<img class="img-fluid" src="/images/landing-pages/threadless/landing-threadless-jewelry-1600x350.jpg" 
+		srcset="/images/landing-pages/threadless/landing-threadless-jewelry-1920x350.jpg 1920w,
+		/images/landing-pages/threadless/landing-threadless-jewelry-1600x350.jpg 1600w,
+		/images/landing-pages/threadless/landing-threadless-jewelry-1024x350.jpg 1024w,
+		/images/landing-pages/threadless/landing-threadless-jewelry-850x350.jpg 850w,
+		/images/landing-pages/threadless/landing-threadless-jewelry-550x350.jpg 550w"
+		sizes="100vw"
+		alt="Threadless jewelry top main landing image" />
+	</picture>
+	</a>
+</div>
 <div class="p-2">
-<h4 class="d-inline">How threadless body jewelry works</h4><a class="btn btn-sm btn-secondary ml-3" href="/products.asp?threading=Threadless">All threadless jewelry</a>
+<h4 class="d-inline">How threadless body jewelry works</h4>
 <div class="mb-4">
 Threadless body jewelry is a great alternative to standard threaded jewelry. Threadless ends use a thin "pin" that you slightly bend to get a secure fit. Check out our video and images below to learn how threadless jewelry works.
 </div>

@@ -57,21 +57,54 @@ $(document).on("click", ".btn-clear-bo", function(event){
     var invoice = $(this).attr("data-invoiceid");
     var stock_qty = $('#deny_qty_' + productdetailid).val();
     
-    $('#spinner_' + item).show();
-    console.log('Qty we counted ' + stock_qty);
+    $('#clear_' + item).hide();
+    $('#spinner_' + item + ', #undo_' + item).show();
+    
     $.ajax({
     method: "POST",
     url: "/includes/ajax-backorder-process.asp",
     data: {item: item, agenda: agenda, invoice: invoice, stock_qty: stock_qty, detailid: productdetailid}
     })
     .done(function(msg ) {
-        $('#row_' + item).hide();
+        $('#row_' + item).delay(5000).fadeOut('slow');
     })
     .fail(function(msg) {
         alert('FAILED');
         $('#spinner_' + item).hide();
     });
 }); // End CLear backorder
+
+// Undo deny backorder
+$(document).on("click", ".btn-undo", function(event){
+    var item = $(this).attr("data-item");
+    var productdetailid = $(this).attr("data-productdetailid");
+    var agenda = $(this).attr("data-agenda");
+    var invoice = $(this).attr("data-invoiceid");
+    
+    $('#clear_' + item).show();
+    $('#spinner_' + item + ', #undo_' + item).hide();
+
+    $.ajax({
+    method: "POST",
+    url: "/includes/ajax-backorder-process.asp",
+    data: {item: item, agenda: agenda, detailid: productdetailid, invoice: invoice}
+    })
+    .done(function(msg ) {
+        $('#row_' + item).fadeIn('fast');
+    })
+    .fail(function(msg) {
+        alert('FAILED');
+    });
+}); // Undo deny backorder
+
+// Load research information up about products
+$(document).on("click", ".btn-load-research", function(event){
+    var productid = $(this).attr("data-productid");
+    
+    $('#load-research').load("/products/ajax-backorder-research.asp", {productid: productid}, function() {
+    });	
+}); // End Load research information
+
 </script>
 <%
 end if

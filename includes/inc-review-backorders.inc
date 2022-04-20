@@ -29,8 +29,10 @@ While NOT rsGetBackorderReviews.EOF
 							(BIN <%=(rsGetBackorderReviews.Fields.Item("BinNumber_Detail").Value)%>)
 						<% end if %>
 					</div>
-					<button class="btn btn-success btn-sm btn-submit-bo mr-3 btn-update-bo-modal" data-toggle="modal" data-target="#modal-submit-backorder" data-itemid="<%=(rsGetBackorderReviews.Fields.Item("OrderDetailID").Value)%>" data-qty="<%= rsGetBackorderReviews.Fields.Item("stock_qty").Value %>" data-title="<%= Server.HTMLEncode(rsGetBackorderReviews.Fields.Item("item_description").Value) %>" data-reason="<%= rsGetBackorderReviews("reason_for_backorder") %>"><strong>APPROVE <span class="mx-1 px-2 bg-light text-dark"><%= rsGetBackorderReviews("qty") %></span> for BO</strong></button><button class="btn btn-danger btn-sm  btn-clear-bo" data-item="<%=(rsGetBackorderReviews.Fields.Item("OrderDetailID").Value)%>" data-invoiceid="<%=(rsGetBackorderReviews.Fields.Item("InvoiceID").Value)%>" data-productdetailid="<%=rsGetBackorderReviews.Fields.Item("ProductDetailID").Value %>" data-agenda="clear">Deny</button>
+					<button class="btn btn-success btn-sm btn-submit-bo mr-3 btn-update-bo-modal" data-toggle="modal" data-target="#modal-submit-backorder" data-itemid="<%=(rsGetBackorderReviews.Fields.Item("OrderDetailID").Value)%>" data-qty="<%= rsGetBackorderReviews.Fields.Item("stock_qty").Value %>" data-title="<%= Server.HTMLEncode(rsGetBackorderReviews.Fields.Item("item_description").Value) %>" data-reason="<%= rsGetBackorderReviews("reason_for_backorder") %>"><strong>APPROVE <span class="mx-1 px-2 bg-light text-dark"><%= rsGetBackorderReviews("qty") %></span> for BO</strong></button><button class="btn btn-danger btn-sm  btn-clear-bo" data-item="<%=(rsGetBackorderReviews.Fields.Item("OrderDetailID").Value)%>" data-invoiceid="<%=(rsGetBackorderReviews.Fields.Item("InvoiceID").Value)%>" data-productdetailid="<%=rsGetBackorderReviews.Fields.Item("ProductDetailID").Value %>" data-agenda="clear" id="clear_<%= rsGetBackorderReviews("OrderDetailID") %>">Deny</button>
+					<button class="btn btn-sm btn-warning btn-undo" data-item="<%= rsGetBackorderReviews("OrderDetailID") %>" data-productdetailid="<%=rsGetBackorderReviews("ProductDetailID") %>" data-agenda="undo" data-invoiceid="<%= rsGetBackorderReviews("InvoiceID") %>" id="undo_<%= rsGetBackorderReviews("OrderDetailID") %>" style="display:none"><i class="fa fa-undo fa-lg"></i></button>
 						<span class="ml-3" id="spinner_<%=(rsGetBackorderReviews.Fields.Item("OrderDetailID").Value)%>" style="display:none"><i class="fa fa-spinner fa-lg fa-spin"></i></span>
+						<span class="btn btn-sm btn-outline-secondary ml-3 btn-load-research" data-toggle="modal" data-target="#modal-product-research"  data-productid="<%= rsGetBackorderReviews("ProductID") %>">Research</span>
 				</div>
 				<div class="card-body">
 					<div class=" clearfix">
@@ -78,6 +80,27 @@ Wend
 	</div>
 </div>
 <!-- End Process backorder Modal -->   
+
+ <!-- Process backorder Modal -->
+<div class="modal fade" id="modal-product-research" tabindex="-1" role="dialog"  aria-labelledby="modal-submit-backorder" >
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title">Product Research</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body small">
+			<div id="load-research"></div>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		</div>
+	  </div>
+	</div>
+</div>
+<!-- End Process backorder Modal --> 
 
 	<% End If ' end Not rsGetBackorderReviews.EOF Or NOT rsGetBackorderReviews.BOF 
 rsGetBackorderReviews.Close()
