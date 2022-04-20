@@ -125,12 +125,6 @@ end if
 	if request.cookies("gaugecard") <> "no" then
 		free_card = " OR ProductDetailID = 5461 "
 	end if
-	if request.cookies("oringsid") <> "" then
-		free_orings = " OR ProductDetailID = ? "
-	end if
-	if request.cookies("stickerid") <> "" then
-		free_sticker = " OR ProductDetailID = ? "
-	end if
 	if request.cookies("freegift1id") <> "" then
 		free_gift1 = " OR ProductDetailID = ? "
 	end if
@@ -146,16 +140,14 @@ end if
 	if request.cookies("freegift5id") <> "" then
 		free_gift5 = " OR ProductDetailID = ? "
 	end if
-	'response.write " free card ---" & free_card & "---<br/>"
-	'response.write " free o-rings ---" & free_orings & "---<br/>"
-	'response.write " free sticker ---" & free_sticker & "---<br/>"
-	'response.write " free free_gift1 ---" & free_gift1 & "---<br/>"
-	'response.write " free free_gift2 ---" & free_gift2 & "---<br/>"
-	'response.write " free free_gift3 ---" & free_gift3 & "---<br/>"
-	'response.write " free_gift4 ---" & free_gift4 & "---<br/>"
-	'response.write " free_gift5 ---" & free_gift5 & "---<br/>"
+	if request.cookies("freegift6id") <> "" then
+		free_gift6 = " OR ProductDetailID = ? "
+	end if
+	if request.cookies("freegift7id") <> "" then
+		free_gift7 = " OR ProductDetailID = ? "
+	end if
 	
-	free_result = Mid(free_card & free_orings & free_sticker & free_gift1 & free_gift2 & free_gift3 & free_gift4 & free_gift5, 5)
+	free_result = Mid(free_card & free_gift1 & free_gift2 & free_gift3 & free_gift4 & free_gift5 & free_gift6 & free_gift7, 5)
 
 	'response.write "post trim ---" & free_result & "---"
 	if free_result <> "" then
@@ -171,26 +163,26 @@ end if
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "SELECT jewelry.title, jewelry.picture, ProductDetails.ProductDetail1, ProductDetails.qty, ProductDetails.free, jewelry.ProductID, ProductDetails.ProductDetailID, ProductDetails.Free_QTY, ProductDetails.weight, jewelry.picture, ProductDetails.price, ProductDetails.active,  ProductDetails.Gauge, ProductDetails.Length, ProductDetails.detail_code FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID " & free_result & " ORDER BY ProductDetailID ASC"
 
-		if request.cookies("oringsid") <> "" then
-			objCmd.Parameters.Append(objCmd.CreateParameter("orings",3,1,10,request.cookies("oringsid")))
-		end if
-		if request.cookies("stickerid") <> "" then
-			objCmd.Parameters.Append(objCmd.CreateParameter("sticker",3,1,10,request.cookies("stickerid")))
-		end if
 		if request.cookies("freegift1id") <> "" then
-			objCmd.Parameters.Append(objCmd.CreateParameter("gift1",3,1,10,request.cookies("freegift1id")))
+			objCmd.Parameters.Append(objCmd.CreateParameter("orings",3,1,10,request.cookies("freegift1id")))
 		end if
 		if request.cookies("freegift2id") <> "" then
-			objCmd.Parameters.Append(objCmd.CreateParameter("gift2",3,1,10,request.cookies("freegift2id")))
+			objCmd.Parameters.Append(objCmd.CreateParameter("sticker",3,1,10,request.cookies("freegift2id")))
 		end if
 		if request.cookies("freegift3id") <> "" then
-			objCmd.Parameters.Append(objCmd.CreateParameter("gift3",3,1,10,request.cookies("freegift3id")))
+			objCmd.Parameters.Append(objCmd.CreateParameter("gift1",3,1,10,request.cookies("freegift3id")))
 		end if
 		if request.cookies("freegift4id") <> "" then
-			objCmd.Parameters.Append(objCmd.CreateParameter("gift4",3,1,10,request.cookies("freegift4id")))
+			objCmd.Parameters.Append(objCmd.CreateParameter("gift2",3,1,10,request.cookies("freegift4id")))
 		end if
 		if request.cookies("freegift5id") <> "" then
-			objCmd.Parameters.Append(objCmd.CreateParameter("gift5",3,1,10,request.cookies("freegift5id")))
+			objCmd.Parameters.Append(objCmd.CreateParameter("gift3",3,1,10,request.cookies("freegift5id")))
+		end if
+		if request.cookies("freegift6id") <> "" then
+			objCmd.Parameters.Append(objCmd.CreateParameter("gift4",3,1,10,request.cookies("freegift6id")))
+		end if
+		if request.cookies("freegift7id") <> "" then
+			objCmd.Parameters.Append(objCmd.CreateParameter("gift5",3,1,10,request.cookies("freegift7id")))
 		end if
 
 	Set rsFreeGifts = objCmd.Execute()
@@ -202,23 +194,15 @@ While not rsFreeGifts.eof
 	if rsFreeGifts.Fields.Item("ProductDetailID").Value = 5461 then
 		var_free_item = "<span class=""mr-2"">FREE:</span>Gauge card<br/>"
 	end if
-	if detailid = int(request.cookies("oringsid") & "0") then
+	if detailid = int(request.cookies("freegift1id") & "0") then
 		var_free_item = "FREE: <span class=""ml-1 mr-2"">Qty 4</span> " & rsFreeGifts.Fields.Item("gauge").Value & " " & rsFreeGifts.Fields.Item("length").Value & " " &   rsFreeGifts.Fields.Item("ProductDetail1").Value &  " " & rsFreeGifts.Fields.Item("title").Value & "<br/>"
 	end if
-	if detailid = int(request.cookies("stickerid") & "0") then
+	if detailid = int(request.cookies("freegift2id") & "0") then
 		var_free_item = "<span class=""mr-2"">FREE:</span>" & rsFreeGifts.Fields.Item("ProductDetail1").Value &  " " & rsFreeGifts.Fields.Item("title").Value & "<br/>"
 	end if
 
 	var_free_items = var_free_items & var_free_item
 
-	if detailid = int(request.cookies("freegift1id") & "0") then
-		var_free_item = "FREE: <span class=""ml-1 mr-2"">Qty " & rsFreeGifts.Fields.Item("Free_QTY").Value & "</span> " & rsFreeGifts.Fields.Item("gauge").Value & " " & rsFreeGifts.Fields.Item("length").Value & " " &   rsFreeGifts.Fields.Item("ProductDetail1").Value &  " " & rsFreeGifts.Fields.Item("title").Value & "<br/>"
-		var_free_items = var_free_items & var_free_item
-	end if
-	if detailid = int(request.cookies("freegift2id") & "0") then
-		var_free_item = "FREE: <span class=""ml-1 mr-2"">Qty " & rsFreeGifts.Fields.Item("Free_QTY").Value & "</span> " & rsFreeGifts.Fields.Item("gauge").Value & " " & rsFreeGifts.Fields.Item("length").Value & " " &   rsFreeGifts.Fields.Item("ProductDetail1").Value &  " " & rsFreeGifts.Fields.Item("title").Value & "<br/>"
-		var_free_items = var_free_items & var_free_item
-	end if
 	if detailid = int(request.cookies("freegift3id") & "0") then
 		var_free_item = "FREE: <span class=""ml-1 mr-2"">Qty " & rsFreeGifts.Fields.Item("Free_QTY").Value & "</span> " & rsFreeGifts.Fields.Item("gauge").Value & " " & rsFreeGifts.Fields.Item("length").Value & " " &   rsFreeGifts.Fields.Item("ProductDetail1").Value &  " " & rsFreeGifts.Fields.Item("title").Value & "<br/>"
 		var_free_items = var_free_items & var_free_item
@@ -228,6 +212,14 @@ While not rsFreeGifts.eof
 		var_free_items = var_free_items & var_free_item
 	end if
 	if detailid = int(request.cookies("freegift5id") & "0") then
+		var_free_item = "FREE: <span class=""ml-1 mr-2"">Qty " & rsFreeGifts.Fields.Item("Free_QTY").Value & "</span> " & rsFreeGifts.Fields.Item("gauge").Value & " " & rsFreeGifts.Fields.Item("length").Value & " " &   rsFreeGifts.Fields.Item("ProductDetail1").Value &  " " & rsFreeGifts.Fields.Item("title").Value & "<br/>"
+		var_free_items = var_free_items & var_free_item
+	end if
+	if detailid = int(request.cookies("freegift6id") & "0") then
+		var_free_item = "FREE: <span class=""ml-1 mr-2"">Qty " & rsFreeGifts.Fields.Item("Free_QTY").Value & "</span> " & rsFreeGifts.Fields.Item("gauge").Value & " " & rsFreeGifts.Fields.Item("length").Value & " " &   rsFreeGifts.Fields.Item("ProductDetail1").Value &  " " & rsFreeGifts.Fields.Item("title").Value & "<br/>"
+		var_free_items = var_free_items & var_free_item
+	end if
+	if detailid = int(request.cookies("freegift7id") & "0") then
 		var_free_item = "FREE: <span class=""ml-1 mr-2"">Qty " & rsFreeGifts.Fields.Item("Free_QTY").Value & "</span> " & rsFreeGifts.Fields.Item("gauge").Value & " " & rsFreeGifts.Fields.Item("length").Value & " " &   rsFreeGifts.Fields.Item("ProductDetail1").Value &  " " & rsFreeGifts.Fields.Item("title").Value & "<br/>"
 		var_free_items = var_free_items & var_free_item
 	end if
@@ -1243,16 +1235,16 @@ end if
 </script>
 <%	end if 	%>
 <script type="text/javascript" src="/js-pages/toggle_required_billing.js"></script>
-<script type="text/javascript" src="/js-pages/currency-exchange.min.js?v=050619"></script>
+<script type="text/javascript" src="/js-pages/currency-exchange.min.js?v=050629"></script>
 <% if (session("exchange-rate") = "" OR session("exchange-currency") <> request.cookies("currency")) AND request.cookies("currency") <> "" AND request.cookies("currency") <> "USD" then %>
 <script>
 		// Get currency conversions on page load
 		updateCurrency();
 </script>
 <% end if %>
-<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=102721"></script>
-<script type="text/javascript" src="/js-pages/cart.min.js?v=050319" async></script>
-<script type="text/javascript" src="/js-pages/checkout.min.js?v=111121"></script>
+<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=102722"></script>
+<script type="text/javascript" src="/js-pages/cart.min.js?v=050329" async></script>
+<script type="text/javascript" src="/js-pages/checkout.min.js?v=111122"></script>
 <!-- Start Afterpay Javascript -->
 <!--
 <script src="https://portal.sandbox.afterpay.com/afterpay.js" async></script>-->

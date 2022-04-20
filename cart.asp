@@ -1,5 +1,6 @@
 <%@LANGUAGE="VBSCRIPT"  CODEPAGE="65001"%>
 <%
+
 	page_title = "Bodyartforms shopping cart"
 	page_description = "Bodyartforms shopping cart"
 	page_keywords = "body jewelry, shopping cart, basket"
@@ -47,6 +48,7 @@ menu.addEventListener("click", function(e){
 
 </script>	
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
+<link rel="stylesheet" type="text/css" href="/CSS/slick.css"/>
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->
 <!--#include virtual="/bootstrap-template/header-navigation.asp" -->
 <!--#include virtual="cart/generate_guest_id.asp"-->
@@ -316,152 +318,9 @@ end if 'if var_showgifts <> "no" only display on the viewcart page
 </div><!-- end row -->
 <hr class="detailid_<%= rs_getCart.Fields.Item("cart_id").Value %>">
 <!--#include virtual="cart/inc_cart_loopitems-end.asp"-->
-<% ' Only display if there's not just one gift certificate in the cart
-if var_other_items = 1 then 
-if request.cookies("OrderAddonsActive") = "" then
-%>
-<div class="card my-5" style="border-color:#696887">
-	<div class="card-header p-2" style="background-color:#696887">
-	<div class="row">
-		<div class="col-8 text-left">
-			<h5 class="m-0 text-light"><i class="fa fa-chevron-down mr-2"></i>SELECT FREE ITEMS</h5>
-		</div>
-		<div class="col text-right">
-			<a class="btn btn-sm btn-outline-light" href="/free-items.asp" target="_blank" id="btn-view-free-items">See the full list!</a>
-		</div>
-	</div>
-	</div>
-	<div class="card-body py-3">
-			<% 
-			' show if gauge card cookie has not been set to "no" 
-			if request.cookies("gaugecard") <> "no" then %>
-			<div class="row free_gauge_card mb-1" id="gaugecard">
-					<a href="productdetails.asp?ProductID=1430"><img src="https://s3.amazonaws.com/bodyartforms-products/1430t.jpg" alt="Gauge card thumbnail" style="height: 40px; width: 40px"></a>
-					<span class="btn btn-sm btn-outline-danger mx-2 remove_gaugeCard"><i class="fa fa-trash-alt"></i></span>		  
-					<span>FREE Gauge card</span>  
-			</div><!-- end gauge card row -->
-			<% end if ' show if gauge card cookie has not been set to "no" %>
 
 
-			<% 
-			' show if o-rings cookie has not been set to "no" 
-			if (var_showgifts = "no" and request.cookies("oringsid") <> "") or (request.cookies("orings") <> "no" and var_viewcart_showgifts = "yes") then  %>
-			<div class="row free_orings" id="freeorings">
-			<% if var_showgifts <> "no" then %>
-					<div class="dropdown w-100 my-1">
-							<button class="btn w-100 btn-outline-secondary text-left dropdown-toggle" type="button" id="dropdownOrings" data-flip="false" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-							  <span id="selected-orings">
-									<% Do While NOT rsGetOrings.EOF 
-									if cStr(rsGetOrings.Fields.Item("ProductDetailID").Value) = request.cookies("oringsid") then
-									orings_found = "yes"
-								%>
-									<img class="ml-1 mr-2" style="width: 40px" src="https://s3.amazonaws.com/bodyartforms-products/<%= rsGetOrings.Fields.Item("picture").Value %>">
-									<span class="mr-3">Qty: 4</span><%=(rsGetOrings.Fields.Item("Gauge").Value)%>&nbsp;<%=(rsGetOrings.Fields.Item("ProductDetail1").Value)%>&nbsp;<%=(rsGetOrings.Fields.Item("title").Value)%>
-								<% 
-								end if
-								rsGetOrings.MoveNext()
-								Loop
-								rsGetOrings.MoveFirst()
-								%>
-							  </span>
-							  <% if orings_found <> "yes" then %>
-							  <span id="orings-dropdown-text">Select free o-rings size</span>
-							  <% end if %>
-							</button>
-							<div class="dropdown-menu w-100 modal-scroll-long" aria-labelledby="dropdownOrings">
-								<div class="dropdown-item btn-group-vertical btn-group-toggle m-0 p-0 " data-toggle="buttons">
-									<label class="btn btn-light d-block text-left">
-										<input type="radio" name="free_orings" id="0orings" value="" data-friendly="No o-rings wanted" data-img-name="blank.gif"><img class="ml-1 mr-2" style="width: 40px" src="https://s3.amazonaws.com/bodyartforms-products/blank.gif">I don't need o-rings
-									</label>
-					<% Do While NOT rsGetOrings.EOF 
-						if cStr(rsGetOrings.Fields.Item("ProductDetailID").Value) = request.cookies("oringsid") then
-							var_selected = "selected"
-						else
-							var_selected = ""
-						end if
-					
-					%>
-					<label class="btn btn-light d-block text-left">
-							<input type="radio" name="free_orings" id="<%= rsGetOrings.Fields.Item("ProductDetailID").Value %>" value="<%= rsGetOrings.Fields.Item("ProductDetailID").Value %>" data-friendly="<%= Server.HTMLEncode(rsGetOrings.Fields.Item("Gauge").Value) %>&nbsp;<%= Server.HTMLEncode(rsGetOrings.Fields.Item("ProductDetail1").Value) %>&nbsp;<%=(rsGetOrings.Fields.Item("title").Value)%>" data-img-name="<%= rsGetOrings.Fields.Item("picture").Value %>"><img class="ml-1 mr-2" style="width: 40px" src="https://s3.amazonaws.com/bodyartforms-products/<%= rsGetOrings.Fields.Item("picture").Value %>">
-							<span class="mr-3">Qty: 4</span><%=(rsGetOrings.Fields.Item("Gauge").Value)%>&nbsp;<%=(rsGetOrings.Fields.Item("ProductDetail1").Value)%>&nbsp;<%=(rsGetOrings.Fields.Item("title").Value)%>
-					   </label> 
-					<% 
-			rsGetOrings.MoveNext()
-			Loop
-			%>
-		</div><!-- button group -->
-	</div><!-- drop down menu -->
-	</div><!-- drop down -->
-			<% 		end if ' don't allow user to change selection on checkout page 
-			%>
-			</div><!-- end o-rings row -->
-			<% 
-			end if ' show if o-rings cookie has not been set to "no" 
-            %>                 
-            <% 
-            
-' show if free sticker cookie has not been set to "no" 
-if (var_showgifts = "no" and request.cookies("stickerid") <> "") or (request.cookies("sticker") <> "no" and var_viewcart_showgifts = "yes") then %>
-<div class="row free_sticker" id="freesticker">
-<% if var_showgifts <> "no" then %>
-<div class="dropdown w-100 my-1">
-        <button class="btn w-100 btn-outline-secondary text-left dropdown-toggle" type="button" id="dropdownStickers" data-flip="false" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">	  
-		  <span id="selected-sticker">
-				<% Do While NOT rsGetFree.EOF 
-				if cStr(rsGetFree.Fields.Item("ProductDetailID").Value) = request.cookies("stickerid") then
-				sticker_found = "yes"
-			%>
-				<img class="ml-1 mr-2" style="width: 40px" src="https://s3.amazonaws.com/bodyartforms-products/<%= rsGetFree.Fields.Item("detail_code").Value %>"><%= Server.HTMLEncode(rsGetFree.Fields.Item("ProductDetail1").Value)%>
-			<% 
-			end if
-			rsGetFree.MoveNext()
-			Loop
-			rsGetFree.MoveFirst()
-			%>
-		  </span>
-		  <% if sticker_found <> "yes" then %>
-		  <span id="sticker-dropdown-text">Pick a free sticker color</span>
-		  <% end if %>
-        </button>
-        <div class="dropdown-menu w-100 modal-scroll-long" aria-labelledby="dropdownStickers">
-            <div class="dropdown-item btn-group-vertical btn-group-toggle m-0 p-0" data-toggle="buttons">
-                <label class="btn btn-light d-block text-left">
-                    <input type="radio" name="freesticker" id="0sticker" value="" data-friendly="No sticker" data-img-name="blank.gif"><img class="ml-1 mr-2" style="width: 40px" src="https://s3.amazonaws.com/bodyartforms-products/blank.gif">I don't need a sticker
-                </label>
-<% Do While Not rsGetFree.EOF 
-if rsGetFree.Fields.Item("ProductID").Value = 3928 then
-%>
-        <label class="btn btn-light d-block text-left">
-             <input type="radio" name="freesticker" id="<%=(rsGetFree.Fields.Item("ProductDetailID").Value)%>" value="<%=(rsGetFree.Fields.Item("ProductDetailID").Value)%>" data-friendly="<%= Server.HTMLEncode(rsGetFree.Fields.Item("ProductDetail1").Value) %>" data-img-name="<%= rsGetFree.Fields.Item("detail_code").Value %>"><img class="ml-1 mr-2" style="width: 40px" src="https://s3.amazonaws.com/bodyartforms-products/<%= rsGetFree.Fields.Item("detail_code").Value %>"><%= Server.HTMLEncode(rsGetFree.Fields.Item("ProductDetail1").Value)%>
-        </label>   
-			  <% 
-  end if ' if ProductID 3928 -- sticker
-  rsGetFree.MoveNext()
-Loop
-	rsGetFree.MoveFirst()
-%>  
-</div><!-- button group -->
-</div><!-- drop down menu -->
-</div><!-- drop down -->
-<%  end if ' don't allow user to change selection on checkout page 
-%>
-</div><!-- end stickers row -->
-<% 
-end if ' show if free sticker cookie has not been set to "no" 
-%>
-<%
-	credit_now = 0
-	for free_count = 1 to 5
-	' display free gifts file 5 times
-%>
-	<!--#include virtual="cart/inc_freeitems_select.asp"-->
-<% next %>
-	</div><!-- end freebies card body -->
-</div><!-- end freebies card -->
-<% end if ' do not show free gifts if add-on feature is active. customer adding items to already placed order %>
-
-<% end if ' Only display if there's not just one gift certificate in the cart%>
-			</div><!-- end cart items container -->
+	</div><!-- end cart items container -->
 	</div><!-- end items column-->
 		<div class="col-12 col-lg-4 col-break1600 col-break1900 m-0 p-0">
 			<div class="sticky-top" style="z-index:100">
@@ -569,6 +428,12 @@ end if ' show if free sticker cookie has not been set to "no"
 										</div>
 									<% end if ' free shipping notice only showing if order is not heavy
 									%>	
+									<%If var_other_items = 1 then 
+										If request.cookies("OrderAddonsActive") = "" then%>
+											<div id="free-items-info" class="text-center font-weight-bold p-1 mt-1">
+											</div>
+										<%End If		
+									End If%>
 								</div><!-- end card body -->
 								
 								<div class="card-footer">
@@ -741,7 +606,64 @@ if NOT rsGetAddOns.eof then
 								-->
 						</div>
 				</div>
-			</div>				
+			</div>	
+
+			<!-- FREE ITEMS MODAL -->
+			<div class="modal fade" id="free-items-modal" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-dialog" role="document">
+						<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">SELECT FREE ITEMS</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<!--<span aria-hidden="true">&times;</span>-->
+									</button>
+								</div>
+								<div id="loading-message" class="modal-body"></div>
+								<div id="free-items" class="modal-body">
+									
+								</div>
+								<div class="modal-footer">
+									<div class="d-inline-block text-right w-50">
+										<button type="button" class="btn btn-secondary close-bo" data-dismiss="modal">Done</button>
+									</div>
+								</div>  
+						</div>
+				</div>
+			</div>	
+			
+			<!-- FREE ITEMS PAGE MODAL -->
+			<div class="modal fade" id="free-items-page-modal" tabindex="-1" role="dialog" aria-hidden="true">
+				<div class="modal-dialog modal-xl" role="document">
+						<div class="modal-content">
+								<div class="modal-header">
+									<h5 class="modal-title">Free Items</h5>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+									<!--#include virtual="/free-items-modal.asp" -->
+								</div>
+						</div>
+				</div>
+			</div>	
+			
+			<!-- Free items page / Item variations modal -->
+			<div class="modal fade" id="free-items-page-variations-modal" role="dialog" aria-labelledby="headVariation" aria-hidden="true">
+				<div class="modal-dialog modal-sm" role="document">
+				  <div class="modal-content">
+					<div class="modal-body">
+							<div id="load-variants"><i class="fa fa-spinner fa-2x fa-spin"></i></div>
+					</div>
+					<div class="modal-footer">
+					  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			<!-- end variations modal -->
+	
+			
 	<%
 	End If 'End Of cart show if not empty
 	%>
@@ -781,14 +703,24 @@ if NOT rsGetAddOns.eof then
 <!-- Apple Pay Javascript -->
 <script src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js"></script>
 <script src="/js/apple-pay-api.js?ver=3"></script>
+<script type="text/javascript" src="/js/slick.min.js"></script>
 
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
-<script type="text/javascript" src="/js-pages/cart.min.js?v=03032024"></script>
-<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=111722"></script>
+<script type="text/javascript" src="/js-pages/cart.min.js?v=03032025"></script>
+<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=111723"></script>
 <!-- ^^^^^^  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE ^^^^^^ -->
 <script type="text/javascript">
 	calcAllTotals();
 </script>
+<script type="text/javascript">
+// START load variations into modal window pop up
+	$(document).on("click", ".view-variations", function(event){
+		var productid = $(this).attr("data-id");	
+		$('#load-variants').html('<i class="fa fa-spinner fa-2x fa-spin"></i>');
+		$('#load-variants').load("products/ajax-freeplanner-getvariations.asp", {productid: productid}, function() {
+		});	
+	});		
+</script>	
 <%
 Set rsToggles = Nothing
 %>

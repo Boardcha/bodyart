@@ -24,28 +24,28 @@ fraudcheck_freegifts_subtotal = var_subtotal - var_couponTotal - total_preferred
 	' DO NOT RUN ON PROCESS ORDER PAGE SINCE SESSION VALUES SHOULD ALREADY BE SET ... causes timeouts and errors
 	credit_later = 0
 if var_process_order <> "yes" then
-	for loop_free_cookie = 1 to 5
+	for loop_free_cookie = 1 to 7
 		' display free gifts file 5 times
-	' retrieve and total use now free credits			
-	Do While Not rsGetFree.EOF
+		' retrieve and total use now free credits			
+		Do While Not rsGetFree.EOF
 
-		if cStr(rsGetFree.Fields.Item("ProductDetailID").Value) = request.cookies("freegift" & loop_free_cookie & "id") then
-		
-			'Detect whether to use a credit now, or save for later (if customer selected that option)
-			if Instr(1, lcase(rsGetFree.Fields.Item("ProductDetail1")), lcase("USE NOW")) > 0 Then
-				credit_now = credit_now + rsGetFree.Fields.Item("price")		
-			end if
+			if cStr(rsGetFree.Fields.Item("ProductDetailID").Value) = request.cookies("freegift" & loop_free_cookie & "id") then
 			
-			if Instr(1, lcase(rsGetFree.Fields.Item("ProductDetail1")), lcase("LATER")) > 0 Then
-				credit_later = credit_later + rsGetFree.Fields.Item("price")
-			' response.write credit_later
-			end if
+				'Detect whether to use a credit now, or save for later (if customer selected that option)
+				if Instr(1, lcase(rsGetFree.Fields.Item("ProductDetail1")), lcase("USE NOW")) > 0 Then
+					credit_now = credit_now + rsGetFree.Fields.Item("price")		
+				end if
+				
+				if Instr(1, lcase(rsGetFree.Fields.Item("ProductDetail1")), lcase("LATER")) > 0 Then
+					credit_later = credit_later + rsGetFree.Fields.Item("price")
+				' response.write credit_later
+				end if
 
-		end if ' find matching information for stored cookie id
-	  rsGetFree.MoveNext()
-	Loop
+			end if ' find matching information for stored cookie id
+		  rsGetFree.MoveNext()
+		Loop
 		rsGetFree.MoveFirst()
-	next  'for loop_free_cookie = 1 to 5
+	next  'for loop_free_cookie = 1 to 7
 		
 		session("credit_now") = credit_now
 		session("credit_later") = credit_later

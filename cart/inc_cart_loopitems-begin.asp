@@ -130,9 +130,7 @@ end if
 
 
 if var_other_items <> 1 then ' if only gift certs are found erase all free gift cookies
-	response.cookies("oringsid") = ""
 	response.cookies("gaugecard") = "no"
-	response.cookies("stickerid") = ""
 	response.cookies("freegift1id") = ""
 	response.cookies("freegift2id") = ""
 	response.cookies("freegift3id") = ""
