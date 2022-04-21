@@ -168,7 +168,7 @@ Set rsGetCompanyInfo = rsGetCompanyInfo_cmd.Execute
 <link href="../CSS/fortawesome/css/external-min.css?v=031920" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="/js/popper.min.js"></script>
 <script type="text/javascript" src="/js/jquery-ui.min.js"></script>
-<script type="text/javascript" src="scripts/generic_auto_update_fields.js?v=081221"></script>
+<script type="text/javascript" src="scripts/generic_auto_update_fields.js?v=081223"></script>
 <script type="text/javascript">
 
 	//url to to do auto updating
@@ -236,6 +236,9 @@ Set rsGetCompanyInfo = rsGetCompanyInfo_cmd.Execute
 	<span class="tmp-loader"></span>
 </form>
 
+<div class="mt-4 mb-2">
+	Create Order:
+</div>
 <form class="ajax-update">
 <% if readonly <> "yes" then %>
 
@@ -250,12 +253,12 @@ Set rsGetCompanyInfo = rsGetCompanyInfo_cmd.Execute
 			<option value="8">8 months</option>
 			<option value="9">9 months</option>
 		</select>
-	
-	  <button class="btn btn-purple mr-4 create_po" type="button">Create order</button>
-	<span class="alert-success csv p-1 pl-2 pr-2 rounded" style="display:none">
-ORDER CREATED
-	</span>
+		<textarea class="form-control form-control-sm mr-2" data-column="po_notes" type="text" style="height:31px;min-width:37%;" id="po_notes" name="po_notes" placeholder="Notes:"></textarea><br/>
 </div>
+<div class="form-inline pt-2"> 
+		<button class="btn btn-purple mr-4 create_po" type="button">Create order</button>
+		<span class="alert-success csv p-1 pl-2 pr-2 rounded" style="display:none">ORDER CREATED</span>
+</div>		
 <% end if '==== if readonly <> "yes" %>
 
 <div class="text-center paging paging-div">
@@ -266,9 +269,10 @@ ORDER CREATED
 <thead class="thead-dark">
   <tr class="text-nowrap">
 	<th class="sticky-top"></th>
-	<th class="sticky-top"></th>
-    <th class="sticky-top"></th>
 	<% if readonly <> "yes" then %>
+	<th class="sticky-top text-right" colspan="2">
+		<a href="?brand=<%=Request.QueryString("brand")%>&amp;resume=<%=Request.QueryString("resume")%>&amp;1stfilter=waiting"><i class="fa fa-sort fa-lg sort-icon mr-2"></i></a>Waiting List
+	</th>
 	<th class="sticky-top">Bought in pairs</th>
 	<th class="sticky-top">Vendor qty</th>
 	<th class="sticky-top">Line total</th>
@@ -789,11 +793,12 @@ $(document).ready(function(){
 			var tempid = $("#tempid").val();
 			var pototal = $("#total").html();
 			var for_how_many_months = $("#for_how_many_months").val();
+			var po_notes = $("#po_notes").val();
 			
 			$.ajax({
 			method: "POST",
 			url: "inventory/ajax_update_po_numbers.asp",
-			data: {brand: brand, tempid: tempid, pototal: pototal, for_how_many_months: for_how_many_months}
+			data: {brand: brand, tempid: tempid, pototal: pototal, for_how_many_months: for_how_many_months, po_notes: po_notes}
 			})
 			$(".csv").show();
 		}else {

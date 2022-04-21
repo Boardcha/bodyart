@@ -2,7 +2,7 @@
 
 function auto_update() {
 	// Auto-update form fields
-		$(document).on("change", ".ajax-update input:not([name^='pair']), .ajax-update textarea, .ajax-update select:not([name='password'], [name='for_how_many_months'])", function() {
+		$(document).on("change", ".ajax-update input:not([name^='pair']), .ajax-update textarea:not([name='po_notes']), .ajax-update select:not([name='password'], [name='for_how_many_months'])", function() {
 
 		var column_name = $(this).attr("data-column");
 		var column_val = $(this).val();

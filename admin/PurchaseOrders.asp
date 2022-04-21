@@ -48,6 +48,7 @@ Set rsGetPurchaseOrders = rsGetPurchaseOrders_cmd.Execute
               <% if var_access_level <> "Customer service" then %>
                 <th class="align-middle">Received</th>
               <% end if %>
+			  <th class="align-middle">Notes</th>
             </tr>
 </thead>
               <% 
@@ -65,7 +66,7 @@ end if
                   
                 </td>
                 <% end if %>
-                  <td class="align-middle"><%= FormatDateTime(rsGetPurchaseOrders.Fields.Item("DateOrdered").Value,2)%>
+                <td class="align-middle"><%= FormatDateTime(rsGetPurchaseOrders.Fields.Item("DateOrdered").Value,2)%>
                     <% if var_access_level <> "Customer service" then %>
                     &nbsp;&nbsp;&nbsp;#<a href="barcodes_modifyviews.asp?ID=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>&type=Order"><%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%></a>
                   <%
@@ -143,6 +144,9 @@ end if
                   
                   </td>
                   <% end if %>
+				<td>
+				<%= rsGetPurchaseOrders("po_notes") %>
+				</td>				  
                 </tr>
                 <% 
   rsGetPurchaseOrders.MoveNext()
