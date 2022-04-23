@@ -470,7 +470,7 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 				let selectedSlideIndex = Cookies.get('freegift' + i + 'slideindex');
 				let friendly_title = Cookies.get('freegift' + i + 'Title');
 
-				if(selectedSlideIndex != "" && selectedSlideIndex != "undefined"){		
+				if(selectedSlideIndex != "" && selectedSlideIndex != undefined){		
 					var element = $('#slick-free-items-' + i + ' .slick-slide[data-slide-index=' + (selectedSlideIndex) + ']');
 					//var slickIndex = element.prev().attr("data-slick-index");
 					//$("#slick-free-items-1").slick('slickGoTo', slickIndex, false);		
@@ -557,7 +557,7 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 		let selectedSlideIndex = Cookies.get('freegift' + tier + 'slideindex');
 		let friendly_title = Cookies.get('freegift' + tier + 'Title');
 
-		if(selectedSlideIndex != "" && selectedSlideIndex != "undefined"){		
+		if(selectedSlideIndex != "" && selectedSlideIndex != undefined){		
 			var element = $("#slick-free-items-" + tier + ' .slick-slide[data-slide-index=' + (selectedSlideIndex) + ']');
 			var slickIndex = element.prev().attr("data-slick-index");
 			console.log("Go to slick Index:" + slickIndex);
