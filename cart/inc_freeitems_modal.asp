@@ -159,7 +159,7 @@ end if
 		objCmd.CommandText = "SELECT DISTINCT FlatProducts.min_gauge, FlatProducts.max_gauge, jewelry.title, jewelry.picture,jewelry.ProductID, jewelry.picture, CASE WHEN jewelry.ProductID = 2890 THEN '1' ELSE jewelry.ProductID END " & _
 							"FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID " & _ 
 							"INNER JOIN FlatProducts ON FlatProducts.ProductID = jewelry.ProductID " & _ 
-							"WHERE ProductDetails.free <= 30 AND (jewelry.ProductID <> 1430) AND (jewelry.ProductID <> 3704) AND (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1) " & _
+							"WHERE ProductDetails.free <= 30 AND (jewelry.ProductID <> 3704) AND (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1) " & _
 							"ORDER BY CASE WHEN jewelry.ProductID = 2890 THEN '1' ELSE jewelry.ProductID END, jewelry.title"
 		Set rsGetFreeTier3 = objCmd.Execute()
 ' ------- End getting free items for TIER 3
@@ -224,7 +224,7 @@ end if
 		objCmd.CommandText = "SELECT DISTINCT FlatProducts.min_gauge, FlatProducts.max_gauge, jewelry.title, jewelry.picture,jewelry.ProductID, jewelry.picture, CASE WHEN jewelry.ProductID = 2890 THEN '1' ELSE jewelry.ProductID END " & _
 							"FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID " & _ 
 							"INNER JOIN FlatProducts ON FlatProducts.ProductID = jewelry.ProductID " & _ 
-							"WHERE ProductDetails.free <= 50 AND (jewelry.ProductID <> 1430) AND (jewelry.ProductID <> 3704) AND (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1) " & _
+							"WHERE ProductDetails.free <= 50 AND (jewelry.ProductID <> 3704) AND (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1) " & _
 							"ORDER BY CASE WHEN jewelry.ProductID = 2890 THEN '1' ELSE jewelry.ProductID END, jewelry.title"
 		Set rsGetFreeTier4 = objCmd.Execute()
 ' ------- End getting free items for TIER 4
@@ -290,7 +290,7 @@ end if
 		objCmd.CommandText = "SELECT DISTINCT FlatProducts.min_gauge, FlatProducts.max_gauge, jewelry.title, jewelry.picture,jewelry.ProductID, jewelry.picture, CASE WHEN jewelry.ProductID = 2890 THEN '1' ELSE jewelry.ProductID END " & _
 							"FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID " & _ 
 							"INNER JOIN FlatProducts ON FlatProducts.ProductID = jewelry.ProductID " & _ 
-							"WHERE ProductDetails.free <= 75 AND (jewelry.ProductID <> 1430) AND (jewelry.ProductID <> 3704) AND (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1) " & _
+							"WHERE ProductDetails.free <= 75 AND (jewelry.ProductID <> 3704) AND (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1) " & _
 							"ORDER BY CASE WHEN jewelry.ProductID = 2890 THEN '1' ELSE jewelry.ProductID END, jewelry.title"
 		Set rsGetFreeTier5 = objCmd.Execute()
 ' ------- End getting free items for TIER 5
@@ -356,7 +356,7 @@ end if
 		objCmd.CommandText = "SELECT DISTINCT FlatProducts.min_gauge, FlatProducts.max_gauge, jewelry.title, jewelry.picture,jewelry.ProductID, jewelry.picture, CASE WHEN jewelry.ProductID = 2890 THEN '1' ELSE jewelry.ProductID END " & _
 							"FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID " & _ 
 							"INNER JOIN FlatProducts ON FlatProducts.ProductID = jewelry.ProductID " & _ 
-							"WHERE ProductDetails.free <= 100 AND (jewelry.ProductID <> 1430) AND (jewelry.ProductID <> 3704) AND (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1) " & _
+							"WHERE ProductDetails.free <= 100 AND (jewelry.ProductID <> 3704) AND (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1) " & _
 							"ORDER BY CASE WHEN jewelry.ProductID = 2890 THEN '1' ELSE jewelry.ProductID END, jewelry.title"
 		Set rsGetFreeTier6 = objCmd.Execute()
 ' ------- End getting free items for TIER 6
@@ -422,7 +422,7 @@ end if
 		objCmd.CommandText = "SELECT DISTINCT FlatProducts.min_gauge, FlatProducts.max_gauge, jewelry.title, jewelry.picture,jewelry.ProductID, jewelry.picture, CASE WHEN jewelry.ProductID = 2890 THEN '1' ELSE jewelry.ProductID END " & _
 							"FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID " & _ 
 							"INNER JOIN FlatProducts ON FlatProducts.ProductID = jewelry.ProductID " & _ 
-							"WHERE ProductDetails.free <= 150 AND (jewelry.ProductID <> 1430) AND (jewelry.ProductID <> 3704) AND (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1) " & _
+							"WHERE ProductDetails.free <= 150 AND (jewelry.ProductID <> 3704) AND (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1) " & _
 							"ORDER BY CASE WHEN jewelry.ProductID = 2890 THEN '1' ELSE jewelry.ProductID END, jewelry.title"
 		Set rsGetFreeTier7 = objCmd.Execute()
 ' ------- End getting free items for TIER 7
