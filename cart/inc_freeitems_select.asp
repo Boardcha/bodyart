@@ -24,7 +24,7 @@ If tier = 1 Then
 	' ------- Get O_RINGS items
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT ProductDetails.free, ProductDetails.Free_QTY, jewelry.picture, ProductDetails.ProductDetailID, ProductDetails.ProductDetail1, FlatProducts.min_gauge, FlatProducts.max_gauge, jewelry.title, jewelry.picture,jewelry.ProductID, jewelry.picture, CASE WHEN jewelry.ProductID = 2890 THEN '1' ELSE jewelry.ProductID END, ISNULL(ProductDetails.gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') + ' ' + ISNULL(ProductDetails.ProductDetail1,'') + ' ' + ISNULL(jewelry.title,'') AS 'free_title' " & _
+	objCmd.CommandText = "SELECT ProductDetails.free, 4 As Free_QTY, jewelry.picture, ProductDetails.ProductDetailID, ProductDetails.ProductDetail1, FlatProducts.min_gauge, FlatProducts.max_gauge, jewelry.title, jewelry.picture,jewelry.ProductID, jewelry.picture, CASE WHEN jewelry.ProductID = 2890 THEN '1' ELSE jewelry.ProductID END, ISNULL(ProductDetails.gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') + ' ' + ISNULL(ProductDetails.ProductDetail1,'') + ' ' + ISNULL(jewelry.title,'') AS 'free_title' " & _
 						"FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID " & _ 
 						"INNER JOIN FlatProducts ON FlatProducts.ProductID = jewelry.ProductID " & _ 
 						"INNER JOIN TBL_GaugeOrder Gauge ON ISNULL(ProductDetails.Gauge,'') = ISNULL(Gauge.GaugeShow,'') " & _ 
