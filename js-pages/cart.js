@@ -438,7 +438,7 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 		
 		
 	// Load Free Items
-	$(document).on("click", "#btn-free-items", function(event)
+	$(document).on("click", ".btn-free-items", function(event)
 	{    
 		$("#free-items").hide();	
 		$("#loading-message").html('<div class="text-center alert" style="color: #525252; background-color: #f1f1f1; border-color: #dbdbdb;"><i class="fa fa-spinner fa-spin" style="font-size: 1.3em"></i> Loading free items . . .</div>');

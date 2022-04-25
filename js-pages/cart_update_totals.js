@@ -156,48 +156,92 @@
 				var subtotal_free_gifts = (json.fraudcheck_freegifts_subtotal);
 				// removed from line above  - json.var_totalvalue_certs_incart
 				
+				
 				free_items_count = 7;
 				freeGiftText = '';
+				var freeGiftSubText = '';
 				
 				if(subtotal_free_gifts < 150) {
 					free_items_count = 6;
 					amountToGetAnotherGift = 150 - subtotal_free_gifts;
-					freeGiftText = '<br/><span class="font-weight-normal">You’ve <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift.<br><a href="#" data-toggle="modal" data-target="#free-items-page-modal">View our free gifts</a></span>';
+					freeGiftText = 'You’ve <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift!';
 					clearFreeItemsCookie(7);
 				}
 				if(subtotal_free_gifts < 100) {
 					free_items_count = 5;
 					amountToGetAnotherGift = 100 - subtotal_free_gifts;
-					freeGiftText = '<br/><span class="font-weight-normal">You’ve <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift.<br><a href="#" data-toggle="modal" data-target="#free-items-page-modal">View our free gifts</a></span>';
+					freeGiftText = 'You’ve <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift!';
 					clearFreeItemsCookie(6);
 				}
 				if(subtotal_free_gifts < 75) {
 					free_items_count = 4;
 					amountToGetAnotherGift = 75 - subtotal_free_gifts;
-					freeGiftText = '<br/><span class="font-weight-normal">You’ve <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift.<br><a href="#" data-toggle="modal" data-target="#free-items-page-modal">View our free gifts</a></span>';
+					freeGiftText = 'You’ve <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift.';
 					clearFreeItemsCookie(5);
 				}
 				if(subtotal_free_gifts < 50) {
 					free_items_count = 3;
 					amountToGetAnotherGift = 50 - subtotal_free_gifts;
-					freeGiftText = '<br/><span class="font-weight-normal">You’ve <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift.<br><a href="#" data-toggle="modal" data-target="#free-items-page-modal">View our free gifts</a></span>';
+					freeGiftText = 'You’ve <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift!';
 					clearFreeItemsCookie(4);
 				}
 
 				if(subtotal_free_gifts < 30) {
 					free_items_count = 2;				
 					amountToGetAnotherGift = 30 - subtotal_free_gifts;
-					freeGiftText = '<br/><span class="font-weight-normal">You’ve <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to earn a free gift.<br><a href="#" data-toggle="modal" data-target="#free-items-page-modal">View our free gifts</a></span>';
+					freeGiftText = 'You’ve <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to earn a free gift!';
+					freeGiftSubText = 'Unlocked: O-rings & Stickers';
 					clearFreeItemsCookie(3);
 				}
 				
 				if(free_items_count > 0){
 					let s = (free_items_count > 1) ? 's' : '';
-					$("#free-items-info").html('<span class="font-weight-bold"><i class="fa fa-gift"></i> You’ve earned ' + free_items_count + ' FREE GIFT' + s + ' <a href="#" id="btn-free-items" data-toggle="modal" data-target="#free-items-modal">Select it now</a></span>' + freeGiftText);
+					if(free_items_count > 2)
+						freeGiftSubText = 'Unlocked: ' + (free_items_count - 2) + ' free gift' + s + '!';
+					
+					var step1icon = "fa-check";
+					var step2icon = "fa-lock";
+					var step3icon = "fa-lock";
+					var step4icon = "fa-lock";
+					var step5icon = "fa-lock";
+					var step6icon = "fa-lock";
+					
+					if (free_items_count > 2)
+						step2icon = "fa-check";
+					if (free_items_count > 3)
+						step3icon = "fa-check";
+					if (free_items_count > 4)
+						step4icon = "fa-check";
+					if (free_items_count > 5)
+						step5icon = "fa-check";
+					if (free_items_count > 6)
+						step6icon = "fa-check";
+						
+					var stepper_html =	'<div class="stepper-container">' +
+											'<div id="free-items-stepper-title" class="text-uppercase text-center font-weight-bold pt-2 mt-3">' + freeGiftText + '</div>'  +
+											'<div class="k-widget free-items-stepper free-items-stepper-linear mt-3">' +
+												'<ol class="free-items-step-list free-items-step-list-horizontal">' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus free-items-step-first free-items-step-done free-items-step-success" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-0" aria-selected="false"><span class="free-items-step-indicator" aria-hidden="true"><span class="free-items-step-indicator-icon k-icon fa ' + step1icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-1" aria-selected="true" aria-current="true"><span class="free-items-step-indicator" aria-hidden="true"><span class="step2-icon free-items-step-indicator-icon k-icon fa ' + step2icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-2" aria-selected="false" tabindex="-1"><span class="free-items-step-indicator" aria-hidden="true"><span class="step3-icon free-items-step-indicator-icon k-icon fa ' + step3icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-2" aria-selected="false" tabindex="-1"><span class="free-items-step-indicator" aria-hidden="true"><span class="step4-icon free-items-step-indicator-icon k-icon fa ' + step4icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-2" aria-selected="false" tabindex="-1"><span class="free-items-step-indicator" aria-hidden="true"><span class="step5-icon free-items-step-indicator-icon k-icon fa ' + step5icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus free-items-step-last" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-2" aria-selected="false" tabindex="-1"><span class="free-items-step-indicator" aria-hidden="true"><span class="step6-icon free-items-step-indicator-icon k-icon fa ' + step6icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+												'</ol>' +
+												'<div data-role="progressbar" class="k-widget k-progressbar k-progressbar-horizontal k-pos-absolute k-overflow-hidden" style="position: absolute; margin-left: 25px;width: 100%;">' +
+													'<div class="k-state-selected" style="width: calc(100% - 50px);"></div>' +
+												'</div>' +
+												'<div id="free-items-stepper-info" class="text-uppercase text-center font-weight-bold p-1 mt-2">' +
+													'<i class="fa fa-gift"></i> <span id="free-items-stepper-subtitle">' + freeGiftSubText + ' <br /><div class="mt-1"><a style="color:#696986;font-weight:700;font-size:18px" href="#" class="btn-free-items" data-toggle="modal" data-target="#free-items-modal">Select it now!</a></span><br /><a style="color:#696986;font-style: italic;font-size:15px;" href="#" data-toggle="modal" data-target="#free-items-page-modal">View our free gifts</a></span></div>' + '</span>' +
+												'</div>' +
+											'</div>' +
+										'</div>';
+					$("#stepper").html(stepper_html);
 				}	
 			}else{
 				free_items_count = 0;		
 				$("#free-items-info").html('');
+				$("#stepper").html('');
 				clearFreeItemsCookie(1);
 			}
 			console.log(free_items_count);
