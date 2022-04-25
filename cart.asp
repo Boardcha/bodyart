@@ -273,6 +273,10 @@ free-items-step-list-horizontal .free-items-step {
 	font-size: 40px;
     margin-right: 8px;	
 }	
+#free-items-page-modal{
+    overflow-x: hidden;
+    overflow-y: auto;
+}	
 </style>
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <script type="text/javascript">
