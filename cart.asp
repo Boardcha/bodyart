@@ -9,6 +9,271 @@
 	session("amount_to_collect") = 0
 	session("var_other_items") = 0
 %>
+<style>
+.stepper-container{
+	height: 225px;
+    border: 1px solid #6969861c;
+    border-radius: 4px;
+    background-color: #6969861c;
+	margin: 20px 0 20px 0;
+	color: #52526c;
+}
+.free-items-stepper {
+    border-width: 0;
+    border-style: solid;
+    box-sizing: border-box;
+    outline: 0;
+    font-size: 1rem;
+    line-height: 1.5;
+    font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    display: block;
+    position: relative;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+    color: inherit;
+    background: 0 0;
+}
+.free-items-stepper .free-items-step-list {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: -ms-flexbox;
+    display: flex;
+    z-index: 1;
+}
+.free-items-step-list-horizontal {
+    -ms-flex-direction: row;
+    flex-direction: row;
+    grid-row: 1;
+}
+.free-items-stepper *, .free-items-stepper ::after, .free-items-stepper ::before {
+    box-sizing: border-box;
+}
+free-items-step-list-horizontal .free-items-step {
+    -ms-flex: 1 0 auto;
+    flex: 1 0 auto;
+    text-align: center;
+}
+.free-items-stepper *, .free-items-stepper ::after, .free-items-stepper ::before {
+    box-sizing: border-box;
+}
+.free-items-step-list-horizontal .free-items-step-link {
+    margin: auto;
+    max-width: 10em;
+    -ms-flex-direction: column;
+    flex-direction: column;
+}
+.free-items-stepper .free-items-step-link {
+    outline: 0;
+    color: inherit;
+    text-decoration: none;
+    white-space: nowrap;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    overflow: hidden;
+}
+.free-items-stepper .free-items-step-current .free-items-step-indicator {
+    border-color: #696986;
+    color: #fff;
+    background-color: #696986;
+}
+.free-items-stepper .free-items-step-done .free-items-step-indicator {
+    border-color: #696986;
+    color: #fff;
+    background-color: #696986;
+}
+.free-items-stepper .free-items-step-indicator {
+    border-color: #dee2e6;
+    color: #212529;
+    background-color: #fff;
+}
+.free-items-stepper .free-items-step-indicator {
+    border-radius: 50%;
+    margin: 3px;
+    width: 28px;
+    height: 28px;
+    border-width: 1px;
+    border-style: solid;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    -ms-flex: none;
+    flex: none;
+    position: relative;
+    z-index: 1;
+    overflow: visible;
+    transition-property: color,background-color,border-color;
+    transition-duration: .4s;
+    transition-timing-function: ease-in-out;
+}
+.k-icon {
+	/*width: 14px;*/
+    height: 17px;
+    outline: 0;
+    font-size: 16px;
+    font-family: WebComponentsIcons;
+    font-style: normal;
+    font-variant: normal;
+    font-weight: 400;
+    line-height: 1;
+    speak: none;
+    text-transform: none;
+    text-decoration: none;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-flow: row nowrap;
+    flex-flow: row nowrap;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    vertical-align: middle;
+    position: relative;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+}
+.free-items-step-list-horizontal .free-items-step-indicator+.free-items-step-label {
+    margin-top: 5px;
+}
+.free-items-step-list-horizontal .free-items-step-label {
+    text-align: center;
+}
+.free-items-stepper .free-items-step-label {
+    max-width: clamp(100%,10em,100%);
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: center;
+    justify-content: center;
+    z-index: 1;
+}
+.free-items-stepper .free-items-step-label .free-items-step-text {
+    max-width: calc(10em - 16px - 0.5rem);
+    -ms-flex-positive: 1;
+    flex-grow: 1;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+.free-items-step-list-horizontal~.k-progressbar {
+    width: 100%;
+    height: 2px;
+    top: 17px;
+}
+.free-items-stepper .k-progressbar-horizontal {
+    grid-row: 1/-1;
+}
+.free-items-stepper .k-progressbar {
+    pointer-events: none;
+    z-index: 0;
+    overflow: visible;
+}
+.k-progressbar {
+    border-radius: 0.25rem;
+    --kendo-progressbar-progress: 0;
+    border-width: 0;
+    border-style: solid;
+    box-sizing: border-box;
+    outline: 0;
+    font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+    font-size: .75rem;
+    line-height: 1;
+    display: inline-grid;
+    vertical-align: middle;
+    position: relative;
+    overflow: hidden;
+    -webkit-touch-callout: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.k-absolute, .k-pos-absolute {
+    position: absolute!important;
+}
+.k-progressbar .k-state-selected {
+    color: #fff;
+    background-color: #696986;
+}
+.k-progressbar>.k-progress-status-wrap, .k-progressbar>.k-state-selected {
+    -ms-grid-column: 1;
+    -ms-grid-row: 1;
+}
+.k-progressbar-horizontal>.k-state-selected {
+    width: 0;
+    width: calc(var(--kendo-progressbar-progress,0)*1%);
+    -ms-flex-direction: row;
+    flex-direction: row;
+}
+.k-progressbar>.k-state-selected {
+    border-width: 0;
+    border-style: solid;
+    display: -ms-flexbox;
+    display: flex;
+    overflow: hidden;
+    grid-column: 1/-1;
+    grid-row: 1/-1;
+}
+.free-items-stepper .free-items-step-focus .free-items-step-indicator::after, .free-items-stepper .free-items-step-link:focus .free-items-step-indicator::after {
+    display: block;
+}
+.free-items-stepper .free-items-step-indicator::after {
+    box-shadow: inset 0 0 0 2px #fff;
+}
+.free-items-stepper .free-items-step-indicator::after {
+    border-radius: 100%;
+    content: "";
+    border-width: 1px;
+    border-style: solid;
+    border-color: inherit;
+    pointer-events: none;
+    display: none;
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    bottom: -4px;
+    left: -4px;
+    z-index: 2;
+}
+.free-items-step-current .k-icon.fa.fa-lock{
+	color: #f8f9fa;
+}
+.k-icon.fa.fa-lock{
+	color: #f8f9fa;
+}
+#free-items-stepper-info{
+	text-align: center!important;
+}	
+#free-items-stepper-info fa.fa-gift{
+	font-size:40px;
+	margin-right:18px;
+}	
+#free-items-stepper-title{
+	font-weight: 700!important;
+	color: #52526c;
+	margin-bottom: 10px;
+	display: block;
+}
+#free-items-stepper-subtitle{
+	text-transform: Capitalize;
+	font-weight: normal;
+}
+#free-items-stepper-info .fa.fa-gift:before{
+	color: #696986;
+    width: 40px;
+    height: 40px;
+	font-size: 40px;
+    margin-right: 8px;	
+}	
+</style>
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <script type="text/javascript">
 // GTM Remove Item from cart
@@ -428,12 +693,13 @@ end if 'if var_showgifts <> "no" only display on the viewcart page
 										</div>
 									<% end if ' free shipping notice only showing if order is not heavy
 									%>	
+									
 									<%If var_other_items = 1 then 
 										If request.cookies("OrderAddonsActive") = "" then%>
-											<div id="free-items-info" class="text-center font-weight-bold p-1 mt-1">
-											</div>
+											<div id="stepper"></div>	
 										<%End If		
 									End If%>
+
 								</div><!-- end card body -->
 								
 								<div class="card-footer">
