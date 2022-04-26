@@ -16265,7 +16265,8 @@ apple-pay-button {
 }
 .accordion-button{
 	width: 100%;
-    height: 44px;
+min-height: 44px;
+    max-height: 65px;
     line-height: 47px;
     display: inline-block;
 	padding: 0;
