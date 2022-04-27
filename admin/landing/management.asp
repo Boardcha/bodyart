@@ -198,7 +198,7 @@ If var_access_level = "Manager" or var_access_level = "Admin" then
 	$("#toggle_autoclave, #toggle_checkout_cards, #toggle_checkout_paypal").on("click", function () {
 		$.ajax({
 			method: "POST",
-			url: "toggle.asp",
+			url: "/admin/toggle.asp",
 			data: {toggleItem: $(this).attr("id"), isChecked: $(this).is(":checked")}
 		})		
 	});	
