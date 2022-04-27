@@ -12,11 +12,11 @@
 <style>
 .stepper-container{
 	height: 225px;
-    border: 1px solid #6969861c;
+    border: 1px solid #d9dadb;
     border-radius: 4px;
-    background-color: #6969861c;
+    background-color: #ffffff;
 	margin: 20px 0 20px 0;
-	color: #52526c;
+	color: #666;
 }
 .free-items-stepper {
     border-width: 0;
@@ -75,14 +75,10 @@ free-items-step-list-horizontal .free-items-step {
     overflow: hidden;
 }
 .free-items-stepper .free-items-step-current .free-items-step-indicator {
-    border-color: #696986;
     color: #fff;
-    background-color: #696986;
 }
 .free-items-stepper .free-items-step-done .free-items-step-indicator {
-    border-color: #696986;
     color: #fff;
-    background-color: #696986;
 }
 .free-items-stepper .free-items-step-indicator {
     border-color: #dee2e6;
@@ -201,7 +197,7 @@ free-items-step-list-horizontal .free-items-step {
 }
 .k-progressbar .k-state-selected {
     color: #fff;
-    background-color: #696986;
+    background-color: #007bff;
 }
 .k-progressbar>.k-progress-status-wrap, .k-progressbar>.k-state-selected {
     -ms-grid-column: 1;
@@ -258,7 +254,7 @@ free-items-step-list-horizontal .free-items-step {
 }	
 #free-items-stepper-title{
 	font-weight: 700!important;
-	color: #52526c;
+	color: #212529;
 	margin-bottom: 10px;
 	display: block;
 }
@@ -267,7 +263,7 @@ free-items-step-list-horizontal .free-items-step {
 	font-weight: normal;
 }
 #free-items-stepper-info .fa.fa-gift:before{
-	color: #696986;
+	color: #007bff;
     width: 40px;
     height: 40px;
 	font-size: 40px;
@@ -277,6 +273,14 @@ free-items-step-list-horizontal .free-items-step {
     overflow-x: hidden;
     overflow-y: auto;
 }	
+.icon-bg-blue{
+	border-color: #007bff!important;
+    background-color: #007bff!important;
+}
+.icon-bg-gray{
+	border-color: #999!important;
+    background-color: #999!important;
+}
 </style>
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <script type="text/javascript">
