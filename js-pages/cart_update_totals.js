@@ -199,40 +199,50 @@
 					if(free_items_count > 2)
 						freeGiftSubText = 'Unlocked: ' + (free_items_count - 2) + ' free gift' + s + '!';
 					
-					var step1icon = "fa-check";
-					var step2icon = "fa-lock";
-					var step3icon = "fa-lock";
-					var step4icon = "fa-lock";
-					var step5icon = "fa-lock";
-					var step6icon = "fa-lock";
+					var step1icon = "fa-check", step1Class = "icon-bg-blue";
+					var step2icon = "fa-lock", step2Class = "icon-bg-gray";
+					var step3icon = "fa-lock", step3Class = "icon-bg-gray";
+					var step4icon = "fa-lock", step4Class = "icon-bg-gray";
+					var step5icon = "fa-lock", step5Class = "icon-bg-gray";
+					var step6icon = "fa-lock", step6Class = "icon-bg-gray";
 					
-					if (free_items_count > 2)
+					if (free_items_count > 2){
 						step2icon = "fa-check";
-					if (free_items_count > 3)
+						step2Class = "icon-bg-blue";
+					}	
+					if (free_items_count > 3){
 						step3icon = "fa-check";
-					if (free_items_count > 4)
+						step3Class = "icon-bg-blue";
+					}	
+					if (free_items_count > 4){
 						step4icon = "fa-check";
-					if (free_items_count > 5)
+						step4Class = "icon-bg-blue";
+					}	
+					if (free_items_count > 5){
 						step5icon = "fa-check";
-					if (free_items_count > 6)
+						step5Class = "icon-bg-blue";
+					}	
+					if (free_items_count > 6){
 						step6icon = "fa-check";
+						step6Class = "icon-bg-blue";
+					}	
 						
 					var stepper_html =	'<div class="stepper-container">' +
 											'<div id="free-items-stepper-title" class="text-uppercase text-center font-weight-bold pt-2 mt-3">' + freeGiftText + '</div>'  +
 											'<div class="k-widget free-items-stepper free-items-stepper-linear mt-3">' +
 												'<ol class="free-items-step-list free-items-step-list-horizontal">' +
-													'<li class="free-items-step free-items-step-current free-items-step-focus free-items-step-first free-items-step-done free-items-step-success" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-0" aria-selected="false"><span class="free-items-step-indicator" aria-hidden="true"><span class="free-items-step-indicator-icon k-icon fa ' + step1icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
-													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-1" aria-selected="true" aria-current="true"><span class="free-items-step-indicator" aria-hidden="true"><span class="step2-icon free-items-step-indicator-icon k-icon fa ' + step2icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
-													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-2" aria-selected="false" tabindex="-1"><span class="free-items-step-indicator" aria-hidden="true"><span class="step3-icon free-items-step-indicator-icon k-icon fa ' + step3icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
-													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-2" aria-selected="false" tabindex="-1"><span class="free-items-step-indicator" aria-hidden="true"><span class="step4-icon free-items-step-indicator-icon k-icon fa ' + step4icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
-													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-2" aria-selected="false" tabindex="-1"><span class="free-items-step-indicator" aria-hidden="true"><span class="step5-icon free-items-step-indicator-icon k-icon fa ' + step5icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
-													'<li class="free-items-step free-items-step-current free-items-step-focus free-items-step-last" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-2" aria-selected="false" tabindex="-1"><span class="free-items-step-indicator" aria-hidden="true"><span class="step6-icon free-items-step-indicator-icon k-icon fa ' + step6icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus free-items-step-first free-items-step-done free-items-step-success" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-0" aria-selected="false"><span class="free-items-step-indicator ' + step1Class + '" aria-hidden="true"><span class="free-items-step-indicator-icon k-icon fa ' + step1icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-1" aria-selected="true" aria-current="true"><span class="free-items-step-indicator ' + step2Class + '" aria-hidden="true"><span class="step2-icon free-items-step-indicator-icon k-icon fa ' + step2icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-2" aria-selected="false" tabindex="-1"><span class="free-items-step-indicator ' + step3Class + '" aria-hidden="true"><span class="step3-icon free-items-step-indicator-icon k-icon fa ' + step3icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-2" aria-selected="false" tabindex="-1"><span class="free-items-step-indicator ' + step4Class + '" aria-hidden="true"><span class="step4-icon free-items-step-indicator-icon k-icon fa ' + step4icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-2" aria-selected="false" tabindex="-1"><span class="free-items-step-indicator ' + step5Class + '" aria-hidden="true"><span class="step5-icon free-items-step-indicator-icon k-icon fa ' + step5icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus free-items-step-last" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-2" aria-selected="false" tabindex="-1"><span class="free-items-step-indicator ' + step6Class + '" aria-hidden="true"><span class="step6-icon free-items-step-indicator-icon k-icon fa ' + step6icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
 												'</ol>' +
 												'<div data-role="progressbar" class="k-widget k-progressbar k-progressbar-horizontal k-pos-absolute k-overflow-hidden" style="position: absolute; margin-left: 25px;width: 100%;">' +
 													'<div class="k-state-selected" style="width: calc(100% - 50px);"></div>' +
 												'</div>' +
 												'<div id="free-items-stepper-info" class="text-uppercase text-center font-weight-bold p-1 mt-2">' +
-													'<i class="fa fa-gift"></i> <span id="free-items-stepper-subtitle">' + freeGiftSubText + ' <br /><div class="mt-1"><a style="color:#696986;font-weight:700;font-size:18px" href="#" class="btn-free-items" data-toggle="modal" data-target="#free-items-modal">Select it now!</a></span><br /><a style="color:#696986;font-style: italic;font-size:15px;" href="#" data-toggle="modal" data-target="#free-items-page-modal">View our free gifts</a></span></div>' + '</span>' +
+													'<i class="fa fa-gift"></i> <span id="free-items-stepper-subtitle">' + freeGiftSubText + ' <br /><div class="mt-1"><a style="color:#007bff;font-weight:700;font-size:18px" href="#" class="btn-free-items" data-toggle="modal" data-target="#free-items-modal">Select it now!</a></span><br /><a style="color:#666;font-style: italic;font-size:15px;" href="#" data-toggle="modal" data-target="#free-items-page-modal">View our free gifts</a></span></div>' + '</span>' +
 												'</div>' +
 											'</div>' +
 										'</div>';
