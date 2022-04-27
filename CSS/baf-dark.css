@@ -7247,9 +7247,9 @@ a.badge-dark:focus, a.badge-dark.focus {
 }
 
 .alert-success {
-  color: #155724;
-  background-color: #d4edda;
-  border-color: #c3e6cb;
+  color: #155724!important;
+  background-color: #d4edda!important;
+  border-color: #c3e6cb!important;
 }
 
 .alert-success hr {
@@ -16265,7 +16265,7 @@ apple-pay-button {
 }
 .accordion-button{
 	width: 100%;
-	min-height: 44px;
+  min-height: 44px;
     max-height: 65px;
     line-height: 47px;
     display: inline-block;

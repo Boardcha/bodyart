@@ -5,7 +5,7 @@ if rsGetUser.bof AND rsGetUser.eof then
     response.redirect "login.asp"
 end if 
 
-
+show_inactive_header = 0
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
@@ -48,16 +48,20 @@ end select
 <body>
  <!--#include file="includes/scanners-header.asp" -->
 <div class="p-3">
-    <h6><%= total_records %> products to be pulled</h6>
+    <h6><%= total_records %> products to be pulled
+        <span class="text-secondary pointer ml-3" data-toggle="modal" data-target="#modal-page-info"><i class="fa fa-information fa-lg"></i></span>
+    </h6>
     <% if not rsGetProducts.eof then %>
+    <div class="my-3">
     <!--#include file="includes/inc-pull-products-paging.asp" -->
+</div>
     <% rsGetProducts.AbsolutePage = intPage '======== PAGING
     For intRecord = 1 To rsGetProducts.PageSize 
 
         ' --- pull details
         set objCmd = Server.CreateObject("ADODB.command")
         objCmd.ActiveConnection = DataConn
-        objCmd.CommandText = "SELECT ID_Description, BinNumber_Detail, location, ProductDetailID, ProductDetails.ProductID as ProductID, qty, type, qty_counted_discontinued, item_pulled, Gauge, Length, ProductDetail1  FROM ProductDetails INNER JOIN TBL_GaugeOrder ON COALESCE (ProductDetails.Gauge, '') = COALESCE (TBL_GaugeOrder.GaugeShow, '') INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID WHERE (BinNumber_Detail = 37 OR BinNumber_Detail = 0) AND ProductDetails.ProductID = ? and ProductDetails.active = 1 ORDER BY ID_BarcodeOrder ASC, BinNumber_Detail ASC, location ASC"
+        objCmd.CommandText = "SELECT ID_Description, BinNumber_Detail, location, ProductDetailID, ProductDetails.ProductID as ProductID, qty, type, qty_counted_discontinued, item_pulled, Gauge, Length, ProductDetail1, ProductDetails.active AS 'detail_active'  FROM ProductDetails INNER JOIN TBL_GaugeOrder ON COALESCE (ProductDetails.Gauge, '') = COALESCE (TBL_GaugeOrder.GaugeShow, '') INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID WHERE ProductDetails.ProductID = ? AND BinNumber_Detail = 0 ORDER BY detail_active DESC, ID_BarcodeOrder ASC, BinNumber_Detail ASC, location ASC"
         objCmd.Parameters.Append(objCmd.CreateParameter("ID",3,1,15,rsGetProducts.Fields.Item("ProductID").Value ))
         'objCmd.Parameters.Append(objCmd.CreateParameter("who",200,1,50, rsGetUser.Fields.Item("name").Value ))
 
@@ -66,7 +70,7 @@ end select
         rsGetDetails.Open objCmd
 
         if rsGetDetails.eof then
-            details_message = "<div class='alert alert-danger'>No active items to be pulled</div>"
+            details_message = "<div class='alert alert-danger'>No active items to be pulled OR items are already in limited bins</div>"
         end if
 
         ' ---- Check to see if there are any details left and if not, then send back json response
@@ -90,17 +94,20 @@ end select
             <button class="btn btn-primary ml-3" id="btn-finalize" id="btn-finalize" name="button" data-productid="<%= rsGetProducts.Fields.Item("ProductID").Value %>">FINALIZE</button>
     </div>
     <button class="btn btn-sm btn-warning mb-2" id="btn-delete" data-productid="<%= rsGetProducts.Fields.Item("ProductID").Value %>" type="button"><i class="fa fa-times-circle fa-lg"></i> Hide product</button>
+    <% if ISNULL(rsGetProducts.Fields.Item("who_pulled").Value) then %>
+    <button class="btn btn-primary btn-sm ml-1 mb-2" id="btn-assign" data-productid="<%= rsGetProducts.Fields.Item("ProductID").Value %>">Pull Items</button>
+    <% else %>
+    <span class="badge badge-info ml-2" style="font-size:1.25em">Assigned to: <%= rsGetProducts.Fields.Item("who_pulled").Value %></span>
+    <% end if %>
     <table class="table table-bordered table-sm small">
             <thead class="thead-light">
                     <tr>
                       <th colspan="3">
-                            <a href="/productdetails.asp?ProductID=<%= rsGetProducts.Fields.Item("ProductID").Value %>" target="_blank"><img src="https://bafthumbs-400.bodyartforms.com/<%= rsGetProducts.Fields.Item("picture_400").Value %>" style="width:50px;height:auto"></a>  
-                        <%= rsGetProducts.Fields.Item("title").Value %>
-                        <% if ISNULL(rsGetProducts.Fields.Item("who_pulled").Value) then %>
-                        <button class="btn btn-primary btn-sm ml-4" id="btn-assign" data-productid="<%= rsGetProducts.Fields.Item("ProductID").Value %>">Pull Items</button>
-                        <% else %>
-                        <span class="badge badge-info ml-2" style="font-size:1.25em">Assigned to: <%= rsGetProducts.Fields.Item("who_pulled").Value %></span>
-                        <% end if %>
+                            <a href="/productdetails.asp?ProductID=<%= rsGetProducts.Fields.Item("ProductID").Value %>" target="_blank"><img class="float-left mr-2" src="https://bafthumbs-400.bodyartforms.com/<%= rsGetProducts.Fields.Item("picture_400").Value %>" style="width:50px;height:auto"></a>  
+                        <%= rsGetProducts.Fields.Item("title").Value %> 
+                        <br>
+                        <i class='fa fa-database fa-lg'></i> = Website count
+                        <i class='fa fa-user-check fa-lg ml-3'></i> = User count
                         
                     </th>
                     </tr>
@@ -108,10 +115,10 @@ end select
                             <th width="20%">
                               Location
                           </th>
-                          <th width="30%">
-                                Qty
+                          <th width="40%">
+                                Quantity
                             </th>
-                            <th width="50%">
+                            <th width="40%">
                                     Item
                                 </th>
                           </tr>
@@ -128,15 +135,26 @@ end select
         disabled_input = " "
     end if
 
-    if rsGetDetails.Fields.Item("qty_counted_discontinued").Value = -1 then
-        var_qty = rsGetDetails.Fields.Item("qty").Value
-        qty_description = ""
-    else
+    if rsGetDetails.Fields.Item("qty_counted_discontinued").Value > 0 then
         var_qty = rsGetDetails.Fields.Item("qty_counted_discontinued").Value
-        qty_description = "Your count"
+        qty_description = "<i class='fa fa-user-check fa-lg ml-2'></i>"
+    else
+        var_qty = rsGetDetails.Fields.Item("qty").Value
+        qty_description = "<i class='fa fa-database fa-lg ml-2'></i>"
     end if
+    
+    if rsGetDetails("detail_active") = 0 then
+    show_inactive_header = show_inactive_header + 1
+    css_inactive = "table-secondary"
+    if show_inactive_header = 1 then
     %>
-    <tr class="tr-<%= rsGetDetails.Fields.Item("ProductDetailID").Value %> <%= row_success %>"><td>
+        <tr>
+            <td class="table-dark font-weight-bold" colspan="3">INACTIVE ITEMS</td>
+        </tr>
+    <% end if
+    end if %>
+    <tr class="tr-<%= rsGetDetails.Fields.Item("ProductDetailID").Value %> <%= row_success %> <%= css_inactive %>">
+        <td>
             <%= rsGetDetails.Fields.Item("ID_Description").Value %>&nbsp;
 			<% if rsGetDetails.Fields.Item("BinNumber_Detail").Value <> 0 then %>
             BIN <%= rsGetDetails.Fields.Item("BinNumber_Detail").Value %>
@@ -144,10 +162,9 @@ end select
             <span class="ml-1"><%= rsGetDetails.Fields.Item("location").Value %></span>
     </td>
     <td>
-                        <span class="input-group-sm form-inline">
-                            <i class="fa fa-check-circle fa-2x  mr-4 <%= checkmark_success %> confirm-item-pulled check-<%= rsGetDetails.Fields.Item("ProductDetailID").Value %>" data-detailid="<%= rsGetDetails.Fields.Item("ProductDetailID").Value %>" data-productid="<%= rsGetDetails.Fields.Item("ProductID").Value %>"></i><input type="text" class="form-control w-25" name="qty_counted" id="qty_<%= rsGetDetails.Fields.Item("ProductDetailID").Value %>" value=" <%= var_qty %>" <%= disabled_input %>>
-                            <span class="ml-1"><%= qty_description %></span>
-                        </span>
+                        <div class="input-group-sm form-inline">
+                            <i class="fa fa-check-circle fa-2x mr-2 <%= checkmark_success %> confirm-item-pulled check-<%= rsGetDetails.Fields.Item("ProductDetailID").Value %>" data-detailid="<%= rsGetDetails.Fields.Item("ProductDetailID").Value %>" data-productid="<%= rsGetDetails.Fields.Item("ProductID").Value %>"></i><input type="text" class="form-control" style="width:55px"  name="qty_counted" id="qty_<%= rsGetDetails.Fields.Item("ProductDetailID").Value %>" value="<%= var_qty %>" <%= disabled_input %>><%= qty_description %>
+                        </div>
     </td>
 <td>
         <% If (rsGetDetails.Fields.Item("Gauge").Value) <> "" Then %>
@@ -177,8 +194,41 @@ Next ' ====== PAGING
 <!--#include file="includes/inc-pull-products-paging.asp" -->
 <% end if ' rsGetProducts.eof%>
 </div>
+
+
+ <!-- Information Modal -->
+ <div class="modal fade" id="modal-page-info" tabindex="-1" role="dialog"  aria-labelledby="modal-information" >
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-header">
+		  <h5 class="modal-title">Page Information</h5>
+		  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+		  </button>
+		</div>
+		<div class="modal-body small">
+			<ul>
+                <li>
+                    After items are finalized, they are ALL set to active (even if they were inactive) to ensure that no items with qty accidentally are left inactive. These will automatically get set back to inactive each day on a schedule if the quantity still 0.
+                </li>
+                <li>
+                    The quantity field will have an icon by it telling where the count is coming from. Legend is at the top of the table. 
+                </li>
+                <li>
+                    You can pull items, but it won't let you finalize them into a bin unless you assign them to yourself using the "Pull items" button
+                </li>
+            </ul>
+		</div>
+		<div class="modal-footer">
+		  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+		</div>
+	  </div>
+	</div>
+</div>
+<!-- End Information Modal --> 
 </body>
-<script type="text/javascript" src="../js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="/js/bootstrap-v4.min.js"></script>
 <script>
 	// Confirm item pulled
 	$(".confirm-item-pulled").click(function () {

@@ -452,6 +452,14 @@ $("#description").redactor({
 		inherit_select_classes: true
 	});
 
+	$("select[name=discount]").change(function(){
+		var product_id = $(".ajax-update :input[name='product-id']").val();
+		$.ajax({
+			method: "POST",
+			url: "products/ajax_log_product_sales_on_discount_change.asp",
+			data: {discount: $(this).val(), product_id: product_id}
+		});
+	});
 
 	// Change active / inactive drop down select colors
 	$("select[name=active]").change(function(){

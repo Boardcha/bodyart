@@ -96,7 +96,7 @@
                         <a class="text-light" href="/products.asp?jewelry=balls">Balls, ends, & beads</a>
                     </li>
                     <li class="text-capitalize py-1 py-md-0">
-                        <a class="text-light" href="/landing/earrings-rings-necklaces-bracelets.asp">Rings, necklaces, & bracelets</a>
+                        <a class="text-light" href="/landing/earrings-rings-necklaces-bracelets.asp">Earrings, rings, necklaces, & bracelets</a>
                     </li>
                 </ul>
             </div>

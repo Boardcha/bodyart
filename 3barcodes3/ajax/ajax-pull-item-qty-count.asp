@@ -19,7 +19,7 @@ if status = "update" then
     ' --- pull details
     set objCmd = Server.CreateObject("ADODB.command")
     objCmd.ActiveConnection = DataConn
-    objCmd.CommandText = "SELECT item_pulled FROM ProductDetails WHERE ProductID = ? AND item_pulled = 0 AND ProductDetails.active = 1"
+    objCmd.CommandText = "SELECT item_pulled FROM ProductDetails WHERE ProductID = ? AND item_pulled = 0"
     objCmd.Parameters.Append(objCmd.CreateParameter("detailid",3,1,20, request.form("productid")  ))
     set rsGetDetails = objCmd.Execute()
     
@@ -39,7 +39,8 @@ else
 
     set objCmd = Server.CreateObject("ADODB.command")
     objCmd.ActiveConnection = DataConn
-    objCmd.CommandText = "UPDATE ProductDetails SET qty_counted_discontinued = -1, item_pulled = 0 WHERE ProductDetailID = ?"
+    objCmd.CommandText = "UPDATE ProductDetails SET qty_counted_discontinued = ?, item_pulled = 0 WHERE ProductDetailID = ?"
+    objCmd.Parameters.Append(objCmd.CreateParameter("qty_counted",3,1,15, request.form("qty_counted") ))
     objCmd.Parameters.Append(objCmd.CreateParameter("ProductDetailID",3,1,15, request.form("detailid") ))
     set rsGetDetails = objCmd.Execute()
 %>
