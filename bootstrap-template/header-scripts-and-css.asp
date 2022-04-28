@@ -64,11 +64,11 @@
         <meta name="msapplication-TileColor" content="#2b5797">
         <meta name="theme-color" content="#ffffff">
         <% if request.cookies("darkmode") <> "on" then 
-        var_applepay_color = "white"
+        var_applepay_color = "black"
         %> 
         <link href="/CSS/baf.min.css?v=042822" id="lightmode" rel="stylesheet" type="text/css" />
         <% else 
-        var_applepay_color = "black"
+        var_applepay_color = "white"
         %>
         <link href="/CSS/baf-dark.min.css?v=042822" id="darkmode" rel="stylesheet" type="text/css" />
         <% end if %>
