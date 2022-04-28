@@ -1,7 +1,7 @@
 	var totalWithoutShipping = 0;
 	var salesTax = 0;
 	var shippingWeight = 0;
-	
+	var free_items_count = 0;
 	
 	function calcAllTotals(e) {
 		
@@ -156,51 +156,105 @@
 				var subtotal_free_gifts = (json.fraudcheck_freegifts_subtotal);
 				// removed from line above  - json.var_totalvalue_certs_incart
 				
-				// Show/hide free gifts when grand total changes
+				
+				free_items_count = 7;
+				freeGiftText = '';
+				var freeGiftSubText = '';
+				
 				if(subtotal_free_gifts < 150) {
-
-					$('.freegift5').hide();
-				//	$('#freegift5 option:first-child').attr("selected", "selected").change();
-				} else {
-					$('.freegift5').show();
-					$(".freegift5").css('visibility', 'visible');
+					free_items_count = 6;
+					amountToGetAnotherGift = 150 - subtotal_free_gifts;
+					freeGiftText = 'You’ve got <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift!';
+					clearFreeItemsCookie(7);
 				}
 				if(subtotal_free_gifts < 100) {
-					$('.freegift4').hide();	
-				//	$('#freegift4 option:first-child').attr("selected", "selected").change();
-				} else {
-					$('.freegift4').show();
-					$(".freegift4").css('visibility', 'visible');
+					free_items_count = 5;
+					amountToGetAnotherGift = 100 - subtotal_free_gifts;
+					freeGiftText = 'You’ve got <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift!';
+					clearFreeItemsCookie(6);
 				}
 				if(subtotal_free_gifts < 75) {
-					$('.freegift3').hide();	
-				//	$('#freegift3 option:first-child').attr("selected", "selected").change();
-				} else {
-					$('.freegift3').show();
-					$(".freegift3").css('visibility', 'visible');
+					free_items_count = 4;
+					amountToGetAnotherGift = 75 - subtotal_free_gifts;
+					freeGiftText = 'You’ve got <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift.';
+					clearFreeItemsCookie(5);
 				}
 				if(subtotal_free_gifts < 50) {
-					$('.freegift2').hide();
-				//	$('#freegift2 option:first-child').attr("selected", "selected").change();					
-				} else {
-					$('.freegift2').show();
-					$(".freegift2").css('visibility', 'visible');
+					free_items_count = 3;
+					amountToGetAnotherGift = 50 - subtotal_free_gifts;
+					freeGiftText = 'You’ve got <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift!';
+					clearFreeItemsCookie(4);
+				}
+
+				if(subtotal_free_gifts < 30) {
+					free_items_count = 2;				
+					amountToGetAnotherGift = 30 - subtotal_free_gifts;
+					freeGiftText = 'You’ve got <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to earn a free gift!';
+					freeGiftSubText = 'Unlocked: O-rings & Stickers';
+					clearFreeItemsCookie(3);
 				}
 				
-				if(subtotal_free_gifts < 30) {
-					$('.freegift1').hide();	
-				//	$('#freegift1 option:first-child').attr("selected", "selected").change();
-				} else {
-					$('.freegift1').show();
-					$(".freegift1").css('visibility', 'visible');
+				if(free_items_count > 0){
+					let s = (free_items_count > 1) ? 's' : '';
+					if(free_items_count > 2)
+						freeGiftSubText = 'Unlocked: ' + (free_items_count - 2) + ' free gift' + s + '!';
 					
-				}
-			} // Only run this code if cart has items other than gift certs	
-			else { // if only gift certs are found
-				$("#gaugecard, #freeorings, #freesticker, .freegift1,.freegift2,.freegift3,.freegift4,.freegift5").hide();
-		
+					var step1icon = "fa-check", step1Class = "icon-bg-blue";
+					var step2icon = "fa-lock", step2Class = "icon-bg-gray";
+					var step3icon = "fa-lock", step3Class = "icon-bg-gray";
+					var step4icon = "fa-lock", step4Class = "icon-bg-gray";
+					var step5icon = "fa-lock", step5Class = "icon-bg-gray";
+					var step6icon = "fa-lock", step6Class = "icon-bg-gray";
+					
+					if (free_items_count > 2){
+						step2icon = "fa-check";
+						step2Class = "icon-bg-blue";
+					}	
+					if (free_items_count > 3){
+						step3icon = "fa-check";
+						step3Class = "icon-bg-blue";
+					}	
+					if (free_items_count > 4){
+						step4icon = "fa-check";
+						step4Class = "icon-bg-blue";
+					}	
+					if (free_items_count > 5){
+						step5icon = "fa-check";
+						step5Class = "icon-bg-blue";
+					}	
+					if (free_items_count > 6){
+						step6icon = "fa-check";
+						step6Class = "icon-bg-blue";
+					}	
+						
+					var stepper_html =	'<div class="stepper-container">' +
+											'<div id="free-items-stepper-title" class="text-uppercase text-center font-weight-bold pt-2 mt-3">' + freeGiftText + '</div>'  +
+											'<div class="k-widget free-items-stepper free-items-stepper-linear mt-3">' +
+												'<ol class="free-items-step-list free-items-step-list-horizontal">' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus free-items-step-first free-items-step-done free-items-step-success" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-0" aria-selected="false"><span class="free-items-step-indicator ' + step1Class + '" aria-hidden="true"><span class="free-items-step-indicator-icon k-icon fa ' + step1icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-1" aria-selected="true" aria-current="true"><span class="free-items-step-indicator ' + step2Class + '" aria-hidden="true"><span class="step2-icon free-items-step-indicator-icon k-icon fa ' + step2icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-2" aria-selected="false" tabindex="-1"><span class="free-items-step-indicator ' + step3Class + '" aria-hidden="true"><span class="step3-icon free-items-step-indicator-icon k-icon fa ' + step3icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-2" aria-selected="false" tabindex="-1"><span class="free-items-step-indicator ' + step4Class + '" aria-hidden="true"><span class="step4-icon free-items-step-indicator-icon k-icon fa ' + step4icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-2" aria-selected="false" tabindex="-1"><span class="free-items-step-indicator ' + step5Class + '" aria-hidden="true"><span class="step5-icon free-items-step-indicator-icon k-icon fa ' + step5icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+													'<li class="free-items-step free-items-step-current free-items-step-focus free-items-step-last" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-2" aria-selected="false" tabindex="-1"><span class="free-items-step-indicator ' + step6Class + '" aria-hidden="true"><span class="step6-icon free-items-step-indicator-icon k-icon fa ' + step6icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
+												'</ol>' +
+												'<div data-role="progressbar" class="k-widget k-progressbar k-progressbar-horizontal k-pos-absolute k-overflow-hidden" style="position: absolute; margin-left: 25px;width: 100%;">' +
+													'<div class="k-state-selected" style="width: calc(100% - 50px);"></div>' +
+												'</div>' +
+												'<div id="free-items-stepper-info" class="text-uppercase text-center font-weight-bold p-1 mt-2">' +
+													'<i class="fa fa-gift"></i> <span id="free-items-stepper-subtitle">' + freeGiftSubText + ' <br /><div class="mt-1"><a style="color:#007bff;font-weight:700;font-size:18px" href="#" class="btn-free-items" data-toggle="modal" data-target="#free-items-modal">Select it now!</a></span><br /><a style="color:#666;font-style: italic;font-size:15px;" href="#" data-toggle="modal" data-target="#free-items-page-modal">View our free gifts</a></span></div>' + '</span>' +
+												'</div>' +
+											'</div>' +
+										'</div>';
+					$("#stepper").html(stepper_html);
+				}	
+			}else{
+				free_items_count = 0;		
+				$("#free-items-info").html('');
+				$("#stepper").html('');
+				clearFreeItemsCookie(1);
 			}
-
+			console.log(free_items_count);
 			// Disabling place order button by country or other restrictions
 			/*	
 			if (tax_country === 'Hong Kong' || tax_country === 'Slovenia') {

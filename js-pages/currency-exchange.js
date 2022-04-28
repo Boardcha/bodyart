@@ -4,7 +4,8 @@ function updateCurrency() {
 	var_pull_json = 0
 	var_symbol = ""
 	var currency_deferred = $.Deferred();
-
+	var var_img;
+	
 	$.ajax({
 	type: "post",
 	dataType: "json",
@@ -12,9 +13,6 @@ function updateCurrency() {
 	})
 	//success: function(json){
 	.done(function( json, msg ) {
-		
-	
-		
 		
 		$('.exchange-price').show();
 		$('.usa-price').hide();
@@ -94,6 +92,7 @@ function updateCurrency() {
 	
 	// Write currency type to each span
 	$('.currency-type').html(var_show_type);
+	if(var_img != "undefined")
 	$('#currency-icon').attr('src', '/images/icons/' + var_img);
 	
 	$('.convert-price').each(function(i, obj) {

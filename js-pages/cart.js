@@ -28,23 +28,17 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 	});
 
 
-
-
 	// Show proceed to checkout button -- enabled for people with scripts on
 	$("#btn_continue_checkout").show();
 	
 	
-	$('.remove_gaugeCard').click(function(){
-		$('.free_gauge_card').css('backgroundColor','#F5A9A9');
-		$('.free_gauge_card').fadeOut( "slow" );
-		Cookies.set('gaugecard', 'no', { expires: 30});
-		});
-		
-	$('.remove_sticker').click(function(){
-		$('.free_sticker').css('backgroundColor','#F5A9A9');
-		$('.free_sticker').fadeOut( "slow" );
-		Cookies.set('sticker', 'no', { expires: 30});
-		});
+	$(document).on('click', '#gaugeCardCheck', function() {
+		if ($(this).is(':checked')){
+			Cookies.set('gaugecard', 'yes', { expires: 30});
+		}else{
+			Cookies.set('gaugecard', 'no', { expires: 30});		
+		}	
+	});
 		
 	// START Set cookies for free gift selections ------------------------
 		function ToggleDisplayUseNow(that, name) {
@@ -56,87 +50,45 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 				} else {
 					$('#' + var_usenow_notice).hide();
 				}
-
 		}
 
-		$('input[name=freegift1]').change(function(){
-			var_freegift1id = $(this).val();
+		$(document).on("change", 'input[class=freegift]', function(event) { 
+			var_freegiftid = $(this).val();
 			friendly_title = $(this).attr('data-friendly');
+			slide_id = $(this).attr('data-slide-id');
 			img_name = $(this).attr('data-img-name');
-			Cookies.set('freegift1id', var_freegift1id, { expires: 30});
-			$('#selected-gift1').html('<img class="ml-1 mr-2" src="https://s3.amazonaws.com/bodyartforms-products/' + img_name + '"   style="width:40px">' + friendly_title);
-			$('#gift1-dropdown-text').hide();
-			calcAllTotals();
-		});
-		
-		$('input[name=freegift2]').change(function(){
-			var_freegift2id = $(this).val();
-			friendly_title = $(this).attr('data-friendly');
-			img_name = $(this).attr('data-img-name');
-			Cookies.set('freegift2id', var_freegift2id, { expires: 30});
-			$('#selected-gift2').html('<img class="ml-1 mr-2" src="https://s3.amazonaws.com/bodyartforms-products/' + img_name + '"   style="width:40px">' + friendly_title);
-			$('#gift2-dropdown-text').hide();
-			calcAllTotals();
-		});
-		
-		$('input[name=freegift3]').change(function(){
-			var_freegift3id = $(this).val();
-			friendly_title = $(this).attr('data-friendly');
-			img_name = $(this).attr('data-img-name');
-			Cookies.set('freegift3id', var_freegift3id, { expires: 30});
-			$('#selected-gift3').html('<img class="ml-1 mr-2" src="https://s3.amazonaws.com/bodyartforms-products/' + img_name + '"   style="width:40px">' + friendly_title);
-			$('#gift3-dropdown-text').hide();
-			calcAllTotals();
-		});
-		
-		$('input[name=freegift4]').change(function(){
-			var_freegift4id = $(this).val();
-			friendly_title = $(this).attr('data-friendly');
-			img_name = $(this).attr('data-img-name');
-			Cookies.set('freegift4id', var_freegift4id, { expires: 30});
-			$('#selected-gift4').html('<img class="ml-1 mr-2" src="https://s3.amazonaws.com/bodyartforms-products/' + img_name + '"   style="width:40px">' + friendly_title);
-			$('#gift4-dropdown-text').hide();
-			calcAllTotals();
-		});
-		
-		$('input[name=freegift5]').change(function(){
-			var_freegift5id = $(this).val();
-			friendly_title = $(this).attr('data-friendly');
-			img_name = $(this).attr('data-img-name');
-			Cookies.set('freegift5id', var_freegift5id, { expires: 30});
-			$('#selected-gift5').html('<img class="ml-1 mr-2" src="https://s3.amazonaws.com/bodyartforms-products/' + img_name + '"   style="width:40px">' + friendly_title);
-			$('#gift5-dropdown-text').hide();
-			calcAllTotals();
-		});
-		
-	// END Set cookies for free gift selections --------------------------
-		
-	// Set cookies for free sticker selection
-	$('input[name=freesticker]').change(function(){
-		var_stickerid = $(this).val();
-		friendly_title = $(this).attr('data-friendly');
-		img_name = $(this).attr('data-img-name');
-		Cookies.set('stickerid', var_stickerid, { expires: 30});
-		$('#selected-sticker').html('<img class="ml-1 mr-2" src="https://s3.amazonaws.com/bodyartforms-products/' + img_name + '"   style="width:40px">' + friendly_title);
-		$('#sticker-dropdown-text').hide();
-		});
-		
-	// Set cookies for free o-rings selection
-	$('input[name=free_orings]').change(function(){
-		var_oringsid = $(this).val();
-		Cookies.set('oringsid', var_oringsid, { expires: 30});
-		friendly_title = $(this).attr('data-friendly');
-		img_name = $(this).attr('data-img-name');
-		$('#selected-orings').html('<img class="ml-1 mr-2" src="https://s3.amazonaws.com/bodyartforms-products/' + img_name + '"   style="width:40px"><span class="mr-3">Qty: 4</span>' + friendly_title);
-		$('#orings-dropdown-text').hide();
-		});
+			var tier = $(this).attr('data-tier');
 
-		$('.remove_orings').click(function(){
-		$('.free_orings').css('backgroundColor','#F5A9A9');
-		$('.free_orings').fadeOut( "slow" );
-		Cookies.set('orings', 'no', { expires: 30});
-		});
+			$('#selected-gift' + tier).html(friendly_title);
+			$('#gift' + tier + '-dropdown-text').hide();
+			$('.selected-variation-text').hide();
+			$('.variation-text').show(); 
+			$('.slick-slide img').css("border", "none");
+			if (friendly_title != "no free item"){
+				Cookies.set('freegift' + tier + 'id', var_freegiftid, { expires: 30});
+				Cookies.set('freegift' + tier + 'slideindex', $(this).attr('data-slide-index'), { expires: 30});
+				Cookies.set('freegift' + tier + 'Title', friendly_title, { expires: 30});
 
+				console.log("c:" + Cookies.get('freegift' + tier + 'id'));
+				console.log("#slick-free-items-" + tier + ' .slick-slide[data-slide-index=' + $(this).attr('data-slide-index') + ']');
+				
+				var element = $("#slick-free-items-" + tier + ' .slick-slide[data-slide-index=' + $(this).attr('data-slide-index') + ']');
+				element.find('.variation-text').hide();
+				element.find('.selected-variation-text').html('<div class="small" style="color: #007bff">' + friendly_title + ' <i class="fa fa-check"></i></div>');
+				$('#header-card-selected-item-' + tier).html(friendly_title + ' <i class="fa fa-check"></i>');
+				element.find('.selected-variation-text').show();			
+				element.find('img').css("border", "3px solid #1585ff");
+				element.find('img').css("border-radius", "2px");
+			}else{
+				$('#header-card-selected-item-' + tier).html('');
+				Cookies.set('freegift' + tier + 'id', "", { expires: 30});
+				Cookies.set('freegift' + tier + 'slideindex', "", { expires: 30});
+				Cookies.set('freegift' + tier + 'Title', "", { expires: 30});			
+			}
+			calcAllTotals();
+			
+		});
+	
 	// Remove item from cart
 	$(document).on('click', '.action-remove', function() {
 		// remove stock notice if it's displaying
@@ -484,3 +436,147 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 		}
 	});	
 		
+		
+	// Load Free Items
+	$(document).on("click", ".btn-free-items", function(event)
+	{    
+		$("#free-items").hide();	
+		$("#loading-message").html('<div class="text-center alert" style="color: #525252; background-color: #f1f1f1; border-color: #dbdbdb;"><i class="fa fa-spinner fa-spin" style="font-size: 1.3em"></i> Loading free items . . .</div>');
+		$("#loading-message").show();
+		$.ajax({
+		  url: "/cart/inc_freeitems_modal.asp",
+		  type: 'POST',
+		  data: {free_items_count: free_items_count}
+		}).done(function( data, msg ) {
+			$("#free-items").html(data);
+			$("#free-items").show();
+			$("#loading-message").hide();	
+			$(".slick-free-items").slick({
+					// Do not set slidesToShow property. It cannot detect parent's width since accordion is collapsed/hidden. Instead use variableWidth: true, and set a fixed width.
+					// TODO: check this out in mobile phone, if view is ok. Setting a smaller width may be needed in mobile for slick items.
+					/*
+					slickGoTo: 1,
+					focusOnSelect: true,
+					centerMode: true,*/
+					/*infinite: false,*/
+					variableWidth: true,
+					slidesToScroll: 3,					
+					prevArrow: '<div class="slider-arrow-prev" style="height: 75%"><i class="fa fa-chevron-circle-left text-dark fa-2x pointer"></i></div>',
+					nextArrow: '<div class="slider-arrow-next" style="height: 75%"><i class="fa fa-chevron-circle-right text-dark  fa-2x pointer"></i></div>'
+			});	
+			
+			for (let i = 0; i < 7; i++) {
+				let selectedSlickId = Cookies.get('freegift' + i + 'slideid');
+				let selectedSlideIndex = Cookies.get('freegift' + i + 'slideindex');
+				let friendly_title = Cookies.get('freegift' + i + 'Title');
+
+				if(selectedSlideIndex != "" && selectedSlideIndex != undefined){		
+					var element = $('#slick-free-items-' + i + ' .slick-slide[data-slide-index=' + (selectedSlideIndex) + ']');
+					//var slickIndex = element.prev().attr("data-slick-index");
+					//$("#slick-free-items-1").slick('slickGoTo', slickIndex, false);		
+					element.find('.variation-text').hide();
+					element.find('.selected-variation-text').html('<div class="small" style="color: #007bff">' + friendly_title + ' <i class="fa fa-check"></i></div>');
+					$('#header-card-selected-item-' + i).html(friendly_title + ' <i class="fa fa-check"></i>');
+					element.find('.selected-variation-text').show();			
+					element.find('img').css("border", "3px solid #1585ff");
+					element.find('img').css("border-radius", "2px");		
+				}
+			}
+			
+			}).fail(function() {
+				$("#loading-message").hide();
+				$("#free-items").show();
+			});
+	});	
+		
+	// Free Items Selection
+	$(document).on("click", ".slick-slide", function(event)
+	{   	
+		if(!$(this).closest(".baf-carousel").hasClass("notavailable") && !$(this).closest(".baf-carousel").hasClass("free-stickers")){
+			event.stopImmediatePropagation();
+			event.preventDefault();
+			
+			var tier = $(this).attr("data-tier");
+			var productid = $(this).attr("data-productid");
+			var slideindex = $(this).attr("data-slide-index");
+			
+			$("#select-product-variation-" + tier).hide();
+			$("#slick-free-items-" + tier).css("opacity", "1");
+			
+			$.ajax({
+			  url: "/cart/inc_freeitems_select.asp",
+			  type: 'POST',
+			  data: {productid: productid, tier: tier, slideindex: slideindex}
+			}).done(function( data, msg ) {
+				$("#select-product-variation-" + tier).html(data);
+				$("#select-product-variation-" + tier).show();
+				$("#slick-free-items-" + tier).css("opacity", "0.5");
+				// Check transition on production website and put a setTimeout if needed
+			}).fail(function() {
+				$("#select-product-variation-" + tier).html('');
+			});	
+		// If clicked on free stickers, don't load select menu
+		}else if ($(this).closest(".baf-carousel").hasClass("free-stickers")){
+			
+			var productDetailId = $(this).attr("data-product-detail-id");
+			friendly_title = $(this).attr('data-friendly');
+			var tier = 2; // free stickers
+
+			$('#selected-gift' + tier).html(friendly_title);
+			$('#gift' + tier + '-dropdown-text').hide();
+			$('.selected-variation-text').hide();
+			$('.variation-text').show(); 
+			$('.slick-slide img').css("border", "none");
+			
+
+			Cookies.set('freegift' + tier + 'id', productDetailId, { expires: 30});
+			Cookies.set('freegift' + tier + 'slideindex', $(this).attr('data-slide-index'), { expires: 30});
+			Cookies.set('freegift' + tier + 'Title', friendly_title, { expires: 30});
+			
+			var element = $("#slick-free-items-" + tier + ' .slick-slide[data-slide-index=' + $(this).attr('data-slide-index') + ']');
+			element.find('.variation-text').hide();
+			element.find('.selected-variation-text').html('<div class="small" style="color: #007bff">' + friendly_title + ' <i class="fa fa-check"></i></div>');
+			$('#header-card-selected-item-' + tier).html(friendly_title + ' <i class="fa fa-check"></i>');
+			element.find('.selected-variation-text').show();			
+			element.find('img').css("border", "3px solid #1585ff");
+			element.find('img').css("border-radius", "2px");
+			calcAllTotals();		
+		}
+	});
+
+	$(document).on("click", "body", function(event)
+	{   	
+		$(".select-product-variation").hide();
+		if(!$(this).hasClass("slick-slide"))
+			$(".slick-free-items").css("opacity", "1");
+	});
+	
+	$(document).on("show.bs.collapse", ".collapse", function(e)	{
+		let tier = $(this).attr("data-tier");
+		let selectedSlickId = Cookies.get('freegift' + tier + 'slideid');
+		let selectedSlideIndex = Cookies.get('freegift' + tier + 'slideindex');
+		let friendly_title = Cookies.get('freegift' + tier + 'Title');
+
+		if(selectedSlideIndex != "" && selectedSlideIndex != undefined){		
+			var element = $("#slick-free-items-" + tier + ' .slick-slide[data-slide-index=' + (selectedSlideIndex) + ']');
+			var slickIndex = element.prev().attr("data-slick-index");
+			console.log("Go to slick Index:" + slickIndex);
+			$("#slick-free-items-" + tier).slick('slickGoTo', slickIndex);		
+			element.find('.variation-text').hide();
+			element.find('.selected-variation-text').html('<div class="small" style="color: #007bff">' + friendly_title + ' <i class="fa fa-check"></i></div>');
+			$('#header-card-selected-item-' + tier).html(friendly_title + ' <i class="fa fa-check"></i>');
+			element.find('.selected-variation-text').show();			
+			element.find('img').css("border", "3px solid #1585ff");
+			element.find('img').css("border-radius", "2px");		
+		}
+	});
+	
+	function clearFreeItemsCookie(tier){
+		for (let i = tier; i <= 7; i++) {
+			Cookies.set('freegift' + i + 'id', "", { expires: 30});
+			Cookies.set('freegift' + i + 'slideindex', "", { expires: 30});
+			Cookies.set('freegift' + i + 'Title', "", { expires: 30});	
+		}
+	}
+
+	

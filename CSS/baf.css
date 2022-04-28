@@ -15974,4 +15974,82 @@ apple-pay-button {
 .gpay-button.white.checkout.en {
   background-image: url("/images/google-checkout.svg") !important;
 }
+
+.slick-free-items .slick-slide {
+   width: 138px !important;
+}
+.slick-free-items .slick-slide:hover{
+   cursor: pointer;
+}
+
+.baf-carousel .slider-arrow-prev{
+	left: 0.6em !important;
+}
+.baf-carousel .slider-arrow-next{
+	right: 0.6em !important;
+}
+
+.accordion>.card>.card-header{
+	padding:0;
+}
+.accordion>.card .card-body{
+	padding: 1rem !important;
+}
+.accordion-button{
+	width: 100%;
+min-height: 44px;
+    max-height: 65px;
+    line-height: 47px;
+    display: inline-block;
+	padding: 0;
+}
+.accordion-button h5{
+	display: inline-block;
+}
+.accordion-button:not(.collapsed) {
+    color: #007bff;
+}
+.accordion-button.collapsed {
+    color: #4f4f4f;
+}
+.accordion-button:before {
+    flex-shrink: 0;
+    width: 1.25rem;
+    height: 1.25rem;
+    margin: 0 6px 0 15px;
+    content: "";
+    background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%234f4f4f'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-size: 1.25rem;
+    transition: transform .2s ease-in-out;
+	display: inline-block;
+	background-position-y: 2px;
+}
+.accordion-button:not(.collapsed):before {
+    background: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='%231266f1'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 01.708 0L8 10.293l5.646-5.647a.5.5 0 01.708.708l-6 6a.5.5 0 01-.708 0l-6-6a.5.5 0 010-.708z'/%3E%3C/svg%3E");
+    transform: rotate(-180deg);
+	display: inline-block;
+	background-position-y: -2px;
+}
+.form-check-label-gauge:before{
+	content: ""; vertical-align: middle; 
+	width: 60px; background-size: contain; 
+	height: 56px; display: inline-block; 
+	background-image: url('https://bafthumbs-400.bodyartforms.com/thumbnail-1430.jpg');
+}
+.notavailable{
+	opacity: 0.5 !important;
+}
+#header-card-selected-item-1,
+#header-card-selected-item-2,
+#header-card-selected-item-3,
+#header-card-selected-item-4,
+#header-card-selected-item-5,
+#header-card-selected-item-6,
+#header-card-selected-item-7{
+	margin-top: -23px;
+    padding-left: 45px;
+    font-size: 14px;
+    color: #007bff;
+}
 /*# sourceMappingURL=baf.css.map */
