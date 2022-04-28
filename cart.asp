@@ -11,7 +11,7 @@
 %>
 <style>
 .stepper-container{
-	height: 225px;
+	min-height: 225px;
     border: 1px solid #d9dadb;
     border-radius: 4px;
     background-color: #ffffff;
@@ -257,6 +257,7 @@ free-items-step-list-horizontal .free-items-step {
 	color: #212529;
 	margin-bottom: 10px;
 	display: block;
+	padding: 0 25px;
 }
 #free-items-stepper-subtitle{
 	text-transform: Capitalize;
