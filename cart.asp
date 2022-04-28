@@ -248,10 +248,7 @@ free-items-step-list-horizontal .free-items-step {
 #free-items-stepper-info{
 	text-align: center!important;
 }	
-#free-items-stepper-info fa.fa-gift{
-	font-size:40px;
-	margin-right:18px;
-}	
+
 #free-items-stepper-title{
 	font-weight: 700!important;
 	color: #212529;
@@ -263,13 +260,7 @@ free-items-step-list-horizontal .free-items-step {
 	text-transform: Capitalize;
 	font-weight: normal;
 }
-#free-items-stepper-info .fa.fa-gift:before{
-	color: #007bff;
-    width: 40px;
-    height: 40px;
-	font-size: 40px;
-    margin-right: 8px;	
-}	
+	
 #free-items-page-modal{
     overflow-x: hidden;
     overflow-y: auto;
@@ -753,8 +744,11 @@ end if 'if var_showgifts <> "no" only display on the viewcart page
 									<% else %>
 										<div class="alert alert-danger">We're sorry, but our <b>PayPal</b> checkout is temporarily unavailable. As soon as PayPal comes back online, we will accept orders again. Please check back later.</div>
 									<% end if %>
-									<div id="pay-api-processing-message" style="display:none"></div>	
+									<div id="pay-api-processing-message" style="display:none"></div>
+									<div id="pay-api-error-message" class="alert alert-danger" style="display:none"></div>	
+									<apple-pay-button id="btn-applepay" buttonstyle="<%= var_applepay_color %>" type="check-out" locale="en" class="mb-2"></apple-pay-button>
 									<div id="btn-googlepay" class="mb-3 checkout_button" style="width: 100%; height: 45px; display: none;"></div>
+									
 									
 									<%
 									' === only show afterpay option to USA customers

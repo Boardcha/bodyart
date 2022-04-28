@@ -228,8 +228,11 @@
 					}	
 						
 					var stepper_html =	'<div class="stepper-container">' +
-											'<div id="free-items-stepper-title" class="text-uppercase text-center font-weight-bold pt-2 mt-3">' + freeGiftText + '</div>'  +
-											'<div class="k-widget free-items-stepper free-items-stepper-linear mt-3">' +
+												'<div id="free-items-stepper-info" class="text-uppercase text-center font-weight-bold p-1 mt-2">' +
+													' <span id="free-items-stepper-subtitle">' + freeGiftSubText + ' <br /><div class="mt-1"><a  href="#" class="btn btn-outline-primary font-weight-bold btn-free-items" data-toggle="modal" data-target="#free-items-modal"><i class="fa fa-gift fa-lg mr-1"></i>SELECT YOUR FREE ITEMS</a></span></span></div>' + '</span>' +
+												'</div>' +
+											'<div id="free-items-stepper-title" class="text-uppercase text-center font-weight-bold pt-2 mt-2">' + freeGiftText + '</div>'  +
+											'<div class="k-widget free-items-stepper free-items-stepper-linear mt-2">' +
 												'<ol class="free-items-step-list free-items-step-list-horizontal">' +
 													'<li class="free-items-step free-items-step-current free-items-step-focus free-items-step-first free-items-step-done free-items-step-success" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-0" aria-selected="false"><span class="free-items-step-indicator ' + step1Class + '" aria-hidden="true"><span class="free-items-step-indicator-icon k-icon fa ' + step1icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
 													'<li class="free-items-step free-items-step-current free-items-step-focus" style="width: 16.6666%;"><a href="#" class="btn-free-items free-items-step-link" data-toggle="modal" data-target="#free-items-modal" title="Select your free gifts" role="tab" aria-controls="wizard-1" aria-selected="true" aria-current="true"><span class="free-items-step-indicator ' + step2Class + '" aria-hidden="true"><span class="step2-icon free-items-step-indicator-icon k-icon fa ' + step2icon +'"></span></span><span class="free-items-step-label"><span class="free-items-step-text"></span> </span></a></li>' +
@@ -241,9 +244,7 @@
 												'<div data-role="progressbar" class="k-widget k-progressbar k-progressbar-horizontal k-pos-absolute k-overflow-hidden" style="position: absolute; margin-left: 25px;width: 100%;">' +
 													'<div class="k-state-selected" style="width: calc(100% - 50px);"></div>' +
 												'</div>' +
-												'<div id="free-items-stepper-info" class="text-uppercase text-center font-weight-bold p-1 mt-2">' +
-													'<i class="fa fa-gift"></i> <span id="free-items-stepper-subtitle">' + freeGiftSubText + ' <br /><div class="mt-1"><a style="color:#007bff;font-weight:700;font-size:18px" href="#" class="btn-free-items" data-toggle="modal" data-target="#free-items-modal">Select it now!</a></span><br /><a style="color:#666;font-style: italic;font-size:15px;" href="#" data-toggle="modal" data-target="#free-items-page-modal">View our free gifts</a></span></div>' + '</span>' +
-												'</div>' +
+												'<div class="text-center"><a style="color:#666;font-style: italic;font-size:15px;" href="#" data-toggle="modal" data-target="#free-items-page-modal">View our free gifts</a></div>' +
 											'</div>' +
 										'</div>';
 					$("#stepper").html(stepper_html);

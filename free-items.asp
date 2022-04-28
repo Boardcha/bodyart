@@ -31,19 +31,19 @@ Set rsGetRecords = objCmd.Execute()
 	<div class="display-5">
 		<%= title_onpage %>
 	</div>
-	Use this free items guide to help you plan your shopping! When you meet certain cart thresholds you will see eligible free items to select from on the shopping cart page right before you checkout.
+	Use this free items guide to help you plan your shopping! When you meet certain a cart total you will see eligible free items to select from on the shopping cart page right before you checkout.
 	<% if NOT rsGetRecords.EOF then	%>
 		<div class="d-flex flex-row flex-wrap">
 			<% While NOT rsGetRecords.EOF %>
 				<%If treshold <> rsGetRecords("free") Then%>
 				<div class="alert alert-secondary w-100 mb-0 mt-3">
 					<div class="h4">
-						<i class="fa fa-lg fa-chevron-down mr-3"></i><%= "$" & FormatNumber(rsGetRecords("free"), 2) & " CART THRESHOLD"%>
+						<i class="fa fa-lg fa-chevron-down mr-3"></i><%= "$" & FormatNumber(rsGetRecords("free"), 2) & " CART TOTAL"%>
 					</div>
 					<% if rsGetRecords("free") > 30 then %>
-						Select one item from the previous threshold selections AND get one item from this new threshold.
+						Select one item from the previous section AND get one item from this new level.
 						<% else %>
-						Select one item from this first threshold
+						Select one item from this first level
 					<% end if %>
 				</div>
 				<%End If%>

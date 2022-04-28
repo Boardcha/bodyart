@@ -127,7 +127,7 @@ end if
 						<% Do While NOT rsGetFreeTier2.EOF %>	
 							<% index = index + 1 %>
 							<a class="slide text-dark homepage-graphic" data-slide-index="<%=index%>" data-tier="2" data-product-detail-id="<%= rsGetFreeTier2("ProductDetailID") %>" data-friendly="<%= rsGetFreeTier2("ProductDetail1") %>" id="tier-2-<%=index%>">
-								<img width="138" class="img-fluid" src="https://s3.amazonaws.com/bodyartforms-products/<%= rsGetFreeTier2("detail_code") %>" alt="<%=(rsGetFreeTier2("title"))%>" title="<%=(rsGetFreeTier2("title"))%>">
+								<img width="138" class="img-fluid" src="https://bafthumbs-400.bodyartforms.com/<%= rsGetFreeTier2("detail_code") %>" alt="<%=(rsGetFreeTier2("title"))%>" title="<%=(rsGetFreeTier2("title"))%>">
 								<div class="w-100 text-center px-1 variation-text">
 									<div class="small">
 											<%= rsGetFreeTier2("ProductDetail1") %>
@@ -173,7 +173,7 @@ end if
 				aria-expanded="false" aria-controls="collapseThree3" class="accordion-button collapsed">
 				<div class="d-inline-block">
 				<h5 class="mb-0">
-				 <%If free_items_count < 3 Then %><i class="fa fa-lock"></i><%End If%> $30.00 CART SUBTOTAL <i class="fas fa-angle-down rotate-icon"></i>
+				 <%If free_items_count < 3 Then %><i class="fa fa-lock"></i><%End If%> $30.00 CART VALUE <i class="fas fa-angle-down rotate-icon"></i>
 				</h5>
 				</div>
 				<div id="header-card-selected-item-3"></div>
@@ -239,7 +239,7 @@ end if
 				aria-expanded="false" aria-controls="collapseThree4" class="accordion-button collapsed">
 				<div class="d-inline-block">
 				<h5 class="mb-0">
-				 <%If free_items_count  < 4 Then %><i class="fa fa-lock"></i><%End If%> $50.00 CART SUBTOTAL <i class="fas fa-angle-down rotate-icon"></i> 
+				 <%If free_items_count  < 4 Then %><i class="fa fa-lock"></i><%End If%> $50.00 CART VALUE <i class="fas fa-angle-down rotate-icon"></i> 
 				</h5>
 				</div>
 				<div id="header-card-selected-item-4"></div>				
@@ -305,7 +305,7 @@ end if
 				aria-expanded="false" aria-controls="collapseThree5" class="accordion-button collapsed">
 				<div class="d-inline-block">
 				<h5 class="mb-0">
-				  <%If free_items_count < 5 Then %><i class="fa fa-lock"></i><%End If%> $75.00 CART SUBTOTAL <i class="fas fa-angle-down rotate-icon"></i>
+				  <%If free_items_count < 5 Then %><i class="fa fa-lock"></i><%End If%> $75.00 CART VALUE <i class="fas fa-angle-down rotate-icon"></i>
 				</h5>
 				</div>
 				<div id="header-card-selected-item-5"></div>				
@@ -371,7 +371,7 @@ end if
 				aria-expanded="false" aria-controls="collapseThree6" class="accordion-button collapsed">
 				<div class="d-inline-block">
 				<h5 class="mb-0">
-				 <%If free_items_count  < 6 Then %><i class="fa fa-lock"></i><%End If%> $100.00 CART SUBTOTAL <i class="fas fa-angle-down rotate-icon"></i>
+				 <%If free_items_count  < 6 Then %><i class="fa fa-lock"></i><%End If%> $100.00 CART VALUE <i class="fas fa-angle-down rotate-icon"></i>
 				</h5>
 				</div>
 				<div id="header-card-selected-item-6"></div>				
@@ -437,7 +437,7 @@ end if
 				aria-expanded="false" aria-controls="collapseThree7" class="accordion-button collapsed">
 				<div class="d-inline-block">
 				<h5 class="mb-0">
-				  <%If free_items_count  < 7 Then %><i class="fa fa-lock"></i><%End If%> $150.00 CART SUBTOTAL <i class="fas fa-angle-down rotate-icon"></i>
+				  <%If free_items_count  < 7 Then %><i class="fa fa-lock"></i><%End If%> $150.00 CART VALUE <i class="fas fa-angle-down rotate-icon"></i>
 				</h5>
 				</div>
 				<div id="header-card-selected-item-7"></div>				
