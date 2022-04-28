@@ -173,6 +173,7 @@ $("#description").redactor({
 		autoProcessQueue: false,
 		parallelUploads : 3,
 		uploadMultiple: true,
+		timeout: 200000,
 		addRemoveLinks: false,
 		init: function () {
 		var myDropzone = this;		
@@ -254,6 +255,8 @@ $("#description").redactor({
 				if (myDropzone.getQueuedFiles().length >0 && myDropzone.getQueuedFiles().length <= 3) { 
 					if ($("#opt-additional-image").is(':checked') && myDropzone.getQueuedFiles().length < 3 && $("#selected_img_id").val() == ""){
 						alert("Please select which image you are updating!");
+					}else if($("#opt-video").is(':checked') && myDropzone.getQueuedFiles().length < 3){	
+						alert("Thumbnails 90x90, 400x400 and a video must be uploaded together!");
 					}else{
 						myDropzone.processQueue();
 					}
