@@ -613,7 +613,8 @@ end if ' show if free sticker cookie has not been set to "no"
 									<% else %>
 										<div class="alert alert-danger">We're sorry, but our <b>PayPal</b> checkout is temporarily unavailable. As soon as PayPal comes back online, we will accept orders again. Please check back later.</div>
 									<% end if %>
-									<div id="pay-api-processing-message" style="display:none"></div>	
+									<div id="pay-api-processing-message" style="display:none"></div>
+									<div id="pay-api-error-message" class="alert alert-danger" style="display:none"></div>	
 									<div id="btn-googlepay" class="mb-3 checkout_button" style="width: 100%; height: 45px; display: none;"></div>
 									
 									<%
