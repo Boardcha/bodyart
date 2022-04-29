@@ -9,7 +9,7 @@
 	</p>
 	<p>
   Jewelry is measured through a gauge system (conversion chart below). The <strong>higher</strong> the gauge number the <strong>smaller</strong> the wire is. For reference, a standard &quot;earring&quot; is usually 20 gauge. Jewelry gauges can vary between manufacturers. There is no universal regulation on companies to make a standard size in body jewelry. This is because some jewelry is made outside of the USA and measured in millimeters. And in the USA jewelry is measured in inches.</p>
-
+<a id="conversion_chart"></a>
   <strong>GAUGE CONVERSION CHART:</strong>
   <table class="table w-auto">
   <thead class="thead-dark">
@@ -50,9 +50,19 @@
       <td>3/32&quot;</td>
     </tr>
     <tr>
+      <td>9g</td>
+      <td>2.7mm</td>
+      <td></td>
+    </tr>
+    <tr>
       <td>8g</td>
       <td>3.2mm</td>
       <td>1/8&quot;</td>
+    </tr>
+    <tr>
+      <td>7g</td>
+      <td>3.5mm</td>
+      <td></td>
     </tr>
     <tr>
       <td>6g</td>
@@ -65,9 +75,19 @@
       <td>3/16&quot;</td>
     </tr>
     <tr>
+      <td>5g</td>
+      <td>4.5mm</td>
+      <td></td>
+    </tr>
+    <tr>
       <td>2g</td>
       <td>6mm</td>
       <td>1/4&quot;</td>
+    </tr>
+    <tr>
+      <td>1g</td>
+      <td>7mm</td>
+      <td></td>
     </tr>
     <tr>
       <td>0g</td>
@@ -217,8 +237,10 @@
 
     <div class="container-fluid p-3 border border-secondary bg-light mt-4" style="border-radius: 10px;border-width:3px!important">
       <div class="row">
-        <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6">
-          <img class="img-fluid" src="/images/measurement-guide/illustration-straight-barbell.png">
+        <div class="col-12 col-xl-2 col-lg-3 col-md-4 col-sm-6">
+          <div class="col-md-12 col-8">
+            <img class="img-fluid" src="/images/measurement-guide/illustration-straight-barbell.png">
+          </div>
         </div>
         <div class="col-12 col-xl-10 col-lg-9 col-md-8 col-sm-6">
           <h4 class="m-0 p-0">Straight Barbells</h4>
@@ -233,11 +255,87 @@
       </div>
     </div>
 
+    <div class="container-fluid p-3 border border-secondary bg-light mt-4" style="border-radius: 10px;border-width:3px!important">
+      <div class="row">
+        <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6">
+          <img class="img-fluid" style="max-width:150px" src="/images/measurement-guide/illustration-plug-double-flare.png">
+        </div>
+        <div class="col-12 col-xl-10 col-lg-9 col-md-8 col-sm-6">
+          <h4 class="m-0 p-0">Double Flare Plugs / Eyelets / Gauges</h4>
+          <div>Commonly worn in earlobes, but can be worn in other stretched piercings.
+            <h5 class="text-secondary mt-2">How to measure double flare plugs</h5>
+            <ul>
+              <li>Gauge - Measure the size of the plug across the middle.</li>
+              <li>Wearable area - Measure straight across the side of the plug between where the flares start.</li>
+              <li>Flare size / rise - Measure the distance from the side of the plug to where the flare ends. </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <div class="container-fluid p-3 border border-secondary bg-light mt-4" style="border-radius: 10px;border-width:3px!important">
       <div class="row">
         <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6">
-          <img class="img-fluid" src="/images/measurement-guide/illustration-curved-barbell.png">
+          <img class="img-fluid" src="/images/measurement-guide/illustration-plug-single-flare.png">
+        </div>
+        <div class="col-12 col-xl-10 col-lg-9 col-md-8 col-sm-6">
+          <h4 class="m-0 p-0">Single Flare Plugs / Eyelets / Gauges</h4>
+          <div>Commonly worn in earlobes, but can be worn in other stretched piercings.
+            <h5 class="text-secondary mt-2">How to measure single flare plugs</h5>
+            <ul>
+              <li>Gauge - Measure the size of the plug across the middle.</li>
+              <li>Wearable area - Measure straight across the side of the plug between where one  flare starts and where the o-ring starts.</li>
+              <li>Flare size / rise - Measure the distance from the side of the plug to where the flare ends. (see image of double flare plugs) </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid p-3 border border-secondary bg-light mt-4" style="border-radius: 10px;border-width:3px!important">
+      <div class="row">
+        <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6">
+          <img class="img-fluid" src="/images/measurement-guide/illustration-plug-no-flare.png">
+        </div>
+        <div class="col-12 col-xl-10 col-lg-9 col-md-8 col-sm-6">
+          <h4 class="m-0 p-0">No Flare Plugs / Eyelets / Gauges</h4>
+          <div>Commonly worn in earlobes, but can be worn in other stretched piercings.
+            <h5 class="text-secondary mt-2">How to measure no flare plugs</h5>
+            <ul>
+              <li>Gauge - Measure the size of the plug across the middle.</li>
+              <li>Wearable area - Measure straight across the side of the plug between the o-rings.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid p-3 border border-secondary bg-light mt-4" style="border-radius: 10px;border-width:3px!important">
+      <div class="row">
+        <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6">
+          <img class="img-fluid" src="/images/measurement-guide/illustration-plug-teardrop.png">
+        </div>
+        <div class="col-12 col-xl-10 col-lg-9 col-md-8 col-sm-6">
+          <h4 class="m-0 p-0">Teardrop Shaped Plugs</h4>
+          <div>Worn in earlobes
+            <h5 class="text-secondary mt-2">How to measure teardrop shaped jewelry</h5>
+            <ul>
+              <li>Gauge - Add the height + width and then divide by 2. Then use the <a href="#conversion_chart">conversion chart</a> to get the closest gauge.</li>
+              <li>Wearable area - Measure directly across the plug between where the flares begin.</li>
+              <li>Flare size / rise - Measure from between the flares to the edge of where the flares end.</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="container-fluid p-3 border border-secondary bg-light mt-4" style="border-radius: 10px;border-width:3px!important">
+      <div class="row">
+        <div class="col-12 col-xl-2 col-lg-3 col-md-4 col-sm-6">
+          <div class="col-md-12 col-8">
+            <img class="img-fluid" src="/images/measurement-guide/illustration-curved-barbell.png">
+          </div>
         </div>
         <div class="col-12 col-xl-10 col-lg-9 col-md-8 col-sm-6">
           <h4 class="m-0 p-0">Curved Barbells</h4>
@@ -255,8 +353,10 @@
 
     <div class="container-fluid p-3 border border-secondary bg-light mt-4" style="border-radius: 10px;border-width:3px!important">
       <div class="row">
-        <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6">
-          <img class="img-fluid" src="/images/measurement-guide/illustration-circular-barbell.png">
+        <div class="col-12 col-xl-2 col-lg-3 col-md-4 col-sm-6 text-center">
+          <div class="col-md-12 col-8">
+            <img class="img-fluid" src="/images/measurement-guide/illustration-circular-barbell.png">
+          </div>
         </div>
         <div class="col-12 col-xl-10 col-lg-9 col-md-8 col-sm-6">
           <h4 class="m-0 p-0">Circular Barbells</h4>
@@ -273,10 +373,36 @@
 
   <% end if ' do not show for finger rings %>
 
+<div class="bg-secondary mt-4" style="margin-right: -15px!important;margin-left: -15px!important;">
+  <div class="container-fluid p-3 text-center font-weight-bold text-light">
+    <div class="row no-gutters">
+      <div class="col h4">
+        JEWELRY THREADING TYPES
+      </div>
+    </div>
+    <div class="row no-gutters justify-content-center">
+      <div class="col-4 col-md-auto">
+        <img class="img-fluid px-1" style="width:200px" src="/images/measurement-guide/externally-threaded-with-bkgd.jpg">
+        <br>Externally threaded
+      </div>
+      <div class="col-4 col-md-auto">
+        <img class="img-fluid px-1" style="width:200px" src="/images/measurement-guide/internally-threaded-with-bkgd.jpg">
+        <br>Internally threaded
+      </div>
+      <div class="col-4 col-md-auto">
+        <img class="img-fluid px-1" style="width:200px" src="/images/measurement-guide/threadless-with-bkgd.jpg">
+        <br>Threadless
+      </div>
+    </div>
+  </div>
+</div> 
+  
+ 
+
 
   <% if var_sizing_type = "all" or var_sizing_type = "septum" or var_sizing_type = "captive" then %>
   <% end if ' septum %>
-  
+  <div class="text-center h4 mt-3 mb-0">SIZE COMPARISON GUIDES</div>
   <div class="container-fluid">
     <div class="row">
       <div class="col-6 col-xl-2 col-lg-3 col-md-4 col-sm-6 text-center">
