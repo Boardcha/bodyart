@@ -19,6 +19,11 @@ else
 	var_brand = "brandname = '" + var_brand + "'"
 end if
 
+If request("months") <> "" Then 
+	for_how_many_months = request("months")
+Else
+	for_how_many_months = 0
+End If	
 
 if readonly <> "yes" then
 	' Create a new purchase order on page load if it's not resuming the last one
@@ -124,7 +129,7 @@ elseif request.cookies("po-filter-autoclave") = "tag" then
 	' if we need to mass tag autoclave items then don't pull in all the details
 	objCmd.CommandText = "SELECT * FROM jewelry WHERE " + var_brand + " " + po_filter_title + " " + po_filter_details + " AND autoclavable = 0 ORDER BY title ASC"
 else
-	objCmd.CommandText = "SELECT inventory.ProductDetailID, jewelry, title, ProductDetail1, ProductDetail2, ProductID, qty, brandname, customorder, wlsl_price, detail_code, type, stock_qty, reorder_amt, picture, largepic, product_active, item_active, DetailPrice, item_order, free, DateLastPurchased, Free_QTY, weight, Length, Gauge, Date_PriceCheck, material, restock_threshold, GaugeOrder, detail_notes, DetailCode, etsy_stock, BinNumber_Detail, date_added, SaleDiscount, ID_BarcodeOrder, ID_Number, ID_SortOrder, DetailID, (restock_threshold - qty) * -1 as thresh_level, sales as total_sales, last_purchase_received, (SELECT TOP(1) po_confirmed FROM tbl_po_details WHERE  (po_detailid = inventory.ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_confirmed ,(SELECT TOP(1) po_manual_adjust FROM tbl_po_details WHERE  (po_detailid = inventory.ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_manual_adjust,(SELECT TOP(1) po_qty FROM tbl_po_details WHERE (po_detailid = inventory.ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_qty, (SELECT TOP(1) po_qty_vendor FROM tbl_po_details WHERE (po_detailid = inventory.ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_qty_vendor, (SELECT TOP(1) po_date_received FROM tbl_po_details WHERE (po_detailid = inventory.ProductDetailID) ORDER BY po_date_received DESC) AS po_date_received, amt_waiting, inventory.location,  inventory.autoclavable, TBL_Barcodes_SortOrder.ID_Description, avg_rating FROM inventory INNER JOIN TBL_Barcodes_SortOrder ON inventory.DetailCode = TBL_Barcodes_SortOrder.ID_Number LEFT OUTER JOIN vw_po_waiting ON inventory.ProductDetailID = vw_po_waiting.DetailID LEFT JOIN TBL_Sales_From_Last_Restock Sales ON Sales.ProductDetailID = inventory.ProductDetailID WHERE " + var_brand + " " + po_filter_title + " " + po_filter_details + " AND customorder <> 'yes' " + po_filter_active + " " + po_filter_status + " ORDER BY " + var_1st_filter + " title ASC, GaugeOrder ASC, ProductID ASC, item_order ASC"
+	objCmd.CommandText = "SELECT inventory.ProductDetailID, jewelry, title, ProductDetail1, ProductDetail2, ProductID, qty, brandname, customorder, wlsl_price, detail_code, type, stock_qty, reorder_amt, picture, largepic, product_active, item_active, DetailPrice, item_order, free, DateLastPurchased, Free_QTY, weight, Length, Gauge, Date_PriceCheck, material, restock_threshold, GaugeOrder, detail_notes, DetailCode, etsy_stock, BinNumber_Detail, date_added, SaleDiscount, ID_BarcodeOrder, ID_Number, ID_SortOrder, DetailID, (restock_threshold - qty) * -1 as thresh_level, (SELECT ISNULL(SUM(qty), 0) FROM sent_items SNT INNER JOIN TBL_OrderSummary ORD ON SNT.ID = ORD.invoiceID WHERE SNT.ship_code = 'paid' AND DetailID = inventory.ProductDetailID AND date_order_placed > DateAdd(month, -" & for_how_many_months & ", GETDATE())) AS sales_from_n_months_back_to_now, (SELECT ISNULL(SUM(ORD.qty), 0) FROM sent_items SNT INNER JOIN TBL_OrderSummary ORD ON SNT.ID = ORD.invoiceID INNER JOIN ProductDetails DET ON DET.ProductDetailID = DetailID WHERE SNT.ship_code = 'paid' AND DetailID = inventory.ProductDetailID AND date_order_placed BETWEEN DateAdd(month, -" & for_how_many_months & ", DateLastPurchased) AND DateLastPurchased) as sales_from_n_months_back_to_last_sold_date, sales as sales_from_po_date_received, last_purchase_received, (SELECT TOP(1) po_confirmed FROM tbl_po_details WHERE  (po_detailid = inventory.ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_confirmed ,(SELECT TOP(1) po_manual_adjust FROM tbl_po_details WHERE  (po_detailid = inventory.ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_manual_adjust,(SELECT TOP(1) po_qty FROM tbl_po_details WHERE (po_detailid = inventory.ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_qty, (SELECT TOP(1) po_qty_vendor FROM tbl_po_details WHERE (po_detailid = inventory.ProductDetailID) AND (po_orderid = 0) AND (po_temp_id = " + tempid + " )) AS po_qty_vendor, (SELECT TOP(1) po_date_received FROM tbl_po_details WHERE (po_detailid = inventory.ProductDetailID) ORDER BY po_date_received DESC) AS po_date_received, amt_waiting, inventory.location,  inventory.autoclavable, TBL_Barcodes_SortOrder.ID_Description, avg_rating FROM inventory INNER JOIN TBL_Barcodes_SortOrder ON inventory.DetailCode = TBL_Barcodes_SortOrder.ID_Number LEFT OUTER JOIN vw_po_waiting ON inventory.ProductDetailID = vw_po_waiting.DetailID LEFT JOIN TBL_Sales_From_Last_Restock Sales ON Sales.ProductDetailID = inventory.ProductDetailID WHERE " + var_brand + " " + po_filter_title + " " + po_filter_details + " AND customorder <> 'yes' " + po_filter_active + " " + po_filter_status + " ORDER BY " + var_1st_filter + " title ASC, GaugeOrder ASC, ProductID ASC, item_order ASC"
 	'Response.Write objCmd.CommandText
 	'Response.End 
 end if
@@ -244,14 +249,14 @@ Set rsGetCompanyInfo = rsGetCompanyInfo_cmd.Execute
 
 <div class="form-inline wrapper-createpo">   
 		<select class="form-control form-control-sm mr-2" id="for_how_many_months" name="for_how_many_months" style="width:195px">
-		<option disabled="disabled" selected="selected">For how many months:</option>
-			<option value="3">3 months</option>
-			<option value="4">4 months</option>
-			<option value="5">5 months</option>
-			<option value="6">6 months</option>
-			<option value="7">7 months</option>
-			<option value="8">8 months</option>
-			<option value="9">9 months</option>
+		<option disabled="disabled" <%If for_how_many_months = 0 Then Response.Write "selected"%>>For how many months:</option>
+			<option value="3" <%If Request("months") = 3 Then Response.Write "selected"%>>3 months</option>
+			<option value="4" <%If Request("months") = 4 Then Response.Write "selected"%>>4 months</option>
+			<option value="5" <%If Request("months") = 5 Then Response.Write "selected"%>>5 months</option>
+			<option value="6" <%If Request("months") = 6 Then Response.Write "selected"%>>6 months</option>
+			<option value="7" <%If Request("months") = 7 Then Response.Write "selected"%>>7 months</option>
+			<option value="8" <%If Request("months") = 8 Then Response.Write "selected"%>>8 months</option>
+			<option value="9" <%If Request("months") = 9 Then Response.Write "selected"%>>9 months</option>
 		</select>
 		<textarea class="form-control form-control-sm mr-2" data-column="po_notes" type="text" style="height:31px;min-width:37%;" id="po_notes" name="po_notes" placeholder="Notes:"></textarea><br/>
 </div>
@@ -367,7 +372,7 @@ if var_productid <> rsGetDetail.Fields.Item("ProductID").Value then
 		<td>
             <div>
                 <label class="font-weight-bold" style="color:white" for="discount">Discount</label>
-                <select class="form-control form-control-sm" name="discount_<%=rsGetDetail("ProductID")%>" data-column="SaleDiscount" data-id="<%=rsGetDetail("ProductID")%>" data-friendly="Discount amount" style="width:100px">
+                <select class="form-control form-control-sm discount-select" name="discount_<%=rsGetDetail("ProductID")%>" data-column="SaleDiscount" data-id="<%=rsGetDetail("ProductID")%>" data-friendly="Discount amount" style="width:100px">
                     <option value="<%= (rsGetDetail.Fields.Item("SaleDiscount").Value) %>" selected><% if rsGetDetail.Fields.Item("SaleDiscount").Value = 0 then %>None<%else%><%= (rsGetDetail.Fields.Item("SaleDiscount").Value) %><% end if %></option>
                     <option value="0">None</option>
                     <option value="5">5%</option>
@@ -420,38 +425,20 @@ var_productid = rsGetDetail.Fields.Item("ProductID").Value
 	<td class="form-inline flex-nowrap">
 <% 
 
-if rsGetDetail.Fields.Item("restock_threshold").Value <> 0 then
-	if rsGetDetail.Fields.Item("restock_threshold").Value >= rsGetDetail.Fields.Item("qty").Value then
-		var_restock = rsGetDetail.Fields.Item("stock_qty").Value - rsGetDetail.Fields.Item("qty").Value
-	else
-		var_restock = 0
-	end if
-else
-	if rsGetDetail.Fields.Item("stock_qty").Value - rsGetDetail.Fields.Item("qty").Value > 0 then
-		var_restock = rsGetDetail.Fields.Item("stock_qty").Value - rsGetDetail.Fields.Item("qty").Value
-	else
-		var_restock = 0
-	end if
-end if
-
-' overwrite calculated qty restock amount if we've already saved our own value in the database
-if rsGetDetail.Fields.Item("po_qty").Value <> 0 then
-	var_restock = rsGetDetail.Fields.Item("po_qty").Value
-end if
-
-isPOamountCalculatedBasedOn_po_date_received = false
-'If there is a po_date_received for the item, use it in calculation 
-if  Not ISNULL(rsGetDetail("total_sales")) AND Not ISNULL(rsGetDetail("last_purchase_received")) then
-	isPOamountCalculatedBasedOn_po_date_received = true
-	var_restock = CLng(rsGetDetail("total_sales")) - rsGetDetail.Fields.Item("qty").Value 
-end if
+var_restock = 0		
+If rsGetDetail("qty") > 0 Then
+	If for_how_many_months <> "" Then
+		var_restock = rsGetDetail("sales_from_n_months_back_to_now")
+	End If
+Else
+	var_restock = rsGetDetail("sales_from_n_months_back_to_last_sold_date")
+End If
 
 'If there are customers waiting this item, add it to the puchase quantity
 If Not ISNULL(rsGetDetail.Fields.Item("amt_waiting")) Then
-	var_restock = var_restock + rsGetDetail.Fields.Item("amt_waiting")
-End If
+	var_restock = var_restock + rsGetDetail("amt_waiting")
+End If	
 
-if var_restock < 0 Then var_restock = 0
 if var_restock > 0 Then show_check = "yes" Else show_check = "no"
 
 if show_check = "no" then
@@ -506,7 +493,7 @@ end if %>
 		End If%>
 		<span data-toggle="tooltip"  data-html="true"
 			title="<% Response.Write "Last received: " & rsGetDetail("last_purchase_received") & "<br>" & _
-			"Sales: " & rsGetDetail("total_sales") & "<br>" & _
+			"Sales : " & rsGetDetail("sales_from_po_date_received") & " (sales from last PO date received)<br>" & _
 			"On hand: " & rsGetDetail.Fields.Item("qty").Value  & "<br>" & _
 			"In Waiting List: " & var_amt_waiting %>" 
 			class="fa fa-information d-inline-block" style="font-size:22px;vertical-align:middle;">
@@ -820,8 +807,28 @@ $(document).ready(function(){
 				}	
 	}); // Toggle grey row change for active/inactive
 	
+	function setQueryStringParamValue(key, value){
+		var currentUrl = window.location.href;
+		var url = new URL(currentUrl);
+		url.searchParams.set(key, value); 
+		var newUrl = url.href;
+		console.log(newUrl);
+		return newUrl;
+	}
 
-		
+	$("#for_how_many_months").change(function() {
+	  window.location.href = setQueryStringParamValue("months", $("#for_how_many_months").val());
+	});
+	
+	$(".discount-select").change(function(){
+		var product_id = $(this).attr("data-id")
+		$.ajax({
+			method: "POST",
+			url: "products/ajax_log_product_sales_on_discount_change.asp",
+			data: {discount: $(this).val(), product_id: product_id}
+		});
+	});	
+	
 });
 </script>
 <!--#include file="inventory/inc-product-sales-line-graph.inc" -->
@@ -829,3 +836,4 @@ $(document).ready(function(){
 <%
 DataConn.Close()
 %>
+
