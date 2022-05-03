@@ -497,11 +497,19 @@ end if %>
 		Else
 			var_amt_waiting = 0
 		End If%>
-		<span data-toggle="tooltip"  data-html="true"
-			title="<% Response.Write "<b>" & var_sales & "</b> sales in <b>" & for_how_many_months & "</b> months" & "<br>" & _
+		<%
+		If for_how_many_months =0 Then
+			tooltipTitle="Please select for how many months"
+		Else	
+			tooltipTitle = "<b>" & var_sales & "</b> sales in <b>" & for_how_many_months & "</b> months" & "<br>" & _
 			"On hand: <b>" & rsGetDetail.Fields.Item("qty").Value  & "</b><br>" & _
 			"In Waiting List: <b>" & var_amt_waiting  & "</b><br>" & _
-			"Last sold date: " & rsGetDetail("DateLastPurchased") %>" 
+			"Last sold date: " & rsGetDetail("DateLastPurchased") 
+		End If
+		%>
+		
+		<span data-toggle="tooltip"  data-html="true"
+			title="<%=tooltipTitle%>" 
 			class="fa fa-information d-inline-block mt-1" style="font-size:22px;vertical-align:middle;"></span>
 	<%If rsGetDetail.Fields.Item("amt_waiting").Value > 0 Then %>
 		<a class="badge badge-info p-2" href="waitinglist_view.asp?DetailID=<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" target="_blank"><span class="fa fa-user" aria-hidden="true"><sup class="pl-1 font-weight-bold"><%= rsGetDetail.Fields.Item("amt_waiting").Value %></sup></span></a>
