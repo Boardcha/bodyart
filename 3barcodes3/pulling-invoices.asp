@@ -138,7 +138,7 @@ Set rs_getsections = objCmd.Execute()
     </div>
   </div>
 </div>
-<!-- End Process backorder Modal -->
+<!-- End Process Error Alert Modal -->
 
 
 </body>

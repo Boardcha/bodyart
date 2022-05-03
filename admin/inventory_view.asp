@@ -260,6 +260,9 @@ Set rsGetCompanyInfo = rsGetCompanyInfo_cmd.Execute
 		</select>
 		<textarea class="form-control form-control-sm mr-2" data-column="po_notes" type="text" style="height:31px;min-width:37%;" id="po_notes" name="po_notes" placeholder="Notes:"></textarea><br/>
 </div>
+<%If for_how_many_months = 0 Then%>
+	<div id="months_selection_warning" class="bg-warning text-dark rounded mt-2 p-2" style="width: 896px;">Please select how many months the order is for!</div>
+<%End If%>
 <div class="form-inline pt-2"> 
 		<button class="btn btn-purple mr-4 create_po" type="button">Create order</button>
 		<span class="alert-success csv p-1 pl-2 pr-2 rounded" style="display:none">ORDER CREATED</span>
@@ -278,7 +281,7 @@ Set rsGetCompanyInfo = rsGetCompanyInfo_cmd.Execute
 	<th class="sticky-top text-right" colspan="2">
 		<a href="?brand=<%=Request.QueryString("brand")%>&amp;resume=<%=Request.QueryString("resume")%>&amp;1stfilter=waiting"><i class="fa fa-sort fa-lg sort-icon mr-2"></i></a>Waiting List
 	</th>
-	<th class="sticky-top">Bought in pairs</th>
+	<th class="sticky-top">In pairs</th>
 	<th class="sticky-top">Vendor qty</th>
 	<th class="sticky-top">Line total</th>
 	<% end if %>
@@ -411,7 +414,7 @@ if request.cookies("po-filter-autoclave") = "" then	' hide details if we're auto
 var_productid = rsGetDetail.Fields.Item("ProductID").Value
 
 'if it's manually adjusted then highlight it 
-	if rsGetDetail.Fields.Item("po_manual_adjust").Value = 1 and rsGetDetail.Fields.Item("po_confirmed").Value = 0 then
+	if rsGetDetail.Fields.Item("po_manual_adjust").Value = 1 OR rsGetDetail.Fields.Item("po_confirmed").Value = 1 then
 		po_manual_adjust = " table-info"
 	else
 		po_manual_adjust = ""
@@ -433,7 +436,7 @@ If rsGetDetail("qty") > 0 Then
 Else
 	var_restock = rsGetDetail("sales_from_n_months_back_to_last_sold_date")
 End If
-
+var_sales = var_restock
 'If there are customers waiting this item, add it to the puchase quantity
 If Not ISNULL(rsGetDetail.Fields.Item("amt_waiting")) Then
 	var_restock = var_restock + rsGetDetail("amt_waiting")
@@ -489,20 +492,25 @@ end if %>
 		<% end if '==== if readonly <> "yes" then %>   
 	</td>
 	<td style="text-align:center">
-	<%If isPOamountCalculatedBasedOn_po_date_received Then %>
 		<% If Not IsNULL(rsGetDetail("amt_waiting")) Then
 			var_amt_waiting = rsGetDetail("amt_waiting")
 		Else
 			var_amt_waiting = 0
 		End If%>
+		<%
+		If for_how_many_months =0 Then
+			tooltipTitle="Please select for how many months"
+		Else	
+			tooltipTitle = "<b>" & var_sales & "</b> sales in <b>" & for_how_many_months & "</b> months" & "<br>" & _
+			"On hand: <b>" & rsGetDetail.Fields.Item("qty").Value  & "</b><br>" & _
+			"In Waiting List: <b>" & var_amt_waiting  & "</b><br>" & _
+			"Last sold date: " & rsGetDetail("DateLastPurchased") 
+		End If
+		%>
+		
 		<span data-toggle="tooltip"  data-html="true"
-			title="<% Response.Write "Last received: " & rsGetDetail("last_purchase_received") & "<br>" & _
-			"Sales : " & rsGetDetail("sales_from_po_date_received") & " (sales from last PO date received)<br>" & _
-			"On hand: " & rsGetDetail.Fields.Item("qty").Value  & "<br>" & _
-			"In Waiting List: " & var_amt_waiting %>" 
-			class="fa fa-information d-inline-block" style="font-size:22px;vertical-align:middle;">
-		</span>
-	<%End If%>
+			title="<%=tooltipTitle%>" 
+			class="fa fa-information d-inline-block mt-1" style="font-size:22px;vertical-align:middle;"></span>
 	<%If rsGetDetail.Fields.Item("amt_waiting").Value > 0 Then %>
 		<a class="badge badge-info p-2" href="waitinglist_view.asp?DetailID=<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" target="_blank"><span class="fa fa-user" aria-hidden="true"><sup class="pl-1 font-weight-bold"><%= rsGetDetail.Fields.Item("amt_waiting").Value %></sup></span></a>
 	<%End If%>	
@@ -551,7 +559,7 @@ end if
 	</td>
 <% end if %>
 	
-		<td>	
+		<td class="align-middle">	
 			<span class="badge badge-secondary p-1" <% 
 			if rsGetDetail.Fields.Item("item_active").Value = 1 then
 			%>style="display:none"<% end if %> id="active_status_<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>">INACTIVE</span>
@@ -748,7 +756,8 @@ $(document).ready(function(){
 		var column_val = $(this).attr("data-value");
 		var id = $(this).attr("data-id");
 		var tempid = $("#tempid").val();
-
+		$(this).closest("tr").addClass("table-info");
+		
 		$.ajax({
 		method: "POST",
 		url: auto_url,
@@ -780,6 +789,7 @@ $(document).ready(function(){
 	// After pressing create order button, load in ajax file and show download link
 	$('.create_po').click(function() {
 		if($("#for_how_many_months").val() != null){
+			$("#months_selection_warning").hide();
 			var brand = $("#brand").val();
 			var tempid = $("#tempid").val();
 			var pototal = $("#total").html();
