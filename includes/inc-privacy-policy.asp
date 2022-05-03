@@ -28,6 +28,10 @@ Effective May 21st, 2018<br/>
 <p class="font-weight-bold">Bodyartforms does not sell, rent or lease its customer lists to third parties.</p>
 <p>Bodyartforms shares data with trusted partners to help perform statistical analysis, send you emails, provide customer support, upgrade website features &amp; security, or arrange for deliveries. All such third parties are prohibited from using your personal information except to provide these services to Bodyartforms, and they are required to maintain the confidentiality of your information.</p>
 
+<p class="font-weight-bold">SHARING OF PUBLIC INFORMATION</p>
+<p>Product Reviews are considered public information. Third party sites where our products are sold may scrape Bodyartforms reviews to use on their platforms to help fellow customers make informed decisions about our products or brand.</p>
+
+
 <p class="font-weight-bold">SHARING YOUR PERSONAL INFORMATION</p>
 
 <p>We share your Personal Information with third parties to help us use your Personal Information, as described above. &nbsp;For example we use Google Analytics to help us understand how our customers use the Site--you can read more about how Google uses your Personal Information here: &nbsp;<a href="https://www.google.com/intl/en/policies/privacy/.">https://www.google.com/intl/en/policies/privacy/.</a> You can also opt-out of Google Analytics here: <a href="https://tools.google.com/dlpage/gaoptout/">https://tools.google.com/dlpage/gaoptout.</a></p>
