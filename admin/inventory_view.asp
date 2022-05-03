@@ -499,8 +499,8 @@ end if %>
 		End If%>
 		<span data-toggle="tooltip"  data-html="true"
 			title="<% Response.Write "<b>" & var_sales & "</b> sales in <b>" & for_how_many_months & "</b> months" & "<br>" & _
-			"On hand: " & rsGetDetail.Fields.Item("qty").Value  & "<br>" & _
-			"In Waiting List: " & var_amt_waiting  & "<br>" & _
+			"On hand: <b>" & rsGetDetail.Fields.Item("qty").Value  & "</b><br>" & _
+			"In Waiting List: <b>" & var_amt_waiting  & "</b><br>" & _
 			"Last sold date: " & rsGetDetail("DateLastPurchased") %>" 
 			class="fa fa-information d-inline-block mt-1" style="font-size:22px;vertical-align:middle;"></span>
 	<%If rsGetDetail.Fields.Item("amt_waiting").Value > 0 Then %>
