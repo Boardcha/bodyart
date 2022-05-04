@@ -226,8 +226,8 @@ $(document).on("click", ".close-bo", function(){
 
 // Copy orderdetailid to attribute for alerting error button
 $(document).on("click", ".error-button", function(){
-    var orderdetailid = $(this).attr('data-orderdetailid');
-    $('#btn-submit-error').attr('data-orderdetailid', orderdetailid);
+    var detailid = $(this).attr('data-detailid');
+    $('#btn-submit-error').attr('data-detailid', detailid);
 
     $('#message-error').html('');
     $('#error_description').val('');
@@ -238,12 +238,12 @@ $(document).on("click", ".error-button", function(){
 $(document).on("click", "#btn-submit-error", function(){
     var notes = $('#error_description').val();
     var item_issue = $('#item_issue').val();
-    var orderdetailid = $(this).attr('data-orderdetailid');
+    var detailid = $(this).attr('data-detailid');
 
       $.ajax({
 		method: "post",
 		url: "pulling/set-inventory-issue.asp",
-		data: {notes: notes, orderdetailid: orderdetailid, item_issue: item_issue}
+		data: {notes: notes, detailid: detailid, item_issue: item_issue, report_source:'Scanner - Pulling order'}
 		})
 		.done(function(msg) {
             $('#message-error').html('<div class="alert alert-success">NOTES SUCCESSFULLY SAVED</div>');
