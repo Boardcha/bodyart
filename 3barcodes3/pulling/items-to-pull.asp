@@ -271,7 +271,7 @@ end if '==== rsGetItems.eof
                 <%= rsGetItems.Fields.Item("title").Value %>&nbsp;<%= rsGetItems.Fields.Item("ProductDetail1").Value %>&nbsp;<%= rsGetItems.Fields.Item("Gauge").Value %>&nbsp;<%= rsGetItems.Fields.Item("Length").Value %><br>
                 <span class="alert alert-info py-0 px-1 font-weight-bold"><span class="mr-1 pr-1 border-info border-right bo-button"  data-toggle="modal" data-target="#modal-submit-backorder" data-orderdetailid="<%= rsGetItems.Fields.Item("OrderDetailID").Value %>">BO</span>In stock: <%= rsGetItems.Fields.Item("AmtInStock").Value %></span>
 
-                <span class="alert alert-warning py-0 px-1 font-weight-bold text-dark ml-3 error-button" style="color:#BDBDBD"   data-toggle="modal" data-target="#modal-submit-error"  data-orderdetailid="<%= rsGetItems.Fields.Item("OrderDetailID").Value %>">Report issue</span>
+                <span class="alert alert-warning py-0 px-1 font-weight-bold text-dark ml-3 error-button" style="color:#BDBDBD"   data-toggle="modal" data-target="#modal-submit-error"  data-detailid="<%= rsGetItems.Fields.Item("ProductDetailID").Value %>">Report issue</span>
         </td>
     </tr>
     <% end if ' var_previous_detailid %>
