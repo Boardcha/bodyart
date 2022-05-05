@@ -41,47 +41,14 @@ End If
 <div class="p-3">
 
 <h4>Custom orders review to ship out</h4>
-
-<div class="card my-3">
-	<div class="card-header h5">
-		Alter barcode labels
-	</div>
-	<div class="card-body">
-			
-			<form action="barcodes_preorders.asp" method="post">
-				<div class="form-inline">
-					<select class="form-control form-control-sm mr-4" name="brand" id="brand">
-					<option value="-">Select company</option>
-					<% while not rsGetCompanies.eof %>
-					<option value="<%= rsGetCompanies.Fields.Item("name").Value %>"><%= rsGetCompanies.Fields.Item("name").Value %></option>
-					<% rsGetCompanies.movenext()
-					wend
-					rsGetCompanies.movefirst()
-					%>
-					</select>
-
-					<input class="mr-1"  type="radio" name="DetailSort" value="Equal" id="type_0">=
-					<input class="ml-4 mr-1"  type="radio" name="DetailSort" value="Greater" id="type_0">>
-					<input class="ml-4 mr-1"  type="radio" name="DetailSort" value="GreaterLess" id="type_2" checked="checked">&lt; &gt; 
-
-					<span class="ml-5" >Invoices:</span>
-					<input class="form-control form-control-sm ml-2 w-25" name="Details" type="text" id="Details" placeholder= "Example: 123456, 456789, 789012" /> 
-					<span class="mx-3">through</span> 
-					<input class="form-control form-control-sm w-25" name="Details2" type="text" id="Details2" >
-				</div>
-				<div class="mt-2">
-					<button class="btn btn-purple" type="submit">Update labels</button>
-				</div>
-			</form>
-	</div>
-</div>
+<button class="btn btn-sm btn-secondary py-1 mb-2" id="btn-print-all" data-brand="" style="display:none"><i class="fa fa-label mr-2"></i>Update NiceLabel to print all <span id="btn-display-brand"></span></button><span id="msg-print-all"></span>
 
 <div class="form-inline">
 <select class="form-control form-control-sm" name="brand_filter" id="brand_filter">
   <option value="-">Filter by brand</option>
   
   <% while not rsGetCompanies.eof %>
-  <option value="<%= rsGetCompanies.Fields.Item("name").Value %>"><%= rsGetCompanies.Fields.Item("name").Value %></option>
+  <option value="<%= replace(rsGetCompanies("name"), " ", "_") %>"><%= rsGetCompanies.Fields.Item("name").Value %></option>
   <% rsGetCompanies.movenext()
   wend
   %>
@@ -92,7 +59,7 @@ End If
   <% 
 While NOT rsGetRecords.EOF
 %>
-  <tr> 
+  <tr class="row_items"> 
         <td style="width:20%"><%=(rsGetRecords.Fields.Item("customer_first").Value)%> &nbsp;<%=(rsGetRecords.Fields.Item("customer_last").Value)%><br>
         <a  href="invoice.asp?ID=<%= rsGetRecords.Fields.Item("ID").Value %>" target="_blank">Invoice <%=(rsGetRecords.Fields.Item("ID").Value)%></a><br>
         Placed: <%=FormatDateTime((rsGetRecords.Fields.Item("date_order_placed").Value),2)%>
@@ -105,7 +72,7 @@ Dim rsGetOrderDetails2_numRows
 Set rsGetOrderDetails2 = Server.CreateObject("ADODB.Recordset")
 With rsGetOrderDetails2
 rsGetOrderDetails2.ActiveConnection = MM_bodyartforms_sql_STRING
-rsGetOrderDetails2.Source = "SELECT OrderDetailID, qty, title, ProductDetail1, PreOrder_Desc, notes, backorder, ProductID, Gauge, Length, brandname, item_received FROM dbo.QRY_OrderDetails WHERE ID = " & rsGetRecords.Fields.Item("ID").Value & " AND customorder = 'yes' AND item_ordered = 1 ORDER BY item_received ASC"
+rsGetOrderDetails2.Source = "SELECT OrderDetailID, qty, title, ProductDetail1, PreOrder_Desc, notes, backorder, ProductID, Gauge, Length, brandname, item_received, picture FROM dbo.QRY_OrderDetails WHERE ID = " & rsGetRecords.Fields.Item("ID").Value & " AND customorder = 'yes' AND item_ordered = 1 ORDER BY item_received ASC"
 rsGetOrderDetails2.CursorLocation = 3 'adUseClient
 rsGetOrderDetails2.LockType = 1 'Read-only records
 rsGetOrderDetails2.Open()
@@ -119,8 +86,8 @@ if rsGetOrderDetails2.Fields.Item("item_received").Value = 1 then
 	received = "yes"
 end if
 %>
-	<div class="row h-100 my-2">
-		<div class="col-2 form-inline my-1 item_block item_block_brand_<%=(rsGetOrderDetails2.Fields.Item("brandname").Value)%>" id="item_block_<%=(rsGetOrderDetails2.Fields.Item("OrderDetailID").Value)%>">
+	<div class="row h-100 my-2 item_block_brand_<%= replace(rsGetOrderDetails2("brandname"), " ", "_") %>">
+		<div class="col-2 form-inline my-1 item_block" id="item_block_<%=(rsGetOrderDetails2.Fields.Item("OrderDetailID").Value)%>">
 				<% if received = "" then %>
 				 	<% if rsGetOrderDetails2.Fields.Item("backorder").Value = 0 then %>
 						  
@@ -138,11 +105,12 @@ end if
 				
 		</div>
 		<div class="col my-auto <% if received <> "" then %>small<% end if %>">
+				<button class="btn btn-sm btn-secondary py-2 d-inline-block mr-2 update_query_orderdetailid" data-orderdetailid="<%= rsGetOrderDetails2("OrderDetailID") %>" title="Update NiceLabel to print single item label"><i class="fa fa-label"></i></button><span id="msg_<%= rsGetOrderDetails2("OrderDetailID") %>"></span>
 			<% if received = "" then %>
 				<input class="mr-2 checkbox_item_id" type="checkbox" name="item_id" invoice="<%=(rsGetRecords.Fields.Item("ID").Value)%>" id="<%=(rsGetOrderDetails2.Fields.Item("OrderDetailID").Value)%>" value="<%=(rsGetOrderDetails2.Fields.Item("OrderDetailID").Value)%>">
 			<% end if %>
 				<%=(rsGetOrderDetails2.Fields.Item("qty").Value)%>
-				<span class="mx-2">|</span>
+				<img class="pull-left mr-2" style="height:50px;width:50px" src="http://bodyartforms-products.bodyartforms.com/<%= rsGetOrderDetails2("picture") %>">
 				<span class="font-weight-bold mr-2"><%=(rsGetOrderDetails2.Fields.Item("brandname").Value)%></span>
 				<a class="mx-1" href="../productdetails.asp?ProductID=<%=(rsGetOrderDetails2.Fields.Item("ProductID").Value)%>" target="_blank"><%=Replace((rsGetOrderDetails2.Fields.Item("title").Value), "CUSTOM ORDER", "")%></a>
 				<span class="mr-1"><%=(rsGetOrderDetails2.Fields.Item("Gauge").Value)%></span>
@@ -177,13 +145,14 @@ Wend
 </body>
 <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
 <script>
-$(document).ready(function(){
-	
         $('#brand_filter').change(function(){
 			var brand_value = $('#brand_filter').val();
-		//	$('div[class^="item_block_brand_" + brand_value + ""]').hide();
-			$('.item_block_brand_' + brand_value).hide();
-		//	$('div[class^="item_block_brand_"]').not('.item_block_brand_' + brand_value).hide();
+			$('#btn-print-all').attr('data-brand', brand_value);
+			$('#btn-display-brand').html(brand_value.replace("_", " "));
+			$('#btn-print-all').show();
+			$('.row_items').hide();
+		//	$('.row_item').not('.item_block_brand_' + brand_value).hide();
+			$('.item_block_brand_' + brand_value).closest('tr').show();
         });
 		
 		
@@ -225,8 +194,35 @@ $(document).ready(function(){
 			});
 		});
 
-		 
-});
+		// BEGIN Alter barcode query for single items
+		$(document).on("click", '.update_query_orderdetailid', function() { 
+		var orderdetailid = $(this).attr('data-orderdetailid');
+
+		$.ajax({
+			method: "post",
+			url: "/admin/barcodes_preorders.asp",
+			data: {orderdetailid: orderdetailid}
+		})
+		.done(function() {
+			$('#msg_' + orderdetailid).html('<i class="fa fa-check text-success"></i>').show().delay(2500).fadeOut("slow");
+		});
+
+	});	// END Alter barcode query for single items 
+
+		// BEGIN Alter barcode query for printing entire brand
+		$(document).on("click", '#btn-print-all', function() { 
+			var brand = $(this).attr('data-brand');
+
+			$.ajax({
+				method: "post",
+				url: "/admin/barcodes_preorders.asp",
+				data: {brand: brand}
+			})
+			.done(function() {
+				$('#msg-print-all').html('<i class="fa fa-check text-success"></i>').show().delay(2500).fadeOut("slow");
+			});
+
+		});	// END Alter barcode query for printing entire brand
 </script>
 </html>
 <%
