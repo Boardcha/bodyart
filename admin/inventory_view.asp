@@ -13,17 +13,27 @@ end if
 
 var_brand = request("brand")
 
+for_how_many_months = 3 'default value
+If request("months") <> "" Then 
+	for_how_many_months = request("months") 'If there is a user selection overwrite it
+Else
+	Set objCmd = Server.CreateObject ("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "SELECT TOP (1) months_to_restock FROM TBL_PurchaseOrders WHERE brand = ? ORDER BY DateOrdered DESC" 
+	objCmd.Parameters.Append(objCmd.CreateParameter("value",200,1,100, var_brand))
+	Set rsForHowManyMonths = objCmd.Execute()
+	If Not rsForHowManyMonths.EOF Then 
+		If rsForHowManyMonths("months_to_restock") > 0 Then
+			for_how_many_months = rsForHowManyMonths("months_to_restock")
+		End If		
+	End If
+End If	
+
 if var_brand = "Etsy" then
 	var_brand = "etsy_stock = 1"
 else
 	var_brand = "brandname = '" + var_brand + "'"
 end if
-
-If request("months") <> "" Then 
-	for_how_many_months = request("months")
-Else
-	for_how_many_months = 0
-End If	
 
 if readonly <> "yes" then
 	' Create a new purchase order on page load if it's not resuming the last one
@@ -250,13 +260,13 @@ Set rsGetCompanyInfo = rsGetCompanyInfo_cmd.Execute
 <div class="form-inline wrapper-createpo">   
 		<select class="form-control form-control-sm mr-2" id="for_how_many_months" name="for_how_many_months" style="width:195px">
 		<option disabled="disabled" <%If for_how_many_months = 0 Then Response.Write "selected"%>>For how many months:</option>
-			<option value="3" <%If Request("months") = 3 Then Response.Write "selected"%>>3 months</option>
-			<option value="4" <%If Request("months") = 4 Then Response.Write "selected"%>>4 months</option>
-			<option value="5" <%If Request("months") = 5 Then Response.Write "selected"%>>5 months</option>
-			<option value="6" <%If Request("months") = 6 Then Response.Write "selected"%>>6 months</option>
-			<option value="7" <%If Request("months") = 7 Then Response.Write "selected"%>>7 months</option>
-			<option value="8" <%If Request("months") = 8 Then Response.Write "selected"%>>8 months</option>
-			<option value="9" <%If Request("months") = 9 Then Response.Write "selected"%>>9 months</option>
+			<option value="3" <%If for_how_many_months = 3 Then Response.Write "selected"%>>3 months</option>
+			<option value="4" <%If for_how_many_months = 4 Then Response.Write "selected"%>>4 months</option>
+			<option value="5" <%If for_how_many_months = 5 Then Response.Write "selected"%>>5 months</option>
+			<option value="6" <%If for_how_many_months = 6 Then Response.Write "selected"%>>6 months</option>
+			<option value="7" <%If for_how_many_months = 7 Then Response.Write "selected"%>>7 months</option>
+			<option value="8" <%If for_how_many_months = 8 Then Response.Write "selected"%>>8 months</option>
+			<option value="9" <%If for_how_many_months = 9 Then Response.Write "selected"%>>9 months</option>
 		</select>
 		<textarea class="form-control form-control-sm mr-2" data-column="po_notes" type="text" style="height:31px;min-width:37%;" id="po_notes" name="po_notes" placeholder="Notes:"></textarea><br/>
 </div>
@@ -425,7 +435,7 @@ var_productid = rsGetDetail.Fields.Item("ProductID").Value
 	<td>
 	<span class="btn btn-sm btn-secondary mr-2 toggle-product-detail" id="<%= row_id %>" data-detailID="<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>"><i class="fa fa-angle-down fa-lg product-detail-expand<%= row_id %>"></i><i class="fa fa-angle-up fa-lg product-detail-expand<%= row_id %>" style="display:none"></i></span>
 	</td>
-	<td class="form-inline flex-nowrap">
+	<td class="flex-nowrap" style="min-width:252px">
 <% 
 
 var_restock = 0		
@@ -486,7 +496,7 @@ else
 end if %>	
 		<span class="mr-2"><%= rsGetDetail.Fields.Item("ProductDetailID").Value %></span>
 		<% if readonly <> "yes" then %>
-		<input name="orderqty_<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" type="text" class="form-control form-control-sm orderqty" style="width:50px" value="<%= var_restock %>" data-column="po_qty" data-id="<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>"> 
+		<input name="orderqty_<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>" type="text" class="form-control form-control-sm orderqty d-inline-block" style="width:50px" value="<%= var_restock %>" data-column="po_qty" data-id="<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>"> 
         <span class="mx-1">*</span> 
 		<span class="wlsl_price" data-price="<%=FormatNumber((rsGetDetail.Fields.Item("wlsl_price").Value), -1, -2, -0, -2)%>"><%=FormatCurrency((rsGetDetail.Fields.Item("wlsl_price").Value), -1, -2, -0, -2)%></span>  
 		<% end if '==== if readonly <> "yes" then %>   
