@@ -41,6 +41,7 @@ End If
 <div class="p-3">
 
 <h4>Custom orders review to ship out</h4>
+<button class="btn btn-sm btn-secondary py-1 mb-2" id="btn-print-all" data-brand="" style="display:none"><i class="fa fa-label mr-2"></i>Update NiceLabel to print all <span id="btn-display-brand"></span></button><span id="msg-print-all"></span>
 
 <div class="form-inline">
 <select class="form-control form-control-sm" name="brand_filter" id="brand_filter">
@@ -104,6 +105,7 @@ end if
 				
 		</div>
 		<div class="col my-auto <% if received <> "" then %>small<% end if %>">
+				<button class="btn btn-sm btn-secondary py-2 d-inline-block mr-2 update_query_orderdetailid" data-orderdetailid="<%= rsGetOrderDetails2("OrderDetailID") %>" title="Update NiceLabel to print single item label"><i class="fa fa-label"></i></button><span id="msg_<%= rsGetOrderDetails2("OrderDetailID") %>"></span>
 			<% if received = "" then %>
 				<input class="mr-2 checkbox_item_id" type="checkbox" name="item_id" invoice="<%=(rsGetRecords.Fields.Item("ID").Value)%>" id="<%=(rsGetOrderDetails2.Fields.Item("OrderDetailID").Value)%>" value="<%=(rsGetOrderDetails2.Fields.Item("OrderDetailID").Value)%>">
 			<% end if %>
@@ -143,14 +145,14 @@ Wend
 </body>
 <script type="text/javascript" src="../js/jquery-2.1.1.min.js"></script>
 <script>
-$(document).ready(function(){
-	
         $('#brand_filter').change(function(){
 			var brand_value = $('#brand_filter').val();
+			$('#btn-print-all').attr('data-brand', brand_value);
+			$('#btn-display-brand').html(brand_value.replace("_", " "));
+			$('#btn-print-all').show();
 			$('.row_items').hide();
 		//	$('.row_item').not('.item_block_brand_' + brand_value).hide();
 			$('.item_block_brand_' + brand_value).closest('tr').show();
-			console.log('Brand: ' + brand_value);
         });
 		
 		
@@ -192,8 +194,35 @@ $(document).ready(function(){
 			});
 		});
 
-		 
-});
+		// BEGIN Alter barcode query for single items
+		$(document).on("click", '.update_query_orderdetailid', function() { 
+		var orderdetailid = $(this).attr('data-orderdetailid');
+
+		$.ajax({
+			method: "post",
+			url: "/admin/barcodes_preorders.asp",
+			data: {orderdetailid: orderdetailid}
+		})
+		.done(function() {
+			$('#msg_' + orderdetailid).html('<i class="fa fa-check text-success"></i>').show().delay(2500).fadeOut("slow");
+		});
+
+	});	// END Alter barcode query for single items 
+
+		// BEGIN Alter barcode query for printing entire brand
+		$(document).on("click", '#btn-print-all', function() { 
+			var brand = $(this).attr('data-brand');
+
+			$.ajax({
+				method: "post",
+				url: "/admin/barcodes_preorders.asp",
+				data: {brand: brand}
+			})
+			.done(function() {
+				$('#msg-print-all').html('<i class="fa fa-check text-success"></i>').show().delay(2500).fadeOut("slow");
+			});
+
+		});	// END Alter barcode query for printing entire brand
 </script>
 </html>
 <%
