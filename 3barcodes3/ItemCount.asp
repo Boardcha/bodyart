@@ -99,8 +99,6 @@ End if ' If regular recordset is not empty
 <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
 <meta name="mobile-web-app-capable" content="yes">
 <link href="/CSS/baf.min.css?v=092519" rel="stylesheet" type="text/css" />
-<!--#include file="../includes/inc_scripts.asp"-->
-
 </head>
 
 <body>
@@ -141,6 +139,9 @@ var_ProductDetailID = rsGetRegular.Fields.Item("ProductDetailID").Value
 		   </div>
 		   <% end if %>
 
+			<div>
+		   		<span class="alert alert-warning py-0 px-1 font-weight-bold text-dark ml-3 error-button" style="color:#BDBDBD" data-toggle="modal" data-target="#modal-submit-error"  data-detailid="<%= rsGetRegular("ProductDetailID") %>">Report issue</span>
+			</div>
 		</div>
 	</div>
  
@@ -159,9 +160,30 @@ End If ' end rsGetRegular.EOF  %>
 	Scan the <strong>SMALL BARCODE</strong> on the label. The product pulls up and tells you how many we have in stock. If it's correct, scan the next bin on move on. If you need to update the quantity or the weight, enter the value, and then press the done button on the screen. The field WILL TURN GREEN once it's updated.
 	</div>
 <% end if 'if session isn't set to hide this message %>
+
 </div><!-- end body padding -->
+
+<!-- Process Error Alert Modal -->
+<div class="modal fade" id="modal-submit-error" tabindex="-1" role="dialog"  aria-labelledby="modal-submit-error" >
+	<div class="modal-dialog" role="document">
+	  <div class="modal-content">
+		<div class="modal-body">
+			<div id="message-error"></div>
+				<!--#include file="includes/form-report-error.inc" -->
+		</div>
+		<div class="modal-footer">
+			<button type="button" class="btn btn-primary" id="btn-submit-error" data-detailid="">Submit</button>
+		  <button type="button" class="btn btn-secondary close-bo" data-dismiss="modal">Close</button>
+		</div>
+	  </div>
+	</div>
+  </div>
+  <!-- End Process Error Alert Modal -->
+
 </body>
 </html>
+<script src="/js/jquery-3.3.1.min.js"></script>
+<script type="text/javascript" src="../js/bootstrap-v4.min.js"></script>
 <script type="text/javascript">
 	function ResetItemField() {
     $("#Item").val('');
@@ -170,34 +192,6 @@ End If ' end rsGetRegular.EOF  %>
     $('#Item').prop('readonly', false);
 	};
 
-	// Update the weight field
-	$("#weight").change(function() {
-		var weightchange = $(this).val();
-		var detailid = $(this).attr("data-detailid");
-		var field_name = $(this).attr("name");
-		
-			$.ajax({
-			method: "POST",
-			url: "includes/inc_update_weight.asp",
-			data: {weight: weightchange, detailid: detailid}
-			})
-			.done(function( msg ) {
-			
-				$('#weight-message').removeClass('alert alert-danger');
-				$('#weight-message').addClass('alert alert-success');
-				$('#weight-message').html('Weight updated');
-					
-				//	alert( "success" + msg + "Detail-id: " + detailid + " Qty: " + qtychange);
-			})
-			.fail(function(msg) {
-
-				$('#weight-message').addClass('alert alert-danger');
-				$('#weight-message').html('Weight update failed. Code or input issue.');
-			
-			//	alert( "error" + msg + "Detail-id: " + detailid + " Qty: " + qtychange);
-			});
-	}); // end weight update
-	
 	// Update the qty field
 	$("#qty").change(function() {
 		var qtychange = $(this).val();
@@ -234,6 +228,39 @@ End If ' end rsGetRegular.EOF  %>
 			});
 		} // if qty is not over 300
 	}); // end qty update
+
+
+
+
+	// Copy orderdetailid to attribute for alerting error button
+	$(document).on("click", ".error-button", function(){
+		var detailid = $(this).attr('data-detailid');
+		$('#btn-submit-error').attr('data-detailid', detailid);
+
+		$('#message-error').html('');
+		$('#error_description').val('');
+		$('#btn-submit-error, #frm-error').show();
+	})
+
+	// Submit inventory issue
+	$(document).on("click", "#btn-submit-error", function(){
+		var notes = $('#error_description').val();
+		var item_issue = $('#item_issue').val();
+		var detailid = $(this).attr('data-detailid');
+
+		$.ajax({
+			method: "post",
+			url: "pulling/set-inventory-issue.asp",
+			data: {notes: notes, detailid: detailid, item_issue: item_issue, report_source:'Scanner - Inventory count'}
+			})
+			.done(function(msg) {
+				$('#message-error').html('<div class="alert alert-success">NOTES SUCCESSFULLY SAVED</div>');
+				$('#btn-submit-error, #frm-error').hide();
+			})
+			.fail(function(msg) {
+				$('#message-error').html('<div class="alert alert-danger">SUBMIT FAILED</div>');
+			})
+	})
 </script>
   <%
 If Not rsGetRegular.EOF Or Not rsGetRegular.BOF Then

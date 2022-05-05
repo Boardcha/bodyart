@@ -115,34 +115,20 @@ Set rs_getsections = objCmd.Execute()
     <div class="modal-content">
       <div class="modal-body">
           <div id="message-error"></div>
-			<form id="frm-error">
-            Select item issue<br/>
-            <select class="form-control form-control-sm mb-2" name="item_issue" id="item_issue">
-              <option value="Print new scanning label">Print new scanning label</option>
-              <option value="Wrong items in bin">Wrong items in bin</option>
-              <option value="Broken item">Broken item</option>
-              <option value="Quantity is off">Quantity is off</option>
-              <option value="Combine bags">Combine bags</option>
-              <option value="Needs to be paired">Needs to be paired</option>
-              <option value="Singles are bad match">Singles are bad match</option>
-              <option value="Needs new location">Needs new location</option>
-            </select>
-			Additional info (optional):<br/>
-			<textarea class="form-control form-control-sm" id="error_description"></textarea>	  
-            </form>
+		      <!--#include file="includes/form-report-error.inc" -->
       </div>
       <div class="modal-footer">
-          <button type="button" class="btn btn-primary" id="btn-submit-error" data-orderdetailid="">Submit</button>
+          <button type="button" class="btn btn-primary" id="btn-submit-error" data-detailid="">Submit</button>
         <button type="button" class="btn btn-secondary close-bo" data-dismiss="modal">Close</button>
       </div>
     </div>
   </div>
 </div>
-<!-- End Process backorder Modal -->
+<!-- End Process Error Alert Modal -->
 
 
 </body>
 </html>
 <script src="/js/jquery-3.3.1.min.js"></script>
 <script type="text/javascript" src="../js/bootstrap-v4.min.js"></script>
-<script type="text/javascript" src="scripts/pull-orders.js?v=040422"></script>
+<script type="text/javascript" src="scripts/pull-orders.js?v=050422"></script>

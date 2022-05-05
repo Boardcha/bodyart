@@ -93,12 +93,18 @@ if rsGetOrder.Fields.Item("pay_method").Value <> "PayPal" then
 		If not(objGetTransactionDetails.selectSingleNode("/*/api:transaction/api:payment/api:creditCard/api:cardNumber") is nothing) then
 			strCardNumber = objGetTransactionDetails.selectSingleNode("/*/api:transaction/api:payment/api:creditCard/api:cardNumber").Text
 		end if
+		If not(objGetTransactionDetails.selectSingleNode("/*/api:transaction/api:payment/api:tokenInformation/api:tokenNumber") is nothing) then
+			strCardNumber = objGetTransactionDetails.selectSingleNode("/*/api:transaction/api:payment/api:tokenInformation/api:tokenNumber").Text
+		end if
+		
 		
 		' CVV status comes right before the invoice # and right after the AVS response. It's a one letter response in the api:transaction text
 				
 		If not(objGetTransactionDetails.selectSingleNode("/*/api:transaction/api:cardCodeResponse") is nothing) then
 			 strCCVresponse = objGetTransactionDetails.selectSingleNode("/*/api:transaction/api:cardCodeResponse").Text
 		End If
+
+			full_card_request_response = objGetTransactionDetails.selectSingleNode("/*/api:transaction/api:AVSResponse").Text
 	
 		
 	Else ' if there's an error getting a transaction
