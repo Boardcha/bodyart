@@ -921,6 +921,9 @@ if NOT rsGetAddOns.eof then
 			<div class="modal fade" id="free-items-page-variations-modal" role="dialog" aria-labelledby="headVariation" aria-hidden="true">
 				<div class="modal-dialog modal-sm" role="document">
 				  <div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					</div>				  
 					<div class="modal-body">
 							<div id="load-variants"><i class="fa fa-spinner fa-2x fa-spin"></i></div>
 					</div>
