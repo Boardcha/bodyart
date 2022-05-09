@@ -885,7 +885,7 @@ if NOT rsGetAddOns.eof then
 								<div class="modal-header">
 									<h5 class="modal-title">SELECT FREE ITEMS</h5>
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<!--<span aria-hidden="true">&times;</span>-->
+										<span aria-hidden="true">&times;</span>
 									</button>
 								</div>
 								<div id="loading-message" class="modal-body"></div>
@@ -922,6 +922,9 @@ if NOT rsGetAddOns.eof then
 			<div class="modal fade" id="free-items-page-variations-modal" role="dialog" aria-labelledby="headVariation" aria-hidden="true">
 				<div class="modal-dialog modal-sm" role="document">
 				  <div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					</div>				  
 					<div class="modal-body">
 							<div id="load-variants"><i class="fa fa-spinner fa-2x fa-spin"></i></div>
 					</div>

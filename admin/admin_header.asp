@@ -72,7 +72,7 @@ if session("sandbox") = "ON" then
 										
 <%
 '=========== START CUSTOMER SERVICE MENU ========================================
-If var_access_level = "Admin" or var_access_level = "Manager" or var_access_level = "Customer service" or user_name = "Melissa" then
+If var_access_level = "Admin" or var_access_level = "Manager" or var_access_level = "Customer service" or user_name = "Melissa" or user_name = "Nathan" then
 %>
 <li class="nav-item border-right border-secondary">
 	<a class="nav-link" href="/admin/landing/customer-service.asp">Customer Service</i>
