@@ -4,6 +4,7 @@
 	page_description = "The History of Gauges: From the Beginning of Time Until Right Now"
 	page_keywords = ""
 %>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->
