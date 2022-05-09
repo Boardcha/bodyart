@@ -55,10 +55,11 @@ total_records = rsGetInvoice.RecordCount
 
 page_num = total_records
 While NOT rsGetInvoice.EOF
-split_img = ""
-shipping_type = rsGetInvoice.Fields.Item("shipping_type").Value
-If Instr(shipping_type,"DHL")>0 Then shipping_label = rsGetInvoice.Fields.Item("dhl_base64_shipping_label").Value
-If Instr(shipping_type,"USPS")>0 Then shipping_label = rsGetInvoice.Fields.Item("usps_base64_shipping_label").Value
+	sum_anodization_fees = 0
+	split_img = ""
+	shipping_type = rsGetInvoice.Fields.Item("shipping_type").Value
+	If Instr(shipping_type,"DHL")>0 Then shipping_label = rsGetInvoice.Fields.Item("dhl_base64_shipping_label").Value
+	If Instr(shipping_type,"USPS")>0 Then shipping_label = rsGetInvoice.Fields.Item("usps_base64_shipping_label").Value
 %>
 <div class="print-wrapper">
 <div class="integrated-label">

@@ -28,6 +28,7 @@ If Not rsGetUser.EOF Then
 	Set objCrypt = Nothing	
 End If	
 %>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/bootstrap-template/header-navigation.asp" -->
 <!--#include virtual="/bootstrap-template/filters.asp" -->
 <div class="display-5 mb-3">

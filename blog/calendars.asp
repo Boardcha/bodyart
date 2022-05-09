@@ -4,6 +4,7 @@
 	page_description = "Bodyartforms Calendar Sales"
 	page_keywords = ""
 %>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <link rel="stylesheet" href="/CSS/jquery.fancybox.min.css" />

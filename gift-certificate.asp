@@ -4,6 +4,7 @@
 	page_description = "Bodyartforms purchase a gift certificate for body jewelry"
 	page_keywords = "body jewelry, gift certificate"
 %>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->

@@ -18,6 +18,7 @@ Server.ScriptTimeout = 240
 	end if
 
 %>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/Connections/authnet.asp" -->
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->

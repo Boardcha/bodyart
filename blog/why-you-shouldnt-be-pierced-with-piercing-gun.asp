@@ -4,6 +4,7 @@
 	page_description = "Why You Shouldn’t Be Pierced With a Piercing Gun"
 	page_keywords = ""
 %>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->

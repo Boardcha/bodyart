@@ -1,4 +1,5 @@
 <%@LANGUAGE="VBSCRIPT"  CODEPAGE="65001"%>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/Connections/sql_connection.asp" -->
 <%
 
