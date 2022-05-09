@@ -435,7 +435,7 @@ var_productid = rsGetDetail.Fields.Item("ProductID").Value
 	<td>
 	<span class="btn btn-sm btn-secondary mr-2 toggle-product-detail" id="<%= row_id %>" data-detailID="<%= rsGetDetail.Fields.Item("ProductDetailID").Value %>"><i class="fa fa-angle-down fa-lg product-detail-expand<%= row_id %>"></i><i class="fa fa-angle-up fa-lg product-detail-expand<%= row_id %>" style="display:none"></i></span>
 	</td>
-	<td class="flex-nowrap" style="min-width:252px">
+	<td class="flex-nowrap" style="min-width:260px!important">
 <% 
 
 var_restock = 0		
