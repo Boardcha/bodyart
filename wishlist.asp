@@ -219,7 +219,7 @@ Set rsGetUser = objCmd.Execute()
 	<div class="alert alert-primary my-3">
 		No wishlist items found
 		<% if session("wishlist_keywords") <> "" then %>
-			for keywords <%= session("wishlist_keywords") %>
+			for keywords <%= Sanitize(session("wishlist_keywords")) %>
 		<% end if %>
 	</div>
 <% End If %>
