@@ -80,7 +80,9 @@ end if '==== if info in scanned field is present
 <body>
 
 <% if NOT rsGetItem.eof then %>
-<div class="alert alert-info h5"><%=rsGetItem.Fields.Item("location").Value  %></div>
+<div class="alert alert-info h5"><%=rsGetItem.Fields.Item("location").Value  %><br>
+    <div class="badge badge-success small"><%=rsGetItem("qty") %> currently in stock (before restock)</div>
+</div>
 <div class="h6 mt-2"><%=rsGetItem.Fields.Item("description").Value  %></div>
             <img class="img-fluid" src="http://bodyartforms-products.bodyartforms.com/<%= rsGetItem.Fields.Item("largepic").Value %>">
 <% else %>

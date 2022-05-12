@@ -1,7 +1,7 @@
 <%@LANGUAGE="VBSCRIPT"%>
 <!--#include virtual="/Connections/bodyartforms_sql_ADMIN.asp" -->
 <%
-If var_access_level = "Manager" or var_access_level = "Admin" or var_access_level = "Customer service" or user_name = "Melissa" then
+If var_access_level = "Manager" or var_access_level = "Admin" or var_access_level = "Customer service" or user_name = "Melissa" or user_name = "Nathan" then
 
 set objcmd = Server.CreateObject("ADODB.command")
 objcmd.ActiveConnection = DataConn

@@ -8,7 +8,7 @@ bootstrapped = "yes"
 set objCmd = Server.CreateObject("ADODB.Command")
 objCmd.ActiveConnection = DataConn
 
-objCmd.CommandText = "SELECT TOP (100) PERCENT dbo.sent_items.ID, dbo.sent_items.shipped, dbo.sent_items.customer_first, dbo.sent_items.customer_last, dbo.sent_items.email, dbo.sent_items.country, dbo.sent_items.PackagedBy, dbo.TBL_OrderSummary.ErrorReportDate, dbo.TBL_OrderSummary.ErrorDescription, dbo.TBL_OrderSummary.ErrorOnReview, pulled_by, inventory_issue_description, dbo.sent_items.ship_code, dbo.TBL_OrderSummary.qty, dbo.TBL_OrderSummary.item_price, dbo.TBL_OrderSummary.notes, dbo.ProductDetails.ProductDetail1, dbo.ProductDetails.location, dbo.ProductDetails.Gauge, dbo.ProductDetails.Length, dbo.jewelry.title, dbo.ProductDetails.ProductDetailID, dbo.ProductDetails.BinNumber_Detail, dbo.ProductDetails.wlsl_price, dbo.TBL_OrderSummary.OrderDetailID, dbo.TBL_OrderSummary.ProductID, dbo.TBL_OrderSummary.item_problem, dbo.TBL_OrderSummary.ErrorQtyMissing, dbo.TBL_Barcodes_SortOrder.ID_Description FROM dbo.sent_items INNER JOIN dbo.TBL_OrderSummary ON dbo.sent_items.ID = dbo.TBL_OrderSummary.InvoiceID INNER JOIN dbo.ProductDetails ON dbo.TBL_OrderSummary.DetailID = dbo.ProductDetails.ProductDetailID INNER JOIN dbo.jewelry ON dbo.TBL_OrderSummary.ProductID = dbo.jewelry.ProductID INNER JOIN dbo.TBL_Barcodes_SortOrder ON dbo.ProductDetails.DetailCode = dbo.TBL_Barcodes_SortOrder.ID_Number WHERE (dbo.TBL_OrderSummary.inventory_issue_toggle = 1) ORDER BY dbo.sent_items.ID"
+objCmd.CommandText = "SELECT ProductDetail1, location, Gauge, Length, title, ProductDetails.ProductDetailID, ProductDetails.ProductID, BinNumber_Detail, TBL_Barcodes_SortOrder.ID_Description, issue_fixed, issue_description, issue_reported_by_who, issue_id FROM ProductDetails INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number INNER JOIN tbl_product_issues ON ProductDetails.ProductDetailID = tbl_product_issues.issue_detailid INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID WHERE tbl_product_issues.issue_fixed = 0 ORDER BY issue_date_reported ASC"
 set rsGetRecords = objCmd.Execute()
 
 set rsGetRecords = Server.CreateObject("ADODB.Recordset")
@@ -38,7 +38,6 @@ rsGetRecords.Open objCmd
 	<thead class="thead-dark">
 		<tr>
             <th></th>
-            <th width="15%">Invoice</th>
 			<th width="20%">Item</th>
             <th>Location</th>
             <th>Reported by</th>
@@ -48,18 +47,15 @@ rsGetRecords.Open objCmd
             <% 
 While NOT rsGetRecords.EOF 
 
-if instr(rsGetRecords("inventory_issue_description"), "Print new scanning label") > 0 then
+if instr(rsGetRecords("issue_description"), "Print new scanning label") > 0 then
   detailids = detailids & " OR ProductDetailID = " & rsGetRecords("ProductDetailID")
 end if
 %>
         
-	<tr id="row_<%= rsGetRecords.Fields.Item("OrderDetailID").Value %>">
+	<tr id="row_<%= rsGetRecords("issue_id") %>">
         <td>
-            <button class="btn btn-primary btn-sm toggle-off" data-orderdetailid="<%= rsGetRecords.Fields.Item("OrderDetailID").Value %>">Done</button>
+            <button class="btn btn-primary btn-sm toggle-off" data-issue_id="<%= rsGetRecords("issue_id") %>">Done</button>
         </td>
-		<td>
-			<strong><a href="invoice.asp?ID=<%= rsGetRecords.Fields.Item("ID").Value %>" class="text-secondary"><%= rsGetRecords.Fields.Item("ID").Value %></strong></a>
-		</td>
 		<td>
             <a class="text-secondary" href="product-edit.asp?ProductID=<%=(rsGetRecords.Fields.Item("ProductID").Value)%>&info=less"><%=(rsGetRecords.Fields.Item("title").Value)%></a>&nbsp; <%=(rsGetRecords.Fields.Item("Gauge").Value)%>&nbsp;<%=(rsGetRecords.Fields.Item("Length").Value)%></td>
 			<td>
@@ -68,8 +64,8 @@ end if
 				(BIN <%=(rsGetRecords.Fields.Item("BinNumber_Detail").Value)%>)
             <% end if %>
 			</td>
-<td><%=(rsGetRecords.Fields.Item("pulled_by").Value)%></td>
-              <td><span class="text-danger"><%=(rsGetRecords.Fields.Item("inventory_issue_description").Value)%></span></td>
+<td><%=(rsGetRecords.Fields.Item("issue_reported_by_who").Value)%></td>
+              <td><span class="text-danger"><%=(rsGetRecords.Fields.Item("issue_description").Value)%></span></td>
               </tr>
             <% 
 
@@ -94,15 +90,15 @@ Not accessible
 <script type="text/javascript">
     // Clear error
     $(document).on("click", ".toggle-off", function(){
-        var orderdetailid = $(this).attr('data-orderdetailid');
+        var issue_id = $(this).attr('data-issue_id');
 
         $.ajax({
             method: "post",
             url: "inventory/toggle-off-inventory-issue.asp",
-            data: {orderdetailid: orderdetailid}
+            data: {issue_id: issue_id}
             })
             .done(function(msg) {
-                $('#row_' + orderdetailid).hide();
+                $('#row_' + issue_id).hide();
             })
             .fail(function(msg) {
                 
