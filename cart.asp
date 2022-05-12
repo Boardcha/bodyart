@@ -472,10 +472,10 @@ Wend
 			<% end if %>
 			<% if rs_getCart.Fields.Item("cart_preorderNotes").Value <> "" then %>	  
 				<% if rs_getCart.Fields.Item("ProductID").Value <> 2424 then ' if item is not a gift certificate %>
-					<strong><% if rs_getCart("anodID") = 0 then %>Custom color:<% else %>Your specs:<% end if %></strong> <span class="spectext<%= rs_getCart.Fields.Item("cart_id").Value %>"><%= rs_getCart.Fields.Item("cart_preorderNotes").Value %></span>
+					<strong><% if rs_getCart("anodID") = 0 then %>Custom color:<% else %>Your specs:<% end if %></strong> <span class="spectext<%= rs_getCart.Fields.Item("cart_id").Value %>"><%= Sanitize(rs_getCart.Fields.Item("cart_preorderNotes").Value) %></span>
 
 					<div class="spec<%= rs_getCart.Fields.Item("cart_id").Value %>" style="display:none">
-						<textarea class="form-control form-control-sm my-2 specvalue<%= rs_getCart.Fields.Item("cart_id").Value %>" data-id="<%= rs_getCart.Fields.Item("cart_id").Value %>" rows="10"><%= rs_getCart.Fields.Item("cart_preorderNotes").Value %></textarea>
+						<textarea class="form-control form-control-sm my-2 specvalue<%= rs_getCart.Fields.Item("cart_id").Value %>" data-id="<%= rs_getCart.Fields.Item("cart_id").Value %>" rows="10"><%= Sanitize(rs_getCart.Fields.Item("cart_preorderNotes").Value) %></textarea>
 						<i class="fa fa-spinner fa-spin fa-2x specspin<%= rs_getCart.Fields.Item("cart_id").Value %>" style="display:none"></i>
 					</div>
 				
@@ -885,7 +885,7 @@ if NOT rsGetAddOns.eof then
 								<div class="modal-header">
 									<h5 class="modal-title">SELECT FREE ITEMS</h5>
 									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-										<span aria-hidden="true">&times;</span>
+										<!--<span aria-hidden="true">&times;</span>-->
 									</button>
 								</div>
 								<div id="loading-message" class="modal-body"></div>
@@ -922,9 +922,6 @@ if NOT rsGetAddOns.eof then
 			<div class="modal fade" id="free-items-page-variations-modal" role="dialog" aria-labelledby="headVariation" aria-hidden="true">
 				<div class="modal-dialog modal-sm" role="document">
 				  <div class="modal-content">
-					<div class="modal-header">
-						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-					</div>				  
 					<div class="modal-body">
 							<div id="load-variants"><i class="fa fa-spinner fa-2x fa-spin"></i></div>
 					</div>
