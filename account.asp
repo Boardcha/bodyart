@@ -165,6 +165,7 @@ if session("admin_tempcustid") <> "" then %>
 
 rsGetOrders.AbsolutePage = intPage '======== PAGING
 For intRecord = 1 To rsGetOrders.PageSize
+sum_anodization_fees = 0
 
 ' Declare variables during loop
 
