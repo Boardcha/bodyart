@@ -4,6 +4,7 @@
 	page_description = "Bodyartforms wishlist"
 	page_keywords = ""
 %>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->
@@ -218,7 +219,7 @@ Set rsGetUser = objCmd.Execute()
 	<div class="alert alert-primary my-3">
 		No wishlist items found
 		<% if session("wishlist_keywords") <> "" then %>
-			for keywords <%= session("wishlist_keywords") %>
+			for keywords <%= Sanitize(session("wishlist_keywords")) %>
 		<% end if %>
 	</div>
 <% End If %>

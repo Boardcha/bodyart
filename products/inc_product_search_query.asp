@@ -1,3 +1,4 @@
+<!--#include virtual="/functions/security.inc" -->
 <%
 ' THIS IS THE NEW MOBILE SEARCH FILE
 
@@ -585,8 +586,8 @@ end if
 
 If request.querystring("keywords") <> "" then
 
-
-	Keywords = Replace(LCase(Request.querystring("keywords")),"  ", " ") ' replace accidentaly double space with single space
+	Keywords = Sanitize(Request.querystring("keywords"))
+	Keywords = Replace(LCase(Keywords),"  ", " ") ' replace accidentaly double space with single space
 	Keywords = Replace(Keywords,"-", "")
 	Keywords = Replace(Keywords,"]", "-")
 	Keywords = Replace(Keywords,"[", "-")
@@ -760,6 +761,8 @@ If(Instr(varprice, ";")>0) then
 		objCmd.Parameters.Append(objCmd.CreateParameter("@price2",6,1,10,arrPrice(1))) 'Price range end
 	End If
 End If					
+
+
 
 if Keywords <> "" then
 	objCmd.Parameters.Append(objCmd.CreateParameter("@keywords",200,1,400,Keywords))

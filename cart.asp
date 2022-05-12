@@ -353,6 +353,7 @@ While Not rsToggles.EOF
 	rsToggles.MoveNext
 Wend
 %>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="cart/inc_cart_add_item.asp"-->
 <!--#include virtual="cart/inc_cart_main.asp"-->
 <!--#include virtual="cart/fraud_checks/inc-flagged-orders.asp"-->

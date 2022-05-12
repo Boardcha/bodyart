@@ -4,6 +4,7 @@
 	page_description = "Bodyartforms is passionate about giving back to charity. Check out some of the causes we give to."
 	page_keywords = ""
 %>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->

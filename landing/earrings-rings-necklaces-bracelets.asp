@@ -4,6 +4,7 @@
 	page_description = "Shop our selection of earrings, necklaces, pendants, rings, ear cuffs, and bracelets. Express yourself."
 	page_keywords = "regular finger rings, necklaces, necklace chains, bracelets"
 %>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->

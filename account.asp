@@ -10,6 +10,7 @@ if request.querystring("cleartemp") = "yes" then
 	session("admin_tempcustid") = ""
 end if
 %>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->
@@ -54,7 +55,7 @@ If Not rsGetUser.EOF Or Not rsGetUser.BOF Then ' Only run this info if a match w
 	objCmd.ActiveConnection = DataConn
 	strSQL = "SELECT * FROM sent_items WHERE ship_code = 'paid' AND customer_ID = ? ORDER BY ID DESC"
 		if Request("keywords") <> "" Then 
-			keywords = Replace(Request("keywords"), """","")
+			keywords = Replace(Replace(Request("keywords"),"'","''"), """","")
 			arrKeyword = Split(keywords, " ")
 			For i=0 to UBound(arrKeyword)
 				subQuery1 = "AND (JEW.title LIKE '%" & arrKeyword(i) & "%' " &_
@@ -149,13 +150,13 @@ if session("admin_tempcustid") <> "" then %>
 		<button class="btn btn-sm my-2 text-light border-none bg-dark" type="submit" name="btn-search"><i class="fa fa-search"></i></button>
 	</form>
 	<%if Request("keywords") <> "" Then%>
-			 <%= Request("keywords") %> found in <%= total_records %> order(s)<a class="filter-delete text-danger  mr-lg-0" href="/account.asp" data-filter="jewelry" data-value="beads"><i class="fa fa-times mx-2"></i>Clear search</a>
+			 <%= Sanitize(Request("keywords")) %> found in <%= total_records %> order(s)<a class="filter-delete text-danger  mr-lg-0" href="/account.asp" data-filter="jewelry" data-value="beads"><i class="fa fa-times mx-2"></i>Clear search</a>
 	<%End If%>
 <% If rsGetOrders.eof Then %>
 	<%if Request("keywords") = "" Then%>
 		<h6>No orders found.</h6>
 	<%else%>
-		<h6>No search results found matching: <%=Request("keywords")%> </h6>
+		<h6>No search results found matching: <%=Sanitize(Request("keywords"))%> </h6>
 	<%End If%>
 <% else %>
 <!--#include virtual="/accounts/inc-orders-paging.asp" -->
@@ -1154,7 +1155,7 @@ By clicking the start button below, you'll be taken to our product search where 
 	<script>	
 		// Highlight keywords on Search result
 		$(document).ready(function() {
-		  var keyWord = "<%=keywords%>";
+		  var keyWord = "<%=Sanitize(keywords)%>";
 		  var arrKeyword = keyWord.split(" ");
 		  for(var i=0; i< arrKeyword.length; i++) {
 			  var replaceD = "<span class='bg-warning rounded font-weight-bold px-2'>" + arrKeyword[i] + "</span>";
