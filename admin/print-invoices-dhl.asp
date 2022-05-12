@@ -37,6 +37,7 @@ Set rsGetInvoice = objCmd.Execute()
 
 page_num = 1
 While NOT rsGetInvoice.EOF
+	sum_anodization_fees = 0
 
 
 if shipping_type <> rsGetInvoice.Fields.Item("shipping_type").Value and rsGetInvoice.Fields.Item("autoclave").Value <> 1 then

@@ -4,6 +4,7 @@
 	page_description = "Switch your body jewelry out quickly with quality threadless jewelry"
 	page_keywords = "threadless body jewelry"
 %>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->

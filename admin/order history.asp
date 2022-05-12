@@ -171,7 +171,8 @@ End If
 	 '======== PAGING
 	rsGetOrders.AbsolutePage = intPage
 	copy_order_header = ""
-	For intRecord = 1 To rsGetOrders.PageSize  
+	For intRecord = 1 To rsGetOrders.PageSize 
+	sum_anodization_fees = 0 
 %>
 <div class="card bg-light mb-5">
 	<h5 class="card-header">

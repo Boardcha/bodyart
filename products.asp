@@ -1,5 +1,6 @@
 <%@LANGUAGE="VBSCRIPT"  CODEPAGE="65001"%>
 <!--#include virtual="/Connections/sql_connection.asp" -->
+<!--#include virtual="/functions/security.inc" -->
 <%
 	
 	if (InStr(Keywords, "gift") <> 0 or InStr(Keywords, "gift certificate") <> 0 or InStr(Keywords, "certificate") <> 0) then
@@ -24,7 +25,7 @@ Function URLDecodeHex(sMatch, lhex_digits, lpos, ssource)
 	URLDecodeHex = chr("&H" & lhex_digits)
 End Function
 
-var_decoded_url = URLDecode(Request.ServerVariables("QUERY_STRING"))
+var_decoded_url = URLDecode(Sanitize(Request.ServerVariables("QUERY_STRING")))
 
 qs_array = Split(var_decoded_url, "&")
 seo_array_values = ""

@@ -5,6 +5,7 @@
 	page_keywords = "body jewelry, body piercing jewelry"
 	var_extra_head_inc = "homepage"
 %>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->

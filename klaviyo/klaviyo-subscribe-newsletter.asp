@@ -1,3 +1,4 @@
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/template/inc_includes_ajax.asp" -->
 <!--#include virtual="/Connections/klaviyo.asp" -->
 <!--#include virtual="/Connections/chilkat.asp" -->
@@ -38,7 +39,7 @@ End If
 		Response.End
 	End If
 	jsonResponseStr = resp.BodyStr
-	response.write jsonResponseStr
+	response.write Sanitize(jsonResponseStr)
 	'Response.Write "<br>Find member result: " &  jsonResponseStr
 
 	'======= IF MEMBER IS NOT FOUND ... KLAVIYO RETURNS [] AS RESULT ... THEN SEND OUT THE ONE TIME COUPON ================
@@ -78,7 +79,7 @@ End If
 	success = rest.AddHeader("Content-Type","application/x-www-form-urlencoded")
 	success = rest.AddHeader("Accept","application/json")
 	If (success = 0) Then
-		Response.Write "<pre>" & Server.HTMLEncode( rest.LastErrorText) & "</pre>"
+		Response.Write "<pre>" & Server.HTMLEncode( Sanitize(rest.LastErrorText) ) & "</pre>"
 		Response.End
 	End If
 
@@ -95,10 +96,10 @@ End If
 		
         Set resp = http.PostJson2("https://a.klaviyo.com/api/identify" ,"application/json", var_profile)
 		If (http.LastMethodSuccess = 0) Then
-			Response.Write "<pre>" & Server.HTMLEncode( http.LastErrorText) & "</pre>"
+			Response.Write "<pre>" & Server.HTMLEncode( Sanitize(http.LastErrorText) ) & "</pre>"
 			Response.End
 		End If
-		jsonResponseStr = resp.BodyStr
+		jsonResponseStr = Sanitize(resp.BodyStr)
 		'Response.Write "<br>Create profile result: " & jsonResponseStr
 
 	'===== END CREATE NEW PROFILE ====================
@@ -113,7 +114,7 @@ End If
 	success = rest.AddHeader("Content-Type","application/json")
 	success = rest.AddHeader("Accept","application/json")
 	If (success = 0) Then
-		Response.Write "<pre>" & Server.HTMLEncode( rest.LastErrorText) & "</pre>"
+		Response.Write "<pre>" & Server.HTMLEncode( Sanitize(rest.LastErrorText) ) & "</pre>"
 		Response.End
 	End If
 
@@ -128,10 +129,10 @@ End If
 	
 		Set resp = http.PostJson2("https://a.klaviyo.com/api/v2/list/UTEZqk/subscribe?api_key=" & klaviyo_private_key ,"application/json", options)
 		If (http.LastMethodSuccess = 0) Then
-			Response.Write "<pre>" & Server.HTMLEncode( http.LastErrorText) & "</pre>"
+			Response.Write "<pre>" & Server.HTMLEncode( Sanitize(http.LastErrorText) ) & "</pre>"
 			Response.End
 		End If
-		jsonResponseStr = resp.BodyStr
+		jsonResponseStr = Sanitize(resp.BodyStr)
 		'Response.Write "<br>Subscribe member result: " & jsonResponseStr
 
 	end if '===== If member is not found =======================================================

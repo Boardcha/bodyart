@@ -3,6 +3,7 @@
 	page_title = "Bodyartforms cart transfer"
     page_description = "Bodyartforms cart transfer"
 %>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->

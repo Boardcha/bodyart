@@ -331,11 +331,17 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 			.done(function(msg) {
 				$('.specspin' + id).css("display","none");
 				$('.edit' + id + ', .updateconfirm' + id).show();
-				$('.spectext' + id).html(specsvalue);
+				$('.spectext' + id).html(sanitizeHTML(specsvalue));
 				$('.specvalue' + id).val(specsvalue);
 				$('.updateconfirm' + id).delay(2000).fadeOut("slow");
 			})	
 	});	
+
+	function sanitizeHTML(text) {
+	  var element = document.createElement('div');
+	  element.innerText = text;
+	  return element.innerHTML;
+	}
 	
 		
 	// Automatically load up saved items on page load

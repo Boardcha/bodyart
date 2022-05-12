@@ -7,7 +7,7 @@
 </div>
         <form action="/products.asp" method="get" id="form-filters">
         <div class="form-group pt-2 pl-2 pr-2 m-0">
-        <input class="form-control border-secondary" name="keywords" id="filter-keywords" type="search" placeholder="Enter keywords" value="<%=  Server.HTMLEncode(request.querystring("keywords")) %>"  /></span>
+        <input class="form-control border-secondary" name="keywords" id="filter-keywords" type="search" placeholder="Enter keywords" value="<%=  Server.HTMLEncode(Sanitize(request.querystring("keywords"))) %>"  /></span>
 
 <input type="submit" class="btn btn-purple w-100 my-1 d-none d-md-block" value="Search &amp; Apply Filters">
 </div>

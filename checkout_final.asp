@@ -1,4 +1,5 @@
 <%@LANGUAGE="VBSCRIPT"%>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/functions/function-decode-to-utf8.asp" -->
 <%
 	page_title = "Bodyartforms order confirmation"

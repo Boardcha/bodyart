@@ -19,7 +19,7 @@
 		<% if Request.Querystring("keywords") <> "" then %>
 			<a class="filter-delete text-danger d-lg-block d-inline-block mr-3 mr-lg-0" href=""  data-filter="keywords">
 			<i class="fa fa-times"></i>
-			Keywords: <%= Request.Querystring("keywords") %>
+			Keywords: <%= Sanitize(Request.Querystring("keywords")) %>
 			</a>
 		<% end if %>
 		<% If request.querystring("new") = "Yes" then %>

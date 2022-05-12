@@ -38,7 +38,7 @@ end if
 if request.form("ProductID") = 2424 then
 	var_add_cart_qty = 1
 	var_add_cart_detailId = request("DetailID")
-	var_add_cart_preorders = request.form("email") & "{}" & request.form("your-name") & "{}" & request.form("gift-message") & "{}" & request.form("name")
+	var_add_cart_preorders = Sanitize(request.form("email")) & "{}" & Sanitize(request.form("your-name")) & "{}" & Sanitize(request.form("gift-message")) & "{}" & Sanitize(request.form("name"))
 end if
 
 	'Add item to cart
