@@ -920,7 +920,7 @@ var button_addcart = document.getElementById('btn-add-cart');
 							if var_totalActiveitems > 10 and total_gauges > 1 and not rsGaugeFilter.eof then %>
 							<div class="form-group">
 							<select class="form-control" name="filter-gauge" id="filter-gauge">
-								<option disabled="disabled" selected="selected">Filter by gauge &nbsp;&nbsp;&nbsp;</option>
+								<option disabled="disabled" selected="selected">Search by gauge &nbsp;&nbsp;&nbsp;</option>
 								<option value="">Show all gauges</option>
 								<option disabled="disabled">&nbsp;</option>
 								<% While NOT rsGaugeFilter.EOF %>
