@@ -237,8 +237,8 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 					
 					$('.qty_change_id_' + row_cart_detailid).attr('data-orig_qty',qty_value);		
 					
-					$('.line_item_total_' + row_cart_detailid).html('$' + new_row_sale_price.toFixed(2));
-					$('.anodization_line_total_' + row_cart_detailid).html('$' + new_row_anodization_price.toFixed(2));
+					$('.line_item_total_' + row_cart_detailid).html(new_row_sale_price.toFixed(2));
+					$('.anodization_line_total_' + row_cart_detailid).html(new_row_anodization_price.toFixed(2));
 			} // end reWriteOverOrdered() function
 
 			
@@ -361,6 +361,7 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 		var cartid = $(this).attr("data-cartid");
 		var productid = $(this).attr("data-productid");
 		var cart_qty = $('#' + cartid).val();
+		cart_qty = cart_qty.replace(/\D/g, ''); //Strip non-numeric chars
 		
 		$('#update-item-display-product').load("/cart/ajax-cart-update-item-display-product.asp", {productid: productid});
 		$('#form-edit-cart-item').load("/products/ajax-details-dropdown-addtocart.asp", {productid: productid, cartid: cartid, cart_qty: cart_qty});
