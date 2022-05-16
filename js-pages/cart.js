@@ -237,8 +237,8 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 					
 					$('.qty_change_id_' + row_cart_detailid).attr('data-orig_qty',qty_value);		
 					
-					$('.line_item_total_' + row_cart_detailid).html('$' + new_row_sale_price.toFixed(2));
-					$('.anodization_line_total_' + row_cart_detailid).html('$' + new_row_anodization_price.toFixed(2));
+					$('.line_item_total_' + row_cart_detailid).html(new_row_sale_price.toFixed(2));
+					$('.anodization_line_total_' + row_cart_detailid).html(new_row_anodization_price.toFixed(2));
 			} // end reWriteOverOrdered() function
 
 			

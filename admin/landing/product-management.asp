@@ -15,7 +15,7 @@ Set rsDiscontinued_ToBePulled = objcmd.Execute()
 
 set objcmd = Server.CreateObject("ADODB.command")
 objcmd.ActiveConnection = DataConn
-objcmd.CommandText = "SELECT Count(*) AS total_inventory_issues FROM TBL_OrderSummary WHERE inventory_issue_toggle = 1"
+objcmd.CommandText = "SELECT Count(*) AS total_inventory_issues FROM tbl_product_issues WHERE tbl_product_issues.issue_fixed = 0 "
 Set rsInventoryIssues = objcmd.Execute()
 %>
 <title>Product Management | Admin</title>
