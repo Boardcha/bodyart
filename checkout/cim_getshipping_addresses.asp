@@ -68,7 +68,7 @@ else
 	var_shipping_checkmark = ""
 end if 
 %>
-<label class="col-12 col-xs-12 col-sm-6 col-md-4 col-lg-6 col-xl-4 col-break1600-4 col-break1900-3 btn btn-light d-block btn-sm rounded-0 text-left shipping <%= var_active %>" style="border: .75em solid #fff"  id="<%= strShipping_ID %>" data-type="shipping">
+<label class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-break1600-6 col-break1900-6 btn btn-light d-block btn-sm rounded-0 text-left shipping <%= var_active %>" style="border: .75em solid #fff"  id="<%= strShipping_ID %>" data-type="shipping">
 		<div class="btn-sm btn-outline-secondary border border-secondary text-center d-block my-1">Ship to this address<span class="btn-selected"><%= var_shipping_checkmark %></span></div>
 		<div class="d-block">
 				<%= strShipping_first %>&nbsp;<%= strShipping_last %><br/>
