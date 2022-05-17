@@ -8,7 +8,18 @@ if request.form("detailid") <> "" then
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "SELECT TOP (6) ORD.DetailID, Format(SNT.date_order_placed, 'yyyy-MM') as monthly, PDE.DateLastPurchased, PDE.qty AS onHand, SUM(ORD.qty) as qty_sold  FROM TBL_OrderSummary ORD INNER JOIN sent_items SNT ON ORD.InvoiceID = SNT.ID " & _
 	"INNER JOIN ProductDetails PDE ON ORD.DetailID = PDE.ProductDetailID " & _
-	"WHERE (SNT.ship_code = N'paid') AND (ORD.DetailID = ?) AND SNT.date_order_placed > DATEADD(MONTH, -6, GETDATE()) " & _
+	"WHERE (SNT.ship_code = N'paid') AND (ORD.DetailID = ?) AND SNT.date_order_placed > " & _
+	"CASE WHEN PDE.qty < 1 THEN  " & _
+	"	 DATEADD(MONTH, -6, DateLastPurchased) " & _
+	"ELSE  " & _
+	"	 DATEADD(MONTH, -6, GETDATE())  " & _
+	"END  " & _
+	"AND SNT.date_order_placed < " & _
+	"CASE WHEN PDE.qty < 1 THEN  " & _
+	"	 DateLastPurchased  " & _
+	"ELSE  " & _
+	"	 GETDATE()  " & _
+	"END 	 " & _
 	"GROUP BY Format(SNT.date_order_placed, 'yyyy-MM'), ORD.DetailID, PDE.DateLastPurchased, PDE.qty " & _
 	"ORDER BY monthly DESC"
 	
@@ -45,6 +56,7 @@ end if
 	<tbody>
 <%
 If Not rsGetDatesSold.EOF Then
+	If rsGetDatesSold("onHand") < 1 Then strExtension = " <span style='color:#ff0707'>to last sold date</span>" Else strExtension = ""
 	While NOT rsGetDatesSold.EOF 
 	%>
 	<tr>
@@ -60,7 +72,8 @@ If Not rsGetDatesSold.EOF Then
 	  rsGetDatesSold.MoveNext()
 	Wend%>
 </table>
-			<span class="badge badge-info" style="font-size:100%!important"><%=total%></span> sales in last 6 months
+			
+			<span class="badge badge-info" style="font-size:100%!important"><%=total%></span> sales in last 6 months<%=strExtension%>
 			<% if NOT rsGetTotal_PreOrderItemsOnHold.EOF then %>
 			<div class="bg-dark text-light font-weight-bold p-1 my-2">Custom orders</div>
 			<div>

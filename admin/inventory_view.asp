@@ -511,7 +511,8 @@ end if %>
 		If for_how_many_months =0 Then
 			tooltipTitle="Please select for how many months"
 		Else	
-			tooltipTitle = "<b>" & var_sales & "</b> sales in <b>" & for_how_many_months & "</b> months" & "<br>" & _
+			If rsGetDetail("qty") < 1 Then strExtension = " <span style='color:yellow'>to last sold date</span>" Else strExtension = ""
+			tooltipTitle = "<b>" & var_sales & "</b> sales in last <b>" & for_how_many_months & "</b> months" & strExtension & "<br>" & _
 			"On hand: <b>" & rsGetDetail.Fields.Item("qty").Value  & "</b><br>" & _
 			"In Waiting List: <b>" & var_amt_waiting  & "</b><br>" & _
 			"Last sold date: " & rsGetDetail("DateLastPurchased") 
