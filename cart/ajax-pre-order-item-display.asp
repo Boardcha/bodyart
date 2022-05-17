@@ -1,4 +1,5 @@
 <%@LANGUAGE="VBSCRIPT" CODEPAGE="65001" %>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/template/inc_includes_ajax.asp" -->
 <!--#include virtual="cart/generate_guest_id.asp"-->
 <%
@@ -16,7 +17,7 @@ While Not rs_getCart.eof
 %>
 <div style="float:left; clear: both">
 	<img class="float-left mr-2 mb-1"  src="https://s3.amazonaws.com/bodyartforms-products/<%= rs_getCart("picture") %>" alt="Product photo">
-	<%= rs_getCart("title") %>&nbsp;<%=(rs_getCart("gauge"))%>&nbsp;<%=(rs_getCart("length"))%>&nbsp;<%=(rs_getCart("ProductDetail1"))%>&nbsp;<%=(rs_getCart("cart_preorderNotes"))%>
+	<%= rs_getCart("title") %>&nbsp;<%=(rs_getCart("gauge"))%>&nbsp;<%=(rs_getCart("length"))%>&nbsp;<%=(rs_getCart("ProductDetail1"))%>&nbsp;<%=Sanitize(rs_getCart("cart_preorderNotes"))%>
 	<span class="d-inline-block my-1 alert alert-warning px-2 py-1">
 		<%= rs_getCart("preorder_timeframes") %> to receive
 	</span>	
