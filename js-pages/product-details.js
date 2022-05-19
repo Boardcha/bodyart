@@ -161,7 +161,7 @@ function refreshMenu() {
 			var customorder = $("#customorder").val();
 
 			
-			$(".cart-count").html(parseInt(cart_count) + parseInt(var_qty));
+			
 			
 		
 			$.ajax({
@@ -170,7 +170,9 @@ function refreshMenu() {
 			data: {DetailID: var_detailid, qty: var_qty, preorders: var_preorders, customorder: customorder, anodID:var_anodid}
 			})
 			.done(function( msg ) {
-				// Update button to confirm addition to cart
+				if(parseInt($('.add-cart:checked').attr('data-qty')) >= parseInt(var_qty)){
+					$(".cart-count").html(parseInt(cart_count) + parseInt(var_qty));
+					// Update button to confirm addition to cart
 					if(!isMobile) {
 						showcart();
 					} else {
@@ -178,6 +180,10 @@ function refreshMenu() {
 					}
 					resetbutton();
 					Cookies.set('cartCount', parseInt(cart_count) + parseInt(var_qty), { expires: 365});
+				}else{
+					resetbutton();
+					$(".add-cart-message").show().html("<div class='alert alert-danger my-2 p-1 font-weight-bold'>We only have " + $('.add-cart:checked').attr('data-qty') + " in stock. Please adjust your quantity.</div>");
+				}	
 			})
 		
 			// Get IP Geo country and region and save to cookie
