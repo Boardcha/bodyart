@@ -30,7 +30,7 @@ products = products & "{" & _
          "'ItemPrice': " & rs_getCart("price") & "," & _
          "'RowTotal': " & rs_getCart("cart_qty") * rs_getCart("price") & "," & _
          "'ProductURL': 'https://bodyartforms.com/productdetails.asp?productid=" & rs_getCart("ProductID") & "'," & _
-         "'ImageURL': 'https://bodyartforms-products.bodyartforms.com/" & rs_getCart("picture") & "'," & _
+         "'ImageURL': 'https://bodyartforms-products.bodyartforms.com/" & rs_getCart("largepic") & "'," & _
          "'ProductCategories': ['" & Trim(rs_getCart("jewelry")) & "']" & _
        "},"
 %>
