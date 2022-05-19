@@ -539,6 +539,8 @@ if not rsGetOrder.eof then
 				<option value="<%=(rsGetOrder.Fields.Item("pay_method").Value)%>" selected><%=(rsGetOrder.Fields.Item("pay_method").Value)%></option>
 				<option value="Visa">Visa</option>
 				<option value="Mastercard">Mastercard</option>
+				<option value="ApplePay">ApplePay</option>
+				<option value="GooglePay">GooglePay</option>
 				<option value="PayPal">PayPal</option>
 				<option value="American Express">American Express</option>
 				<option value="Discover">Discover</option>
