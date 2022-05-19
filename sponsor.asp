@@ -15,7 +15,7 @@
 
 
 <div class="display-5">
-		<%= var_sponsor %>
+		<%= Sanitize(var_sponsor) %>
 	</div>
 	Page info will change out depending on what the querystring has for the sponsor variable
 	<br/>
