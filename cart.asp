@@ -517,7 +517,7 @@ Wend
 			<% end if %>
 		
       </div><!-- end col / item information -->
-			<div class="col-12 col-lg-12 col-xl pt-2 py-xl-0">
+			<div class="col-12 col-lg-12 col-xl pt-2 py-xl-0" style="min-width:200px">
 <% 
 if var_showgifts <> "no" then ' only display on the viewcart page 
 
@@ -539,7 +539,7 @@ if Request.Cookies("ID") <> "" then ' qty select name value changes if logged in
 		
 		<% end if ' if not a gift cert then show qty adjuster 
 		%>
-		@ 	  <span class="mr-1" data-price="<%= FormatNumber(var_itemPrice, -1, -2, -2, -2) %>"><%= exchange_symbol %><%= FormatNumber(var_itemPrice, -1, -2, -2, -2) %></span><span  class="mr-3"><%= qty_pair_text %></span>
+		 	  <span class="mr-3 d-inline-block" data-price="<%= FormatNumber(var_itemPrice, -1, -2, -2, -2) %>"> @ <%= exchange_symbol %><%= FormatNumber(var_itemPrice, -1, -2, -2, -2) %><span class="ml-1"><%= qty_pair_text %></span></span>
 					<%
 					if FormatNumber(var_itemPrice, -1, -2, -2, -2) < FormatNumber(rs_getCart.Fields.Item("price").Value * exchange_rate, -1, -2, -2, -2) then
 					%>
