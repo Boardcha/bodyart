@@ -1,6 +1,11 @@
 <h6 class="border-bottom border-secondary text-center ">INVENTORY</h6>
                             <ul class="list-unstyled">
-                              
+                              <li>
+                                    <a href="/admin/power-bi/reports.asp?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSection42de71d8c6805a9cd981&reportName=Inventory Overview" target="_blank">
+                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
+                                        Inventory Overview
+                                        </a>
+                            </li>
                             <li>
                                     <a href="/admin/power-bi/reports.asp?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSection781f072d6b16235e5969&reportName=Incoming versus Outgoing" target="_blank">
                                         <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
