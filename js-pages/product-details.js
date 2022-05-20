@@ -160,32 +160,28 @@ function refreshMenu() {
 			
 			var customorder = $("#customorder").val();
 
-			
-			
-			
-		
-			$.ajax({
-			method: "POST",
-			url: "cart/ajax_cart_add_item.asp",
-			data: {DetailID: var_detailid, qty: var_qty, preorders: var_preorders, customorder: customorder, anodID:var_anodid}
-			})
-			.done(function( msg ) {
-				if(parseInt($('.add-cart:checked').attr('data-qty')) >= parseInt(var_qty)){
-					$(".cart-count").html(parseInt(cart_count) + parseInt(var_qty));
-					// Update button to confirm addition to cart
-					if(!isMobile) {
-						showcart();
-					} else {
-						run_cart_mobile();
-					}
-					resetbutton();
-					Cookies.set('cartCount', parseInt(cart_count) + parseInt(var_qty), { expires: 365});
-				}else{
-					resetbutton();
-					$(".add-cart-message").show().html("<div class='alert alert-danger my-2 p-1 font-weight-bold'>We only have " + $('.add-cart:checked').attr('data-qty') + " in stock. Please adjust your quantity.</div>");
-				}	
-			})
-		
+				
+			if(parseInt($('.add-cart:checked').attr('data-qty')) >= parseInt(var_qty)){
+				$.ajax({
+				method: "POST",
+				url: "cart/ajax_cart_add_item.asp",
+				data: {DetailID: var_detailid, qty: var_qty, preorders: var_preorders, customorder: customorder, anodID:var_anodid}
+				})
+				.done(function( msg ) {
+						$(".cart-count").html(parseInt(cart_count) + parseInt(var_qty));
+						// Update button to confirm addition to cart
+						if(!isMobile) {
+							showcart();
+						} else {
+							run_cart_mobile();
+						}
+						resetbutton();
+						Cookies.set('cartCount', parseInt(cart_count) + parseInt(var_qty), { expires: 365});	
+				});
+			}else{
+				resetbutton();
+				$(".add-cart-message").show().html("<div class='alert alert-danger my-2 p-1 font-weight-bold'>We only have " + $('.add-cart:checked').attr('data-qty') + " in stock. Please adjust your quantity.</div>");
+			}		
 			// Get IP Geo country and region and save to cookie
 			$.getJSON("https://pro.ip-api.com/json/?key=1FbdfMEofSriXRs&fields=countryCode,region,city", function() {})
 				.done(function( data ) {
@@ -751,4 +747,3 @@ $(document).ready(function() {
 		e.preventDefault();
 	});	
 });
-
