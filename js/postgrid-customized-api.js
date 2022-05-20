@@ -6,7 +6,7 @@ let PID = 0;
 let customAddressCompletedCallbacks = {};
 
 // ClickFunnel Address Form
-{
+{/*
     let shippingDivs = document.querySelectorAll(
         '.elOS1Shipping, .elShippingForm'
     );
@@ -51,7 +51,7 @@ let customAddressCompletedCallbacks = {};
 
     for (const div of countryDivs) {
         div.setAttribute('data-pg-country', '');
-    }
+    }*/
 }
 
 let usingGravityForm = false;
