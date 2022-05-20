@@ -794,7 +794,9 @@ var button_addcart = document.getElementById('btn-add-cart');
 							if var_show_thumbnails = "yes" then
 							%>
 							<div class="m-0 pr-0 col-2 col-md-2 col-lg-2 col-xl-2 col-break1600-1 baf-carousel-vertical col-img-thumbs" id="vert-thumb-carousel">
-								<img  class="img-fluid img-thumb lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=rsProduct.Fields.Item("picture").Value %>" alt="Main photo" title="Main photo"  data-imgid="thumb_img_0" data-imgname="<%= rsProduct.Fields.Item("largepic").Value %>" id="img_thumb_0" data-id="0" data-color-chart="no" data-unassigned="no" />
+								<div class="image-thumbnail">		
+									<img  class="img-fluid img-thumb lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=rsProduct.Fields.Item("picture").Value %>" alt="Main photo" title="Main photo"  data-imgid="thumb_img_0" data-imgname="<%= rsProduct.Fields.Item("largepic").Value %>" id="img_thumb_0" data-id="0" data-color-chart="no" data-unassigned="no" />
+								</div>
 							<%							
 							end if 
 
@@ -858,7 +860,7 @@ var button_addcart = document.getElementById('btn-add-cart');
 									<a class="position-relative pointer" data-fancybox="product-images" data-caption="Main Photo" href="https://bodyartforms-products.bodyartforms.com/<%=(rsProduct.Fields.Item("largepic").Value)%>" id="img_id_0">
 										<span class="position-absolute badge badge-secondary p-2 rounded-0" style="top:0;left:0;z-index:200"><i class="fa fa-search fa-lg"></i></span>
 										<img class="img-fluid" height="550px" width="550px" src="https://bodyartforms-products.bodyartforms.com/<%=(rsProduct.Fields.Item("largepic").Value)%>" alt="<%= rsProduct.Fields.Item("title").Value %>" style="max-height: 550px;" />
-									<div class="text-center small text-dark">Main Photo</div>
+										<div class="text-center small text-dark">Main Photo</div>
 									</a>
 										
 								<% while NOT rs_getImages.eof
@@ -867,17 +869,17 @@ var button_addcart = document.getElementById('btn-add-cart');
 								if rs_getImages.Fields.Item("img_description").Value <> "" then
 									var_img_title = rs_getImages.Fields.Item("img_description").Value
 								end if
-								%>
+								%>							
 								<%if rs_getImages.Fields.Item("is_video").Value = 1 then%>
-								<a class="position-relative pointer" data-fancybox="product-images" data-caption="<%= var_img_title %>" href="#video_<%=rs_getImages.Fields.Item("img_id").Value %>" id="img_id_<%=rs_getImages.Fields.Item("img_id").Value %>">
-									<div class="video-container">
-										<video preload="metadata" id="video_<%=rs_getImages.Fields.Item("img_id").Value %>" class="video-player" controls disablepictureinpicture controlslist="nodownload"><source src="https://videos.bodyartforms.com/<%=rs_getImages.Fields.Item("img_full").Value%>#t=0.1" type="video/mp4"></video>
-									</div>
-								</a>	
+									<a class="position-relative pointer" data-fancybox="product-images" data-caption="<%= var_img_title %>" href="https://videos.bodyartforms.com/<%=rs_getImages.Fields.Item("img_full").Value%>#t=0.1" id="img_id_<%=rs_getImages.Fields.Item("img_id").Value %>">
+										<div class="video-container">
+											<video preload="metadata" id="video_<%=rs_getImages.Fields.Item("img_id").Value %>" class="video-player" controls disablepictureinpicture controlslist="nodownload"><source src="https://videos.bodyartforms.com/<%=rs_getImages.Fields.Item("img_full").Value%>#t=0.1" type="video/mp4"></video>
+										</div>
+									</a>	
 								<%else%>
 									<a class="position-relative pointer" data-fancybox="product-images" data-caption="<%= var_img_title %>" href="https://bodyartforms-products.bodyartforms.com/<%=(rs_getImages.Fields.Item("img_full").Value)%>" id="img_id_<%=rs_getImages.Fields.Item("img_id").Value %>">
 										<span class="position-absolute badge badge-secondary p-2 rounded-0" style="top:0;left:0;z-index:200"><i class="fa fa-search fa-lg"></i></span>
-											<img class="img-fluid lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=(rs_getImages.Fields.Item("img_full").Value)%>" alt="<%= var_img_title %>"  style="max-height: 550px;" />
+										<img class="img-fluid lazyload" src="/images/image-placeholder.png" data-src="https://bodyartforms-products.bodyartforms.com/<%=(rs_getImages.Fields.Item("img_full").Value)%>" alt="<%= var_img_title %>"  style="max-height: 550px;" />
 										<div class="text-center small text-dark"><%= var_img_title %></div>
 									</a>
 								<%end if%>	
@@ -1576,7 +1578,7 @@ end if
 </script>
 <% end if %>
 <script src="/js/jquery.fancybox.min.js"></script>
-<script type="text/javascript" src="/js/slick.min.js"></script>
+<script type="text/javascript" src="/js/slick-customized.min.js"></script>
 <script type="text/javascript" src="/js-pages/product-details.min.js?v=111722" ></script>
 
 <!-- Start Afterpay Javascript -->
@@ -1595,7 +1597,6 @@ end if
 	  js.src = "//connect.facebook.net/en_US/all.js#xfbml=1&appId=180076978718781";
 	  fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));
-
 </script>
 
 <%
