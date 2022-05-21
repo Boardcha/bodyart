@@ -318,5 +318,5 @@ Wend
 	
 
 			<!--#include virtual="/bootstrap-template/footer.asp" -->
-			<script type="text/javascript" src="/js/slick.min.js"></script>
+			<script type="text/javascript" src="/js/slick-customized.min.js"></script>
 			<script type="text/javascript" src="/js-pages/homepage.min.js?v=111021"></script>
