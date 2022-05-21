@@ -137,35 +137,40 @@ function setCurrency() {
 	$('input[name="billing-province-canada"]').val(Cookies.get("billing-province-canada"));
 	$('#billing-zip').val(Cookies.get("billing-zip"));
 
-		// Run on page load -- needs to be below cim_shipping function above to load results
-		if ($("input[name='cim_shipping']:checked").val() != '') {
-			$('input[name="cim_shipping"]:first').trigger("click");
-			window.onbeforeunload = function () {
-				window.scrollTo(0, 0);
-				}
-		} 
-		if($('#shipping-country').is(':visible')) {
-			
-			// set shipping on page load based on country drop down on form
-			var varcountry = $("#shipping-country").val();
-			var varzip = $("#shipping-zip").val();	
-			var address = $("input[name='shipping-address']").val() + " " + $("input[name='shipping-address2']").val();
-			var city = $("input[name='shipping-city']").val();
-			var state = $("select[name='shipping-state']").val();
+	// Run on page load -- needs to be below cim_shipping function above to load results
+	if ($("input[name='cim_shipping']:checked").val() != '') {
+		$('input[name="cim_shipping"]:first').trigger("click");
+		window.onbeforeunload = function () {
+			window.scrollTo(0, 0);
+			}
+	} 
+	if($('#shipping-country').is(':visible')) {
 		
-			setCurrency();
-			var page = $("#ajax-shipping-options");
-			page.load("/checkout/ajax_display_shipping_usps.asp", {country: varcountry, zip:varzip, address:address, city:city, state:state}, function(status) {
-				$('#shipping-loading').hide();
-				$.get("/checkout/ajax_display_shipping_ups.asp", {country: varcountry}, function(html, status) {	
-					page.append(html);
-					triggerShippingSelection();
-					calcAllTotals();
-				});
+		// set shipping on page load based on country drop down on form
+		var varcountry = $("#shipping-country").val();
+		var varzip = $("#shipping-zip").val();	
+		var address = $("input[name='shipping-address']").val() + " " + $("input[name='shipping-address2']").val();
+		var city = $("input[name='shipping-city']").val();
+		var state = $("select[name='shipping-state']").val();
+	
+		setCurrency();
+		var page = $("#ajax-shipping-options");
+		page.load("/checkout/ajax_display_shipping_usps.asp", {country: varcountry, zip:varzip, address:address, city:city, state:state}, function(status) {
+			$('#shipping-loading').hide();
+			$.get("/checkout/ajax_display_shipping_ups.asp", {country: varcountry}, function(html, status) {	
+				page.append(html);
+				triggerShippingSelection();
+				calcAllTotals();
 			});
-		}
-		set_fields_by_country();
-  
+		});
+	}
+	set_fields_by_country();
+		
+	//If all fields are filled from cookies then create address bubble	
+	if($("#shipping-address").val() !="" && $("#shipping-city").val() !="" && $("#shipping-zip").val() !="" && $("#shipping-country").val() !="" && getShippingState() != ""){
+		createAddressBubble('shipping');
+	}
+	
 	// Remember any field information that user types in and save to local storage
 	$("input, select").change(function() {
 		if ($(this).attr('name') != 'card_number' && $(this).attr('name') != 'billing-year' && $(this).attr('name') != 'billing-month') {
@@ -219,6 +224,7 @@ function setCurrency() {
 		$('.processing-message').html('<div class="alert alert-success mt-2"><i class="fa fa-spinner fa-2x fa-spin"></i> Please wait ... PROCESSING ORDER</div>');
 
 		// Fetch form to apply custom Bootstrap validation
+		console.log($("#shipping-country").val());
 		var form = $("#checkout_form")
 		if (form[0].checkValidity() === false) {
 			var this_error = '';
@@ -231,6 +237,13 @@ function setCurrency() {
 			});
 			$('.processing-message').html('<div class="alert alert-danger mt-2">Some fields that are required have not been filled out. Please fix the fields that are highlighted in red.<div class="small mt-2">' + all_required_errors + '</div></div>');
 			$('.checkout_button').show();
+			$("#shipping-address-container").show();	
+			$("#billing-address-container").show();	
+			$("#shipping-address-autocomplete").hide();				
+			$("#billing-address-autocomplete").hide();	
+			$("#selected-shipping-address").hide();	
+			$("#selected-billing-address").hide();	
+			
 		} else {
 		console.log("processing order...");
 			$.ajax({
@@ -338,7 +351,7 @@ function setCurrency() {
 
 		set_fields_by_country();
 			
-		$('.shipping-address-form input:visible, select:visible').each(function(){
+		$('.shipping-address-form input:visible:not(#shipping-full-address), select:visible').each(function(){
 				if (Cookies.get($(this).attr('name'))) {					
 					$(this).val(Cookies.get($(this).attr('name')));
 				}
@@ -378,7 +391,7 @@ function setCurrency() {
 		
 		set_fields_by_country();	
 		
-		$('.billing-address-form input:visible, select:visible').each(function(){	
+		$('.billing-address-form input:visible:not(#billing-full-address), select:visible').each(function(){	
 			if (Cookies.get($(this).attr('name'))) {					
 					$(this).val(Cookies.get($(this).attr('name')));
 				}
@@ -517,6 +530,17 @@ function setCurrency() {
 			$('#shipping-state, #shipping-province, #shipping-province-canada').prop('required', false);
 		}	
 		
+		//If the address is complete, create the address bubble	
+		if($("#shipping-address").val() !="" && $("#shipping-city").val() !="" && $("#shipping-zip").val() !="" && $("#shipping-country").val() !="" && getShippingState() != ""){
+			createAddressBubble('shipping');
+			$("#shipping-address-container").hide();	
+			$("#shipping-address-autocomplete").show();				
+		}else{
+			$("#shipping-address-container").show();		
+			$('#selected-shipping-address').hide();	
+			$("#shipping-address-autocomplete").hide();			
+		}			
+		
 		$('#ajax-shipping-options').load("checkout/ajax_display_shipping_usps.asp", {country:edit_country, zip:edit_zip}, function(){
 				$('input[name="shipping-option"]:first').click();
 				calcAllTotals();
@@ -558,7 +582,8 @@ function setCurrency() {
 	$('.edit-link-billing').click(function() {
 		$('.billing-address-form input, .billing-address-form select').attr('disabled', false);
 		$('#billing-status').val("update");
-		$('#card-save-wrapper, #shipping-same-billing-wrapper, .add-new-billing-button, #cim_billing_addresses').hide();
+		$('#card-save-wrapper, #shipping-same-billing-container, .add-new-billing-button, #cim_billing_addresses').hide();
+		$('#billing-address-autocomplete label').show();
 		$('#cancel-billing-add, #btn-save-credit-card').show();
 		var edit_country = $(this).data("country");
 		$('.billing-address-form').show();
@@ -585,7 +610,17 @@ function setCurrency() {
 		if (edit_country != 'USA' && edit_country != 'Canada') {
 			$('#billing-state, #billing-province-canada').val('');	
 			$('.billing-state, .billing-province, .billing-province-canada').prop('required', false);
-		}			
+		}
+		//If the address is complete, create the address bubble	
+		if($("#billing-address").val() !="" && $("#billing-city").val() !="" && $("#billing-zip").val() !="" && $("#billing-country").val() !="" && getBillingState() != ""){
+			createAddressBubble('billing');
+			$("#billing-address-container").hide();	
+			$("#billing-address-autocomplete").show();				
+		}else{
+			$("#billing-address-container").show();		
+			$('#selected-billing-address').hide();	
+			$("#billing-address-autocomplete").hide();			
+		}		
 	});
 
 	// UPDATE SAVED CREDIT CARD INFORMATION
@@ -672,21 +707,122 @@ function setCurrency() {
 			$("#billing-zip").val($("#shipping-zip").val());
 			$("#billing-country").val($("select[name='shipping-country']").val());
 			
+			//If all shipping address fields to copy are filled, show the address bubble instead of input fields
+			if($("#shipping-address").val() !="" && $("#shipping-city").val() !="" && $("#shipping-zip").val() !="" && $("#shipping-country").val() !=""){
+
+				var state = getShippingState();
+				
+				if(state != ""){				
+					var address = $("#shipping-address").val() + ' ' + $("#shipping-address2").val() + '<br />' + 
+							$("#shipping-city").val() + '<br />' + 
+							state + '<br />' + 
+							$("#shipping-zip").val() + '<br />' + 
+							$("select[name='shipping-country']").val();
+					var content = '<div class="alert alert-secondary alert-dismissible fade show" role="alert">' + 
+					'  <div id="selected-billing-address-content" class="m-2"><div class="mb-2 font-weight-bold"><span style="text-transform: uppercase;">BILLING ADDRESS</span></div><div style="line-height:22px;">' + address + '</div></div>' +
+					'  <button type="button"  class="close" id="btn-edit-billing-address" style="right:20px;padding: 7px 11px 7px 11px;margin-right:16px">' + 
+					'	<img src="/images/edit.svg" style="height:14px;width:14px;vertical-align:initial;" />'  +
+					'  </button>' +	
+					'  <button id="billing-bubble-close" type="button" class="close" data-dismiss="alert" aria-label="Close" style="padding: 7px 11px 7px 11px" onClick="closeBillingBubble()">' + 
+					'	<span aria-hidden="true">&times;</span>' +
+					'  </button>' +
+					'</div>';
+					
+					$('#selected-billing-address').html(content);
+					$('#selected-billing-address').hide().fadeIn('fast');
+					$('#billing-country').change();	
+					$("#billing-address-autocomplete").hide();
+					$("#billing-address-container").hide();		
+				}else{
+					$("#billing-address-container").show();		
+					$('#selected-billing-address').hide();	
+					$("#billing-address-autocomplete").hide();
+				}	
+			}else{
+				$("#billing-address-container").show();		
+				$('#selected-billing-address').hide();	
+				$("#billing-address-autocomplete").hide();
+			}			
+			
 			// Trigger change to save field info to local storage
 			 $("#billing-first, #billing-last, #billing-address, #billing-address2, #billing-city, #billing-state, #billing-province-canada, #billing-province, #billing-zip, #billing-country").trigger('change');
 			 
 		} else {
-			$("input[name='billing-first']").val('');
-			$("input[name='billing-last']").val('');
-			$("input[name='billing-address']").val('');
-			$("input[name='billing-address2']").val('');
-			$("input[name='billing-city']").val('');
-			$("input[name='billing-state']").val('');
-			$("input[name='billing-zip']").val('');
-			$("input[name='billing-province']").val('');
-			$("input[name='billing-province-canada']").val('');	
+			clearBillingAddressInputs();
+			$("#billing-bubble-close").trigger('click');
+			$('#billing-address-autocomplete').show();
+			$("#billing-address-container").hide();	
 		}
 	}); // End shipping same as billing
+	
+	function getShippingState(){
+		var state = "";
+		if($("select[name='shipping-country']").val() == "USA")
+			state = $("#shipping-state").val();
+		else if($("select[name='shipping-country']").val() == "Canada")
+			state = $("select[name='shipping-province-canada']").val();
+		else
+			state = $("input[name='shipping-province']").val();	
+		return state;	
+	}
+	
+	function getBillingState(){
+		var state = "";
+		if($("select[name='billing-country']").val() == "USA")
+			state = $("#billing-state").val();
+		else if($("select[name='billing-country']").val() == "Canada")
+			state = $("select[name='billing-province-canada']").val();
+		else
+			state = $("input[name='billing-province']").val();	
+		return state;	
+	}	
+	
+	function closeBillingBubble(){
+	  clearBillingAddressInputs();
+	  $("#shipping-same-billing").prop('checked', false);
+	  $('#billing-address-autocomplete').show();
+	  $('#billing-full-address').val('');
+	  $('#billing-full-address').focus();
+	  console.log("close");
+	};	
+
+	
+	function clearAddressInputs(section){
+		if (section=="billing")
+			clearBillingAddressInputs();
+		if (section=="shipping")
+			clearShippingAddressInputs();			
+	}
+	
+	function clearBillingAddressInputs(){
+		$("input[name='billing-first']").val('');
+		$("input[name='billing-last']").val('');
+		$("input[name='billing-address']").val('');
+		$("input[name='billing-address2']").val('');
+		$("input[name='billing-city']").val('');
+		$("input[name='billing-state']").removeAttr("selected");
+		$("input[name='billing-country']").removeAttr("selected");
+		$("input[name='billing-zip']").val('');
+		$("input[name='billing-province']").val('');
+		$("input[name='billing-province-canada']").val('');		
+	}
+	
+	function clearShippingAddressInputs(){
+		$("#shipping-full-address").val('');
+		$("input[name='shipping-address']").val('');
+		$("input[name='shipping-address2']").val('');
+		$("input[name='shipping-city']").val('');
+		$("input[name='shipping-country']").removeAttr("selected");
+		$("input[name='shipping-state']").removeAttr("selected");
+		$("input[name='shipping-province-canada']").removeAttr("selected");
+		$("input[name='shipping-province']").val('');
+		$("input[name='shipping-zip']").val('');		
+	}	
+
+	$("#shipping-address-container input, #shipping-address-container select").on('change', function(e){
+		if($("input[name='shipping-same-billing']").is(':checked'))
+			$("input[name='shipping-same-billing']").change();
+	});
 	
 	// When user selects Canada or US IN THE SHIPPING ADDRESS AREA, change divs that display with states and provinces
 	$("select[name='shipping-country'], input[name='shipping-city'], select[name='shipping-state'], select[name='shipping-province-canada'], input[name='shipping-province'], input[name='shipping-zip'], input[name='shipping-address'], input[name='shipping-address2']").on('change', function(e){
@@ -918,3 +1054,46 @@ $("#checkout-newsletter-signup").on("click", function () {
 	}
   });
 
+$(document).on('click', '#btn-edit-shipping-address', function() {
+	$("#selected-shipping-address").hide();	
+	$("#shipping-address-autocomplete").hide();
+	$("#shipping-address-container").show();	
+});
+
+$(document).on('click', '#btn-edit-billing-address', function() {
+	$("#selected-billing-address").hide();	
+	$("#billing-address-autocomplete").hide();
+	$("#billing-address-container").show();	
+});
+
+function createAddressBubble(section) {
+	var state = "";
+	if (section == 'shipping')
+		state = getShippingState();
+	if (section == 'billing')	
+		state = getBillingState();
+		
+	var address = ($('#' + section + '-address').val() + ' ' + $('#' + section + '-address2').val() + '<br/>') +
+		($('#' + section + '-city').val() + '<br/>') +
+		($('#' + section + '-country').val() + '<br/>') +
+		(state + '<br/>') +
+		($('#' + section + '-zip').val() + '');
+			
+	var content = '<div class="alert alert-secondary alert-dismissible fade show" role="alert">' + 
+	'  <div id="selected-' + section + '-address-content" class="m-2"><div class="mb-2 font-weight-bold">' + ((section == 'shipping') ? '<i class="fa fa-shipping-fast fa-lg mr-2"></i> ':'') + '<span style="text-transform: uppercase;">' + section + ' ADDRESS</span></div><div style="line-height:22px;">' + address + '</div></div>' +
+	'  <button type="button"  class="close" id="btn-edit-' + section + '-address" style="right:20px;padding: 7px 11px 7px 11px;margin-right:16px">' + 
+	'	<img src="/images/edit.svg" style="height:14px;width:14px;vertical-align:initial;" />'  +
+	'  </button>' +	
+	'  <button id="' + section + '-bubble-close" type="button" class="close" data-dismiss="alert" aria-label="Close" style="padding: 7px 11px 7px 11px" onClick="$(\'#' + section + '-full-address\').val(\'\');$(\'#' + section + '-full-address\').focus();clearAddressInputs(\'' + section + '\')">' + 
+	'	<span aria-hidden="true">&times;</span>' +
+	'  </button>' +
+	'</div>';
+	
+    $('#selected-' + section + '-address').html(content);
+	$('#selected-' + section + '-address').show();	
+	$('#' + section + '-country').change();	
+	
+	if($("input[name='shipping-same-billing']").is(':checked') && section == 'shipping')
+		$("input[name='shipping-same-billing']").change();
+	
+}

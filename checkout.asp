@@ -298,7 +298,8 @@ objCmd.Execute()
 
  <div id="msg-location-replace"></div>
  <!--#include virtual="cart/inc_stock_display_notice.asp"-->
- <section> 
+<div class="row">
+<section data-pg-verify class="col-md-6 shipping-information"> 
 <div class="card mb-5" id="shipping-card">
 	<div class="card-header">
 		<h5>Shipping address</h5>
@@ -314,10 +315,28 @@ objCmd.Execute()
 		<!--#include virtual="/checkout/cim_getshipping_addresses.asp"-->
 	</div>
 <div class="shipping-address-form">
+<style>
+<!-- TODO: This will be moved to CSS files -->
+.pg-autocomplete-list {
+	position: relative;
+}
+.pg-autocomplete-list div:before{
+	content: '';
+	display: inline-block;
+	float:left;
+	margin-right:11px;
+	margin-top:2px;
+	background: url('/images/location-sign.svg') no-repeat;
+	width: 20px;
+	height: 20px;
+	background-size: cover;
+}
+</style>
+	
+
 <% if CustID_Cookie = 0 then
 'and (var_no_ship_addresses = "false" or var_no_ship_addresses = "")
  %>
-<br/>
 <div class="form-group position-relative" <%= hide_registered %>>
 <label for="e-mail">E-mail address <span class="text-danger">*</span></label>
 <input class="form-control" required name="e-mail" id="e-mail" type="email" autocomplete="shipping email" data-friendly-error="E-mail address is required" />
@@ -325,10 +344,8 @@ objCmd.Execute()
 		E-mail address is required
 </div>
 <div class="invalid-feedback feedback-icon">
-	<i class="fa fa-times"></i>
 </div>
 <div class="valid-feedback feedback-icon">
-	<i class="fa fa-check"></i>
 </div>
 </div>
 <% else %>
@@ -342,10 +359,8 @@ objCmd.Execute()
 		First name is required
 	</div>
 	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
 	</div>
 	<div class="invalid-feedback feedback-icon">
-		<i class="fa fa-times"></i>
 	</div>
 </div>
 <div class="form-group position-relative">
@@ -355,131 +370,121 @@ objCmd.Execute()
 	Last name is required
 </div>
 <div class="invalid-feedback feedback-icon">
-	<i class="fa fa-times"></i>
 </div>
 <div class="valid-feedback feedback-icon">
-	<i class="fa fa-check"></i>
 </div>
-</div>
-<div class="form-group position-relative">
-	<label for="shipping-company">Company</label>
-	<input class="form-control" name="shipping-company" id="shipping-company" type="text" autocomplete="shipping organization" />
-	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
-	</div>
-</div>
-<div class="form-group position-relative">
-	<label for="shipping-address">Address (Line 1)<span class="text-danger">*</span></label>
-	<input class="form-control" required name="shipping-address" id="shipping-address" type="text" autocomplete="shipping address-line1" data-friendly-error="Shipping address is required" />
-	<div class="invalid-feedback">
-		Address is required
-	</div>
-	<div class="invalid-feedback feedback-icon">
-		<i class="fa fa-times"></i>
-	</div>
-	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
-	</div>
-</div>
-<div class="form-group position-relative">
-	<label for="shipping-address2">Apt #, Dorm, Suite</label>
-	<input class="form-control" name="shipping-address2" id="shipping-address2" type="text" autocomplete="shipping address-line2" />
-	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
-	</div>
-</div>
-<div class="form-group position-relative">
-	<label for="shipping-city">City <span class="text-danger">*</span></label>
-	<input class="form-control" required name="shipping-city" id="shipping-city" type="text" autocomplete="shipping address-level2" data-friendly-error="Shipping city is required" />
-	<div class="invalid-feedback">
-		City is required
-	</div>
-	<div class="invalid-feedback feedback-icon">
-		<i class="fa fa-times"></i>
-	</div>
-	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
-	</div>
-</div>
-<div class="form-group position-relative">                     
-	<label for="shipping-country">Country <span class="text-danger">*</span></label>
-	<select class="form-control" required name="shipping-country" id="shipping-country" autocomplete="shipping country"  data-friendly-error="Shipping country is required" >
-	<option value="USA" selected>USA</option>
-	<% 
-	While NOT rsGetCountrySelect.EOF 
-	%>
-			<option value="<%=(rsGetCountrySelect.Fields.Item("Country").Value)%>"><%=(rsGetCountrySelect.Fields.Item("Country").Value)%></option>
-	<% 
-	rsGetCountrySelect.MoveNext()
-	Wend
-	rsGetCountrySelect.Requery
-	%>
-		</select>
-		<div class="invalid-feedback">
-			Country is required
-		</div>
-		<div class="invalid-feedback feedback-icon">
-			<i class="fa fa-times"></i>
-		</div>
-		<div class="valid-feedback feedback-icon">
-			<i class="fa fa-check"></i>
-		</div>
-</div>
-<div class="form-group shipping-state position-relative" <%= hide_state %>>
-	<label for="shipping-state">State (USA)<span class="text-danger">*</span></label>
-	<select class="form-control" required name="shipping-state" id="shipping-state" autocomplete="shipping address-level1"  data-friendly-error="Shipping state is required">
-	<!--#include file="includes/inc_states_select.asp"-->
-      </select>
-	  <div class="invalid-feedback">
-		State is required
-	</div>
-	<div class="invalid-feedback feedback-icon">
-		<i class="fa fa-times"></i>
-	</div>
-	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
-	</div>
-</div>
-<div class="form-group shipping-province-canada position-relative" <%= hide_canada %>>
-	<label for="shipping-province-canada">Province <span class="text-danger">*</span></label>
-	<select class="form-control" name="shipping-province-canada" id="shipping-province-canada" autocomplete="shipping address-level2" data-friendly-error="Shipping province is required">
-	<!--#include virtual="/includes/inc_province_canada_select.asp"-->
-	  </select>
-	  <div class="invalid-feedback">
-		Province is required
-	</div>
-	<div class="invalid-feedback feedback-icon">
-		<i class="fa fa-times"></i>
-	</div>
-	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
-	</div>
-</div>
-<div class="form-group shipping-province position-relative" <%= hide_province %>>
-	<label for="shipping-province">Province / State</label>
-	<input class="form-control" name="shipping-province" id="shipping-province" type="text" autocomplete="shipping address-level2" data-friendly-error="Shipping province/state is required" />
-	<div class="invalid-feedback">
-		Province / State is required
-	</div>
-	<div class="invalid-feedback feedback-icon">
-		<i class="fa fa-times"></i>
-	</div>
-	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
-	</div>
 </div>
 
-<div class="form-group position-relative">
-	<label for="shipping-zip"><span class="hide_usa_zip <%= hide_state %>">Zip code</span><span class="hide_inter_zip <%= hide_inter_zip %>">Postal code</span> <span class="text-danger">*</span></label>
-	<input class="form-control" required name="shipping-zip" id="shipping-zip" type="text" autocomplete="shipping postal-code" data-friendly-error="Shipping postal code is required" />
-	<div class="invalid-feedback">
-		Zip / Postal Code is required
+
+<div id="shipping-address-autocomplete">
+	<div class="form-group position-relative">
+		<label for="shipping-full-address">Shipping Address<span class="text-danger">*</span></label>
+		<input type="text" id="shipping-full-address" data-pg-full-address  class="form-control" placeholder="Start typing an a&#8203;ddress..."  autocomplete="off" />
 	</div>
-	<div class="invalid-feedback feedback-icon">
-		<i class="fa fa-times"></i>
+ </div>
+
+<div id="selected-shipping-address" class="mt-3" style="display:none"></div>
+
+<div id="shipping-address-container" style="display:none">
+	<div class="form-group position-relative">
+		<label for="shipping-address">Address (Line 1)<span class="text-danger">*</span></label>
+		<input data-pg-address-line1 class="form-control" required name="shipping-address" id="shipping-address" type="text" autocomplete="shipping address-line1" data-friendly-error="Shipping address is required" />
+		<div class="invalid-feedback">
+			Address is required
+		</div>
+		<div class="invalid-feedback feedback-icon">
+		</div>
+		<div class="valid-feedback feedback-icon">
+		</div>
 	</div>
-	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
+	<div class="form-group position-relative">
+		<label for="shipping-address2">Apt #, Dorm, Suite</label>
+		<input data-pg-address-line2 class="form-control" name="shipping-address2" id="shipping-address2" type="text" autocomplete="shipping address-line2" />
+		<div class="valid-feedback feedback-icon">
+		</div>
+	</div>
+	<div class="form-group position-relative">
+		<label for="shipping-city">City <span class="text-danger">*</span></label>
+		<input data-pg-city class="form-control" required name="shipping-city" id="shipping-city" type="text" autocomplete="shipping address-level2" data-friendly-error="Shipping city is required" />
+		<div class="invalid-feedback">
+			City is required
+		</div>
+		<div class="invalid-feedback feedback-icon">
+		</div>
+		<div class="valid-feedback feedback-icon">
+		</div>
+	</div>
+	<div class="form-group position-relative">                     
+		<label for="shipping-country">Country <span class="text-danger">*</span></label>
+		<select data-pg-country class="form-control" required name="shipping-country" id="shipping-country" autocomplete="shipping country"  data-friendly-error="Shipping country is required" >
+		<option value="USA" selected>USA</option>
+		<% 
+		While NOT rsGetCountrySelect.EOF 
+		%>
+				<option value="<%=(rsGetCountrySelect.Fields.Item("Country").Value)%>"><%=(rsGetCountrySelect.Fields.Item("Country").Value)%></option>
+		<% 
+		rsGetCountrySelect.MoveNext()
+		Wend
+		rsGetCountrySelect.Requery
+		%>
+			</select>
+			<div class="invalid-feedback">
+				Country is required
+			</div>
+			<div class="invalid-feedback feedback-icon">
+			</div>
+			<div class="valid-feedback feedback-icon">
+			</div>
+	</div>
+
+	<div class="form-group shipping-state position-relative">
+		<label for="shipping-state">State (USA)<span class="text-danger">*</span></label>
+		<select data-pg-prov class="form-control" required name="shipping-state" id="shipping-state" autocomplete="shipping address-level1"  data-friendly-error="Shipping state is required">
+		<!--#include file="includes/inc_states_select.asp"-->
+		  </select>
+		  <div class="invalid-feedback">
+			State is required
+		</div>
+		<div class="invalid-feedback feedback-icon">
+		</div>
+		<div class="valid-feedback feedback-icon">
+		</div>
+	</div>
+	<div class="form-group shipping-province-canada position-relative" <%= hide_canada %>>
+		<label for="shipping-province-canada">Province <span class="text-danger">*</span></label>
+		<select data-pg-prov2 class="form-control" name="shipping-province-canada" id="shipping-province-canada" autocomplete="shipping address-level2" data-friendly-error="Shipping province is required">
+		<!--#include virtual="/includes/inc_province_canada_select.asp"-->
+		  </select>
+		  <div class="invalid-feedback">
+			Province is required
+		</div>
+		<div class="invalid-feedback feedback-icon">
+		</div>
+		<div class="valid-feedback feedback-icon">
+		</div>
+	</div>
+	<div class="form-group shipping-province position-relative" <%= hide_province %>>
+		<label for="shipping-province">Province / State</label>
+		<input data-pg-prov3 class="form-control" name="shipping-province" id="shipping-province" type="text" autocomplete="shipping address-level2" data-friendly-error="Shipping province/state is required" />
+		<div class="invalid-feedback">
+			Province / State is required
+		</div>
+		<div class="invalid-feedback feedback-icon">
+		</div>
+		<div class="valid-feedback feedback-icon">
+		</div>
+	</div>
+
+	<div class="form-group position-relative">
+		<label for="shipping-zip"><span class="hide_usa_zip <%= hide_state %>">Zip code</span><span class="hide_inter_zip <%= hide_inter_zip %>">Postal code</span> <span class="text-danger">*</span></label>
+		<input data-pg-pc class="form-control" required name="shipping-zip" id="shipping-zip" type="text" autocomplete="shipping postal-code" data-friendly-error="Shipping postal code is required" />
+		<div class="invalid-feedback">
+			Zip / Postal Code is required
+		</div>
+		<div class="invalid-feedback feedback-icon">
+		</div>
+		<div class="valid-feedback feedback-icon">
+		</div>
 	</div>
 </div>
 
@@ -487,14 +492,14 @@ objCmd.Execute()
 	<label for="shipping-phone">Phone #</label>
 	<input class="form-control" name="shipping-phone" type="text" autocomplete="shipping tel" />
 	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
 	</div>
 </div>
 
-	<div class="custom-control custom-checkbox" <%= hide_non_registered %> id="shipping-save-wrapper">
-			<input type="checkbox" class="custom-control-input" name="shipping-save" id="shipping-save">
-			<label class="custom-control-label" for="shipping-save">Save this shipping address to my account</label>
-	</div>
+
+<div class="custom-control custom-checkbox" <%= hide_non_registered %> id="shipping-save-wrapper">
+		<input type="checkbox" class="custom-control-input" name="shipping-save" id="shipping-save">
+		<label class="custom-control-label" for="shipping-save">Save this shipping address to my account</label>
+</div>
 <input name="shipping-status" id="shipping-status" type="hidden" value="">
 </div><!-- end shipping address form -->
 </div><!-- end hide content for adding on products -->
@@ -502,14 +507,14 @@ objCmd.Execute()
 </div><!-- end shipping main card -->
 </section><!-- end shipping address section -->
 
-
 <% if var_grandtotal + session("temp_shipping") = 0 then
 	hide_payment_section = "style=""display:none"""
 end if 
 
 if request.querystring("type") <> "paypal" and request.querystring("type") <> "afterpay" then ' Only display billing if checking out with credit card
 %>
-<section class="billing-information" id="billing-information" <%= hide_payment_section %>> 
+
+<section data-pg-verify class="col-md-6 billing-information" id="billing-information" <%= hide_payment_section %>> 
 <div class="card mb-5">
 <div class="card-header"><h5>Payment method</h5></div>
 <div class="card-body">
@@ -525,78 +530,80 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 <div class="billing-address-form AddressesForm">
 <div class="billing-input-fields">
 
-<div class="custom-control custom-checkbox" id="shipping-same-billing-wrapper" <%= hide_section_addons %>>
-	<input type="checkbox" class="custom-control-input" name="shipping-same-billing" id="shipping-same-billing">
-	<label class="custom-control-label" for="shipping-same-billing">Billing address is the same as my shipping address</label>
+<div class="form-group position-relative" id="shipping-same-billing-container">
+	<div class="custom-control custom-checkbox" id="shipping-same-billing-wrapper" <%= hide_section_addons %>>
+		<input type="checkbox" class="custom-control-input" name="shipping-same-billing" id="shipping-same-billing">
+		<label class="custom-control-label" for="shipping-same-billing">Billing address is the same as my shipping address</label>
+	</div>
 </div>
 
 <div class="mb-3" id="credit_card_inputs">
-		<div class="text-secondary mt-1" style="font-size:2em">
+
+<div class="form-group position-relative">
+	<div class="row">
+		<div class="col-md-6" style="display:flex;flex-direction:column;justify-content:end">
+			<label for="cardNumber">Card number <span class="text-danger">*</span></label>
+		</div>	
+		<div class="col-md-6 text-right text-secondary" style="font-size:2em">
 				<i class="fa fa-cc-visa"></i>
 				<i class="fa fa-cc-mastercard"></i>
 				<i class="fa fa-cc-amex"></i>
 				<i class="fa fa-cc-discover"></i>
-			</div>
-
-<div class="form-group position-relative">
-	<label for="cardNumber">Card number <span class="text-danger">*</span></label>
+		</div>
+	</div>
 	<input class="form-control" required type="tel" name="card_number" id="cardNumber" placeholder="&#8226;&#8226;&#8226;&#8226;  &#8226;&#8226;&#8226;&#8226;  &#8226;&#8226;&#8226;&#8226;  &#8226;&#8226;&#8226;&#8226;" data-validation="length alphanumeric"  data-validation-length="12-19" data-validation-allowing=" " autocomplete="cc-number" data-friendly-error="Credit card # is required" />
 	<div class="invalid-feedback">
 			Valid credit card # is required
 		</div>
 		<div class="valid-feedback feedback-icon">
-			<i class="fa fa-check"></i>
 		</div>
 		<div class="invalid-feedback feedback-icon">
-			<i class="fa fa-times"></i>
 		</div>
 </div>
-		
-<div class="form-group position-relative">
-	<label for="creditCardMonth">Exp month <span class="text-danger">*</span></label>
-	<select class="form-control" required name="billing-month" id="creditCardMonth" name="billing-month"  autocomplete="cc-exp-month" data-friendly-error="Expiration month is required" >
-			<option value="">Select month</option>
-			<option value="01">01 - January</option>
-			<option value="02">02 - February</option>
-			<option value="03">03 - March</option>
-			<option value="04">04 - April</option>
-			<option value="05">05 - May</option>
-			<option value="06">06 - June</option>
-			<option value="07">07 - July</option>
-			<option value="08">08 - August</option>
-			<option value="09">09 - September</option>
-			<option value="10">10 - October</option>
-			<option value="11">11 - November</option>
-			<option value="12">12 - December</option>
+
+<div class="row">		
+	<div class="col-md-6 form-group position-relative">
+		<label for="creditCardMonth">Exp month <span class="text-danger">*</span></label>
+		<select class="form-control" required name="billing-month" id="creditCardMonth" name="billing-month"  autocomplete="cc-exp-month" data-friendly-error="Expiration month is required" >
+				<option value="">Select month</option>
+				<option value="01">01 - January</option>
+				<option value="02">02 - February</option>
+				<option value="03">03 - March</option>
+				<option value="04">04 - April</option>
+				<option value="05">05 - May</option>
+				<option value="06">06 - June</option>
+				<option value="07">07 - July</option>
+				<option value="08">08 - August</option>
+				<option value="09">09 - September</option>
+				<option value="10">10 - October</option>
+				<option value="11">11 - November</option>
+				<option value="12">12 - December</option>
+			</select>
+			<div class="invalid-feedback">
+					Month is required
+				</div>
+				<div class="valid-feedback feedback-icon">
+				</div>
+				<div class="invalid-feedback feedback-icon">
+				</div>
+		</div>
+			
+	<div class="col-md-6 form-group position-relative">
+		<label for="creditCardYear">Exp year <span class="text-danger">*</span></label>
+		<select class="form-control" required name="billing-year" id="creditCardYear" autocomplete="cc-exp-year" data-friendly-error="Expiration year is required">
+				<option value="">Select year</option>
+			<% for i = 0 to 10 %>
+				<option value="<%= year(now) + i %>"><%= year(now) + i %></option>
+			<% next %>
 		</select>
 		<div class="invalid-feedback">
-				Month is required
+				Year is required
 			</div>
 			<div class="valid-feedback feedback-icon">
-				<i class="fa fa-check"></i>
 			</div>
 			<div class="invalid-feedback feedback-icon">
-				<i class="fa fa-times"></i>
 			</div>
 	</div>
-		
-<div class="form-group position-relative">
-	<label for="creditCardYear">Exp year <span class="text-danger">*</span></label>
-	<select class="form-control" required name="billing-year" id="creditCardYear" autocomplete="cc-exp-year" data-friendly-error="Expiration year is required">
-			<option value="">Select year</option>
-		<% for i = 0 to 10 %>
-			<option value="<%= year(now) + i %>"><%= year(now) + i %></option>
-		<% next %>
-	</select>
-	<div class="invalid-feedback">
-			Year is required
-		</div>
-		<div class="valid-feedback feedback-icon">
-			<i class="fa fa-check"></i>
-		</div>
-		<div class="invalid-feedback feedback-icon">
-			<i class="fa fa-times"></i>
-		</div>
 </div>
 
 <div class="form-group position-relative">
@@ -606,169 +613,166 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 			Security code is required
 		</div>
 		<div class="valid-feedback feedback-icon">
-			<i class="fa fa-check"></i>
 		</div>
 		<div class="invalid-feedback feedback-icon">
-			<i class="fa fa-times"></i>
 		</div>
 </div>
 </div><!-- credit card input fields -->
-<div class="form-group position-relative">
-	<label for="billing-first" class="control-label">First name <span class="text-danger">*</span></label>
-	<input class="form-control" required name="billing-first" id="billing-first" type="text" autocomplete="billing given-name" data-friendly-error="Billing address: First name is required" />
-	<div class="invalid-feedback">
-		First name is required
-	</div>
-	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
-	</div>
-	<div class="invalid-feedback feedback-icon">
-		<i class="fa fa-times"></i>
-	</div>
-</div>
-
-<div class="form-group position-relative">
-	<label for="billing-last" class="control-label">Last name <span class="text-danger">*</span></label>
-	<input class="form-control" required name="billing-last" id="billing-last" type="text" autocomplete="billing family-name" data-friendly-error="Billing address: Last name is required" />
-	<div class="invalid-feedback">
-		Last name is required
-	</div>
-	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
-	</div>
-	<div class="invalid-feedback feedback-icon">
-		<i class="fa fa-times"></i>
-	</div>
-</div>
-
-<div class="form-group position-relative">
-	<label for="billing-address">Address (Line 1)<span class="text-danger">*</span></label>
-	<input class="form-control" required name="billing-address" id="billing-address" type="text" autocomplete="billing address-line1" data-friendly-error="Billing address is required" />
-	<div class="invalid-feedback">
-		Address is required
-	</div>
-	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
-	</div>
-	<div class="invalid-feedback feedback-icon">
-		<i class="fa fa-times"></i>
-	</div>
-</div>
-
-<div class="form-group position-relative">
-	<label for="billing-address2">Apt #, Dorm, Suite&nbsp;&nbsp;</label>
-	<input class="form-control" name="billing-address2" id="billing-address2" type="text" autocomplete="billing address-line2" />
-	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
-	</div>
-</div>
-
-<div class="form-group position-relative">
-	<label for="billing-city">City <span class="text-danger">*</span></label>
-	<input class="form-control" required name="billing-city" id="billing-city" type="text" autocomplete="billing address-level2" data-friendly-error="Billing city is required" />
-	<div class="invalid-feedback">
-		City is required
-	</div>
-	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
-	</div>
-	<div class="invalid-feedback feedback-icon">
-		<i class="fa fa-times"></i>
-	</div>
-</div>
-
-<div class="form-group position-relative">                     
-	<label for="billing-country">Country <span class="text-danger">*</span></label>
-	<select class="form-control" required name="billing-country"  id="billing-country" autocomplete="billing country" data-friendly-error="Billing country is required" >
-	<option value="USA" selected>USA</option>
-			<% 
-	While NOT rsGetCountrySelect.EOF 
-	%>
-			<option value="<%=(rsGetCountrySelect.Fields.Item("Country").Value)%>"><%=(rsGetCountrySelect.Fields.Item("Country").Value)%></option>
-			<% 
-	rsGetCountrySelect.MoveNext()
-	Wend
-	rsGetCountrySelect.Requery
 
 
-	%>
-		</select>
+<div class="row">
+	<div class="col-md-6 form-group position-relative">
+		<label for="billing-first" class="control-label">First name <span class="text-danger">*</span></label>
+		<input class="form-control" required name="billing-first" id="billing-first" type="text" autocomplete="billing given-name" data-friendly-error="Billing address: First name is required" />
 		<div class="invalid-feedback">
-			Country is required
+			First name is required
 		</div>
 		<div class="valid-feedback feedback-icon">
-			<i class="fa fa-check"></i>
 		</div>
 		<div class="invalid-feedback feedback-icon">
-			<i class="fa fa-times"></i>
 		</div>
-</div>
+	</div>
 
-<div class="form-group position-relative billing-state <%= hide_state %>">
-	<label for="billing-state">State (USA)<span class="text-danger">*</span></label>
-	<select class="form-control" name="billing-state" id="billing-state" autocomplete="billing address-level1" data-friendly-error="Billing state is required">
-	<!--#include file="includes/inc_states_select.asp"-->
-		</select>
+	<div class="col-md-6 form-group position-relative">
+		<label for="billing-last" class="control-label">Last name <span class="text-danger">*</span></label>
+		<input class="form-control" required name="billing-last" id="billing-last" type="text" autocomplete="billing family-name" data-friendly-error="Billing address: Last name is required" />
 		<div class="invalid-feedback">
-			State is required
+			Last name is required
 		</div>
 		<div class="valid-feedback feedback-icon">
-			<i class="fa fa-check"></i>
 		</div>
 		<div class="invalid-feedback feedback-icon">
-			<i class="fa fa-times"></i>
 		</div>
-</div>
-
-<div class="form-group position-relative billing-province-canada <%= hide_canada %>">
-	<label for="billing-province-canada">Province <span class="text-danger">*</span></label>
-	<select class="form-control" name="billing-province-canada" id="billing-province-canada" autocomplete="billing address-level2" data-friendly-error="Billing province is required">
-	<!--#include file="includes/inc_province_canada_select.asp"-->
-		</select>
-		<div class="invalid-feedback">
-			Province is required
-		</div>
-		<div class="valid-feedback feedback-icon">
-			<i class="fa fa-check"></i>
-		</div>
-		<div class="invalid-feedback feedback-icon">
-			<i class="fa fa-times"></i>
-		</div>
-</div>
-
-<div class="form-group position-relative billing-province <%= hide_province %>">
-	<label for="billing-province">Province / State</label>
-	<input class="form-control" name="billing-province" id="billing-province" type="text" autocomplete="billing address-level2" data-friendly-error="Billing province/state is required" />
-	<div class="invalid-feedback">
-		Province / State is required
-	</div>
-	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
-	</div>
-	<div class="invalid-feedback feedback-icon">
-		<i class="fa fa-times"></i>
 	</div>
 </div>
 
 <div class="form-group position-relative">
-	<label for="billing-zip"><span class="hide_usa_zip <%= hide_state %>">Zip code</span><span class="hide_inter_zip <%= hide_inter_zip %>">Postal code</span> <span class="text-danger">*</span></label>
-	<input class="form-control" name="billing-zip" id="billing-zip" type="text" autocomplete="billing postal-code" data-friendly-error="Billing postal code is required" />
-	<div class="invalid-feedback">
-		Zip / Postal Code is required
+	<div class="custom-control custom-checkbox" id="card-save-wrapper" <%= hide_non_registered %>>
+		<input type="checkbox" class="custom-control-input" name="card-save" id="card-save">
+		<label class="custom-control-label" for="card-save">Save this credit card to my account</label>
 	</div>
-	<div class="invalid-feedback feedback-icon">
-		<i class="fa fa-times"></i>
+</div>
+<div id="billing-address-autocomplete">
+	<div class="form-group position-relative">
+		<label for="billing-full-address">Billing Address<span class="text-danger">*</span></label>
+		<input type="text" id="billing-full-address" data-pg-full-address  class="form-control" placeholder="Start typing billing a&#8203;ddress..."  autocomplete="off" />
 	</div>
-	<div class="valid-feedback feedback-icon">
-		<i class="fa fa-check"></i>
+ </div>
+
+<div id="selected-billing-address" class="mt-3" style="display:none"></div>
+
+<div id="billing-address-container" style="display:none">
+	<div class="form-group position-relative">
+		<label for="billing-address">Address (Line 1)<span class="text-danger">*</span></label>
+		<input data-pg-address-line1 class="form-control" required name="billing-address" id="billing-address" type="text" autocomplete="billing address-line1" data-friendly-error="Billing address is required" />
+		<div class="invalid-feedback">
+			Address is required
+		</div>
+		<div class="valid-feedback feedback-icon">
+		</div>
+		<div class="invalid-feedback feedback-icon">
+		</div>
+	</div>
+
+	<div class="form-group position-relative">
+		<label for="billing-address2">Apt #, Dorm, Suite&nbsp;&nbsp;</label>
+		<input data-pg-address-line2 class="form-control" name="billing-address2" id="billing-address2" type="text" autocomplete="billing address-line2" />
+		<div class="valid-feedback feedback-icon">
+		</div>
+	</div>
+
+	<div class="form-group position-relative">
+		<label for="billing-city">City <span class="text-danger">*</span></label>
+		<input data-pg-city class="form-control" required name="billing-city" id="billing-city" type="text" autocomplete="billing address-level2" data-friendly-error="Billing city is required" />
+		<div class="invalid-feedback">
+			City is required
+		</div>
+		<div class="valid-feedback feedback-icon">
+		</div>
+		<div class="invalid-feedback feedback-icon">
+		</div>
+	</div>
+
+	<div class="form-group position-relative">                     
+		<label for="billing-country">Country <span class="text-danger">*</span></label>
+		<select data-pg-country class="form-control" required name="billing-country"  id="billing-country" autocomplete="billing country" data-friendly-error="Billing country is required" >
+		<option value="USA" selected>USA</option>
+				<% 
+		While NOT rsGetCountrySelect.EOF 
+		%>
+				<option value="<%=(rsGetCountrySelect.Fields.Item("Country").Value)%>"><%=(rsGetCountrySelect.Fields.Item("Country").Value)%></option>
+				<% 
+		rsGetCountrySelect.MoveNext()
+		Wend
+		rsGetCountrySelect.Requery
+
+
+		%>
+			</select>
+			<div class="invalid-feedback">
+				Country is required
+			</div>
+			<div class="valid-feedback feedback-icon">
+			</div>
+			<div class="invalid-feedback feedback-icon">
+			</div>
+	</div>
+
+	<div class="form-group position-relative billing-state <%= hide_state %>">
+		<label for="billing-state">State (USA)<span class="text-danger">*</span></label>
+		<select data-pg-state class="form-control" name="billing-state" id="billing-state" autocomplete="billing address-level1" data-friendly-error="Billing state is required">
+		<!--#include file="includes/inc_states_select.asp"-->
+			</select>
+			<div class="invalid-feedback">
+				State is required
+			</div>
+			<div class="valid-feedback feedback-icon">
+			</div>
+			<div class="invalid-feedback feedback-icon">
+			</div>
+	</div>
+
+	<div class="form-group position-relative billing-province-canada <%= hide_canada %>">
+		<label for="billing-province-canada">Province <span class="text-danger">*</span></label>
+		<select data-pg-prov class="form-control" name="billing-province-canada" id="billing-province-canada" autocomplete="billing address-level2" data-friendly-error="Billing province is required">
+		<!--#include file="includes/inc_province_canada_select.asp"-->
+			</select>
+			<div class="invalid-feedback">
+				Province is required
+			</div>
+			<div class="valid-feedback feedback-icon">
+			</div>
+			<div class="invalid-feedback feedback-icon">
+			</div>
+	</div>
+
+	<div class="form-group position-relative billing-province <%= hide_province %>">
+		<label for="billing-province">Province / State</label>
+		<input class="form-control" name="billing-province" id="billing-province" type="text" autocomplete="billing address-level2" data-friendly-error="Billing province/state is required" />
+		<div class="invalid-feedback">
+			Province / State is required
+		</div>
+		<div class="valid-feedback feedback-icon">
+		</div>
+		<div class="invalid-feedback feedback-icon">
+		</div>
+	</div>
+
+	<div class="form-group position-relative">
+		<label for="billing-zip"><span class="hide_usa_zip <%= hide_state %>">Zip code</span><span class="hide_inter_zip <%= hide_inter_zip %>">Postal code</span> <span class="text-danger">*</span></label>
+		<input data-pg-pc class="form-control" name="billing-zip" id="billing-zip" type="text" autocomplete="billing postal-code" data-friendly-error="Billing postal code is required" />
+		<div class="invalid-feedback">
+			Zip / Postal Code is required
+		</div>
+		<div class="invalid-feedback feedback-icon">
+		</div>
+		<div class="valid-feedback feedback-icon">
+		</div>
 	</div>
 </div>
 
 
-<div class="custom-control custom-checkbox" id="card-save-wrapper" <%= hide_non_registered %>>
-	<input type="checkbox" class="custom-control-input" name="card-save" id="card-save">
-	<label class="custom-control-label" for="card-save">Save this credit card to my account</label>
-</div>
+
 
 <button class="btn btn-sm btn-info" id="btn-save-credit-card" data-id="" style="display:none" type="button">Save my new credit card # <i class="fa fa-spinner fa-spin fa-lg ml-3" style="display:none" id="spinner-update-billing"></i></button>
 <div class="alert alert-danger mt-2" id="msg-update-billing" style="display:none"></div>
@@ -789,6 +793,7 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 </div><!-- end billing card body -->
 </div><!-- end billing main card -->
 </section><!-- end billing address section -->
+</div>
 <% end if ' if checkout type is not paypal %>
 <!--#include virtual="cart/inc_cart_loopitems-begin.asp"-->
 <!--#include virtual="cart/inc_cart_loopitems-end.asp"-->
@@ -936,10 +941,10 @@ end if
 			
 			<% if rs_getCart.Fields.Item("cart_preorderNotes").Value <> "" then %>	  
 				<% if rs_getCart.Fields.Item("ProductID").Value <> 2424 then ' if item is not a gift certificate %>
-					<strong><% if rs_getCart("anodID") = 0 then %>Custom color:<% else %>Your specs:<% end if %></strong> <span class="spectext<%= rs_getCart.Fields.Item("cart_id").Value %>"><%= rs_getCart.Fields.Item("cart_preorderNotes").Value %></span>
+					<strong><% if rs_getCart("anodID") = 0 then %>Custom color:<% else %>Your specs:<% end if %></strong> <span class="spectext<%= rs_getCart.Fields.Item("cart_id").Value %>"><%= Sanitize(rs_getCart.Fields.Item("cart_preorderNotes").Value) %></span>
 				
 				<% else ' show gift certificate information 
-					certificate_array =split(rs_getCart.Fields.Item("cart_preorderNotes").Value,"{}")				
+					certificate_array =split(Sanitize(rs_getCart.Fields.Item("cart_preorderNotes").Value),"{}")				
 				%>
 				<span class="font-weight-bold">Recipient's name:</span> <%= certificate_array(3) %>
 				<span class="font-weight-bold">Recipient's e-mail:</span> <%= certificate_array(0) %>
@@ -1180,7 +1185,7 @@ end if
 							<button class="btn btn-lg btn-primary btn-block checkout_button place_order checkout_afterpay" style="display:none" type="submit" form="checkout_form" name="place_order">PAY NOW WITH <img class="img-fluid d-inline w-50" src="/images/afterpay-white-logo.png"/></button>
 						</div>
 						</div>
-					<-->
+					-->
 					<div class="processing-message" style="display:none"></div>
 				</div><!-- display bottom section for mobile only -->
 				<% end if ' OrderAddonsActive is null %>
@@ -1253,7 +1258,8 @@ end if
 <script type = "text/javascript" src="https://static-us.afterpay.com/javascript/present-afterpay.js"></script>-->
 <!--
 <script type="text/javascript" src="/js-pages/afterpay-widget.js?v=020420" ></script>-->
-
+<!-- Postgrid API -->
+<script src="/js/postgrid-customized-api.js" data-pg-key="live_pk_csP2zaBTuekcKtmRMRSi9U"></script>
 <%
 Set rsToggles = Nothing
 %>
