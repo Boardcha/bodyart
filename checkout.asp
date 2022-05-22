@@ -383,6 +383,13 @@ objCmd.Execute()
 	</div>
  </div>
 
+ <div class="form-group position-relative" id="chk-shipping-manual-address-input-container">
+	<div class="custom-control custom-checkbox">
+		<input type="checkbox" class="custom-control-input" name="chk-shipping-manual-address-input" id="chk-shipping-manual-address-input">
+		<label class="custom-control-label" for="chk-shipping-manual-address-input">You can't find the address? Enter the address manually.</label>
+	</div>
+</div>
+ 
 <div id="selected-shipping-address" class="mt-3" style="display:none"></div>
 
 <div id="shipping-address-container" style="display:none">
@@ -530,8 +537,8 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 <div class="billing-address-form AddressesForm">
 <div class="billing-input-fields">
 
-<div class="form-group position-relative" id="shipping-same-billing-container">
-	<div class="custom-control custom-checkbox" id="shipping-same-billing-wrapper" <%= hide_section_addons %>>
+<div class="form-group position-relative" id="shipping-same-billing-container" <%= hide_section_addons %>>
+	<div class="custom-control custom-checkbox" id="shipping-same-billing-wrapper">
 		<input type="checkbox" class="custom-control-input" name="shipping-same-billing" id="shipping-same-billing">
 		<label class="custom-control-label" for="shipping-same-billing">Billing address is the same as my shipping address</label>
 	</div>
@@ -646,18 +653,26 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 	</div>
 </div>
 
-<div class="form-group position-relative">
-	<div class="custom-control custom-checkbox" id="card-save-wrapper" <%= hide_non_registered %>>
+<div class="form-group position-relative" <%= hide_non_registered %>>
+	<div class="custom-control custom-checkbox" id="card-save-wrapper">
 		<input type="checkbox" class="custom-control-input" name="card-save" id="card-save">
 		<label class="custom-control-label" for="card-save">Save this credit card to my account</label>
 	</div>
 </div>
-<div id="billing-address-autocomplete">
+
+<div id="billing-address-autocomplete" <%= hide_section_addons %>>
 	<div class="form-group position-relative">
 		<label for="billing-full-address">Billing Address<span class="text-danger">*</span></label>
 		<input type="text" id="billing-full-address" data-pg-full-address  class="form-control" placeholder="Start typing billing a&#8203;ddress..."  autocomplete="off" />
 	</div>
  </div>
+
+ <div class="form-group position-relative" id="chk-billing-manual-address-input-container" <%= hide_section_addons %>>
+	<div class="custom-control custom-checkbox">
+		<input type="checkbox" class="custom-control-input" name="chk-billing-manual-address-input" id="chk-billing-manual-address-input">
+		<label class="custom-control-label" for="chk-billing-manual-address-input">You can't find the address? Enter the address manually.</label>
+	</div>
+</div>
 
 <div id="selected-billing-address" class="mt-3" style="display:none"></div>
 
@@ -941,10 +956,10 @@ end if
 			
 			<% if rs_getCart.Fields.Item("cart_preorderNotes").Value <> "" then %>	  
 				<% if rs_getCart.Fields.Item("ProductID").Value <> 2424 then ' if item is not a gift certificate %>
-					<strong><% if rs_getCart("anodID") = 0 then %>Custom color:<% else %>Your specs:<% end if %></strong> <span class="spectext<%= rs_getCart.Fields.Item("cart_id").Value %>"><%= rs_getCart.Fields.Item("cart_preorderNotes").Value %></span>
+					<strong><% if rs_getCart("anodID") = 0 then %>Custom color:<% else %>Your specs:<% end if %></strong> <span class="spectext<%= rs_getCart.Fields.Item("cart_id").Value %>"><%= Sanitize(rs_getCart.Fields.Item("cart_preorderNotes").Value) %></span>
 				
 				<% else ' show gift certificate information 
-					certificate_array =split(rs_getCart.Fields.Item("cart_preorderNotes").Value,"{}")				
+					certificate_array =split(Sanitize(rs_getCart.Fields.Item("cart_preorderNotes").Value),"{}")				
 				%>
 				<span class="font-weight-bold">Recipient's name:</span> <%= certificate_array(3) %>
 				<span class="font-weight-bold">Recipient's e-mail:</span> <%= certificate_array(0) %>

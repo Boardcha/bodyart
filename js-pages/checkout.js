@@ -746,12 +746,13 @@ function setCurrency() {
 			
 			// Trigger change to save field info to local storage
 			 $("#billing-first, #billing-last, #billing-address, #billing-address2, #billing-city, #billing-state, #billing-province-canada, #billing-province, #billing-zip, #billing-country").trigger('change');
-			 
+			 $("#chk-billing-manual-address-input-container").hide();
 		} else {
 			clearBillingAddressInputs();
 			$("#billing-bubble-close").trigger('click');
 			$('#billing-address-autocomplete').show();
 			$("#billing-address-container").hide();	
+			$("#chk-billing-manual-address-input-container").show();
 		}
 	}); // End shipping same as billing
 	
@@ -777,6 +778,24 @@ function setCurrency() {
 		return state;	
 	}	
 	
+	$("input[name='chk-billing-manual-address-input']").change(function(){
+		if (this.checked) {
+			$("#billing-address-container").show();		
+			$('#selected-billing-address').hide();	
+			$("#billing-address-autocomplete").hide();
+			$("#chk-billing-manual-address-input-container").hide();
+		}
+	});	
+	
+	$("input[name='chk-shipping-manual-address-input']").change(function(){
+		if (this.checked) {
+			$("#shipping-address-container").show();		
+			$('#selected-shipping-address').hide();	
+			$("#shipping-address-autocomplete").hide();
+			$("#chk-shipping-manual-address-input-container").hide();
+		}
+	});	
+	
 	function closeBillingBubble(){
 	  clearBillingAddressInputs();
 	  $("#shipping-same-billing").prop('checked', false);
@@ -786,7 +805,6 @@ function setCurrency() {
 	  console.log("close");
 	};	
 
-	
 	function clearAddressInputs(section){
 		if (section=="billing")
 			clearBillingAddressInputs();
@@ -1097,3 +1115,21 @@ function createAddressBubble(section) {
 		$("input[name='shipping-same-billing']").change();
 	
 }
+
+// If user from the USA or Canada, show the address validation field
+$( document ).ready(function() {
+	$.getJSON("https://pro.ip-api.com/json/?key=1FbdfMEofSriXRs&fields=countryCode", function() {})
+		.done(function( data ) {
+			if(!(data.countryCode == 'US' || data.countryCode == 'CA')){
+				$("#selected-shipping-address").hide();	
+				$("#selected-billing-address").hide();	
+				$("#shipping-address-autocomplete").hide();
+				$("#billing-address-autocomplete").hide();
+				$("#shipping-address-container").show();
+				$("#billing-address-container").show();
+				$("#chk-shipping-manual-address-input-container").hide();
+				$("#chk-billing-manual-address-input-container").hide();
+			}
+	});
+
+});
