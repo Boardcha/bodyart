@@ -537,8 +537,8 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 <div class="billing-address-form AddressesForm">
 <div class="billing-input-fields">
 
-<div class="form-group position-relative" id="shipping-same-billing-container">
-	<div class="custom-control custom-checkbox" id="shipping-same-billing-wrapper" <%= hide_section_addons %>>
+<div class="form-group position-relative" id="shipping-same-billing-container" <%= hide_section_addons %>>
+	<div class="custom-control custom-checkbox" id="shipping-same-billing-wrapper">
 		<input type="checkbox" class="custom-control-input" name="shipping-same-billing" id="shipping-same-billing">
 		<label class="custom-control-label" for="shipping-same-billing">Billing address is the same as my shipping address</label>
 	</div>
@@ -660,14 +660,14 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 	</div>
 </div>
 
-<div id="billing-address-autocomplete">
+<div id="billing-address-autocomplete" <%= hide_section_addons %>>
 	<div class="form-group position-relative">
 		<label for="billing-full-address">Billing Address<span class="text-danger">*</span></label>
 		<input type="text" id="billing-full-address" data-pg-full-address  class="form-control" placeholder="Start typing billing a&#8203;ddress..."  autocomplete="off" />
 	</div>
  </div>
 
- <div class="form-group position-relative" id="chk-billing-manual-address-input-container">
+ <div class="form-group position-relative" id="chk-billing-manual-address-input-container" <%= hide_section_addons %>>
 	<div class="custom-control custom-checkbox">
 		<input type="checkbox" class="custom-control-input" name="chk-billing-manual-address-input" id="chk-billing-manual-address-input">
 		<label class="custom-control-label" for="chk-billing-manual-address-input">You can't find the address? Enter the address manually.</label>
