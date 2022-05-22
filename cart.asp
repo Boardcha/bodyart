@@ -973,7 +973,7 @@ if NOT rsGetAddOns.eof then
 <!-- Apple Pay Javascript -->
 <script src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js"></script>
 <script src="/js/apple-pay-api.js?ver=3"></script>
-<script type="text/javascript" src="/js/slick.min.js"></script>
+<script type="text/javascript" src="/js/slick-customized.min.js"></script>
 
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
 <script type="text/javascript" src="/js-pages/cart.min.js?v=03032025"></script>
