@@ -84,7 +84,7 @@ Set rsGetTestimonials = DataConn.Execute(SqlString)
 
 			<% 
 			If Not rsGetTestimonials.EOF Then %>
-			<div class="baf-carousel mb-3" id="testimonials">
+			<div class="baf-carousel mb-3 pl-5 pr-5" id="testimonials">
 			<% 	While NOT rsGetTestimonials.EOF %>
 			<div class="slide alert alert-light">
 				<i class="fa fa-lg fa-double-quote-serif-left pr-2 homepage-graphic" id="testimonial-left"></i>
