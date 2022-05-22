@@ -333,52 +333,9 @@ objCmd.Execute()
 }
 </style>
 	
-
-<% if CustID_Cookie = 0 then
-'and (var_no_ship_addresses = "false" or var_no_ship_addresses = "")
- %>
-<div class="form-group position-relative" <%= hide_registered %>>
-<label for="e-mail">E-mail address <span class="text-danger">*</span></label>
-<input class="form-control" required name="e-mail" id="e-mail" type="email" autocomplete="shipping email" data-friendly-error="E-mail address is required" />
-<div class="invalid-feedback">
-		E-mail address is required
-</div>
-<div class="invalid-feedback feedback-icon">
-</div>
-<div class="valid-feedback feedback-icon">
-</div>
-</div>
-<% else %>
-<input id="e-mail" type="hidden" value="<%= rsGetUser.Fields.Item("email").Value %>" />
-<% end if %>
-
-<div class="form-group position-relative">
-	<label for="shipping-first-checkout">First name <span class="text-danger">*</span></label>
-	<input class="form-control" required name="shipping-first" id="shipping-first-checkout" type="text" autocomplete="shipping given-name" data-friendly-error="Shipping address: First name is required" />
-	<div class="invalid-feedback">
-		First name is required
-	</div>
-	<div class="valid-feedback feedback-icon">
-	</div>
-	<div class="invalid-feedback feedback-icon">
-	</div>
-</div>
-<div class="form-group position-relative">
-<label for="shipping-last-checkout">Last name <span class="text-danger">*</span></label>
-<input class="form-control" required name="shipping-last" id="shipping-last-checkout" type="text" autocomplete="shipping family-name" data-friendly-error="Shipping address: Last name is required"  />
-<div class="invalid-feedback">
-	Last name is required
-</div>
-<div class="invalid-feedback feedback-icon">
-</div>
-<div class="valid-feedback feedback-icon">
-</div>
-</div>
-
-
 <div id="shipping-address-autocomplete">
 	<div class="form-group position-relative">
-		<label for="shipping-full-address">Shipping Address<span class="text-danger">*</span></label>
+		<label for="shipping-address">Address<span class="text-danger">*</span></label>
 		<input type="text" id="shipping-full-address" data-pg-full-address  class="form-control" placeholder="Start typing an a&#8203;ddress..."  autocomplete="off" />
 	</div>
  </div>
@@ -488,18 +445,63 @@ objCmd.Execute()
 	</div>
 </div>
 
+<% if CustID_Cookie = 0 then
+'and (var_no_ship_addresses = "false" or var_no_ship_addresses = "")
+ %>
+<div class="form-group position-relative" <%= hide_registered %>>
+<label for="e-mail">E-mail address <span class="text-danger">*</span></label>
+<input class="form-control" required name="e-mail" id="e-mail" type="email" autocomplete="shipping email" data-friendly-error="E-mail address is required" />
+<div class="invalid-feedback">
+		E-mail address is required
+</div>
+<div class="invalid-feedback feedback-icon">
+</div>
+<div class="valid-feedback feedback-icon">
+</div>
+</div>
+<% else %>
+<input id="e-mail" type="hidden" value="<%= rsGetUser.Fields.Item("email").Value %>" />
+<% end if %>
+
+<div class="form-group position-relative">
+	<label for="shipping-first-checkout">First name <span class="text-danger">*</span></label>
+	<input class="form-control" required name="shipping-first" id="shipping-first-checkout" type="text" autocomplete="shipping given-name" data-friendly-error="Shipping address: First name is required" />
+	<div class="invalid-feedback">
+		First name is required
+	</div>
+	<div class="valid-feedback feedback-icon">
+	</div>
+	<div class="invalid-feedback feedback-icon">
+	</div>
+</div>
+<div class="form-group position-relative">
+<label for="shipping-last-checkout">Last name <span class="text-danger">*</span></label>
+<input class="form-control" required name="shipping-last" id="shipping-last-checkout" type="text" autocomplete="shipping family-name" data-friendly-error="Shipping address: Last name is required"  />
+<div class="invalid-feedback">
+	Last name is required
+</div>
+<div class="invalid-feedback feedback-icon">
+</div>
+<div class="valid-feedback feedback-icon">
+</div>
+</div>
 <div class="form-group position-relative">
 	<label for="shipping-phone">Phone #</label>
 	<input class="form-control" name="shipping-phone" type="text" autocomplete="shipping tel" />
 	<div class="valid-feedback feedback-icon">
 	</div>
 </div>
-
-
-<div class="custom-control custom-checkbox" <%= hide_non_registered %> id="shipping-save-wrapper">
-		<input type="checkbox" class="custom-control-input" name="shipping-save" id="shipping-save">
-		<label class="custom-control-label" for="shipping-save">Save this shipping address to my account</label>
+<div class="form-group position-relative">
+	<label for="shipping-company">Company</label>
+	<input class="form-control" name="shipping-company" id="shipping-company" type="text" autocomplete="shipping organization" />
+	<div class="valid-feedback feedback-icon">
+	</div>
 </div>
+
+	<div class="custom-control custom-checkbox" <%= hide_non_registered %> id="shipping-save-wrapper">
+			<input type="checkbox" class="custom-control-input" name="shipping-save" id="shipping-save">
+			<label class="custom-control-label" for="shipping-save">Save this shipping address to my account</label>
+	</div>
 <input name="shipping-status" id="shipping-status" type="hidden" value="">
 </div><!-- end shipping address form -->
 </div><!-- end hide content for adding on products -->
@@ -537,124 +539,11 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 	</div>
 </div>
 
-<div class="mb-3" id="credit_card_inputs">
-
-<div class="form-group position-relative">
-	<div class="row">
-		<div class="col-md-6" style="display:flex;flex-direction:column;justify-content:end">
-			<label for="cardNumber">Card number <span class="text-danger">*</span></label>
-		</div>	
-		<div class="col-md-6 text-right text-secondary" style="font-size:2em">
-				<i class="fa fa-cc-visa"></i>
-				<i class="fa fa-cc-mastercard"></i>
-				<i class="fa fa-cc-amex"></i>
-				<i class="fa fa-cc-discover"></i>
-		</div>
-	</div>
-	<input class="form-control" required type="tel" name="card_number" id="cardNumber" placeholder="&#8226;&#8226;&#8226;&#8226;  &#8226;&#8226;&#8226;&#8226;  &#8226;&#8226;&#8226;&#8226;  &#8226;&#8226;&#8226;&#8226;" data-validation="length alphanumeric"  data-validation-length="12-19" data-validation-allowing=" " autocomplete="cc-number" data-friendly-error="Credit card # is required" />
-	<div class="invalid-feedback">
-			Valid credit card # is required
-		</div>
-		<div class="valid-feedback feedback-icon">
-		</div>
-		<div class="invalid-feedback feedback-icon">
-		</div>
-</div>
-
-<div class="row">		
-	<div class="col-md-6 form-group position-relative">
-		<label for="creditCardMonth">Exp month <span class="text-danger">*</span></label>
-		<select class="form-control" required name="billing-month" id="creditCardMonth" name="billing-month"  autocomplete="cc-exp-month" data-friendly-error="Expiration month is required" >
-				<option value="">Select month</option>
-				<option value="01">01 - January</option>
-				<option value="02">02 - February</option>
-				<option value="03">03 - March</option>
-				<option value="04">04 - April</option>
-				<option value="05">05 - May</option>
-				<option value="06">06 - June</option>
-				<option value="07">07 - July</option>
-				<option value="08">08 - August</option>
-				<option value="09">09 - September</option>
-				<option value="10">10 - October</option>
-				<option value="11">11 - November</option>
-				<option value="12">12 - December</option>
-			</select>
-			<div class="invalid-feedback">
-					Month is required
-				</div>
-				<div class="valid-feedback feedback-icon">
-				</div>
-				<div class="invalid-feedback feedback-icon">
-				</div>
-		</div>
-			
-	<div class="col-md-6 form-group position-relative">
-		<label for="creditCardYear">Exp year <span class="text-danger">*</span></label>
-		<select class="form-control" required name="billing-year" id="creditCardYear" autocomplete="cc-exp-year" data-friendly-error="Expiration year is required">
-				<option value="">Select year</option>
-			<% for i = 0 to 10 %>
-				<option value="<%= year(now) + i %>"><%= year(now) + i %></option>
-			<% next %>
-		</select>
-		<div class="invalid-feedback">
-				Year is required
-			</div>
-			<div class="valid-feedback feedback-icon">
-			</div>
-			<div class="invalid-feedback feedback-icon">
-			</div>
-	</div>
-</div>
-
-<div class="form-group position-relative">
-	<label for="cvv2">Security code (3-4 digit number on back of card) <span class="text-danger">*</span></label>
-	<input class="form-control" type="tel" name="cvv2" id="security-code">
-	<div class="invalid-feedback">
-			Security code is required
-		</div>
-		<div class="valid-feedback feedback-icon">
-		</div>
-		<div class="invalid-feedback feedback-icon">
-		</div>
-</div>
-</div><!-- credit card input fields -->
 
 
-<div class="row">
-	<div class="col-md-6 form-group position-relative">
-		<label for="billing-first" class="control-label">First name <span class="text-danger">*</span></label>
-		<input class="form-control" required name="billing-first" id="billing-first" type="text" autocomplete="billing given-name" data-friendly-error="Billing address: First name is required" />
-		<div class="invalid-feedback">
-			First name is required
-		</div>
-		<div class="valid-feedback feedback-icon">
-		</div>
-		<div class="invalid-feedback feedback-icon">
-		</div>
-	</div>
-
-	<div class="col-md-6 form-group position-relative">
-		<label for="billing-last" class="control-label">Last name <span class="text-danger">*</span></label>
-		<input class="form-control" required name="billing-last" id="billing-last" type="text" autocomplete="billing family-name" data-friendly-error="Billing address: Last name is required" />
-		<div class="invalid-feedback">
-			Last name is required
-		</div>
-		<div class="valid-feedback feedback-icon">
-		</div>
-		<div class="invalid-feedback feedback-icon">
-		</div>
-	</div>
-</div>
-
-<div class="form-group position-relative">
-	<div class="custom-control custom-checkbox" id="card-save-wrapper" <%= hide_non_registered %>>
-		<input type="checkbox" class="custom-control-input" name="card-save" id="card-save">
-		<label class="custom-control-label" for="card-save">Save this credit card to my account</label>
-	</div>
-</div>
 <div id="billing-address-autocomplete">
 	<div class="form-group position-relative">
-		<label for="billing-full-address">Billing Address<span class="text-danger">*</span></label>
+		<label for="shipping-address" style="display:none">Address<span class="text-danger">*</span></label>
 		<input type="text" id="billing-full-address" data-pg-full-address  class="form-control" placeholder="Start typing billing a&#8203;ddress..."  autocomplete="off" />
 	</div>
  </div>
@@ -771,8 +660,121 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 	</div>
 </div>
 
+<div class="row">
+	<div class="col-md-6 form-group position-relative">
+		<label for="billing-first" class="control-label">First name <span class="text-danger">*</span></label>
+		<input class="form-control" required name="billing-first" id="billing-first" type="text" autocomplete="billing given-name" data-friendly-error="Billing address: First name is required" />
+		<div class="invalid-feedback">
+			First name is required
+		</div>
+		<div class="valid-feedback feedback-icon">
+		</div>
+		<div class="invalid-feedback feedback-icon">
+		</div>
+	</div>
+
+	<div class="col-md-6 form-group position-relative">
+		<label for="billing-last" class="control-label">Last name <span class="text-danger">*</span></label>
+		<input class="form-control" required name="billing-last" id="billing-last" type="text" autocomplete="billing family-name" data-friendly-error="Billing address: Last name is required" />
+		<div class="invalid-feedback">
+			Last name is required
+		</div>
+		<div class="valid-feedback feedback-icon">
+		</div>
+		<div class="invalid-feedback feedback-icon">
+		</div>
+	</div>
+</div>
+
+<div class="mb-3" id="credit_card_inputs">
+
+<div class="form-group position-relative">
+	<div class="row">
+		<div class="col-md-6" style="display:flex;flex-direction:column;justify-content:end">
+			<label for="cardNumber">Card number <span class="text-danger">*</span></label>
+		</div>	
+		<div class="col-md-6 text-right text-secondary" style="font-size:2em">
+				<i class="fa fa-cc-visa"></i>
+				<i class="fa fa-cc-mastercard"></i>
+				<i class="fa fa-cc-amex"></i>
+				<i class="fa fa-cc-discover"></i>
+		</div>
+	</div>
+	<input class="form-control" required type="tel" name="card_number" id="cardNumber" placeholder="&#8226;&#8226;&#8226;&#8226;  &#8226;&#8226;&#8226;&#8226;  &#8226;&#8226;&#8226;&#8226;  &#8226;&#8226;&#8226;&#8226;" data-validation="length alphanumeric"  data-validation-length="12-19" data-validation-allowing=" " autocomplete="cc-number" data-friendly-error="Credit card # is required" />
+	<div class="invalid-feedback">
+			Valid credit card # is required
+		</div>
+		<div class="valid-feedback feedback-icon">
+		</div>
+		<div class="invalid-feedback feedback-icon">
+		</div>
+</div>
+
+<div class="row">		
+	<div class="col-md-6 form-group position-relative">
+		<label for="creditCardMonth">Exp month <span class="text-danger">*</span></label>
+		<select class="form-control" required name="billing-month" id="creditCardMonth" name="billing-month"  autocomplete="cc-exp-month" data-friendly-error="Expiration month is required" >
+				<option value="">Select month</option>
+				<option value="01">01 - January</option>
+				<option value="02">02 - February</option>
+				<option value="03">03 - March</option>
+				<option value="04">04 - April</option>
+				<option value="05">05 - May</option>
+				<option value="06">06 - June</option>
+				<option value="07">07 - July</option>
+				<option value="08">08 - August</option>
+				<option value="09">09 - September</option>
+				<option value="10">10 - October</option>
+				<option value="11">11 - November</option>
+				<option value="12">12 - December</option>
+			</select>
+			<div class="invalid-feedback">
+					Month is required
+				</div>
+				<div class="valid-feedback feedback-icon">
+				</div>
+				<div class="invalid-feedback feedback-icon">
+				</div>
+		</div>
+			
+	<div class="col-md-6 form-group position-relative">
+		<label for="creditCardYear">Exp year <span class="text-danger">*</span></label>
+		<select class="form-control" required name="billing-year" id="creditCardYear" autocomplete="cc-exp-year" data-friendly-error="Expiration year is required">
+				<option value="">Select year</option>
+			<% for i = 0 to 10 %>
+				<option value="<%= year(now) + i %>"><%= year(now) + i %></option>
+			<% next %>
+		</select>
+		<div class="invalid-feedback">
+				Year is required
+			</div>
+			<div class="valid-feedback feedback-icon">
+			</div>
+			<div class="invalid-feedback feedback-icon">
+			</div>
+	</div>
+</div>
+
+<div class="form-group position-relative">
+	<label for="cvv2">Security code (3-4 digit number on back of card) <span class="text-danger">*</span></label>
+	<input class="form-control" type="tel" name="cvv2" id="security-code">
+	<div class="invalid-feedback">
+			Security code is required
+		</div>
+		<div class="valid-feedback feedback-icon">
+		</div>
+		<div class="invalid-feedback feedback-icon">
+		</div>
+</div>
+</div><!-- credit card input fields -->
 
 
+
+
+<div class="custom-control custom-checkbox" id="card-save-wrapper" <%= hide_non_registered %>>
+	<input type="checkbox" class="custom-control-input" name="card-save" id="card-save">
+	<label class="custom-control-label" for="card-save">Save this credit card to my account</label>
+</div>
 
 <button class="btn btn-sm btn-info" id="btn-save-credit-card" data-id="" style="display:none" type="button">Save my new credit card # <i class="fa fa-spinner fa-spin fa-lg ml-3" style="display:none" id="spinner-update-billing"></i></button>
 <div class="alert alert-danger mt-2" id="msg-update-billing" style="display:none"></div>

@@ -235,15 +235,9 @@ function setCurrency() {
 					all_required_errors = all_required_errors + this_error;
 				}
 			});
+			console.log($("#shipping-country").val());
 			$('.processing-message').html('<div class="alert alert-danger mt-2">Some fields that are required have not been filled out. Please fix the fields that are highlighted in red.<div class="small mt-2">' + all_required_errors + '</div></div>');
 			$('.checkout_button').show();
-			$("#shipping-address-container").show();	
-			$("#billing-address-container").show();	
-			$("#shipping-address-autocomplete").hide();				
-			$("#billing-address-autocomplete").hide();	
-			$("#selected-shipping-address").hide();	
-			$("#selected-billing-address").hide();	
-			
 		} else {
 		console.log("processing order...");
 			$.ajax({
@@ -351,7 +345,7 @@ function setCurrency() {
 
 		set_fields_by_country();
 			
-		$('.shipping-address-form input:visible:not(#shipping-full-address), select:visible').each(function(){
+		$('.shipping-address-form input:visible, select:visible').each(function(){
 				if (Cookies.get($(this).attr('name'))) {					
 					$(this).val(Cookies.get($(this).attr('name')));
 				}
@@ -391,7 +385,7 @@ function setCurrency() {
 		
 		set_fields_by_country();	
 		
-		$('.billing-address-form input:visible:not(#billing-full-address), select:visible').each(function(){	
+		$('.billing-address-form input:visible, select:visible').each(function(){	
 			if (Cookies.get($(this).attr('name'))) {					
 					$(this).val(Cookies.get($(this).attr('name')));
 				}
