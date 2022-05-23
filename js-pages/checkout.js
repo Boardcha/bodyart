@@ -243,7 +243,7 @@ function setCurrency() {
 			$("#billing-address-autocomplete").hide();	
 			$("#selected-shipping-address").hide();	
 			$("#selected-billing-address").hide();	
-			
+			console.log("st1");
 		} else {
 		console.log("processing order...");
 			$.ajax({
@@ -617,6 +617,7 @@ function setCurrency() {
 			$("#billing-address-container").hide();	
 			$("#billing-address-autocomplete").show();				
 		}else{
+			console.log("st2");
 			$("#billing-address-container").show();		
 			$('#selected-billing-address').hide();	
 			$("#billing-address-autocomplete").hide();			
@@ -695,65 +696,79 @@ function setCurrency() {
 	// Billing same as shipping information checkbox
 	$("input[name='shipping-same-billing']").change(function(){
 		
-		if (this.checked) {
-			$("#billing-first").val($("#shipping-first-checkout").val());
-			$("#billing-last").val($("#shipping-last-checkout").val());
-			$("#billing-address").val($("#shipping-address").val());
-			$("#billing-address2").val($("#shipping-address2").val());
-			$("#billing-city").val($("#shipping-city").val());
-			$("#billing-state").val($("#shipping-state").val());
-			$("#billing-province-canada").val($("select[name='shipping-province-canada']").val());
-			$("#billing-province").val($("input[name='shipping-province']").val());
-			$("#billing-zip").val($("#shipping-zip").val());
-			$("#billing-country").val($("select[name='shipping-country']").val());
-			
-			//If all shipping address fields to copy are filled, show the address bubble instead of input fields
-			if($("#shipping-address").val() !="" && $("#shipping-city").val() !="" && $("#shipping-zip").val() !="" && $("#shipping-country").val() !=""){
-
-				var state = getShippingState();
+		var userLocal = false;
+		$.getJSON("https://pro.ip-api.com/json/?key=1FbdfMEofSriXRs&fields=countryCode", function() {})
+			.done(function( data ) {
+				if(data.countryCode == 'US' || data.countryCode == 'CA'){
+					userLocal = true;
+				}
 				
-				if(state != ""){				
-					var address = $("#shipping-address").val() + ' ' + $("#shipping-address2").val() + '<br />' + 
-							$("#shipping-city").val() + '<br />' + 
-							state + '<br />' + 
-							$("#shipping-zip").val() + '<br />' + 
-							$("select[name='shipping-country']").val();
-					var content = '<div class="alert alert-secondary alert-dismissible fade show" role="alert">' + 
-					'  <div id="selected-billing-address-content" class="m-2"><div class="mb-2 font-weight-bold"><span style="text-transform: uppercase;">BILLING ADDRESS</span></div><div style="line-height:22px;">' + address + '</div></div>' +
-					'  <button type="button"  class="close" id="btn-edit-billing-address" style="right:20px;padding: 7px 11px 7px 11px;margin-right:16px">' + 
-					'	<img src="/images/edit.svg" style="height:14px;width:14px;vertical-align:initial;" />'  +
-					'  </button>' +	
-					'  <button id="billing-bubble-close" type="button" class="close" data-dismiss="alert" aria-label="Close" style="padding: 7px 11px 7px 11px" onClick="closeBillingBubble()">' + 
-					'	<span aria-hidden="true">&times;</span>' +
-					'  </button>' +
-					'</div>';
+				if ($("input[name='shipping-same-billing']").prop('checked')) {
+					$("#billing-first").val($("#shipping-first-checkout").val());
+					$("#billing-last").val($("#shipping-last-checkout").val());
+					$("#billing-address").val($("#shipping-address").val());
+					$("#billing-address2").val($("#shipping-address2").val());
+					$("#billing-city").val($("#shipping-city").val());
+					$("#billing-state").val($("#shipping-state").val());
+					$("#billing-province-canada").val($("select[name='shipping-province-canada']").val());
+					$("#billing-province").val($("input[name='shipping-province']").val());
+					$("#billing-zip").val($("#shipping-zip").val());
+					$("#billing-country").val($("select[name='shipping-country']").val());
 					
-					$('#selected-billing-address').html(content);
-					$('#selected-billing-address').hide().fadeIn('fast');
-					$('#billing-country').change();	
-					$("#billing-address-autocomplete").hide();
-					$("#billing-address-container").hide();		
-				}else{
-					$("#billing-address-container").show();		
-					$('#selected-billing-address').hide();	
-					$("#billing-address-autocomplete").hide();
-				}	
-			}else{
-				$("#billing-address-container").show();		
-				$('#selected-billing-address').hide();	
-				$("#billing-address-autocomplete").hide();
-			}			
+					//If all shipping address fields to copy are filled, show the address bubble instead of input fields
+					if($("#shipping-address").val() !="" && $("#shipping-city").val() !="" && $("#shipping-zip").val() !="" && $("#shipping-country").val() !=""){
+
+						var state = getShippingState();
 			
-			// Trigger change to save field info to local storage
-			 $("#billing-first, #billing-last, #billing-address, #billing-address2, #billing-city, #billing-state, #billing-province-canada, #billing-province, #billing-zip, #billing-country").trigger('change');
-			 $("#chk-billing-manual-address-input-container").hide();
-		} else {
-			clearBillingAddressInputs();
-			$("#billing-bubble-close").trigger('click');
-			$('#billing-address-autocomplete').show();
-			$("#billing-address-container").hide();	
-			$("#chk-billing-manual-address-input-container").show();
-		}
+						if(state != "" && userLocal == true){				
+							var address = $("#shipping-address").val() + ' ' + $("#shipping-address2").val() + '<br />' + 
+									$("#shipping-city").val() + '<br />' + 
+									state + '<br />' + 
+									$("#shipping-zip").val() + '<br />' + 
+									$("select[name='shipping-country']").val();
+							var content = '<div class="alert alert-secondary alert-dismissible fade show" role="alert">' + 
+							'  <div id="selected-billing-address-content" class="m-2"><div class="mb-2 font-weight-bold"><span style="text-transform: uppercase;">BILLING ADDRESS</span></div><div style="line-height:22px;">' + address + '</div></div>' +
+							'  <button type="button"  class="close" id="btn-edit-billing-address" style="right:20px;padding: 7px 11px 7px 11px;margin-right:16px">' + 
+							'	<img src="/images/edit.svg" style="height:14px;width:14px;vertical-align:initial;" />'  +
+							'  </button>' +	
+							'  <button id="billing-bubble-close" type="button" class="close" data-dismiss="alert" aria-label="Close" style="padding: 7px 11px 7px 11px" onClick="closeBillingBubble()">' + 
+							'	<span aria-hidden="true">&times;</span>' +
+							'  </button>' +
+							'</div>';
+							
+							$('#selected-billing-address').html(content);
+							$('#selected-billing-address').hide().fadeIn('fast');
+							$('#billing-country').change();	
+							$("#billing-address-autocomplete").hide();
+							$("#billing-address-container").hide();		
+						}else{
+							$("#billing-address-container").show();		
+							$('#selected-billing-address').hide();	
+							$("#billing-address-autocomplete").hide();
+						}	
+					}else{
+						$("#billing-address-container").show();		
+						$('#selected-billing-address').hide();	
+						$("#billing-address-autocomplete").hide();
+					}			
+					
+					// Trigger change to save field info to local storage
+					 $("#billing-first, #billing-last, #billing-address, #billing-address2, #billing-city, #billing-state, #billing-province-canada, #billing-province, #billing-zip, #billing-country").trigger('change');
+					 $("#chk-billing-manual-address-input-container").hide();
+				} else {
+					clearBillingAddressInputs();
+					$("#billing-bubble-close").trigger('click');
+					if (userLocal){
+						$('#billing-address-autocomplete').show();
+						$("#billing-address-container").hide();	
+						$("#chk-billing-manual-address-input-container").show();
+					}else{
+						$("#billing-address-container").show();		
+						$('#selected-billing-address').hide();	
+						$("#billing-address-autocomplete").hide();			
+					}
+				}
+		});
 	}); // End shipping same as billing
 	
 	function getShippingState(){
@@ -780,6 +795,7 @@ function setCurrency() {
 	
 	$("input[name='chk-billing-manual-address-input']").change(function(){
 		if (this.checked) {
+		console.log("st6");
 			$("#billing-address-container").show();		
 			$('#selected-billing-address').hide();	
 			$("#billing-address-autocomplete").hide();
@@ -1130,6 +1146,5 @@ $( document ).ready(function() {
 				$("#chk-shipping-manual-address-input-container").hide();
 				$("#chk-billing-manual-address-input-container").hide();
 			}
-	});
-
+		});
 });
