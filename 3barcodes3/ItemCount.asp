@@ -38,9 +38,20 @@ If Not rsGetRegular.EOF Or Not rsGetRegular.BOF Then
 	UpdateRow.Execute() 
 
 If (rsGetRegular.Fields.Item("DateLastPurchased").Value) < now() - 2 OR IsNull(rsGetRegular.Fields.Item("DateLastPurchased").Value) then
-	
-	RecentlySold = "yes"
 
+'======== CHECK TO SEE IF ALL THE ITEMS HAVE ACTUALLY BEEN PULLED AND IF SO, THEN DONT REQUIRE A RESCAN
+Set objCmd = Server.CreateObject ("ADODB.Command")
+objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
+objCmd.CommandText = "SELECT DetailID FROM TBL_OrderSummary INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID WHERE DetailID = ? AND pulled_by IS NULL AND date_order_placed > GETDATE()-3"
+objCmd.Parameters.Append(objCmd.CreateParameter("ProductDetailID",3,1,20, rsGetRegular("ProductDetailID") ))
+set rsGetOrderDetails = objCmd.Execute()
+
+	if NOT rsGetOrderDetails.EOF then
+		
+		RecentlySold = "yes"	
+
+	end if
+	
 End if
 
 
@@ -123,7 +134,7 @@ var_ProductDetailID = rsGetRegular.Fields.Item("ProductDetailID").Value
 			</div>
 			<div class="font-weight-bold d-inline-block" id="qty-message"></div>
 
-			<% If RecentlySold = "yes" then   ' SHOW BELOW IF ITEM HASN'T BEEN SOLD IN THE LAST 24 HOURS%>
+			<% If RecentlySold <> "yes" then%>
 			<div class="alert alert-success d-inline-block font-weight-bold">
 				<span id="new-qty-number"><%= rsGetRegular.Fields.Item("qty").Value %></span> in stock 
 				<% If Not rsGetPreorders.EOF Or Not rsGetPreorders.BOF Then %> 
@@ -131,7 +142,7 @@ var_ProductDetailID = rsGetRegular.Fields.Item("ProductDetailID").Value
 				<% End If ' end Not rsGetPreorders.EOF Or NOT rsGetPreorders.BOF %>
 		   </div>
 	   
-		   <% else ' DISPLAY BELOW IF ITEM HAS BEEN SOLD IN LAST 24 HOURS%> 
+		   <% else %> 
 		   <div>
 			   <span class="alert alert-danger d-inline-block font-weight-bold">Write down #<%=(rsGetRegular.Fields.Item("ProductDetailID").Value)%> and re-scan later<br>
 			   Last sold <%= (rsGetRegular.Fields.Item("DateLastPurchased").Value) %></span>

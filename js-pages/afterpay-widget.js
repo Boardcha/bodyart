@@ -4,7 +4,7 @@ function AfterpayWidget() {
 	afterpay_grandtotal = $(".cart_grand-total").html();
 	if (afterpay_grandtotal != null) {
 			afterpay_amount = afterpay_grandtotal.replace('.','');
-			if (afterpay_grandtotal >= 100) {
+			if (afterpay_grandtotal >= 35) {
 				$('#btn-afterpay-checkout').show();
 				$('#afterpay-displayonly').hide();
 				afterpay_div = '.afterpay-widget';
@@ -25,7 +25,7 @@ function AfterpayWidget() {
 		locale: 'en_US',
 		currency: 'USD',
 		minMaxThreshold: {
-		min: 10000,
+		min: 3500,
 		max: 100000,
 	},
 	// variable to remove upper limit

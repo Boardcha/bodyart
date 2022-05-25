@@ -89,8 +89,8 @@
 				}
 			if (page_name === "cart.asp" || page_name === "cart2.asp") {
 					$('.checkout_button').show();
-					// Show AfterPay if total is over $100
-					if (json.grandtotal >= 100) {
+					// Show AfterPay if total is over $35
+					if (json.grandtotal >= 35) {
 						$('#btn-afterpay-checkout, .checkout_afterpay').show();	
 					}
 
