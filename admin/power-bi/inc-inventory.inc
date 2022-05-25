@@ -20,12 +20,6 @@
                                     </a>
                             </li>
                             <li>
-                                <a href="/admin/power-bi/reports.asp?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSection8f6da6f2f8fef955931f&reportName=Incoming jewelry" target="_blank">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Incoming $ by vendor
-                                    </a>
-                            </li>
-                            <li>
                                 <a href="/admin/power-bi/reports.asp?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSectionbddd7e9b0e965ec3d95e&reportName=Wholesale stock on hand" target="_blank">
                                     <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
                                     Wholesale value by vendor
