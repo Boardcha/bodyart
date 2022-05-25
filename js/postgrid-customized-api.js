@@ -701,7 +701,7 @@ function setSelectedAddress(option, section) {
 	'  <button type="button"  class="close" id="btn-edit-' + section + '-address" style="right:20px;padding: 7px 11px 7px 11px;margin-right:16px">' + 
 	'	<img src="/images/edit.svg" style="height:14px;width:14px;vertical-align:initial;" />'  +
 	'  </button>' +	
-	'  <button id="' + section + '-bubble-close" type="button" class="close" data-dismiss="alert" aria-label="Close" style="padding: 7px 11px 7px 11px" onClick="$(\'#' + section + '-full-address\').val(\'\');$(\'#' + section + '-full-address\').focus();clearAddressInputs(\'' + section + '\')">' + 
+	'  <button id="' + section + '-bubble-close" type="button" class="close" data-dismiss="alert" aria-label="Close" style="padding: 7px 11px 7px 11px" onClick="closeAddressBubble(\'' + section + '\')">' + 
 	'	<span aria-hidden="true">&times;</span>' +
 	'  </button>' +
 	'</div>';
@@ -709,6 +709,10 @@ function setSelectedAddress(option, section) {
     $('#selected-' + section + '-address').html(content);
 	$('#selected-' + section + '-address').show();	
 	$('#' + section + '-country').change();	
+	$('#' + section + '-address-autocomplete').hide();
+	$('#chk-' + section + '-manual-address-input-container').hide();
+	$("input[name='shipping-address2']").val('');
+	$("input[name='billing-address2']").val('');
 	
 	if($("input[name='shipping-same-billing']").is(':checked') && section == 'shipping')
 		$("input[name='shipping-same-billing']").change();
