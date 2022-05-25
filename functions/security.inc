@@ -16,4 +16,33 @@
 		'Sets return function value			
 		sanitize = str
 	End Function
+	
+	Function FixCookies()
+		if request.cookies("gaugecard") = "undefined" then
+			response.cookies("gaugecard") = ""
+		end if
+		if request.cookies("freegift1id") = "undefined" then
+			response.cookies("freegift1id") = ""
+		end if
+		if request.cookies("freegift2id") = "undefined" then
+			response.cookies("freegift2id") = ""
+		end if
+		if request.cookies("freegift3id") = "undefined" then
+			response.cookies("freegift3id") = ""
+		end if
+		if request.cookies("freegift4id") = "undefined" then
+			response.cookies("freegift4id") = ""
+		end if
+		if request.cookies("freegift5id") = "undefined" then
+			response.cookies("freegift5id") = ""
+		end if
+		if request.cookies("freegift6id") = "undefined" then
+			response.cookies("freegift6id") = ""
+		end if
+		if request.cookies("freegift7id") = "undefined" then
+			response.cookies("freegift7id") = ""
+		end if
+	End Function
+		
+	Call FixCookies()	
 %>
