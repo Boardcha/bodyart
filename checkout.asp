@@ -126,25 +126,25 @@ end if
 	if request.cookies("gaugecard") <> "no" then
 		free_card = " OR ProductDetailID = 5461 "
 	end if
-	if request.cookies("freegift1id") <> "" then
+	if request.cookies("freegift1id") <> "" And IsNumeric(request.cookies("freegift1id")) then
 		free_gift1 = " OR ProductDetailID = ? "
 	end if
-	if request.cookies("freegift2id") <> "" then
+	if request.cookies("freegift2id") <> "" And IsNumeric(request.cookies("freegift2id")) then
 		free_gift2 = " OR ProductDetailID = ? "
 	end if
-	if request.cookies("freegift3id") <> "" then
+	if request.cookies("freegift3id") <> "" And IsNumeric(request.cookies("freegift3id")) then
 		free_gift3 = " OR ProductDetailID = ? "
 	end if
-	if request.cookies("freegift4id") <> "" then
+	if request.cookies("freegift4id") <> "" And IsNumeric(request.cookies("freegift4id")) then
 		free_gift4 = " OR ProductDetailID = ? "
 	end if
-	if request.cookies("freegift5id") <> "" then
+	if request.cookies("freegift5id") <> "" And IsNumeric(request.cookies("freegift5id")) then
 		free_gift5 = " OR ProductDetailID = ? "
 	end if
-	if request.cookies("freegift6id") <> "" then
+	if request.cookies("freegift6id") <> "" And IsNumeric(request.cookies("freegift6id")) then
 		free_gift6 = " OR ProductDetailID = ? "
 	end if
-	if request.cookies("freegift7id") <> "" then
+	if request.cookies("freegift7id") <> "" And IsNumeric(request.cookies("freegift7id")) then
 		free_gift7 = " OR ProductDetailID = ? "
 	end if
 	
@@ -164,25 +164,25 @@ end if
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "SELECT jewelry.title, jewelry.picture, ProductDetails.ProductDetail1, ProductDetails.qty, ProductDetails.free, jewelry.ProductID, ProductDetails.ProductDetailID, ProductDetails.Free_QTY, ProductDetails.weight, jewelry.picture, ProductDetails.price, ProductDetails.active,  ProductDetails.Gauge, ProductDetails.Length, ProductDetails.detail_code FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID " & free_result & " ORDER BY ProductDetailID ASC"
 
-		if request.cookies("freegift1id") <> "" then
+		if request.cookies("freegift1id") <> "" And IsNumeric(request.cookies("freegift1id")) then
 			objCmd.Parameters.Append(objCmd.CreateParameter("orings",3,1,10,request.cookies("freegift1id")))
 		end if
-		if request.cookies("freegift2id") <> "" then
+		if request.cookies("freegift2id") <> "" And IsNumeric(request.cookies("freegift2id")) then
 			objCmd.Parameters.Append(objCmd.CreateParameter("sticker",3,1,10,request.cookies("freegift2id")))
 		end if
-		if request.cookies("freegift3id") <> "" then
+		if request.cookies("freegift3id") <> "" And IsNumeric(request.cookies("freegift3id")) then
 			objCmd.Parameters.Append(objCmd.CreateParameter("gift1",3,1,10,request.cookies("freegift3id")))
 		end if
-		if request.cookies("freegift4id") <> "" then
+		if request.cookies("freegift4id") <> "" And IsNumeric(request.cookies("freegift4id")) then
 			objCmd.Parameters.Append(objCmd.CreateParameter("gift2",3,1,10,request.cookies("freegift4id")))
 		end if
-		if request.cookies("freegift5id") <> "" then
+		if request.cookies("freegift5id") <> "" And IsNumeric(request.cookies("freegift5id")) then
 			objCmd.Parameters.Append(objCmd.CreateParameter("gift3",3,1,10,request.cookies("freegift5id")))
 		end if
-		if request.cookies("freegift6id") <> "" then
+		if request.cookies("freegift6id") <> "" And IsNumeric(request.cookies("freegift6id")) then
 			objCmd.Parameters.Append(objCmd.CreateParameter("gift4",3,1,10,request.cookies("freegift6id")))
 		end if
-		if request.cookies("freegift7id") <> "" then
+		if request.cookies("freegift7id") <> "" And IsNumeric(request.cookies("freegift7id")) then
 			objCmd.Parameters.Append(objCmd.CreateParameter("gift5",3,1,10,request.cookies("freegift7id")))
 		end if
 
