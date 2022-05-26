@@ -439,14 +439,18 @@ var_productid = rsGetDetail.Fields.Item("ProductID").Value
 <% 
 
 var_restock = 0		
+var_sales = 0	
 If rsGetDetail("qty") > 0 Then
 	If for_how_many_months <> "" Then
 		var_restock = rsGetDetail("sales_from_n_months_back_to_now")
+		var_restock = var_restock - rsGetDetail("qty")
+		var_sales = rsGetDetail("sales_from_n_months_back_to_now")
 	End If
 Else
 	var_restock = rsGetDetail("sales_from_n_months_back_to_last_sold_date")
+	var_sales = rsGetDetail("sales_from_n_months_back_to_last_sold_date")
 End If
-var_sales = var_restock
+
 'If there are customers waiting this item, add it to the puchase quantity
 If Not ISNULL(rsGetDetail.Fields.Item("amt_waiting")) Then
 	var_restock = var_restock + rsGetDetail("amt_waiting")
@@ -455,6 +459,8 @@ End If
 If rsGetDetail("qty_edited") > 0 Then
 	var_restock = rsGetDetail("qty_edited")
 End If	
+
+If var_restock < 0 Then var_restock = 0
 
 if var_restock > 0 Then show_check = "yes" Else show_check = "no"
 
