@@ -94,7 +94,7 @@ end if
 			objCmd.Parameters.Append(objCmd.CreateParameter("detailID",3,1,10,var_add_cart_detailId))
 			objCmd.Parameters.Append(objCmd.CreateParameter("cart_custID",3,1,10,var_cart_userid))
 			objCmd.Parameters.Append(objCmd.CreateParameter("cart_preorderNotes",200,1,2000,var_add_cart_preorders))
-			objCmd.Parameters.Append(objCmd.CreateParameter("cart_dateAdded",200,1,30,now()))
+			objCmd.Parameters.Append(objCmd.CreateParameter("cart_dateAdded",200,1,30,Cstr(now())))
 			objCmd.Parameters.Append(objCmd.CreateParameter("wishlistID",3,1,10,var_wishlistID))
 			objCmd.Parameters.Append(objCmd.CreateParameter("ip_country",200,1,5,Request.ServerVariables("HTTP_NGX_GEOIP2_COUNTRYCODE")))
 			objCmd.Parameters.Append(objCmd.CreateParameter("cart_addon_item",3,1,2,var_addon))
