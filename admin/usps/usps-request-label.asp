@@ -230,7 +230,7 @@ While NOT rsGetOrder.EOF
 				  "<ToState>" & rsGetOrder.Fields.Item("ShipToState").Value & "</ToState>" & _
 				  "<ToPostalCode>" & var_cleaned_zip & "</ToPostalCode>" & _
 				  "<FromCompany>Bodyartforms</FromCompany>" & _
-				  "<FromName>Bodyartforms</FromName>" & _
+				  "<FromName>BAF Bodyartforms</FromName>" & _
 				  "<ReturnAddress1>1966 S Austin Ave</ReturnAddress1>" & _
 				  "<FromCity>Georgetown</FromCity>" & _
 				  "<FromState>TX</FromState>" & _
