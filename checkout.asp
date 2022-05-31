@@ -936,10 +936,10 @@ end if
 			
 			<% if rs_getCart.Fields.Item("cart_preorderNotes").Value <> "" then %>	  
 				<% if rs_getCart.Fields.Item("ProductID").Value <> 2424 then ' if item is not a gift certificate %>
-					<strong><% if rs_getCart("anodID") = 0 then %>Custom color:<% else %>Your specs:<% end if %></strong> <span class="spectext<%= rs_getCart.Fields.Item("cart_id").Value %>"><%= rs_getCart.Fields.Item("cart_preorderNotes").Value %></span>
+					<strong><% if rs_getCart("anodID") = 0 then %>Custom color:<% else %>Your specs:<% end if %></strong> <span class="spectext<%= rs_getCart.Fields.Item("cart_id").Value %>"><%= Sanitize(rs_getCart.Fields.Item("cart_preorderNotes").Value) %></span>
 				
 				<% else ' show gift certificate information 
-					certificate_array =split(rs_getCart.Fields.Item("cart_preorderNotes").Value,"{}")				
+					certificate_array =split(Sanitize(rs_getCart.Fields.Item("cart_preorderNotes").Value),"{}")				
 				%>
 				<span class="font-weight-bold">Recipient's name:</span> <%= certificate_array(3) %>
 				<span class="font-weight-bold">Recipient's e-mail:</span> <%= certificate_array(0) %>
