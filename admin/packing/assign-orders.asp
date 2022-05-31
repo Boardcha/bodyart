@@ -125,8 +125,9 @@ while not rsEmailStats.eof
 if not rsEmailStats.eof then
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
-	objCmd.CommandText = "SELECT * FROM QRY_FaultyOrders WHERE (date_sent >= GETDATE() -30 AND date_sent <= GETDATE() ) AND PackagedBy = ? ORDER BY item_problem ASC, date_sent DESC"
+	objCmd.CommandText = "SELECT * FROM QRY_FaultyOrders WHERE (date_sent >= GETDATE() -30 AND date_sent <= GETDATE() ) AND (PackagedBy = ? OR pulled_by = ?) ORDER BY item_problem ASC, date_sent DESC"
     objCmd.Parameters.Append(objCmd.CreateParameter("PackagedBy",200,1,30, rsEmailStats("PackagedBy") ))
+    objCmd.Parameters.Append(objCmd.CreateParameter("pulled_by",200,1,30, rsEmailStats("PackagedBy") ))
 	Set rsGetErrors_Details = objCmd.Execute()
 end if
 

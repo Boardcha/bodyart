@@ -27,7 +27,15 @@ end if
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT L.length_mm as 'length_conversion', *, ISNULL(Gauge, '') + ' ' + ISNULL(Length, '') + ' ' + ISNULL(ProductDetail1, '') as OptionTitle, ISNULL(Gauge, ''), ISNULL(Length, ''), ISNULL(ProductDetail1, '')  FROM ProductDetails INNER JOIN TBL_GaugeOrder as G ON ISNULL(ProductDetails.Gauge,'') = ISNULL(G.GaugeShow,'') LEFT JOIN tbl_lengths as L ON ISNULL(ProductDetails.Length,'') = ISNULL(L.length_inches,'')  WHERE ProductID = ? AND active = 1 " & filter_gauge & " " & filter_cart_qty & " ORDER BY G.GaugeOrder ASC, item_order ASC, Price ASC"
+objCmd.CommandText = "SELECT (SELECT ProductDetails.qty - COALESCE(SUM(cart_qty), 0) FROM tbl_carts WHERE ProductDetails.ProductDetailID = tbl_carts.cart_detailID AND cart_dateAdded > DATEADD(mi, -15, GETDATE())) as dynamic_qty," & _ 
+		"L.length_mm as 'length_conversion', *, " & _
+		"ISNULL(Gauge, '') + ' ' + ISNULL(Length, '') + ' ' + ISNULL(ProductDetail1, '') as OptionTitle," & _ 
+		"ISNULL(Gauge, ''), ISNULL(Length, ''), " & _ 
+		"ISNULL(ProductDetail1, '') " & _ 
+		"FROM ProductDetails INNER JOIN TBL_GaugeOrder as G ON ISNULL(ProductDetails.Gauge,'') = ISNULL(G.GaugeShow,'') " & _ 
+		"LEFT JOIN tbl_lengths as L ON ISNULL(ProductDetails.Length,'') = ISNULL(L.length_inches,'') " & _ 
+		"WHERE ProductID = ? AND active = 1 " & filter_gauge & " " & filter_cart_qty & " ORDER BY G.GaugeOrder ASC, item_order ASC, Price ASC"
+
 objCmd.Parameters.Append(objCmd.CreateParameter("ProductID",3,1,10,request("productid")))
 if request("gauge") <> "" then
 	objCmd.Parameters.Append(objCmd.CreateParameter("gauge",200,1,20,request("gauge")))
@@ -86,8 +94,8 @@ if not rsGetItems.eof then
 			end if
 			
 			var_qty_in_stock = ""
-			if rsProduct.Fields.Item("customorder").Value <> "yes" and rsProduct.Fields.Item("type").Value <> "One time buy" and rsGetItems.Fields.Item("qty").Value <= 4 then
-				var_qty_in_stock = "&nbsp;&nbsp;&nbsp;[" & rsGetItems.Fields.Item("qty").Value & " left]"
+			if rsProduct.Fields.Item("customorder").Value <> "yes" and rsProduct.Fields.Item("type").Value <> "One time buy" and rsGetItems.Fields.Item("dynamic_qty").Value <= 4 then
+				var_qty_in_stock = "&nbsp;&nbsp;&nbsp;[" & rsGetItems.Fields.Item("dynamic_qty").Value & " left]"
 			end if
 						
 			setgroup = 0
@@ -104,7 +112,7 @@ if not rsGetItems.eof then
 			end if
 			%>
 			<label class="btn rounded-0 py-3 py-lg-2 border-bottom text-left btn-select-menu option_img_<%=(rsGetItems.Fields.Item("img_id").Value)%>">
-				<input class="add-cart" type="radio" name="add-cart" value="<%=(rsGetItems.Fields.Item("ProductDetailID").Value)%>" data-img_id="<%=(rsGetItems.Fields.Item("img_id").Value)%>" data-sale-price="<%= option_sale_price %>" data-retail-price="<%= option_retail_price %>" data-actual-price="<%= option_actual_price %>" data-symbol="<%= exchange_symbol %>" data-title="<%= replace(rsGetItems.Fields.Item("ProductDetail1").Value, """", "") %>" dropdown-title="<%= exchange_symbol %><%= option_actual_price %>
+				<input class="add-cart" type="radio" name="add-cart" value="<%=(rsGetItems.Fields.Item("ProductDetailID").Value)%>" data-qty="<%=rsGetItems.Fields.Item("dynamic_qty").Value%>" data-img_id="<%=(rsGetItems.Fields.Item("img_id").Value)%>" data-sale-price="<%= option_sale_price %>" data-retail-price="<%= option_retail_price %>" data-actual-price="<%= option_actual_price %>" data-symbol="<%= exchange_symbol %>" data-title="<%= replace(rsGetItems.Fields.Item("ProductDetail1").Value, """", "") %>" dropdown-title="<%= exchange_symbol %><%= option_actual_price %>
 				&nbsp;&nbsp;&nbsp;&nbsp;<%= server.htmlencode(rsGetItems.Fields.Item("OptionTitle").Value) %>" data-variant="<%= trim(server.htmlencode(rsGetItems.Fields.Item("OptionTitle").Value)) %>" required   <%if var_totalitems = 1 Then Response.Write "checked"%>><%= exchange_symbol %><%= option_actual_price %>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<% if rsGetItems.Fields.Item("Gauge").Value <> "" then %>

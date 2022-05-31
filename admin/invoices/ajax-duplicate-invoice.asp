@@ -5,7 +5,7 @@ var_orig_invoiceid = request.form("invoiceid")
     '==== COPY INVOICE =======
     set objCmd = Server.CreateObject("ADODB.Command")
     objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
-    objCmd.CommandText = "INSERT INTO sent_items (shipped, customer_ID, customer_first, customer_last, company, address, address2, city, state, province, zip, country, email, date_order_placed, shipping_rate, ship_code, phone, transactionID, pay_method, shipping_type) SELECT 'Pending...', customer_ID, customer_first, customer_last, company, address, address2, city, state, province, zip, country, email, '" & now() & "', 0, 'paid', phone, transactionID, pay_method, shipping_type FROM sent_items WHERE ID = ?"
+    objCmd.CommandText = "INSERT INTO sent_items (shipped, customer_ID, customer_first, customer_last, company, address, address2, city, state, province, zip, country, email, date_order_placed, shipping_rate, ship_code, phone, transactionID, pay_method, shipping_type, autoclave, anodize) SELECT 'Pending...', customer_ID, customer_first, customer_last, company, address, address2, city, state, province, zip, country, email, '" & now() & "', 0, 'paid', phone, transactionID, pay_method, shipping_type, autoclave, anodize FROM sent_items WHERE ID = ?"
     objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,15, var_orig_invoiceid ))
     objCmd.Execute() 
 

@@ -35,10 +35,11 @@ ErrorAdd = 0
   '===== GET ALL ERRORS ====================================
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT * FROM QRY_FaultyOrders WHERE (date_sent >= ? AND date_sent <= ?) AND PackagedBy = ? " & " ORDER BY item_problem ASC, date_sent DESC"
+	objCmd.CommandText = "SELECT * FROM QRY_FaultyOrders WHERE (date_sent >= ? AND date_sent <= ?) AND (PackagedBy = ? OR pulled_by = ?) ORDER BY item_problem ASC, date_sent DESC"
 	objCmd.Parameters.Append(objCmd.CreateParameter("date1",133,1,20, var_date1 ))
   objCmd.Parameters.Append(objCmd.CreateParameter("date2",133,1,20, var_date2 ))
   objCmd.Parameters.Append(objCmd.CreateParameter("PackagedBy",200,1,30, var_packer ))
+  objCmd.Parameters.Append(objCmd.CreateParameter("pulled_by",200,1,30, var_packer ))
 
 	set rsGetErrors = Server.CreateObject("ADODB.Recordset")
 	rsGetErrors.CursorLocation = 3 'adUseClient
@@ -49,7 +50,7 @@ ErrorAdd = 0
   '==== GET TOTAL AMOUNT OF ORDERS ========================
   set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT ID FROM sent_items WHERE (date_sent >= ? AND date_sent <= ?) AND PackagedBy = ?" 
+	objCmd.CommandText = "SELECT ID FROM sent_items WHERE (date_sent >= ? AND date_sent <= ?) AND (PackagedBy = ?)" 
 	objCmd.Parameters.Append(objCmd.CreateParameter("date1",133,1,20, var_date1 ))
   objCmd.Parameters.Append(objCmd.CreateParameter("date2",133,1,20, var_date2 ))
   objCmd.Parameters.Append(objCmd.CreateParameter("PackagedBy",200,1,30, var_packer ))
@@ -59,7 +60,10 @@ ErrorAdd = 0
 	rsGetTotalOrders.Open objCmd
 	total_orders = rsGetTotalOrders.RecordCount
 
-  While NOT rsGetErrors.EOF 
+	
+
+  While NOT rsGetErrors.EOF
+  if rsGetErrors("PackagedBy") = var_packer then
 
   if (rsGetErrors.Fields.Item("item_problem").Value) = "Flip-flop" then 
 	varError = 5
@@ -107,13 +111,15 @@ end if
 	Error_missing_total = Error_missing_total + Error_missing
   Error_misc_total = Error_misc_total + Error_misc
 
+  end if '====rsGetErrors("PackagedBy") = var_packer
   rsGetErrors.MoveNext()
 Wend
 rsGetErrors.requery()
 
-if NOT rsGetErrors.EOF then
+if NOT rsGetErrors.EOF AND ErrorAdd > 0 then
   var_error_percentage = Replace(Left((FormatNumber((total_orders / 10 - ErrorAdd) / (total_orders / 10),4, 0) * 100),3),".", "") & "%"
 else
   var_error_percentage = "100%"
 end if
+
 %>

@@ -187,11 +187,23 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 					$('.qty_change_id_' + row_cart_detailid).attr('data-orig_qty',qty_value);
 					
 					$('.line_item_total_' + row_cart_detailid).attr('data-price',new_row_sale_price);
-					
+
 					// toFixed corrects format number decimal places
-					$('.line_item_total_' + row_cart_detailid).html(new_row_sale_price.toFixed(2));
-					$('.anodization_line_total_' + row_cart_detailid).html(new_row_anodization_price.toFixed(2));
+					$('.line_item_total_' + row_cart_detailid).html(String(new_row_sale_price.toFixed(2)));
+					$('.anodization_line_total_' + row_cart_detailid).html(String(new_row_anodization_price.toFixed(2)));
 					
+					// Enter a point in browser history with a unique token to get back to the point when browser back button is used
+					if (typeof (history.pushState) != "undefined") {
+						const queryString = window.location.search;
+						const urlParams = new URLSearchParams(queryString);
+						cartUpdateCounter = urlParams.get('cart-update');
+						if(cartUpdateCounter == null || cartUpdateCounter == undefined)
+							cartUpdateCounter = 1;
+						else	
+							cartUpdateCounter++;
+						var obj = { Title: document.title, Url:  window.location.origin + '/cart.asp?cart-update=' + cartUpdateCounter + '&id=' + row_cart_detailid + '&token=' + generateToken(10)};
+						history.pushState(obj, obj.Title, obj.Url);
+					}
 			} // end reWriteValues() function
 			
 			$.ajax({
@@ -225,7 +237,7 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 					$(".success_id_" + row_cart_detailid).delay(3000).fadeOut();
 					
 					$('.qty_change_id_' + row_cart_detailid).attr('data-orig_qty',qty_value);		
-					
+
 					$('.line_item_total_' + row_cart_detailid).html(new_row_sale_price.toFixed(2));
 					$('.anodization_line_total_' + row_cart_detailid).html(new_row_anodization_price.toFixed(2));
 			} // end reWriteOverOrdered() function
@@ -582,4 +594,12 @@ $('.checkout_now, .checkout_paypal, #btn-googlepay, #btn-applepay').show();
 		}
 	}
 
-	
+	function generateToken(length){
+		var a = "abcdefghijklmnopqrstuvwxyz1234567890".split("");
+		var b = [];  
+		for (var i=0; i<length; i++) {
+			var j = (Math.random() * (a.length-1)).toFixed(0);
+			b[i] = a[j];
+		}
+		return b.join("");
+	}

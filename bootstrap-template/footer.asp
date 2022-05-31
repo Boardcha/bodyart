@@ -81,7 +81,7 @@
                         <a class="text-light" href="/products.asp?feature=top_seller">Top sellers</a>
                     </li>
                     <li class="text-capitalize py-1 py-md-0">
-                        <a class="text-light" href="/products.asp?jewelry=captive">Rings</a>
+                        <a class="text-light" href="/landing/basics-essential-body-jewelry.asp">The essentials</a>
                     </li>
                     <li class="text-capitalize py-1 py-md-0">
                         <a class="text-light" href="/products.asp?jewelry=septum">Septum jewelry</a>
@@ -91,9 +91,6 @@
                     </li>
                     <li class="text-capitalize py-1 py-md-0">
                         <a class="text-light" href="/products.asp?jewelry=plugs">Plugs & stretched piercings</a>
-                    </li>
-                    <li class="text-capitalize py-1 py-md-0">
-                        <a class="text-light" href="/products.asp?jewelry=balls">Balls, ends, & beads</a>
                     </li>
                     <li class="text-capitalize py-1 py-md-0">
                         <a class="text-light" href="/landing/earrings-rings-necklaces-bracelets.asp">Earrings, rings, necklaces, & bracelets</a>

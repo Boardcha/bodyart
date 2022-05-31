@@ -99,10 +99,16 @@ end if
                   <% end if %>
                   </td>
                   <% if var_access_level <> "Customer service" then %>
-                  <td class="align-middle">
-            
-					<%= FormatCurrency(rsGetPurchaseOrders.Fields.Item("po_total").Value, -1, -2, -0, -2) %>
-          
+            <td class="align-middle ajax-update">
+              Order total: <%= FormatCurrency(rsGetPurchaseOrders.Fields.Item("po_total").Value, -1, -2, -0, -2) %>
+              <% if rsGetPurchaseOrders("billed_shipping_cost") > 0 then %>
+              <br>
+                Shipping: <%= FormatCurrency(rsGetPurchaseOrders("billed_shipping_cost"), 2) %><br>
+                Weight: <%= rsGetPurchaseOrders("billed_shipping_weight") %>
+              <% else %>
+                <input class="form-control form-control-sm" type="text" placeholder="Enter shipping" name="shipping_<%= rsGetPurchaseOrders("PurchaseOrderID") %>" data-column="billed_shipping_cost" data-id="<%= rsGetPurchaseOrders("PurchaseOrderID") %>" data-friendly="PO Shipping Cost">
+                <input class="form-control form-control-sm mt-1" type="text" placeholder="Enter weight (rounded)" name="weight_<%= rsGetPurchaseOrders("PurchaseOrderID") %>" data-column="billed_shipping_weight" data-id="<%= rsGetPurchaseOrders("PurchaseOrderID") %>" data-friendly="PO Shipping Weight">
+              <% end if %>
 				  </td>
           <% end if %>
           <td class="align-middle">
@@ -162,6 +168,15 @@ Wend
 </body>
 </html>
 <script type="text/javascript">
+
+	//url to to do auto updating
+	var auto_url = "/admin/purchase-orders/ajax/ajax-po-add-shipping.asp"
+</script>
+<script type="text/javascript" src="scripts/generic_auto_update_fields.js"></script>
+
+<script type="text/javascript">
+  auto_update(); // run function to update fields when tabbing out of them
+
   // Delete purchase order
   $(document).on("click", ".delete_po", function(event){
       var po_id = $(this).attr("data-po_id");

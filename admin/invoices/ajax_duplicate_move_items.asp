@@ -18,7 +18,7 @@ if lCase(request("move_to_id")) = "new" then
 		 
 		set objCmd = Server.CreateObject("ADODB.Command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "INSERT INTO sent_items (shipped, customer_ID, customer_first, customer_last, company, address, address2, city, state, province, zip, country, email, date_order_placed, shipping_rate, shipping_type, ship_code, phone, pay_method, UPS_Service, autoclave) SELECT 'Pending...', customer_ID, customer_first, customer_last, company, address, address2, city, state, province, zip, country, email, '" & now() & "',0 ,'" & shipping & "' , 'paid', phone, pay_method, '', autoclave FROM sent_items WHERE ID = ?" 
+		objCmd.CommandText = "INSERT INTO sent_items (shipped, customer_ID, customer_first, customer_last, company, address, address2, city, state, province, zip, country, email, date_order_placed, shipping_rate, shipping_type, ship_code, phone, pay_method, UPS_Service, autoclave, anodize) SELECT 'Pending...', customer_ID, customer_first, customer_last, company, address, address2, city, state, province, zip, country, email, '" & now() & "',0 ,'" & shipping & "' , 'paid', phone, pay_method, '', autoclave, anodize FROM sent_items WHERE ID = ?" 
 		objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,15,request("invoiceid")))
 		objCmd.Execute() 
 		

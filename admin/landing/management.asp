@@ -174,7 +174,7 @@ If var_access_level = "Manager" or var_access_level = "Admin" then
 		  </button>
 		</div>
 		<div class="modal-body text-center">
-            <iframe class="" id="load-report" width="1340px" height="740px" frameborder="0" allowFullScreen="true" scrolling="no" src=""></iframe>
+            <iframe class="" id="load-report" width="1900px" height="740px" frameborder="0" allowFullScreen="true" scrolling="no" src=""></iframe>
 		</div>
 	  </div>
 	</div>

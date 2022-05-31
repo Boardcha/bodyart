@@ -321,6 +321,9 @@ $("#footer-newsletter-signup").on("click", function () {
             if ($.isEmptyObject(json)) {
                 $("#footer-newsletter-msg").html('<span class="alert alert-success m-0 p-2">Thanks for signing up!</span>').show();
                 $("#footer-newsletter-signup").hide();
+                $.ajax({
+                    method: "post",
+                    url: "/klaviyo/newsletter-pixel-track.asp"});
             } 
             if ($.isArray(json)) {
                 if ((json[0].id) != "") {

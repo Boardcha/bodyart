@@ -417,7 +417,7 @@ Wend
 <div class="container-fluid p-0" style="margin-left:-.75em;margin-right:-.75em">
 <!--#include virtual="cart/inc_cart_loopitems-begin.asp"-->
 	<div class="row detailid_<%= rs_getCart.Fields.Item("cart_id").Value %>">
-                 <div class="col-auto col-xl-auto">
+                 <div class="col-auto col-xl-auto mb-3">
 				  <% If Instr(rs_getCart.Fields.Item("title").Value, "Digital gift certificate") > 0 Then
 					product_link = "gift-certificate.asp"
 				  else
@@ -437,7 +437,7 @@ Wend
 							</div><!-- position-relative -->
 				</a>
 				 </div><!-- end image -->
-				 <div class="col col-lg-9 col-xl-5 small pl-0">	
+				 <div class="col col-lg-9 col-xl-4 small pl-0 mb-3">	
 						<%=(rs_getCart.Fields.Item("title").Value)%>
 
 				  <% if rs_getCart.Fields.Item("pair").Value = "yes" then
@@ -517,7 +517,7 @@ Wend
 			<% end if %>
 		
       </div><!-- end col / item information -->
-			<div class="col-12 col-lg-12 col-xl pt-2 py-xl-0" style="min-width:200px">
+			<div class="col-12 col-lg-12 col-xl pt-2 py-xl-0" style="min-width:140px">
 <% 
 if var_showgifts <> "no" then ' only display on the viewcart page 
 
@@ -973,7 +973,7 @@ if NOT rsGetAddOns.eof then
 <!-- Apple Pay Javascript -->
 <script src="https://applepay.cdn-apple.com/jsapi/v1/apple-pay-sdk.js"></script>
 <script src="/js/apple-pay-api.js?ver=3"></script>
-<script type="text/javascript" src="/js/slick.min.js"></script>
+<script type="text/javascript" src="/js/slick-customized.min.js"></script>
 
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
 <script type="text/javascript" src="/js-pages/cart.min.js?v=03032025"></script>
