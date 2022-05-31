@@ -13,7 +13,7 @@ end if
 '------------- GET PACKER NAMES -----------------
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = MM_bodyartforms_sql_STRING
-objCmd.CommandText = "SELECT name FROM TBL_AdminUsers WHERE toggle_packer = 1 AND archived = 0 ORDER BY name ASC"
+objCmd.CommandText = "SELECT name FROM TBL_AdminUsers WHERE archived = 0 ORDER BY name ASC"
 Set rsGetPackers = objCmd.Execute()
 %>
 <!--#include file="packing/inc-error-formula.asp" -->
@@ -92,7 +92,22 @@ While NOT rsGetErrors.EOF
  <%=(rsGetErrors.Fields.Item("ErrorQtyMissing").Value)%>&nbsp;&nbsp;Scanned:&nbsp;<%=(rsGetErrors.Fields.Item("TimesScanned").Value)%>
  <% end if %><br>
             Shipped: <%= FormatDateTime(rsGetErrors.Fields.Item("date_sent").Value,1)%>&nbsp;&nbsp;&nbsp;Placed: <%=FormatDateTime((rsGetErrors.Fields.Item("date_order_placed").Value),2)%></strong><br>
+<% 
+highlight_packagedby = ""
+highlight_pulledby = ""
+if rsGetErrors("PackagedBy") = var_packer then
+      highlight_packagedby = "badge badge-secondary"
+    end if
+    if rsGetErrors("pulled_by") = var_packer then
+      highlight_pulledby = "badge badge-secondary"
+    end if
+    %>
+ <div class="font-weight-bold">
+  Packaged by: <span class="<%= highlight_packagedby %> mr-5"><%= rsGetErrors("PackagedBy") %></span>
+  Pulled by: <span class="<%= highlight_pulledby %>"><%= rsGetErrors("pulled_by") %></span>
+</div>
         <%=(rsGetErrors.Fields.Item("ErrorDescription").Value)%>
+<br>
 <br>
         <%=(rsGetErrors.Fields.Item("qty").Value)%> | <%=(rsGetErrors.Fields.Item("title").Value)%>&nbsp; <%=(rsGetErrors.Fields.Item("Gauge").Value)%>&nbsp;<%=(rsGetErrors.Fields.Item("Length").Value)%>&nbsp;<%=(rsGetErrors.Fields.Item("ProductDetail1").Value)%> &nbsp;<%=(rsGetErrors.Fields.Item("notes").Value)%></td>
     </tr>

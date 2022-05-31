@@ -11,6 +11,9 @@
 <!--#include virtual="/bootstrap-template/header-navigation.asp" -->
 		
 		<!--#include virtual="/bootstrap-template/filters.asp" -->
+<style>
+	.card-header {padding: .75rem 1.25rem!important}
+</style>
 		<div class="display-5 mb-4">
 			Help / FAQs
 		</div>

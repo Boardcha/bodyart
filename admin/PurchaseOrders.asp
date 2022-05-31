@@ -102,9 +102,12 @@ end if
             <td class="align-middle ajax-update">
               Order total: <%= FormatCurrency(rsGetPurchaseOrders.Fields.Item("po_total").Value, -1, -2, -0, -2) %>
               <% if rsGetPurchaseOrders("billed_shipping_cost") > 0 then %>
-                Shipping: <%= FormatCurrency(rsGetPurchaseOrders("billed_shipping_cost"), 2) %>
+              <br>
+                Shipping: <%= FormatCurrency(rsGetPurchaseOrders("billed_shipping_cost"), 2) %><br>
+                Weight: <%= rsGetPurchaseOrders("billed_shipping_weight") %>
               <% else %>
                 <input class="form-control form-control-sm" type="text" placeholder="Enter shipping" name="shipping_<%= rsGetPurchaseOrders("PurchaseOrderID") %>" data-column="billed_shipping_cost" data-id="<%= rsGetPurchaseOrders("PurchaseOrderID") %>" data-friendly="PO Shipping Cost">
+                <input class="form-control form-control-sm mt-1" type="text" placeholder="Enter weight (rounded)" name="weight_<%= rsGetPurchaseOrders("PurchaseOrderID") %>" data-column="billed_shipping_weight" data-id="<%= rsGetPurchaseOrders("PurchaseOrderID") %>" data-friendly="PO Shipping Weight">
               <% end if %>
 				  </td>
           <% end if %>
