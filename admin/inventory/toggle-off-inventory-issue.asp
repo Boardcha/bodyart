@@ -4,7 +4,7 @@
 ' ====== FLAG ISSUE AS FIXED
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "UPDATE tbl_product_issues SET issue_fixed = 1 WHERE issue_id = ?"
-objCmd.Parameters.Append(objCmd.CreateParameter("issue_id",3,1,15, request.form("issue_id") ))
+If request.form("issue_id") <> "all" Then issue_id = " AND issue_id = " & request.form("issue_id")
+objCmd.CommandText = "UPDATE tbl_product_issues SET issue_fixed = 1 WHERE issue_fixed = 0" & issue_id 
 objCmd.Execute  
 %>
