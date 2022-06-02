@@ -69,12 +69,6 @@ if rsGetRecords("wearable_material") <> "" then
 	detail_wearable = "Wearable material: " & rsGetRecords("wearable_material") & "  |  "
 end if
 
-if rsGetRecords.Fields.Item("img_thumb").Value <> "" then
-	var_thumbnail_name = rsGetRecords.Fields.Item("img_thumb").Value
-else
-	var_thumbnail_name = rsGetRecords.Fields.Item("picture").Value
-end if
-
 if rsGetRecords.Fields.Item("inventory").Value > 0 then
 	availability = "in stock"
 else
@@ -110,7 +104,7 @@ end if
 		<g:condition>new</g:condition>
 		<g:price><%= formatnumber(rsGetRecords.Fields.Item("min_price").Value,2) %> USD</g:price>
 		<g:link>http://www.bodyartforms.com/productdetails.asp?ProductID=<%= rsGetRecords.Fields.Item("ProductID").Value %></g:link>
-		<g:image_link>https://bafthumbs-400.bodyartforms.com/<%= var_thumbnail_name %></g:image_link>
+		<g:image_link>https://bodyartforms-products.bodyartforms.com/<%= rsGetRecords("picture") %></g:image_link>
 		<%= var_brand %>
 		<g:size><%= rsGetRecords.Fields.Item("gauge").Value %></g:size>
 		<g:age_group>adult</g:age_group>
@@ -129,7 +123,7 @@ end if
 			<g:condition>new</g:condition>
 			<g:price><%= formatnumber(rsGetRecords.Fields.Item("price").Value,2) %> USD</g:price>
 			<g:link>http://www.bodyartforms.com/productdetails.asp?ProductID=<%= rsGetRecords.Fields.Item("ProductID").Value %></g:link>
-			<g:image_link>https://bafthumbs-400.bodyartforms.com/<%= var_thumbnail_name %></g:image_link>
+			<g:image_link>https://bodyartforms-products.bodyartforms.com/<%= rsGetRecords("picture") %></g:image_link>
 			<%= var_brand %>
 			<g:size><%= rsGetRecords.Fields.Item("gauge").Value %></g:size>
 			<g:color><%= rsGetRecords.Fields.Item("color_tags").Value %></g:color>

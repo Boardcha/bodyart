@@ -134,8 +134,11 @@ end if
 					<a href="inventory/create_csv_po.asp?po_id=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>">
 					Download Order</a>
 					&nbsp;&nbsp;|&nbsp;&nbsp;
-					
-					<a href="barcodes_modifyviews.asp?ID=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>&type=new_po_system">Update barcode query</a>
+          <% if rsGetPurchaseOrders("po_type") = "Custom Orders" then %>
+            <a href="barcodes_modifyviews.asp?ID=<%= rsGetPurchaseOrders("PurchaseOrderID") %>&type=custom_orders">Update barcode query</a>
+          <% else %>
+					  <a href="barcodes_modifyviews.asp?ID=<%=(rsGetPurchaseOrders.Fields.Item("PurchaseOrderID").Value)%>&type=new_po_system">Update barcode query</a>
+          <% end if %>
                     <% end if %>
                     <% end if %>
                   </td>
