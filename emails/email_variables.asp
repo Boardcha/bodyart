@@ -403,6 +403,7 @@
 	if mailer_type = "customer_submitted_refund_notification" then 
 		google_utmsource = "Bodyartforms refund receipt"
 		mail_to_email = rsCheckRefund.Fields.Item("email").Value
+		mail_to_email = "ugurcatak@gmail.com"
 		mail_to_name = rsCheckRefund.Fields.Item("customer_first").Value
 		mail_subject = "Bodyartforms refund receipt"
 
@@ -418,6 +419,7 @@
 	if mailer_type = "backorder" then 'Backorder email
 		google_utmsource = "Backorder notification"
 		mail_to_email = var_customer_email
+		mail_to_email = "ugurcatak@gmail.com"
 		mail_to_name = var_customer_name
 		mail_subject = "Backorder notice - " + var_item_description + " (Invoice #" & var_invoice_number & ")"
 		mail_body = "Hey " & var_customer_name &_
@@ -431,8 +433,11 @@
 			mail_body = mail_body & "<li>You can leave the item on backorder and we'll ship it when it comes back in stock</li>"
 		end if
 
-		mail_body = mail_body & "<li>You can get in-store credit for the item (You'll need to have an account set up on the site if you'd like to do this)</li>" &_
-		"<li>You can get a refund for the item</li>" &_
+
+		If var_customer_number > 0 Then
+			mail_body = mail_body & "<li><a href='https://bodyartforms.com/refunds-backordered-items.asp?id=" & encrypted_code & "'>You can get in-store credit for the item (You'll need to have an account set up on the site if you'd like to do this)</a></li>" 
+		End If
+		mail_body = mail_body & "<li><a href='https://bodyartforms.com/refunds-backordered-items.asp?id=" & encrypted_code & "'>You can get a refund for the item</a></li>" &_
 		"<li>You can exchange the item for something else (Just reply and let us know which item you want instead)</li>" &_
 		"</ul>" &_
 		"<div style='font-family:Arial;color:#ffffff;background-color:#696986;padding:20px;border-radius:10px'>We'd also like to extend you this one time coupon code for <strong>15% off any future order</strong> by way of apology.<div style='text-align:center;font-family:Arial;font-size:16px;color: #ffffff;;background-color:#41415a;padding:10px;font-weight:bold;text-decoration:none;margin:15px'>" & var_cert_code & "</div>We take customer service super seriously, and we're always working on improving. If you have any questions or feedback, we'd love to hear from you at <a style='text-decoration:none' href='mailto:help@bodyartforms.com'>help@bodyartforms.com</a></div>" &_
