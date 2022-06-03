@@ -381,6 +381,7 @@ objCmd.Execute()
 		<label for="shipping-full-address">Shipping Address<span class="text-danger">*</span></label>
 		<input type="text" id="shipping-full-address" data-pg-full-address  class="form-control" placeholder="Start typing an a&#8203;ddress..."  autocomplete="off" />
 	</div>
+	
  </div>
 
  <div class="form-group position-relative" id="chk-shipping-manual-address-input-container">

@@ -6,53 +6,6 @@ let PID = 0;
 let customAddressCompletedCallbacks = {};
 
 // ClickFunnel Address Form
-{/*
-    let shippingDivs = document.querySelectorAll(
-        '.elOS1Shipping, .elShippingForm'
-    );
-
-    for (const div of shippingDivs) {
-        div.setAttribute('data-pg-verify', '');
-    }
-
-    addressDivs = document.getElementsByName('shipping_address');
-    const cityDivs = document.getElementsByName('shipping_city');
-    const stateDivs = document.getElementsByName('shipping_state');
-    const zipDivs = document.getElementsByName('shipping_zip');
-    const countryDivs = document.getElementsByName('shipping_country');
-
-    for (const div of addressDivs) {
-        div.setAttribute('data-pg-full-address', '');
-    }
-    
-	for (const div of addressDivs) {
-        div.setAttribute('data-pg-address-line1', '');
-    }
-
-    for (const div of cityDivs) {
-        div.setAttribute('data-pg-city', '');
-    }
-
-    for (const div of stateDivs) {
-        div.setAttribute('data-pg-prov', '');
-    }
-	
-    for (const div of stateDivs) {
-        div.setAttribute('data-pg-prov2', '');
-    }
-
-    for (const div of stateDivs) {
-        div.setAttribute('data-pg-prov3', '');
-    }	
-
-    for (const div of zipDivs) {
-        div.setAttribute('data-pg-pc', '');
-    }
-
-    for (const div of countryDivs) {
-        div.setAttribute('data-pg-country', '');
-    }*/
-}
 
 let usingGravityForm = false;
 
@@ -472,8 +425,6 @@ var efficientSearch = debounce(function (ev, config, pid) {
             : parseAutoCompleteAddressToString(parsedAddress);
         ev.target.value = value;
 		
-			console.log("addr");
-	console.log(parsedAddress);
 	
         // Show response in div
         for (let i = 0; i < config.elements.line1.length; i++) {
@@ -607,6 +558,7 @@ var efficientSearch = debounce(function (ev, config, pid) {
                 if (!val) {
                     return false;
                 }
+				
                 currentFocus = -1; // Set focused element in list to none
                 a = document.createElement('div');
                 a.setAttribute('class', 'pg-autocomplete-list');
@@ -622,6 +574,12 @@ var efficientSearch = debounce(function (ev, config, pid) {
                 );
                 ev.target.parentNode.appendChild(a);
                 inputHeight = ev.target.offsetHeight;
+				console.log("list:" + list.length);
+				if (list.length == 0){
+				    b = document.createElement('div');
+                    b.innerHTML += "No options.";
+                    a.appendChild(b);
+				}
                 for (let i = 0; i < list.length; i++) {
                     const option = config.isInternational
                         ? list[i]
@@ -667,11 +625,13 @@ var efficientSearch = debounce(function (ev, config, pid) {
                                     );
                                 }
                             } else {
+							
                                 getAutocomplete(text, index, config).then(
                                     function (addr) {
                                         setValueAndErrors(addr, section);
                                     }
                                 );
+							
                             }
                         }
                         closeAllLists();
@@ -685,6 +645,7 @@ var efficientSearch = debounce(function (ev, config, pid) {
     };
 
     execGetList(text, countrySelected, config, config.fullAutocomplete);
+
 }, debounceTime); // debounce time
 
 function setSelectedAddress(option, section) {
