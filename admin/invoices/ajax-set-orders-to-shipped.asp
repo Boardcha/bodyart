@@ -40,7 +40,7 @@ WHILE NOT rsGetInvoice.EOF
 	var_tracking = ""
 	estimated_delivery = ""
 
-	if Not IsNull(rsGetInvoice("estimated_delivery_date")) AND rsGetInvoice("estimated_delivery_date") <> "" Then 
+	if Not IsNull(rsGetInvoice("estimated_delivery_date")) AND rsGetInvoice("estimated_delivery_date") <> "" AND (rsGetInvoice("country") = "USA" OR rsGetInvoice("country") = "US") Then 
 		estimated_delivery = "Estimated delivery date: " & rsGetInvoice("estimated_delivery_date")
 	end if
 
