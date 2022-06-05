@@ -175,7 +175,8 @@
 		//	$(".bo-message").delay(10000).fadeOut(1000);
 		})
 		.fail(function(msg) {
-			alert('FAILED');
+			//alert('FAILED');
+			console.log(msg);
 			$(".bo-message").hide();
 			$(".backorders").delay(1000).fadeIn(1000);
 		});

@@ -44,13 +44,14 @@
 
 	end if ' order details build-out
 
-	if IsArray(array_details_2) = "True" then
+	if IsArray(array_details_2) = True then
+
 		mail_order_details = ""
 		For i = 0 to (ubound(array_details_2, 2) - 1)
-	
+
 			' Do not write to email receipt if it's tax... display it in the totals area above
 			if Instr(1, array_details_2(2,i), "Tax") = 0 Then
-			
+
 				'	https://bafthumbs-400.bodyartforms.com
 				'	https://bodyartforms-products.bodyartforms.com
 
@@ -433,12 +434,14 @@
 			mail_body = mail_body & "<li>You can leave the item on backorder and we'll ship it when it comes back in stock</li>"
 		end if
 
-
-		If var_customer_number > 0 Then
-			mail_body = mail_body & "<li><a href='https://bodyartforms.com/refunds-backordered-items.asp?id=" & encrypted_code & "'>You can get in-store credit for the item (You'll need to have an account set up on the site if you'd like to do this)</a></li>" 
+		If var_refund_total > 0 Then ' Make sure if it is not just a free item
+			If var_customer_number > 0 Then
+				mail_body = mail_body & "<li><a href='https://bodyartforms.com/refunds-backordered-items.asp?id=" & var_invoice_number & "&hash=" & encrypted_code & "'>You can get in-store credit for the item (You'll need to have an account set up on the site if you'd like to do this)</a></li>" 
+			End If
+			mail_body = mail_body & "<li><a href='https://bodyartforms.com/refunds-backordered-items.asp?id=" & var_invoice_number & "&hash=" & encrypted_code & "'>You can get a refund for the item</a></li>"
 		End If
-		mail_body = mail_body & "<li><a href='https://bodyartforms.com/refunds-backordered-items.asp?id=" & encrypted_code & "'>You can get a refund for the item</a></li>" &_
-		"<li>You can exchange the item for something else (Just reply and let us know which item you want instead)</li>" &_
+		
+		mail_body = mail_body & "<li>You can exchange the item for something else (Just reply and let us know which item you want instead)</li>" &_
 		"</ul>" &_
 		"<div style='font-family:Arial;color:#ffffff;background-color:#696986;padding:20px;border-radius:10px'>We'd also like to extend you this one time coupon code for <strong>15% off any future order</strong> by way of apology.<div style='text-align:center;font-family:Arial;font-size:16px;color: #ffffff;;background-color:#41415a;padding:10px;font-weight:bold;text-decoration:none;margin:15px'>" & var_cert_code & "</div>We take customer service super seriously, and we're always working on improving. If you have any questions or feedback, we'd love to hear from you at <a style='text-decoration:none' href='mailto:help@bodyartforms.com'>help@bodyartforms.com</a></div>" &_
 		"<br><br>Thank's again for your support, and we look forward to hearing from you," &_
