@@ -404,7 +404,7 @@
 	if mailer_type = "customer_submitted_refund_notification" then 
 		google_utmsource = "Bodyartforms refund receipt"
 		mail_to_email = rsCheckRefund.Fields.Item("email").Value
-		mail_to_email = "ugurcatak@gmail.com"
+		'mail_to_email = "ugurcatak@gmail.com"
 		mail_to_name = rsCheckRefund.Fields.Item("customer_first").Value
 		mail_subject = "Bodyartforms refund receipt"
 
@@ -420,7 +420,7 @@
 	if mailer_type = "backorder" then 'Backorder email
 		google_utmsource = "Backorder notification"
 		mail_to_email = var_customer_email
-		mail_to_email = "ugurcatak@gmail.com"
+		'mail_to_email = "ugurcatak@gmail.com"
 		mail_to_name = var_customer_name
 		mail_subject = "Backorder notice - " + var_item_description + " (Invoice #" & var_invoice_number & ")"
 		mail_body = "Hey " & var_customer_name &_
