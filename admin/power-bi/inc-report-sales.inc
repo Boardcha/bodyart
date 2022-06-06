@@ -12,6 +12,12 @@
                                     Shipping revenue
                                     </a>
                             </li>
+                                   <li>
+                                    <a href="/admin/power-bi/reports.asp?reportId=c204861b-779e-4e27-9d7e-4e4b6be3696a&pageName=ReportSection&reportName=Coupon Revenue">
+                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
+                                        Coupon Revenue
+                                        </a>
+                            </li>
                             <li>
                                 <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Payment methods"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSectionc3293043a32b093a128c">
                                     <img class="mr-1" src="/images/icons/power-bi.png" height="20px">

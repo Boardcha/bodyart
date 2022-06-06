@@ -9,6 +9,7 @@
       <option value="Needs to be paired">Needs to be paired</option>
       <option value="Singles are bad match">Singles are bad match</option>
       <option value="Needs new location">Needs new location</option>
+      <option value="Loose item in bin">Loose item in bin</option>
     </select>
     Additional info (optional):<br/>
     <textarea class="form-control form-control-sm" id="error_description"></textarea>	  

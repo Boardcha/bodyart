@@ -97,7 +97,7 @@ If var_access_level = "Admin" or var_access_level = "Manager" or var_access_leve
 </li>
 <% end if  %>
 
-<% If var_access_level = "Social Media" then  %>
+<% If var_access_level = "Social Media" or var_access_level = "Admin" then  %>
 <li class="nav-item border-right border-secondary">
 	<a class="nav-link" href="/admin/landing/social-media.asp">Social Media</i>
 	</a>

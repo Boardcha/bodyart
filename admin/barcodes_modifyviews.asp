@@ -11,9 +11,9 @@ if request.Form("Details") <> "" then
 		DetailArray = Split(request.Form("Details"),",")
 		For i=0 to UBound(DetailArray) 'the UBound function returns # in array
 			if i = 0 then
-				DetailAdd = "dbo.ProductDetails.location = " & DetailArray(i)
+				DetailAdd = "ProductDetails.location = " & DetailArray(i)
 			else
-				DetailAdd = " OR dbo.ProductDetails.location = " & DetailArray(i)
+				DetailAdd = " OR ProductDetails.location = " & DetailArray(i)
 			end if
 			DetailsBuild = DetailsBuild & DetailAdd
 		Next
@@ -21,12 +21,12 @@ if request.Form("Details") <> "" then
 	end if
 
 	if request.Form("DetailSort") = "Greater" then
-		Details = "AND (dbo.ProductDetails.location > " & request.Form("Details") & ")"
+		Details = "AND (ProductDetails.location > " & request.Form("Details") & ")"
 	end if
 	
 	' greater than and less than
 		if request.Form("DetailSort") = "GreaterLess" then
-		Details = "AND (dbo.ProductDetails.location >= " & request.Form("Details") & ") AND (dbo.ProductDetails.location <= " & request.Form("Details2") & ")"
+		Details = "AND (ProductDetails.location >= " & request.Form("Details") & ") AND (ProductDetails.location <= " & request.Form("Details2") & ")"
 	end if
 
 else
@@ -39,9 +39,9 @@ if request.Form("Products") <> "" then
 		ProductsArray = Split(request.Form("Products"),",")
 		For j=0 to UBound(ProductsArray) 'the UBound function returns # in array
 			if j = 0 then
-				ProductsAdd = "dbo.jewelry.ProductID = " & ProductsArray(j)
+				ProductsAdd = "jewelry.ProductID = " & ProductsArray(j)
 			else
-				ProductsAdd = " OR dbo.jewelry.ProductID = " & ProductsArray(j)
+				ProductsAdd = " OR jewelry.ProductID = " & ProductsArray(j)
 			end if
 		ProductsBuild = ProductsBuild & ProductsAdd
 
@@ -73,7 +73,7 @@ end if
 '===== UPDATES VIEW TO RETRIEVE PURCHASE ORDER DETAILS FOR LABEL PRINTERS IN OFFICE =================
 if request.QueryString("type") = "new_po_system" then
 
-SqlString = "ALTER VIEW QRY_Labels_Orders AS SELECT TOP (100) PERCENT ProductDetails.ProductDetailID, ProductDetails.ProductDetail1, ProductDetails.location,  ProductDetails.BinNumber_Detail, tbl_po_details.po_orderid as 'PurchaseOrderID', tbl_po_details.po_qty, ProductDetails.Gauge, ProductDetails.Length, ISNULL(ProductDetails.Gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') + ' ' + ISNULL(ProductDetails.ProductDetail1,'') + ' ' + jewelry.title as title, jewelry.title as title_sort,  TBL_Barcodes_SortOrder.ID_Description FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number  INNER JOIN dbo.tbl_po_details ON dbo.ProductDetails.ProductDetailID = dbo.tbl_po_details.po_detailid WHERE (tbl_po_details.po_orderid = " & request.QueryString("ID") & ") ORDER BY title_sort" 
+SqlString = "ALTER VIEW QRY_Labels_Orders AS SELECT TOP (100) PERCENT ProductDetails.ProductDetailID, ProductDetails.ProductDetail1, ProductDetails.location,  ProductDetails.BinNumber_Detail, tbl_po_details.po_orderid as 'PurchaseOrderID', tbl_po_details.po_qty, ProductDetails.Gauge, ProductDetails.Length, ISNULL(ProductDetails.Gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') + ' ' + ISNULL(ProductDetails.ProductDetail1,'') + ' ' + jewelry.title as title, jewelry.title as title_sort,  TBL_Barcodes_SortOrder.ID_Description FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID INNER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number  INNER JOIN tbl_po_details ON ProductDetails.ProductDetailID = tbl_po_details.po_detailid WHERE (tbl_po_details.po_orderid = " & request.QueryString("ID") & ") ORDER BY title_sort" 
 Set rsBarcodes = DataConn.Execute(SqlString)
 
 end if 
@@ -89,8 +89,19 @@ end if
 '=========  LABELS BY PRODUCT DETAIL ID ONLY ============================
 if request.queryString("type") = "labels_by_detailid" then
 
-	SqlString = "ALTER VIEW QRY_Barcodes_Regular AS SELECT TOP (100) PERCENT CAST(dbo.ProductDetails.DetailCode AS varchar(15)) + '' + CAST(dbo.ProductDetails.location AS varchar(15)) AS locationBarcode, ProductDetails.location, dbo.ProductDetails.ProductDetailID, ISNULL(ProductDetails.ProductDetail1,'') + ' ' + ISNULL(ProductDetails.Length,'') + ' ' + dbo.jewelry.title AS title, dbo.ProductDetails.ProductDetail1,  dbo.ProductDetails.Gauge, dbo.ProductDetails.Length, dbo.TBL_Barcodes_SortOrder.ID_Description FROM dbo.jewelry INNER JOIN dbo.ProductDetails ON dbo.jewelry.ProductID = dbo.ProductDetails.ProductID LEFT OUTER JOIN dbo.TBL_Barcodes_SortOrder ON dbo.ProductDetails.DetailCode = dbo.TBL_Barcodes_SortOrder.ID_Number WHERE (dbo.jewelry.customorder <> 'yes') " & request.form("detailids") & " ORDER BY dbo.ProductDetails.ProductDetailID DESC, dbo.ProductDetails.location ASC" 
+	SqlString = "ALTER VIEW QRY_Barcodes_Regular AS SELECT TOP (100) PERCENT CAST(ProductDetails.DetailCode AS varchar(15)) + '' + CAST(ProductDetails.location AS varchar(15)) AS locationBarcode, ProductDetails.location, ProductDetails.ProductDetailID, ISNULL(ProductDetails.ProductDetail1,'') + ' ' + ISNULL(ProductDetails.Length,'') + ' ' + jewelry.title AS title, ProductDetails.ProductDetail1,  ProductDetails.Gauge, ProductDetails.Length, TBL_Barcodes_SortOrder.ID_Description FROM jewelry INNER JOIN ProductDetails ON jewelry.ProductID = ProductDetails.ProductID LEFT OUTER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number WHERE (jewelry.customorder <> 'yes') " & request.form("detailids") & " ORDER BY ProductDetails.ProductDetailID DESC, ProductDetails.location ASC" 
 	Set rsBarcodes = DataConn.Execute(SqlString)
+
+end if
+
+'=========  LABELS FOR CUSTOM ORDER SHIPMENTS ============================
+if request.queryString("type") = "custom_orders" then
+
+	Set objCmd = Server.CreateObject ("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "ALTER VIEW QRY_Barcodes_Regular AS SELECT TOP (100) PERCENT sent_items.ID, ProductDetails.ProductDetailID, ProductDetails.Gauge, ProductDetails.Length, ISNULL(ProductDetails.Gauge, '') + ' ' + ISNULL(ProductDetails.Length, '') + ' ' + ISNULL(ProductDetails.ProductDetail1, '') + ' ' + jewelry.title AS title, PreOrder_Desc, sent_items.customer_first, TBL_OrderSummary.qty FROM ProductDetails INNER JOIN TBL_OrderSummary ON ProductDetails.ProductDetailID = TBL_OrderSummary.DetailID INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID INNER JOIN tbl_po_details ON TBL_OrderSummary.OrderDetailID = tbl_po_details.po_invoice_order_detailid WHERE tbl_po_details.po_orderid = " & request.querystring("ID") & " AND jewelry.customorder = 'yes' ORDER BY ID DESC" 
+
+	objCmd.Execute 
 
 end if
 
@@ -107,7 +118,7 @@ if request.Form("type") <> "" then
 		LocationGroup = ""
 	End if
 
-	SqlString = "ALTER VIEW QRY_Barcodes_Regular AS SELECT TOP (100) PERCENT CAST(dbo.ProductDetails.DetailCode AS varchar(15)) + '' + CAST(dbo.ProductDetails.location AS varchar(15)) AS locationBarcode, ProductDetails.location, dbo.ProductDetails.ProductDetailID, dbo.ProductDetails.ProductDetail1 + ' ' + dbo.ProductDetails.Length + ' ' + dbo.jewelry.title AS title, dbo.ProductDetails.ProductDetail1,  dbo.ProductDetails.Gauge, dbo.ProductDetails.Length, dbo.TBL_Barcodes_SortOrder.ID_Description FROM dbo.jewelry INNER JOIN dbo.ProductDetails ON dbo.jewelry.ProductID = dbo.ProductDetails.ProductID LEFT OUTER JOIN dbo.TBL_Barcodes_SortOrder ON dbo.ProductDetails.DetailCode = dbo.TBL_Barcodes_SortOrder.ID_Number WHERE  (dbo.jewelry.customorder <> 'yes') " & Details & " " & Products & " " & LocationGroup & " " & new_items & " ORDER BY dbo.ProductDetails.ProductDetailID DESC, dbo.ProductDetails.location ASC" 
+	SqlString = "ALTER VIEW QRY_Barcodes_Regular AS SELECT TOP (100) PERCENT CAST(ProductDetails.DetailCode AS varchar(15)) + '' + CAST(ProductDetails.location AS varchar(15)) AS locationBarcode, ProductDetails.location, ProductDetails.ProductDetailID, ProductDetails.ProductDetail1 + ' ' + ProductDetails.Length + ' ' + jewelry.title AS title, ProductDetails.ProductDetail1,  ProductDetails.Gauge, ProductDetails.Length, TBL_Barcodes_SortOrder.ID_Description FROM jewelry INNER JOIN ProductDetails ON jewelry.ProductID = ProductDetails.ProductID LEFT OUTER JOIN TBL_Barcodes_SortOrder ON ProductDetails.DetailCode = TBL_Barcodes_SortOrder.ID_Number WHERE  (jewelry.customorder <> 'yes') " & Details & " " & Products & " " & LocationGroup & " " & new_items & " ORDER BY ProductDetails.ProductDetailID DESC, ProductDetails.location ASC" 
 	Set rsBarcodes = DataConn.Execute(SqlString)
 
 end if 
