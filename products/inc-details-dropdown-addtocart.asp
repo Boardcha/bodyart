@@ -112,9 +112,7 @@ if not rsGetItems.eof then
 			end if
 			%>
 			<label class="btn rounded-0 py-3 py-lg-2 border-bottom text-left btn-select-menu option_img_<%=(rsGetItems.Fields.Item("img_id").Value)%>">
-
 				<input class="add-cart" type="radio" name="add-cart" value="<%=(rsGetItems.Fields.Item("ProductDetailID").Value)%>" data-qty="<%=rsGetItems.Fields.Item("dynamic_qty").Value%>" data-img_id="<%=(rsGetItems.Fields.Item("img_id").Value)%>" data-sale-price="<%= option_sale_price %>" data-retail-price="<%= option_retail_price %>" data-actual-price="<%= option_actual_price %>" data-symbol="<%= exchange_symbol %>" data-title="<%= replace(rsGetItems.Fields.Item("ProductDetail1").Value, """", "") %>" dropdown-title="<%= exchange_symbol %><%= option_actual_price %>
-
 				&nbsp;&nbsp;&nbsp;&nbsp;<%= server.htmlencode(rsGetItems.Fields.Item("OptionTitle").Value) %>" data-variant="<%= trim(server.htmlencode(rsGetItems.Fields.Item("OptionTitle").Value)) %>" required   <%if var_totalitems = 1 Then Response.Write "checked"%>><%= exchange_symbol %><%= option_actual_price %>
 				&nbsp;&nbsp;&nbsp;&nbsp;
 				<% if rsGetItems.Fields.Item("Gauge").Value <> "" then %>
