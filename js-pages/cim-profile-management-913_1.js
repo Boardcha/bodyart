@@ -1,18 +1,26 @@
 // Toggle state / province depending on country selection
-$('#country').on('change', function () {
-
+$('#shipping-country').on('change', function () {
 	$('.state, .province, .province-canada').hide();
-	$('#state, #province, #province-canada').val('');
-	$('#state, #province, #province-canada').prop('required', false);
+	if ($('#shipping-country').val() === "USA") {
+		$('#shipping-province, #shipping-province-canada').val('');		
+	}
+	if ($('#shipping-country').val() === "Canada") {
+		$('#shipping-state, #shipping-province').val('');
+	}
+	if ($('#shipping-country').val() != "USA" && $('#shipping-country').val() != "Canada") {
+		$('#shipping-state, #shipping-province-canada').val('');
+	}
+		
+	$('#shipping-state, #shipping-province, #shipping-province-canada').prop('required', false);
 	
-	if ($('#country').val() === "USA") {
-		$('#state').prop('required', true);
+	if ($('#shipping-country').val() === "USA") {
+		$('#shipping-state').prop('required', true);
 		$('.state').show();
 	} else {			
 		
-		if ($('#country').val() === "Canada") {
+		if ($('#shipping-country').val() === "Canada") {
 			$('.province-canada').show();
-			$('#province-canada').prop('required', true);
+			$('#shipping-province-canada').prop('required', true);
 		} else {
 			$('.province').show();
 		}				
@@ -20,9 +28,10 @@ $('#country').on('change', function () {
 	
 });
 
+
 // Load up USA by default on page load. This triggers the state/province fields to show/hide approriately
 function resetUSA() {
-	$('#country').val('USA').trigger('change');
+	$('#shipping-country').val('USA').trigger('change');
 }
 
 // Input cursor enabled on first field of address modal pop up
@@ -139,7 +148,6 @@ $('.delete-address').click(function (e) {
 		
 		var first = $(this).attr("data-first");
 		var last = $(this).attr("data-last");
-		var company = $(this).attr("data-company");
 		var address = $(this).attr("data-address");
 		var address2 = $(this).attr("data-address2");
 		var city = $(this).attr("data-city");
@@ -149,22 +157,39 @@ $('.delete-address').click(function (e) {
 		
 		$('#first').val(first);
 		$('#last').val(last);
-		$('#company').val(company);
-		$('#address').val(address);
-		$('#address2').val(address2);
-		$('#city').val(city);		
-		$('#zip').val(zip);
-		$('#country').val(country);
-		$("#country").trigger('change');
-		if ($('#country').val() === "USA") {
-			$('#state').val(state);
+
+		$('#shipping-address').val(address);
+		$('#shipping-address2').val(address2);
+		$('#shipping-city').val(city);		
+		$('#shipping-zip').val(zip);
+		$('#shipping-country').val(country);
+		$("#shipping-country").trigger('change');
+		if ($('#shipping-country').val() === "USA") {
+			$('#shipping-state').val(state);
 		} else {			
-			if ($('#country').val() === "Canada") {
-				$('#province-canada').val(state);
+			if ($('#shipping-country').val() === "Canada") {
+				$('#shipping-province-canada').val(state);
 			} else {
-				$('#province').val(state);
+				$('#shipping-province').val(state);
 			}				
 		}
+		
+		if(isUserFromUSAorCANADA()){
+			if($("#shipping-address").val() !="" && $("#shipping-city").val() !="" && $("#shipping-zip").val() !="" && $("#shipping-country").val() !="" && getShippingState() != ""){
+				createAddressBubble("shipping", 'fromCookies');
+				$("#shipping-address-container").hide();
+			}else{
+				showShippingAddressValidation();
+				clearShippingAddressInputs();
+				$('#selected-shipping-address').hide();	
+				$("#shipping-address-container").hide();
+			}
+		}else{
+			hideShippingAddressValidation();
+			$("#shipping-address-container").show();
+		}
+		$('#chk-shipping-manual-address-input').prop('checked', false);
+	
 	});  // END Pre-populate and bring up edit CIM form 
 
 	// On form submit dynamically add or update an address
@@ -178,15 +203,14 @@ $('.delete-address').click(function (e) {
 		// Used to display new card or updated card information
 		var first = $('#first').val();
 		var last = $('#last').val();
-		var company = $('#company').val();
-		var address = $('#address').val();
-		var address2 = $('#address2').val();
-		var city = $('#city').val();
-		var state = $('#state').val();
-		var province = $('#province').val();
-		var province_canada = $('#province-canada').val();
-		var zip = $('#zip').val();
-		var country = $('#country').val();
+		var address = $('#shipping-address').val();
+		var address2 = $('#shipping-address2').val();
+		var city = $('#shipping-city').val();
+		var state = $('#shipping-state').val();
+		var province = $('#shipping-province').val();
+		var province_canada = $('#shipping-province-canada').val();
+		var zip = $('#shipping-zip').val();
+		var country = $('#shipping-country').val();
 		var cc_num = $('#cardNumber').val();
 		var lastFour = cc_num.substr(cc_num.length - 4);
 		var cc_month = $('#billing-month').val();
@@ -218,7 +242,7 @@ $('.delete-address').click(function (e) {
 				if(status === 'add') { // If address being added then show new card
 				if (type == 'shipping') {
 				// Display address info
-				$('#show-new').prepend('<div class="card d-inline-block m-md-2 my-2 account-cards"><div class="card-body bg-light">' + first + ' ' + last + '<br/>' + company + '<br/>' + address + ' ' + address2 + '<br/>' + city + ', ' + state + province + province_canada + '  ' + zip + '</div></div>');
+				$('#show-new').prepend('<div class="card d-inline-block m-md-2 my-2 account-cards"><div class="card-body bg-light">' + first + ' ' + last + '<br/>' + address + ' ' + address2 + '<br/>' + city + ', ' + state + province + province_canada + '  ' + zip + '</div></div>');
 				
 				} else {
 					// Display card info
@@ -229,7 +253,6 @@ $('.delete-address').click(function (e) {
 					// Update edit button attributes in case they need to edit again
 					$('.edit-' + addressId).attr("data-first",first);
 					$('.edit-' + addressId).attr("data-last",last);
-					$('.edit-' + addressId).attr("data-company",company);
 					$('.edit-' + addressId).attr("data-address",address);
 					$('.edit-' + addressId).attr("data-address2",address2);
 					$('.edit-' + addressId).attr("data-city",city);
@@ -240,11 +263,11 @@ $('.delete-address').click(function (e) {
 				if (type == 'shipping') {
 					
 					// Display address info
-					$('.' + addressId + '-address').html(first + ' ' + last + '<br/>' + company + '<br/>' + address + ' ' + address2 + '<br/>' + city + ', ' + state + province + province_canada + '  ' + zip + '<br/>' + country);
+					$('.' + addressId + '-address').html(first + ' ' + last + '<br/>' + address + ' ' + address2 + '<br/>' + city + ', ' + state + province + province_canada + '  ' + zip + '<br/>' + country);
 					} else {
 						// Display card info
 					// Display address info
-					$('.' + addressId + '-address').html('<div class="font-weight-bold">Card ending in ' + lastFour + '</div>' + first + ' ' + last + '<br/>' + company + '<br/>' + address + ' ' + address2 + '<br/>' + city + ', ' + state + province + province_canada + '  ' + zip + '<br/>' + country);				
+					$('.' + addressId + '-address').html('<div class="font-weight-bold">Card ending in ' + lastFour + '</div>' + first + ' ' + last + '<br/>' + address + ' ' + address2 + '<br/>' + city + ', ' + state + province + province_canada + '  ' + zip + '<br/>' + country);				
 					}
 			}
 

@@ -2,7 +2,7 @@
 // If user from the USA or Canada, show the address validation field
 $( document ).ready(function() {
 	if(isUserFromUSAorCANADA()){
-		if($("#address").val() !="" && $("#city").val() !="" && $("#zip").val() !="" && $("#country").val() !="" && getShippingState() != ""){
+		if($("#shipping-address").val() !="" && $("#shipping-city").val() !="" && $("#shipping-zip").val() !="" && $("#shipping-country").val() !="" && getShippingState() != ""){
 			createAddressBubble("shipping", 'fromCookies');
 			$("#shipping-address-container").hide();
 		}else{
@@ -80,12 +80,12 @@ function closeShippingBubble(){
 
 function getShippingState(){
 	var state = "";
-	if($("select[name='country']").val() == "USA")
-		state = $("#state").val();
-	else if($("select[name='country']").val() == "Canada")
-		state = $("select[name='province-canada']").val();
+	if($("select[name='shipping-country']").val() == "USA")
+		state = $("#shipping-state").val();
+	else if($("select[name='shipping-country']").val() == "Canada")
+		state = $("select[name='shipping-province-canada']").val();
 	else
-		state = $("input[name='province']").val();	
+		state = $("input[name='shipping-province']").val();	
 	return state;	
 }
 	
@@ -103,17 +103,17 @@ function createAddressBubble(section, source) {
 	
 	var address = '';	
 	if(source == 'fromCookies'){
-		address = ($('#address').val() + ' ' + $('#address2').val() + '<br/>') +
-		($('#city').val() + '<br/>') +
-		($('#country').val() + '<br/>') +
+		address = ($('#' + section + '-address').val() + ' ' + $('#' + section + '-address2').val() + '<br/>') +
+		($('#' + section + '-city').val() + '<br/>') +
+		($('#' + section + '-country').val() + '<br/>') +
 		(state + '<br/>') +
-		($('#zip').val() + '');
+		($('#' + section + '-zip').val() + '');
 	}else if(source =='fromShipping'){
-		address = $("#address").val() + ' ' + $("#address2").val() + '<br />' + 
-		$("#city").val() + '<br />' + 
+		address = $("#shipping-address").val() + ' ' + $("#shipping-address2").val() + '<br />' + 
+		$("#shipping-city").val() + '<br />' + 
 		state + '<br />' + 
-		$("#zip").val() + '<br />' + 
-		$("select[name='country']").val();
+		$("#shipping-zip").val() + '<br />' + 
+		$("select[name='shipping-country']").val();
 	}	
 			
 	var content = '<div class="alert alert-secondary alert-dismissible fade show" role="alert">' + 
@@ -128,22 +128,22 @@ function createAddressBubble(section, source) {
 	
     $('#selected-' + section + '-address').html(content);
 	$('#selected-' + section + '-address').show();	
-	$('#country').change();	
-	$("input[name='address2']").val('');
+	$('#' + section + '-country').change();	
+	$("input[name='shipping-address2']").val('');
 	
 }
 	
 
 function clearShippingAddressInputs(){
 	$("#shipping-full-address").val('');
-	$("input[name='address']").val('');
-	$("input[name='address2']").val('');
-	$("input[name='city']").val('');
-	$("input[name='country']").removeAttr("selected");
-	$("input[name='state']").removeAttr("selected");
-	$("input[name='province-canada']").removeAttr("selected");
-	$("input[name='province']").val('');
-	$("input[name='zip']").val('');
+	$("input[name='shipping-address']").val('');
+	$("input[name='shipping-address2']").val('');
+	$("input[name='shipping-city']").val('');
+	$("input[name='shipping-country']").removeAttr("selected");
+	$("input[name='shipping-state']").removeAttr("selected");
+	$("input[name='shipping-province-canada']").removeAttr("selected");
+	$("input[name='shipping-province']").val('');
+	$("input[name='shipping-zip']").val('');
 	$('#selected-shipping-address').hide();		
 }	
 
