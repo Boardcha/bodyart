@@ -165,31 +165,32 @@ var wrap = function (toWrap, wrapper = undefined) {
     return wrapper.appendChild(toWrap);
 };
 
+	
 for (var elem of document.querySelectorAll(
-    '[data-pg-verify] [data-pg-address-line1]'
+	'[data-pg-verify] [data-pg-address-line1]'
 )) {
-    var inputBox;
-    if (
-        elem.tagName.toLocaleLowerCase() === 'input' ||
-        elem.tagName.toLocaleLowerCase() === 'textarea'
-    ) {
-        inputBox = elem;
-        wrap(elem);
-    } else {
-        inputBox = document.createElement('input');
-        inputBox.setAttribute('type', 'text');
-        var attributes = elem.attributes;
-        // Move all attributes from parent element (div) to input box
-        for (var i = attributes.length - 1; i >= 0; i--) {
-            var attribute = attributes[i];
-            inputBox.setAttribute(attribute.name, attribute.value);
-            elem.removeAttribute(attribute.name);
-        }
-        elem.setAttribute('class', 'pg-input-wrapper');
-        elem.appendChild(inputBox);
-    }
-    inputBox.setAttribute('type', 'text');
-    inputBox.setAttribute('autocomplete', 'off');
+	var inputBox;
+	if (
+		elem.tagName.toLocaleLowerCase() === 'input' ||
+		elem.tagName.toLocaleLowerCase() === 'textarea'
+	) {
+		inputBox = elem;
+		wrap(elem);
+	} else {
+		inputBox = document.createElement('input');
+		inputBox.setAttribute('type', 'text');
+		var attributes = elem.attributes;
+		// Move all attributes from parent element (div) to input box
+		for (var i = attributes.length - 1; i >= 0; i--) {
+			var attribute = attributes[i];
+			inputBox.setAttribute(attribute.name, attribute.value);
+			elem.removeAttribute(attribute.name);
+		}
+		elem.setAttribute('class', 'pg-input-wrapper');
+		elem.appendChild(inputBox);
+	}
+	inputBox.setAttribute('type', 'text');
+	inputBox.setAttribute('autocomplete', 'off');
 }
 
 let forms = document.querySelectorAll('[data-pg-verify]');
@@ -198,158 +199,160 @@ var currentFocus;
 var currentTimeout;
 
 var debounceTime = document.querySelector('[data-pg-debounce-time]')
-    ? document
-          .querySelector('[data-pg-debounce-time]')
-          .getAttribute('data-pg-debounce-time')
-    : 100;
+	? document
+		  .querySelector('[data-pg-debounce-time]')
+		  .getAttribute('data-pg-debounce-time')
+	: 100;
 
 if (isNaN(debounceTime) || debounceTime === '') {
-    debounceTime = 100;
+	debounceTime = 100;
 } else {
-    debounceTime = Number.parseInt(debounceTime);
+	debounceTime = Number.parseInt(debounceTime);
 }
 
 for (let i = 0; i < forms.length; i++) {
-    let config = {
-        elements: {
-            form: forms[i],
-            countrySelected: forms[i].querySelector('[data-pg-select-country]'),
-            line1: forms[i].querySelectorAll('[data-pg-address-line1]'),
+console.log(forms[i].querySelectorAll('[data-pg-full-address]'));
+	let config = {
+		elements: {
+			form: forms[i],
+			countrySelected: forms[i].querySelector('[data-pg-select-country]'),
+			line1: forms[i].querySelectorAll('[data-pg-address-line1]'),
 			fullAddress: forms[i].querySelectorAll('[data-pg-full-address]'),
-            line1Orig: forms[i].querySelectorAll('[data-pg-orig-address-line1]'),
-            line1Msg: forms[i].querySelectorAll('[data-pg-address-line1-message]'),
-            line2: forms[i].querySelector('[data-pg-address-line2]'),
-            line2Msg: forms[i].querySelector('[data-pg-address-line2-message]'),
-            city: forms[i].querySelector('[data-pg-city]'),
-            cityMsg: forms[i].querySelector('[data-pg-city-message]'),
-            prov: forms[i].querySelector('[data-pg-prov]'),
-            provMsg: forms[i].querySelector('[data-pg-prov-message]'),
-            prov2: forms[i].querySelector('[data-pg-prov2]'),
-            provMsg: forms[i].querySelector('[data-pg-prov2-message]'),
-            prov3: forms[i].querySelector('[data-pg-prov3]'),
-            provMsg: forms[i].querySelector('[data-pg-prov3-message]'),			
-            pc: forms[i].querySelector('[data-pg-pc]'),
-            pcMessage: forms[i].querySelector('[data-pg-pc-message]'),
-            country: forms[i].querySelector('[data-pg-country]'),
-            countryMessage: forms[i].querySelector('[data-pg-country-message]'),
-            status: document.querySelector('[data-pg-status]'),
-            errorBox: document.querySelector('[data-pg-generic-message]'),
-            invalidBox: [],
-        },
-        apis: {
-            verify: baseUrl + '/v1/addver/verifications',
-            autocomplete: baseUrl + '/v1/addver/completions',
-            intlVerify: baseUrl + '/v1/intl_addver/verifications',
-            intlAutocomplete: baseUrl + '/v1/intl_addver/completions',
-        },
-        apiKey: document.querySelector('[data-pg-key]')
-            ? document
-                  .querySelector('[data-pg-key]')
-                  .getAttribute('data-pg-key')
-            : null,
-        isInternational: document.querySelector('[data-pg-international]')
-            ? document
-                  .querySelector('[data-pg-international]')
-                  .getAttribute('data-pg-international') === 'true'
-            : false,
-        countryFilter: document.querySelector('[data-pg-country-filter]')
-            ? document
-                  .querySelector('[data-pg-country-filter]')
-                  .getAttribute('data-pg-country-filter')
-            : null,
-        skipVerification: document.querySelector('[data-pg-skip-verification]')
-            ? document
-                  .querySelector('[data-pg-skip-verification]')
-                  .getAttribute('data-pg-skip-verification') === 'true'
-            : true,
-        fullAutocomplete: document.querySelector('[data-pg-full-autocomplete]')
-            ? document
-                  .querySelector('[data-pg-full-autocomplete]')
-                  .getAttribute('data-pg-full-autocomplete') === 'true'
-            : false,
-        fullAddressLine1: document.querySelector('[data-pg-full-address-line1]')
-            ? document
-                  .querySelector('[data-pg-full-address-line1]')
-                  .getAttribute('data-pg-full-address-line1') === 'true'
-            : true,
-        useProvinceCodes: document.querySelector('[data-pg-use-province-codes]')
-            ? document
-                  .querySelector('[data-pg-use-province-codes]')
-                  .getAttribute('data-pg-use-province-codes') === 'true'
-            : false,
-    };
-    // ***************************************** Autocomplete line 1 **************************************************
+			line1Orig: forms[i].querySelectorAll('[data-pg-orig-address-line1]'),
+			line1Msg: forms[i].querySelectorAll('[data-pg-address-line1-message]'),
+			line2: forms[i].querySelector('[data-pg-address-line2]'),
+			line2Msg: forms[i].querySelector('[data-pg-address-line2-message]'),
+			city: forms[i].querySelector('[data-pg-city]'),
+			cityMsg: forms[i].querySelector('[data-pg-city-message]'),
+			prov: forms[i].querySelector('[data-pg-prov]'),
+			provMsg: forms[i].querySelector('[data-pg-prov-message]'),
+			prov2: forms[i].querySelector('[data-pg-prov2]'),
+			provMsg: forms[i].querySelector('[data-pg-prov2-message]'),
+			prov3: forms[i].querySelector('[data-pg-prov3]'),
+			provMsg: forms[i].querySelector('[data-pg-prov3-message]'),			
+			pc: forms[i].querySelector('[data-pg-pc]'),
+			pcMessage: forms[i].querySelector('[data-pg-pc-message]'),
+			country: forms[i].querySelector('[data-pg-country]'),
+			countryMessage: forms[i].querySelector('[data-pg-country-message]'),
+			status: document.querySelector('[data-pg-status]'),
+			errorBox: document.querySelector('[data-pg-generic-message]'),
+			invalidBox: [],
+		},
+		apis: {
+			verify: baseUrl + '/v1/addver/verifications',
+			autocomplete: baseUrl + '/v1/addver/completions',
+			intlVerify: baseUrl + '/v1/intl_addver/verifications',
+			intlAutocomplete: baseUrl + '/v1/intl_addver/completions',
+		},
+		apiKey: document.querySelector('[data-pg-key]')
+			? document
+				  .querySelector('[data-pg-key]')
+				  .getAttribute('data-pg-key')
+			: null,
+		isInternational: document.querySelector('[data-pg-international]')
+			? document
+				  .querySelector('[data-pg-international]')
+				  .getAttribute('data-pg-international') === 'true'
+			: false,
+		countryFilter: document.querySelector('[data-pg-country-filter]')
+			? document
+				  .querySelector('[data-pg-country-filter]')
+				  .getAttribute('data-pg-country-filter')
+			: null,
+		skipVerification: document.querySelector('[data-pg-skip-verification]')
+			? document
+				  .querySelector('[data-pg-skip-verification]')
+				  .getAttribute('data-pg-skip-verification') === 'true'
+			: true,
+		fullAutocomplete: document.querySelector('[data-pg-full-autocomplete]')
+			? document
+				  .querySelector('[data-pg-full-autocomplete]')
+				  .getAttribute('data-pg-full-autocomplete') === 'true'
+			: false,
+		fullAddressLine1: document.querySelector('[data-pg-full-address-line1]')
+			? document
+				  .querySelector('[data-pg-full-address-line1]')
+				  .getAttribute('data-pg-full-address-line1') === 'true'
+			: true,
+		useProvinceCodes: document.querySelector('[data-pg-use-province-codes]')
+			? document
+				  .querySelector('[data-pg-use-province-codes]')
+				  .getAttribute('data-pg-use-province-codes') === 'true'
+			: false,
+	};
+	// ***************************************** Autocomplete line 1 **************************************************
 
-    if (config.elements.fullAddress && config.elements.fullAddress.length > 0) {
-        if (!config.skipVerification) {
-            var invalidBox = document.createElement('input');
-            invalidBox.setAttribute('required', 'true');
-            invalidBox.setAttribute('id', 'pg-invalid-box');
-            invalidBox.setAttribute('hidden', 'true');
-            config.elements.invalidBox.push(invalidBox);
-            // When user tries to submit
-            invalidBox.addEventListener('invalid', function (ev) {
-                verifyFields(ev, config);
-            });
+	if (config.elements.fullAddress && config.elements.fullAddress.length > 0) {
+		if (!config.skipVerification) {
+			var invalidBox = document.createElement('input');
+			invalidBox.setAttribute('required', 'true');
+			invalidBox.setAttribute('id', 'pg-invalid-box');
+			invalidBox.setAttribute('hidden', 'true');
+			config.elements.invalidBox.push(invalidBox);
+			// When user tries to submit
+			invalidBox.addEventListener('invalid', function (ev) {
+				verifyFields(ev, config);
+			});
 
-            config.elements.fullAddress[0].parentNode.insertBefore(
-                invalidBox,
-                config.elements.fullAddress[0]
-            );
-        }
+			config.elements.fullAddress[0].parentNode.insertBefore(
+				invalidBox,
+				config.elements.fullAddress[0]
+			);
+		}
 
-        for (var fullAddress of config.elements.fullAddress) {
-            autocomplete(fullAddress, config);
-            fullAddress.addEventListener('input', function () {
-                onInput(config);
-            });
-        }
-    }
-    if (config.elements.line2) {
-        config.elements.line2.addEventListener('input', function () {
-            onInput(config);
-        });
-    }
-    if (config.elements.city) {
-        config.elements.city.addEventListener('input', function () {
-            onInput(config);
-        });
-    }
-    if (config.elements.prov) {
-        config.elements.prov.addEventListener('input', function () {
-            onInput(config);
-        });
-    }
-    if (config.elements.prov2) {
-        config.elements.prov2.addEventListener('input', function () {
-            onInput(config);
-        });
-    }
-    if (config.elements.prov3) {
-        config.elements.prov3.addEventListener('input', function () {
-            onInput(config);
-        });
-    }	
-    if (config.elements.pc) {
-        config.elements.pc.addEventListener('input', function () {
-            onInput(config);
-        });
-    }
-    if (config.elements.country) {
-        config.elements.country.addEventListener('input', function () {
-            onInput(config);
-        });
-    }
+		for (var fullAddress of config.elements.fullAddress) {
+			autocomplete(fullAddress, config);
+			fullAddress.addEventListener('input', function () {
+				onInput(config);
+			});
+		}
+	}
+	if (config.elements.line2) {
+		config.elements.line2.addEventListener('input', function () {
+			onInput(config);
+		});
+	}
+	if (config.elements.city) {
+		config.elements.city.addEventListener('input', function () {
+			onInput(config);
+		});
+	}
+	if (config.elements.prov) {
+		config.elements.prov.addEventListener('input', function () {
+			onInput(config);
+		});
+	}
+	if (config.elements.prov2) {
+		config.elements.prov2.addEventListener('input', function () {
+			onInput(config);
+		});
+	}
+	if (config.elements.prov3) {
+		config.elements.prov3.addEventListener('input', function () {
+			onInput(config);
+		});
+	}	
+	if (config.elements.pc) {
+		config.elements.pc.addEventListener('input', function () {
+			onInput(config);
+		});
+	}
+	if (config.elements.country) {
+		config.elements.country.addEventListener('input', function () {
+			onInput(config);
+		});
+	}
 
-    const standardCountriesAbbreviations = new Set(['us', 'ca']);
+	const standardCountriesAbbreviations = new Set(['us', 'ca']);
 
-    if (
-        config.countryFilter &&
-        !standardCountriesAbbreviations.has(config.countryFilter.toLowerCase())
-    ) {
-        config.countryFilter = null;
-    }
+	if (
+		config.countryFilter &&
+		!standardCountriesAbbreviations.has(config.countryFilter.toLowerCase())
+	) {
+		config.countryFilter = null;
+	}
 }
+
 
 function autocomplete(inp, config) {
     inp.addEventListener('input', function (ev) {
