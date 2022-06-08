@@ -8,7 +8,7 @@ page_keywords = ""
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->
 <%
-email = Request("email")
+email = Replace(Request("email"), " ", "+")
 activation_hash = Request("hash")
 
 set objCmd = Server.CreateObject("ADODB.command")
