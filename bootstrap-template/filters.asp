@@ -2,9 +2,12 @@
   <div class="container-fluid">
     <div class="row">
       <div class="collapse col-12 col-lg-3 col-xl-2 px-0" id="filters"> 
-        <div class="text-right">
-<button class="btn btn-outline-danger btn-sm m-1 mr-3 d-lg-none" data-toggle="collapse" data-target="#filters" type="button">Close <i class="fa fa-times"></i></button> 
-</div>
+        <div class="row m-0 pt-2 d-lg-none">
+          <div class="col-8 h4 mt-2">Advanced search & filters</div>
+          <div class="col-4 text-right">
+            <button class="btn btn-outline-danger btn-sm m-1 mr-3 d-lg-none" data-toggle="collapse" data-target="#filters" type="button">Close <i class="fa fa-times"></i></button> 
+          </div>
+        </div>
         <form action="/products.asp" method="get" id="form-filters">
         <div class="form-group pt-2 pl-2 pr-2 m-0">
         <input class="form-control border-secondary" name="keywords" id="filter-keywords" type="search" placeholder="Enter keywords" value="<%=  Server.HTMLEncode(Sanitize(request.querystring("keywords"))) %>"  /></span>
@@ -630,7 +633,33 @@ rsGetGauges.ReQuery() %>
               </div>
             </div>
 
+            <div class="card rounded-0 border-0">
+              <a class="card-header collapsed h6 filter-dropdown" id="price-head" data-toggle="collapse" data-target="#price" aria-expanded="false" aria-controls="collapseOne"
+                href="#collapseOne"><i class="fa" aria-hidden="true"></i>
+                Price
+              </a>
+              <div id="price" class="collapse" aria-labelledby="price-head" data-parent="#accordion">
+                <div class="card-body noscroll">
 
+					<% 
+					if(Instr(request.querystring("price"), ";")>0) then
+						arrPrice = split(request.querystring("price"), ";")
+					else
+						arrPrice = Array(0, 100)
+					end if	
+					%>
+						<input type="text" class="js-range-slider" name="price" id="price-range" value=""
+						data-type="double"
+						data-min="0"
+						data-max="100"
+						data-from="<%= arrPrice(0) %>"
+						data-to="<%= arrPrice(1) %>"
+						data-grid="true"
+						/>
+
+                </div>
+              </div>
+            </div>
                         <div class="card rounded-0 border-0">
               <a class="card-header collapsed h6 filter-dropdown" id="piercingtype-head" data-toggle="collapse" data-target="#piercingtype" aria-expanded="false" aria-controls="piercingtype"
                 href="#"><i class="fa" aria-hidden="true"></i>
@@ -993,33 +1022,6 @@ rsGetGauges.ReQuery() %>
                     <input class="form-check-input" type="checkbox" name="length" value="2&quot;" id="filter-length2inch" data-friendly="Length: 2&quot;">
                     <label class="form-check-label d-block" for="filter-length2inch">2&quot; (51mm)</label>
                   </div>
-
-                </div>
-              </div>
-            </div>
-                        <div class="card rounded-0 border-0">
-              <a class="card-header collapsed h6 filter-dropdown" id="price-head" data-toggle="collapse" data-target="#price" aria-expanded="false" aria-controls="collapseOne"
-                href="#collapseOne"><i class="fa" aria-hidden="true"></i>
-                Price
-              </a>
-              <div id="price" class="collapse" aria-labelledby="price-head" data-parent="#accordion">
-                <div class="card-body noscroll">
-
-					<% 
-					if(Instr(request.querystring("price"), ";")>0) then
-						arrPrice = split(request.querystring("price"), ";")
-					else
-						arrPrice = Array(0, 100)
-					end if	
-					%>
-						<input type="text" class="js-range-slider" name="price" id="price-range" value=""
-						data-type="double"
-						data-min="0"
-						data-max="100"
-						data-from="<%= arrPrice(0) %>"
-						data-to="<%= arrPrice(1) %>"
-						data-grid="true"
-						/>
 
                 </div>
               </div>

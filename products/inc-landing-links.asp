@@ -48,7 +48,7 @@ var_plugs_string = "?jewelry=plugs" & var_gauge_linkchange & var_brand_linkchang
 	</div>
 	<div class="card-body p-2">
 <div class="d-flex flex-row flex-wrap mb-3h">
-	<a  class="text-light bg-lightpurple p-2 mx-1 d-block mt-2 plugs-landing-link" id="under20-<%= request.querystring("gauge") %>" href="?jewelry=plugs<%= var_gauge_linkchange %><%= var_brand_linkchange %><%= var_material_linkchange %><%= var_keywords_linkchange %>&price=20">Plugs under $20</a>
+	<a  class="text-light bg-lightpurple p-2 mx-1 d-block mt-2 plugs-landing-link" id="under20-<%= request.querystring("gauge") %>" href="?jewelry=plugs<%= var_gauge_linkchange %><%= var_brand_linkchange %><%= var_material_linkchange %><%= var_keywords_linkchange %>&price=0%3B20">Plugs under $20</a>
 	<a  class="text-light bg-lightpurple p-2 mx-1 d-block mt-2 plugs-landing-link" id="double-flare-<%= request.querystring("gauge") %>" href="?jewelry=plugs<%= var_gauge_linkchange %><%= var_brand_linkchange %><%= var_material_linkchange %><%= var_keywords_linkchange %>&flare_type=Double+flare">Double flare</a>
 	<a  class="text-light bg-lightpurple p-2 mx-1 d-block mt-2 plugs-landing-link" id="single-flare-<%= request.querystring("gauge") %>" href="?jewelry=plugs<%= var_gauge_linkchange %><%= var_brand_linkchange %><%= var_material_linkchange %><%= var_keywords_linkchange %>&flare_type=Single+flare">Single flare</a>
 	<a  class="text-light bg-lightpurple p-2 mx-1 d-block mt-2 plugs-landing-link" id="no-flare-<%= request.querystring("gauge") %>" href="?jewelry=plugs<%= var_gauge_linkchange %><%= var_brand_linkchange %><%= var_material_linkchange %><%= var_keywords_linkchange %>&flare_type=No+flare">No flares</a>
