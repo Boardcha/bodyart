@@ -222,7 +222,7 @@
         data-close-text="Got it!">
     </script>
 <% end if ' ONLY TO EU COUNTRIES %>
- <script type="text/javascript" src="/js-pages/footer.min.js?v=02172022_v2"></script>  
+ <script type="text/javascript" src="/js-pages/footer.min.js?v=06072022"></script>  
 <% if request.cookies("adminuser") = "yes" then %>
 <script>
     // Toggle sandbox front end load
