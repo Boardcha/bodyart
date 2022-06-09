@@ -118,6 +118,12 @@ $("#mobileaccountDropdown").on("click", function () {
     $('#filters, #mobilemenu').collapse('hide'); 
     $('.hamburger').removeClass('fa-times').addClass('fa-bars');       
 });
+// If mobile navigation advanced filters is clicked close out hamburger menu
+$("#mobile-nav-link-advanced-search").on("click", function () {
+    $('#mobilemenu, #accountmenu-bar').collapse('hide');
+    $('.hamburger').removeClass('fa-times').addClass('fa-bars');        
+});
+
 
     
 // Filter builder output display for user to know what all checkboxes they have selected. This is text that pops up right above the apply filters button.

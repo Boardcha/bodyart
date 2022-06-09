@@ -35,6 +35,25 @@ if var_access_level = "Social Media" or var_access_level = "Admin" then
                     
                     <div class="card">
                         <div class="card-header">
+                          <h5>Reports & Analytics</h5>
+                        </div>
+                        <div class="card-body">                    
+
+                            <ul class="list-unstyled">
+                                   <li>
+                                    <a href="/admin/power-bi/reports.asp?reportId=c204861b-779e-4e27-9d7e-4e4b6be3696a&pageName=ReportSection&reportName=Coupon Revenue">
+                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
+                                        Coupon Revenue
+                                        </a>
+                                    </li>
+                            </ul>
+                        </div><!-- card body -->
+                      </div><!-- card -->
+                </div>
+                <div class="col">
+                    
+                    <div class="card">
+                        <div class="card-header">
                           <h5>Modeling & Visual Media</h5>
                         </div>
                         <div class="card-body">                    
@@ -47,7 +66,6 @@ if var_access_level = "Social Media" or var_access_level = "Admin" then
                         </div><!-- card body -->
                       </div><!-- card -->
                 </div>
-                <div class="col"></div>
             </div><!-- row -->
         </div><!-- container -->
 

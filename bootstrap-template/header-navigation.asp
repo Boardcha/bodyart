@@ -156,6 +156,9 @@ Set rsNavWaitingList = objCmd.Execute()
                 <div class="navbar-nav w-100 px-">
                         <div class="collapse navbar-collapse" id="mobilemenu">
                                 <ul class="navbar-nav mr-auto" style="background-color: #2E2E2E">
+                                        <li class="nav-item p-1 d-lg-none">
+                                                <a class="nav-link text-light py-2 pl-3 header-menu-link"  id="mobile-nav-link-advanced-search" data-toggle="collapse" data-target="#filters" aria-controls="filters" aria-expanded="false" aria-label="Toggle filters">Advanced search & filters</a>
+                                        </li>
                                         <li class="nav-item p-1">
                                                 <a class="nav-link text-light py-2 pl-3 header-menu-link" href="/products.asp?new=Yes" id="new-items">NEW<span
                                                                 class="d-md-none"> Jewelry</span>

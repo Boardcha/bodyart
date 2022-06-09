@@ -1,16 +1,22 @@
 <h6 class="border-bottom border-secondary text-center">SALES</h6>
                             <ul class="list-unstyled">
                             <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Orders & sales overview"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSection">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Orders & sales overview
-                                    </a>
+                                     <a href="/admin/power-bi/reports.asp?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSection&reportName=Orders and sales overview">
+                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
+                                        Orders & sales overview
+                                        </a>
                             </li>
                             <li>
                                 <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Shipping revenue"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSectionba4ce75b01d27f9f9abe">
                                     <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
                                     Shipping revenue
                                     </a>
+                            </li>
+                                   <li>
+                                    <a href="/admin/power-bi/reports.asp?reportId=c204861b-779e-4e27-9d7e-4e4b6be3696a&pageName=ReportSection&reportName=Coupon Revenue">
+                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
+                                        Coupon Revenue
+                                        </a>
                             </li>
                             <li>
                                 <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Payment methods"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSectionc3293043a32b093a128c">
