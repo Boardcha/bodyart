@@ -404,7 +404,7 @@
 	if mailer_type = "customer_submitted_refund_notification" then 
 		google_utmsource = "Bodyartforms refund receipt"
 		mail_to_email = rsCheckRefund.Fields.Item("email").Value
-		'mail_to_email = "ugurcatak@gmail.com"
+		mail_to_email = "ugurcatak@gmail.com"
 		mail_to_name = rsCheckRefund.Fields.Item("customer_first").Value
 		mail_subject = "Bodyartforms refund receipt"
 
@@ -415,12 +415,27 @@
 		Call baf_sendmail()
 	end if ' ====== customer_submitted_refund_notification
 	
+	' ===== From refunds.asp  Receipt of customers refund request/success
+	if mailer_type = "customer_submitted_refund_as_store_credit_notification" then 
+		google_utmsource = "Bodyartforms refund receipt"
+		mail_to_email = rsCheckRefund.Fields.Item("email").Value
+		mail_to_email = "ugurcatak@gmail.com"
+		mail_to_name = rsCheckRefund.Fields.Item("customer_first").Value
+		mail_subject = "Bodyartforms refund receipt"
+
+		mail_body = "Your refund of $" & var_db_refund_amt & " has been successfully processed into your account as a store credit."
+				
+		mail_body = mail_body & "<br/><br/>We appreciate your business very much!<br/>If you have any questions or need assistance please reply to this e-mail to get in touch with us. We're here to help Mon - Fri from 9am - 5pm.<br/><br/>Customer service:  (877) 223-5005"
+	
+		Call baf_sendmail()
+	end if ' ====== customer_submitted_refund_as_store_credit_notification	
+	
 	'======= RE-WORDED BACKORDER EMAIL DECEMBER 2021 ==================================
 	'======= GENERAL BACKORDER EMAIL ==================================
 	if mailer_type = "backorder" then 'Backorder email
 		google_utmsource = "Backorder notification"
 		mail_to_email = var_customer_email
-		'mail_to_email = "ugurcatak@gmail.com"
+		mail_to_email = "ugurcatak@gmail.com"
 		mail_to_name = var_customer_name
 		mail_subject = "Backorder notice - " + var_item_description + " (Invoice #" & var_invoice_number & ")"
 		mail_body = "Hey " & var_customer_name &_
@@ -436,7 +451,7 @@
 
 		If var_refund_total > 0 Then ' Make sure if it is not just a free item
 			If var_customer_number > 0 Then
-				mail_body = mail_body & "<li><a href='https://bodyartforms.com/refunds-backordered-items.asp?id=" & var_invoice_number & "&hash=" & encrypted_code & "'>You can get in-store credit for the item (You'll need to have an account set up on the site if you'd like to do this)</a></li>" 
+				mail_body = mail_body & "<li><a href='https://bodyartforms.com/refunds-backordered-items.asp?id=" & var_invoice_number & "&hash=" & encrypted_code & "'>You can get in-store credit for the item</a></li>" 
 			End If
 			mail_body = mail_body & "<li><a href='https://bodyartforms.com/refunds-backordered-items.asp?id=" & var_invoice_number & "&hash=" & encrypted_code & "'>You can get a refund for the item</a></li>"
 		End If

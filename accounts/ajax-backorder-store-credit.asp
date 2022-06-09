@@ -12,7 +12,7 @@
 	split_refund = split(decrypted_refund, "|")
 
 	invoice_id = split_refund(0)
-    refund_total = split_refund(1)
+    ProductDetailID = split_refund(1)
 	var_customer_number = split_refund(2)
     var_refund_id = request.querystring("id")
 
@@ -20,31 +20,40 @@
 
 	set objCmd = Server.CreateObject("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT TBL_Refunds_backordered_items.*, sent_items.customer_id, email, customer_first, transactionID, pay_method FROM sent_items INNER JOIN TBL_Refunds_backordered_items ON sent_items.ID = TBL_Refunds_backordered_items.invoice_id WHERE date_redeemed= NULL AND invoice_id = ? AND refund_total = ? AND encrypted_code = ?"
+	objCmd.CommandText = "SELECT REF.*, sent_items.customer_id, email, customer_first, transactionID, pay_method FROM sent_items INNER JOIN TBL_Refunds_backordered_items REF ON sent_items.ID = REF.invoice_id WHERE redeemed = 0 AND REF.invoice_id = ? AND REF.ProductDetailID = ? AND REF.encrypted_code = ?"
 	objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15, invoice_id))
-	objCmd.Parameters.Append(objCmd.CreateParameter("refund_total",6,1,20, refund_total))
+	objCmd.Parameters.Append(objCmd.CreateParameter("ProductDetailID",3,1,15, ProductDetailID))
 	objCmd.Parameters.Append(objCmd.CreateParameter("encrypted_code",200,1,200, data))
 	set rsCheckRefund = objCmd.Execute()
 
 
     if not rsCheckRefund.eof then
+		var_db_refund_amt = formatnumber(rsCheckRefund.Fields.Item("refund_total").Value,2)
 		' ====== Save it as store credit =======
 		set objCmd = Server.CreateObject("ADODB.Command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "UPDATE customers SET credits = credits + " & refund_total & " WHERE customer_ID = ?"
+		objCmd.CommandText = "UPDATE customers SET credits = credits + " & var_db_refund_amt & " WHERE customer_ID = ?"
 		objCmd.Parameters.Append(objCmd.CreateParameter("customerid",3,1,12, rsCheckRefund.Fields.Item("customer_ID").Value))
 		objCmd.Execute()
 						
-		' ====== update the record to clear it out it, so they can not refund multiple times or cannot use the both option =======
+		' ====== update the record to clear it out, so they can not refund multiple times or cannot use the both option =======
 		set objCmd = Server.CreateObject("ADODB.Command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "UPDATE TBL_Refunds_backordered_items date_redeemed = GETDATE() WHERE invoice_id = ? AND encrypted_code = ? AND id = ?"
+		objCmd.CommandText = "UPDATE TBL_Refunds_backordered_items SET redeemed = 1, date_redeemed = GETDATE(), redeemedAs = 'Store Credit' WHERE invoice_id = ? AND encrypted_code = ? AND id = ?"
 		objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15, invoice_id))
 		objCmd.Parameters.Append(objCmd.CreateParameter("encrypted_code",200,1,200, data))
 		objCmd.Parameters.Append(objCmd.CreateParameter("var_refund_id",3,1,15, var_refund_id))
 		objCmd.Execute()
 
-		mailer_type = "customer_submitted_refund_notification"
+		' ==== Set item's backorder status ====
+		set objCmd = Server.CreateObject("ADODB.command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "UPDATE TBL_OrderSummary SET backorder = 0, BackorderReview = 'N', notes = 'Customer has refunded the item and backorder has been cleared' WHERE InvoiceID = ? AND DetailID = ?"
+		objCmd.Parameters.Append(objCmd.CreateParameter("InvoiceID",3,1,15, invoice_id))
+		objCmd.Parameters.Append(objCmd.CreateParameter("detailID",3,1,20, ProductDetailID))
+		objCmd.Execute()
+			
+		mailer_type = "customer_submitted_refund_as_store_credit_notification"
 		%>
 		<!--#include virtual="emails/email_variables.asp"-->
 		<%

@@ -1,7 +1,7 @@
 <%@LANGUAGE="VBSCRIPT" CODEPAGE="1252"%>
 <!--#include virtual="/Connections/bodyartforms_sql_ADMIN.asp" -->
 <!--#include virtual="/Connections/authnet.asp" -->
-<!--#include virtual="/includes/function-update-refundable-amount.inc"-->
+<!--#include virtual="/includes/create-refund-entry-for-backorder.inc"-->
 <%
 '====== SINCE THIS FILE IS IN ROOT DIRECTORY, MAKE SURE THAT USER IS LOGGED IN VIA ADMIN IN ORDER TO ACCESS CODE ON THIS page
 Dim var_refund_total
@@ -256,7 +256,8 @@ if request.cookies("adminuser") = "yes" then
 		objCmd.Parameters.Append(objCmd.CreateParameter("var_item",3,1,12, var_item ))
 		objCmd.Execute()
 
-		Call updateRefundableAmount(var_invoice, var_custid)
+
+		Call DeleteRefundEntry(request.form("detailid"))
 		
 		var_notes = "Automated message: Cleared backorder item # " & var_detailid
 

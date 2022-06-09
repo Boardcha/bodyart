@@ -1,7 +1,7 @@
 <%@LANGUAGE="VBSCRIPT" CODEPAGE="1252"%>
 <!--#include virtual="/Connections/bodyartforms_sql_ADMIN.asp" -->
 <!--#include virtual="/emails/function-send-email.asp"-->
-<!--#include virtual="/includes/function-update-refundable-amount.inc"-->
+<!--#include virtual="/includes/create-refund-entry-for-backorder.inc"-->
 <%
 '====== SINCE THIS FILE IS IN ROOT DIRECTORY, MAKE SURE THAT USER IS LOGGED IN VIA ADMIN IN ORDER TO ACCESS CODE ON THIS page
 Dim var_refund_total
@@ -11,7 +11,8 @@ Dim encrypted_code
 Dim decrypted
 Dim var_invoice_number
 
-if request.cookies("adminuser") = "yes" AND  request.form("orderdetailid") <> "" then
+
+if request.cookies("adminuser") = "yes" AND request.form("orderdetailid") <> "" then
 
 	orderdetailid = request.form("orderdetailid")
 	Set objCmd = Server.CreateObject ("ADODB.Command")
@@ -74,10 +75,12 @@ if request.cookies("adminuser") = "yes" AND  request.form("orderdetailid") <> ""
 	var_bo_reason = Request.Form("bo_reason")
 	If var_bo_reason <> "" Then param_bo_reason = ", reason_for_backorder = '" + var_bo_reason + "'"
 
+	
+
 	' Set item to backorder status (and not on review)
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "UPDATE TBL_OrderSummary SET backorder = 1, backorder_tracking = 1, BackorderReview = 'N'" & param_bo_reason & ", archive_bo_checked_by_who = ? WHERE OrderDetailID = ?"
+	objCmd.CommandText = "UPDATE TBL_OrderSummary SET backorder = 1, backorder_tracking = 1, BackorderReview = 'N'" & param_bo_reason & ", archive_bo_checked_by_who = ? WHERE orderdetailid = ?"
 	objCmd.Parameters.Append(objCmd.CreateParameter("archive_bo_checked_by_who",200,1,50, user_name ))
 	objCmd.Parameters.Append(objCmd.CreateParameter("orderdetailid",3,1,20, orderdetailid))
 	objCmd.Execute()
@@ -98,7 +101,9 @@ if request.cookies("adminuser") = "yes" AND  request.form("orderdetailid") <> ""
 	objCmd.Parameters.Append(objCmd.CreateParameter("description",200,1,250, "Automated - Updated qty from " & rsGetInfo("stock_qty") & " to " & request.form("bo_qty") & " - backorder submit page" ))
 	objCmd.Execute()
 
-	Call updateRefundableAmount(var_invoice_number, var_customer_number)
+	If Not rsGetInfo.EOF Then
+		Call CreateRefundEntryForBackorderedItem(var_invoice_number, var_customer_number, orderdetailid, rsGetInfo("DetailID"))
+	End If
 			
 	Set objCmd = Nothing
 	mailer_type = "backorder"
@@ -106,21 +111,19 @@ if request.cookies("adminuser") = "yes" AND  request.form("orderdetailid") <> ""
 	<!--#include virtual="/checkout/inc_random_code_generator.asp"-->
 	<!--#include virtual="/includes/inc-dupe-onetime-codes.asp"--> 
 	<%
-	If Not refundableAmountFound Then
-		'================ Prepare a one time use coupon for the backorder hassle
-		var_cert_code = getPassword(15, extraChars, firstNumber, firstLower, firstUpper, firstOther, latterNumber, latterLower, latterUpper, latterOther)
+	'================ Prepare a one time use coupon for the backorder hassle
+	var_cert_code = getPassword(15, extraChars, firstNumber, firstLower, firstUpper, firstOther, latterNumber, latterLower, latterUpper, latterOther)
 
-		' Call function
-		var_cert_code = CheckDupe(var_cert_code)
+	' Call function
+	var_cert_code = CheckDupe(var_cert_code)
 
-		'======= Store one time coupon code
-		set objCmd = Server.CreateObject("ADODB.command")
-		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "INSERT INTO TBLDiscounts (DiscountCode, DateExpired, coupon_single_email, DiscountPercent, coupon_single_use, DateAdded, DiscountType, active, dateactive, coupon_assigned, DiscountDescription) VALUES (?, GETDATE()+730, ?, 15, 1, GETDATE(), 'Percentage', 'A', GETDATE()-1, 1, 'Backordered item discount')"
-		objCmd.Parameters.Append(objCmd.CreateParameter("Code",200,1,30,var_cert_code ))
-		objCmd.Parameters.Append(objCmd.CreateParameter("Email",200,1,30, var_customer_email ))
-		objCmd.Execute()
-	End If
+	'======= Store one time coupon code
+	set objCmd = Server.CreateObject("ADODB.command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "INSERT INTO TBLDiscounts (DiscountCode, DateExpired, coupon_single_email, DiscountPercent, coupon_single_use, DateAdded, DiscountType, active, dateactive, coupon_assigned, DiscountDescription) VALUES (?, GETDATE()+730, ?, 15, 1, GETDATE(), 'Percentage', 'A', GETDATE()-1, 1, 'Backordered item discount')"
+	objCmd.Parameters.Append(objCmd.CreateParameter("Code",200,1,30,var_cert_code ))
+	objCmd.Parameters.Append(objCmd.CreateParameter("Email",200,1,30, var_customer_email ))
+	objCmd.Execute()
 	%>
 	<!--#include virtual="/emails/email_variables.asp"-->
 	<%
