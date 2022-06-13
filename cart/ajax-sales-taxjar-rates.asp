@@ -31,6 +31,7 @@ if request("state_taxed") = "yes" then
 Set HttpReq = Server.CreateObject("MSXML2.ServerXMLHTTP")
 HttpReq.open "POST", taxjar_url, false
 HttpReq.setRequestHeader "Content-Type", "application/json"
+HttpReq.setRequestHeader "x-api-version", "2022-01-24"
 HttpReq.SetRequestHeader "Authorization", "Bearer " & taxjar_authorization & ""
 HttpReq.Send("{" & _
 	"""to_country"":""" & taxjar_to_country & """," & _
@@ -54,6 +55,7 @@ HttpReq.Send("{" & _
 		taxjar_nexus_values & _
 	"]" & _
 	"}")
+
 
 'response.write HttpReq.responseText
 
