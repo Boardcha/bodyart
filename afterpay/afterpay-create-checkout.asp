@@ -15,7 +15,7 @@ Set rsGetOrder = objCmd.Execute()
 '====== Retrieve ordered items
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT TBL_OrderSummary.ProductID, TBL_OrderSummary.DetailID, jewelry.picture, jewelry.picture_400, TBL_OrderSummary.qty, TBL_OrderSummary.item_price,  ISNULL(jewelry.title,'') + ' ' + ISNULL(ProductDetails.ProductDetail1,'') + ' ' + ISNULL(ProductDetails.Gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') + ' ' + ISNULL(TBL_OrderSummary.PreOrder_Desc,'') as 'item_name'  FROM TBL_OrderSummary INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID INNER JOIN ProductDetails ON TBL_OrderSummary.DetailID = ProductDetails.ProductDetailID WHERE InvoiceID = ? AND free = 0 ORDER BY OrderDetailID ASC"
+objCmd.CommandText = "SELECT TBL_OrderSummary.ProductID, TBL_OrderSummary.DetailID, jewelry.picture, jewelry.picture_400, largepic, TBL_OrderSummary.qty, TBL_OrderSummary.item_price,  ISNULL(jewelry.title,'') + ' ' + ISNULL(ProductDetails.ProductDetail1,'') + ' ' + ISNULL(ProductDetails.Gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') + ' ' + ISNULL(TBL_OrderSummary.PreOrder_Desc,'') as 'item_name'  FROM TBL_OrderSummary INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID INNER JOIN ProductDetails ON TBL_OrderSummary.DetailID = ProductDetails.ProductDetailID WHERE InvoiceID = ? AND free = 0 ORDER BY OrderDetailID ASC"
 objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,20, Session("invoiceid")))
 
 set rsGetOrderItems = Server.CreateObject("ADODB.Recordset")
@@ -37,7 +37,7 @@ While NOT rsGetOrderItems.EOF
             """sku"":""" & rsGetOrderItems.Fields.Item("DetailID").Value & """," & _
             """quantity"": " & rsGetOrderItems.Fields.Item("qty").Value & "," & _
             """pageUrl"": ""https://bodyartforms.com/productdetails.asp?productid=" & rsGetOrderItems.Fields.Item("ProductID").Value & """," & _
-            """imageUrl"": ""https://bafthumbs-400.bodyartforms.com/" & rsGetOrderItems.Fields.Item("picture_400").Value & """," & _
+            """imageUrl"": ""https://bodyartforms-products.bodyartforms.com/" & rsGetOrderItems.Fields.Item("largepic").Value & """," & _
             """price"": {" & _
                 """amount"":""" & rsGetOrderItems.Fields.Item("item_price").Value & """," & _
                 """currency"":""USD""" & _
@@ -88,11 +88,11 @@ jsonAuthstring  = objAfterPayCeckout.responseText
 Set oJSON = New aspJSON
 oJSON.loadJSON(jsonAuthstring)
 
-response.write jsonAuthstring
+'response.write jsonAuthstring
 
 session("afterpay_checkout_token") =  oJSON.data("token")
 
-response.write "<br>TOKEN: " & session("afterpay_checkout_token")
+'response.write "<br>TOKEN: " & session("afterpay_checkout_token")
 
 %>
 {
