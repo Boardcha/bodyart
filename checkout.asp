@@ -299,7 +299,8 @@ objCmd.Execute()
  <div id="msg-location-replace"></div>
  <!--#include virtual="cart/inc_stock_display_notice.asp"-->
 <div class="row">
-<section data-pg-verify class="col-md-6 shipping-information"> 
+<%if request.querystring("type") <> "paypal" and request.querystring("type") <> "afterpay" then column_size = "col-md-6" else column_size = "col-md-12" %>
+<section data-pg-verify class="<%=column_size%> shipping-information"> 
 <div class="card mb-5" id="shipping-card">
 	<div class="card-header">
 		<h5>Shipping address</h5>
@@ -809,8 +810,8 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 </div><!-- end billing card body -->
 </div><!-- end billing main card -->
 </section><!-- end billing address section -->
-</div>
 <% end if ' if checkout type is not paypal %>
+</div>
 <!--#include virtual="cart/inc_cart_loopitems-begin.asp"-->
 <!--#include virtual="cart/inc_cart_loopitems-end.asp"-->
 
