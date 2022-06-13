@@ -31,6 +31,7 @@ While NOT rsGetOrderItems.EOF
         item_build_comma = ""
     end if
 
+    
     items_build = items_build & _
         "{" & _
             """name"":""" & replace(rsGetOrderItems.Fields.Item("item_name").Value,"""", "") & """," & _

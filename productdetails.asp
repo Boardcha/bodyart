@@ -1087,7 +1087,7 @@ else
 end if
 	
 	%>
-	<div id="REMOVE-GO-LIVE" style="display:none">
+	<div id="REMOVE-GO-LIVE" >
 	<div class="afterpay_option" style="<%= afterpay_display %>">
 		<div class="afterpay-widget"></div>
 	</div>
@@ -1582,10 +1582,10 @@ end if
 <script type="text/javascript" src="/js-pages/product-details.min.js?v=111722" ></script>
 
 <!-- Start Afterpay Javascript -->
-<!--
-<script type = "text/javascript" src="https://static-us.afterpay.com/javascript/present-afterpay.js"></script>-->
-<!--
-<script type="text/javascript" src="/js-pages/afterpay-widget.js?v=020420" ></script>-->
+
+<script type = "text/javascript" src="https://static-us.afterpay.com/javascript/present-afterpay.js"></script>
+
+<script type="text/javascript" src="/js-pages/afterpay-widget.js?v=020420" ></script>
 <!-- Pinterest -->
 <script async defer src="//assets.pinterest.com/js/pinit.js"></script>
 <!-- Facebook -->

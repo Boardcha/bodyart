@@ -759,10 +759,10 @@ end if 'if var_showgifts <> "no" only display on the viewcart page
 										afterpay_display = "display:none"
 									end if
 									%>
-									<div id="REMOVE-GO-LIVE" style="display:none">
+									<div id="REMOVE-GO-LIVE">
 										<div class="afterpay_option" style="<%= afterpay_display %>">
-											<a class="btn btn-block btn-outline-secondary pb-1  mt-3 " style="display:none" id="btn-afterpay-checkout" href="checkout.asp?type=afterpay"><span class="afterpay-widget"></span></a>
-											<div class="mt-3" style="display:none" id="afterpay-displayonly"><span class="afterpay-widget-nonactive"></span></div>
+											<a class="btn btn-dark mt-1 "  id="btn-afterpay-checkout" href="checkout.asp?type=afterpay"><span class="afterpay-widget"></span></a>
+											<div class="mt-3"  id="afterpay-displayonly"><span class="afterpay-widget-nonactive"></span></div>
 										</div>
 									</div>
 						</div><!-- end card footer for totals -->
@@ -991,6 +991,9 @@ if NOT rsGetAddOns.eof then
 		});	
 	});		
 </script>	
+<!-- Start Afterpay Javascript -->
+<script type = "text/javascript" src="https://static-us.afterpay.com/javascript/present-afterpay.js"></script>
+<script type="text/javascript" src="/js-pages/afterpay-widget.js?v=020420" ></script>
 <%
 Set rsToggles = Nothing
 %>

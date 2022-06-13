@@ -16,6 +16,7 @@ check_stock = "yes"
 %>
 <!--#include file="functions/encrypt.asp"-->
 <!--#include file="Connections/authnet.asp"-->
+<!--#include virtual="/Connections/afterpay-credentials.asp"-->
 <!--#include virtual="cart/inc_cart_main.asp"-->
 <!--#include virtual="cart/inc_cart_loopitems-begin.asp"-->
 <%
@@ -1112,17 +1113,17 @@ end if
 						afterpay_display = "display:none"
 					end if
 					%>
-					<!--
-					<div id="REMOVE-GO-LIVE" style="display:none">
+					
+					<div id="REMOVE-GO-LIVE" >
 					<div class="afterpay_option" style="<%= afterpay_display %>">
-						<button class="btn btn-lg btn-primary btn-block checkout_button place_order checkout_afterpay" style="display:none" type="submit" form="checkout_form" name="place_order">PAY NOW WITH <img class="img-fluid d-inline w-50" src="/images/afterpay-white-logo.png"/></button>
+						<button class="btn btn-lg btn-primary btn-block checkout_button place_order checkout_afterpay"  type="submit" form="checkout_form" name="place_order">PAY NOW WITH <img class="img-fluid d-inline w-50" src="/images/afterpay-white-logo.png"/></button>
 						<span class="d-none"><span class="afterpay-widget-nonactive afterpay-widget"></span></span>
 						<% if request.querystring("type") = "afterpay" then %> 
 						<input type="hidden" name="afterpay" value="on">
 						<% end if %>
 					</div>
 					</div>
-					-->
+					
 					<div class="processing-message" style="display:none"></div>			
 						
 						
@@ -1247,12 +1248,12 @@ end if
 <script type="text/javascript" src="/js-pages/cart.min.js?v=050329" async></script>
 <script type="text/javascript" src="/js-pages/checkout.min.js?v=111122"></script>
 <!-- Start Afterpay Javascript -->
-<!--
-<script src="https://portal.sandbox.afterpay.com/afterpay.js" async></script>-->
-<!--
-<script type = "text/javascript" src="https://static-us.afterpay.com/javascript/present-afterpay.js"></script>-->
-<!--
-<script type="text/javascript" src="/js-pages/afterpay-widget.js?v=020420" ></script>-->
+
+<script src="<%= afterpay_javascript %>" async></script>
+
+<script type = "text/javascript" src="https://static-us.afterpay.com/javascript/present-afterpay.js"></script>
+
+<script type="text/javascript" src="/js-pages/afterpay-widget.js?v=020420" ></script>
 
 <%
 Set rsToggles = Nothing
