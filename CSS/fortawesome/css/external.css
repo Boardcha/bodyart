@@ -450,6 +450,14 @@
       content: '\f03e';
   }
 
+  .fa-sliders-h:before {
+      content: '\f03f';
+  }
+
+  .fa-user-friends:before {
+      content: '\f040';
+  }
+
 
 .sr-only {
     position: absolute;

@@ -99,8 +99,7 @@ if request.queryString("type") = "custom_orders" then
 
 	Set objCmd = Server.CreateObject ("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "ALTER VIEW QRY_Barcodes_Regular AS SELECT TOP (100) PERCENT sent_items.ID, ProductDetails.ProductDetailID, ProductDetails.Gauge, ProductDetails.Length, ISNULL(ProductDetails.Gauge, '') + ' ' + ISNULL(ProductDetails.Length, '') + ' ' + ISNULL(ProductDetails.ProductDetail1, '') + ' ' + jewelry.title AS title, PreOrder_Desc, sent_items.customer_first, TBL_OrderSummary.qty FROM ProductDetails INNER JOIN TBL_OrderSummary ON ProductDetails.ProductDetailID = TBL_OrderSummary.DetailID INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID INNER JOIN tbl_po_details ON TBL_OrderSummary.OrderDetailID = tbl_po_details.po_invoice_order_detailid WHERE tbl_po_details.po_orderid = " & request.querystring("ID") & " AND jewelry.customorder = 'yes' ORDER BY ID DESC" 
-
+	objCmd.CommandText = "ALTER VIEW vw_barcodes_preorders AS SELECT TOP (100) PERCENT sent_items.ID, ProductDetails.ProductDetailID, ProductDetails.Gauge, ProductDetails.Length, ISNULL(ProductDetails.Gauge, '') + ' ' + ISNULL(ProductDetails.Length, '') + ' ' + ISNULL(ProductDetails.ProductDetail1, '') + ' ' + jewelry.title AS title, PreOrder_Desc, sent_items.customer_first, TBL_OrderSummary.qty FROM ProductDetails INNER JOIN TBL_OrderSummary ON ProductDetails.ProductDetailID = TBL_OrderSummary.DetailID INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID INNER JOIN sent_items ON TBL_OrderSummary.InvoiceID = sent_items.ID INNER JOIN tbl_po_details ON TBL_OrderSummary.OrderDetailID = tbl_po_details.po_invoice_order_detailid WHERE tbl_po_details.po_orderid = " & request.querystring("ID") & " ORDER BY ID DESC" 
 	objCmd.Execute 
 
 end if
