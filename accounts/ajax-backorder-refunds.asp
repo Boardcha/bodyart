@@ -7,6 +7,7 @@
 	Set objCrypt = Server.CreateObject("Bodyartforms.BAFCrypt")
 	password = "3uBRUbrat77V"
 	data = request.querystring("encrypted")
+	data = Replace(data, " ", "+") 'Bug fix: IIS converts "+" signs to spaces. We need to convert it back.
 	decrypted_refund = objCrypt.Decrypt(password, data)
 	
 	split_refund = split(decrypted_refund, "|")
@@ -96,7 +97,7 @@
 				' ====== update the record to clear it out =======
 				set objCmd = Server.CreateObject("ADODB.Command")
 				objCmd.ActiveConnection = DataConn
-				objCmd.CommandText = "UPDATE TBL_Refunds_backordered_items redeemed = 1, date_redeemed = GETDATE(), redeemedAs = 'Refund' WHERE invoice_id = ? AND encrypted_code = ? AND id = ?"
+				objCmd.CommandText = "UPDATE TBL_Refunds_backordered_items SET redeemed = 1, date_redeemed = GETDATE(), redeemedAs = 'Refund' WHERE invoice_id = ? AND encrypted_code = ? AND id = ?"
 				objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15, invoice_id))
 				objCmd.Parameters.Append(objCmd.CreateParameter("encrypted_code",200,1,200, data))
 				objCmd.Parameters.Append(objCmd.CreateParameter("var_refund_id",3,1,15, var_refund_id))
@@ -110,13 +111,15 @@
 			else '======== ORDER IS NOT APPROVED 
 		
 				var_notes = "Automated message: Customers automated refund was declined by Authorize.net"
-			
+				status = "unsuccessful"
+				var_authnet_error = objResponse.selectSingleNode("/*/api:transactionResponse/api:errors/api:error/api:errorText").Text
 			end if '============  if response code not approved
 	
 		else '==============  if an error occurred
 
 			var_notes = "Automated message: A processing error occured when customer tried to request an automated refund for the item"
-			
+			status = "unsuccessful"
+			var_authnet_error = objResponse.selectSingleNode("/*/api:transactionResponse/api:errors/api:error/api:errorText").Text
 		end if '============== if success or error message for auth.net
 	
 
@@ -137,4 +140,4 @@
 DataConn.Close()
 Set DataConn = Nothing
 %>
-{"status":"<%=status%>"}
+{"status":"<%=status%>", "error":"<%= var_authnet_error %>"}

@@ -7,6 +7,7 @@
 	Set objCrypt = Server.CreateObject("Bodyartforms.BAFCrypt")
 	password = "3uBRUbrat77V"
 	data = request.querystring("encrypted")
+	data = Replace(data, " ", "+") 'Bug fix: IIS converts "+" signs to spaces. We need to convert it back.
 	decrypted_refund = objCrypt.Decrypt(password, data)
 	
 	split_refund = split(decrypted_refund, "|")

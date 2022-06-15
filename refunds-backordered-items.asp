@@ -80,7 +80,7 @@
 				$("#msg").addClass("alert alert-success").html("Your refund has been submitted and a confirmation has been sent to the e-mail address on the order.");
 				$('#loaded-div').hide();
 			}else{
-				$("#msg").addClass("alert alert-danger").html("The transaction was unsuccessful. Please contact customer service at help@bodyartforms.com or call us at (877) 223-5005").show();
+				$("#msg").addClass("alert alert-danger").html("The transaction was unsuccessful. " + json.error + " Please contact customer service at help@bodyartforms.com or call us at (877) 223-5005").show();
 				$('#btn-process-refund').prop('disabled', false);
 				$('#btn-process-store-credit').prop('disabled', false);
 				$('#msg-spinner').hide();			
