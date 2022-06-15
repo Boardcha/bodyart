@@ -79,6 +79,20 @@ $('#add-address, .btn-edit').click(function () {
 
 });
 
+$('#add-address').click(function () {
+	if(isUserFromUSAorCANADA()){
+		showShippingAddressValidation();
+		clearShippingAddressInputs();
+		$('#selected-shipping-address').hide();	
+		$("#shipping-address-container").hide();
+	}else{
+		hideShippingAddressValidation();
+		$("#shipping-address-container").show();
+	}	
+	$('#chk-shipping-manual-address-input').prop('checked', false);	
+});
+
+
 // Make an address the default address
 $('.make-default').click(function () {
 	var id = $(this).attr("data-id");

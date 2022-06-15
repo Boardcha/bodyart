@@ -219,7 +219,7 @@ if session("admin_tempcustid") <> "" then %>
 			  </button>
 			</div>
 			<form class="needs-validation" id="frm-cim" data-type="" data-status="" data-url="" novalidate>
-			<div class="modal-body modal-scroll-long" style="height:500px">
+			<div class="modal-body modal-scroll-long" id="update_address_body" style="height:400px">
 			  <!--#include virtual="/accounts/inc-cim-address-form.asp" -->
 			  <div class="message-address-modal"></div>
 			</div>
