@@ -379,7 +379,7 @@ objCmd.Execute()
 
 <div id="shipping-address-autocomplete">
 	<div class="form-group position-relative">
-		<label for="shipping-full-address">Shipping Address<span class="text-danger">*</span></label>
+		<label for="shipping-full-address">Shipping Address <span class="text-danger">*</span></label>
 		<input type="text" id="shipping-full-address" data-pg-full-address  class="form-control" placeholder="Start typing an a&#8203;ddress..."  autocomplete="off" />
 	</div>
 	
@@ -388,7 +388,7 @@ objCmd.Execute()
  <div class="form-group position-relative" id="chk-shipping-manual-address-input-container">
 	<div class="custom-control custom-checkbox">
 		<input type="checkbox" class="custom-control-input" name="chk-shipping-manual-address-input" id="chk-shipping-manual-address-input">
-		<label class="custom-control-label" for="chk-shipping-manual-address-input">You can't find the address? Enter the address manually.</label>
+		<label class="custom-control-label" for="chk-shipping-manual-address-input">Can't find your address? Check this box to manually enter your shipping address.</label>
 	</div>
 </div>
  
@@ -396,7 +396,7 @@ objCmd.Execute()
 
 <div id="shipping-address-container" style="display:none">
 	<div class="form-group position-relative">
-		<label for="shipping-address">Address (Line 1)<span class="text-danger">*</span></label>
+		<label for="shipping-address">Address (Line 1) <span class="text-danger">*</span></label>
 		<input data-pg-address-line1 class="form-control" required name="shipping-address" id="shipping-address" type="text" autocomplete="shipping address-line1" data-friendly-error="Shipping address is required" />
 		<div class="invalid-feedback">
 			Address is required
@@ -447,7 +447,7 @@ objCmd.Execute()
 	</div>
 
 	<div class="form-group shipping-state position-relative">
-		<label for="shipping-state">State (USA)<span class="text-danger">*</span></label>
+		<label for="shipping-state">State (USA) <span class="text-danger">*</span></label>
 		<select data-pg-prov class="form-control" required name="shipping-state" id="shipping-state" autocomplete="shipping address-level1"  data-friendly-error="Shipping state is required">
 		<!--#include file="includes/inc_states_select.asp"-->
 		  </select>
@@ -664,7 +664,7 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 
 <div id="billing-address-autocomplete" <%= hide_section_addons %>>
 	<div class="form-group position-relative">
-		<label for="billing-full-address">Billing Address<span class="text-danger">*</span></label>
+		<label for="billing-full-address">Billing Address <span class="text-danger">*</span></label>
 		<input type="text" id="billing-full-address" data-pg-full-address  class="form-control" placeholder="Start typing billing a&#8203;ddress..."  autocomplete="off" />
 	</div>
  </div>
@@ -672,7 +672,7 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
  <div class="form-group position-relative" id="chk-billing-manual-address-input-container" <%= hide_section_addons %>>
 	<div class="custom-control custom-checkbox">
 		<input type="checkbox" class="custom-control-input" name="chk-billing-manual-address-input" id="chk-billing-manual-address-input">
-		<label class="custom-control-label" for="chk-billing-manual-address-input">You can't find the address? Enter the address manually.</label>
+		<label class="custom-control-label" for="chk-billing-manual-address-input">Can't find your address? Check this box to manually enter your billing address.</label>
 	</div>
 </div>
 
@@ -680,7 +680,7 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 
 <div id="billing-address-container" style="display:none">
 	<div class="form-group position-relative">
-		<label for="billing-address">Address (Line 1)<span class="text-danger">*</span></label>
+		<label for="billing-address">Address (Line 1) <span class="text-danger">*</span></label>
 		<input data-pg-address-line1 class="form-control" required name="billing-address" id="billing-address" type="text" autocomplete="billing address-line1" data-friendly-error="Billing address is required" />
 		<div class="invalid-feedback">
 			Address is required
@@ -736,7 +736,7 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 	</div>
 
 	<div class="form-group position-relative billing-state <%= hide_state %>">
-		<label for="billing-state">State (USA)<span class="text-danger">*</span></label>
+		<label for="billing-state">State (USA) <span class="text-danger">*</span></label>
 		<select data-pg-state class="form-control" name="billing-state" id="billing-state" autocomplete="billing address-level1" data-friendly-error="Billing state is required">
 		<!--#include file="includes/inc_states_select.asp"-->
 			</select>

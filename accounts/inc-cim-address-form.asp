@@ -73,14 +73,14 @@
 		<section data-pg-verify>
 		<div id="shipping-address-autocomplete">
 			<div class="form-group position-relative">
-				<label for="shipping-full-address">Address<span class="text-danger">*</span></label>
+				<label for="shipping-full-address">Address <span class="text-danger">*</span></label>
 				<input type="text" id="shipping-full-address" data-pg-full-address  class="form-control" placeholder="Start typing an a&#8203;ddress..."  autocomplete="off" />
 			</div>
 		 </div>
 		 <div class="form-group position-relative" id="chk-shipping-manual-address-input-container">
 			<div class="custom-control custom-checkbox">
 				<input type="checkbox" class="custom-control-input" name="chk-shipping-manual-address-input" id="chk-shipping-manual-address-input">
-				<label class="custom-control-label" for="chk-shipping-manual-address-input">You can't find the address? Enter the address manually.</label>
+				<label class="custom-control-label" for="chk-shipping-manual-address-input">Can't find your address? Check this box to manually enter your address.</label>
 			</div>
 		</div>		 
 
