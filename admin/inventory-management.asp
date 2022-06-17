@@ -30,7 +30,16 @@ end if
 ' Retrieve current wholesale assets we have on hand
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT  vs_wlsl.brand, vs_wlsl.wholesale_value, vs_wlsl.total_items, vw_out.out, vw_thresh.threshold, vw_waiting.waiting, CAST(vw_thresh.threshold AS float) / CAST(vs_wlsl.total_items AS float) * 100 AS 'thresh_percent', CAST(vw_out.out AS float) / CAST(vs_wlsl.total_items AS float) * 100 AS 'out_percent', vw_open.DateOrdered FROM  vw_vendor_dashboard_wholesale_assets AS vs_wlsl LEFT OUTER JOIN vw_vendor_dashboard_open AS vw_open ON vs_wlsl.brand = vw_open.Brand LEFT OUTER JOIN vw_vendor_dashboard_waiting AS vw_waiting ON vs_wlsl.brand = vw_waiting.brand LEFT OUTER JOIN vw_vendor_dashboard_threshold AS vw_thresh ON vs_wlsl.brand = vw_thresh.brand LEFT OUTER JOIN vw_vendor_dashboard_qtyout AS vw_out ON vs_wlsl.brand = vw_out.brand ORDER BY CASE WHEN vs_wlsl.brand = 'TOTAL' THEN 1 ELSE 2 END, " &  var_sortby & " " & var_sortorder
+objCmd.CommandText = "SELECT TOP 10 vs_wlsl.brand, vs_wlsl.wholesale_value, vs_wlsl.total_items, vw_out.out, vw_thresh.threshold, vw_waiting.waiting, " & _
+	"CAST(vw_thresh.threshold AS float) / CAST(vs_wlsl.total_items AS float) * 100 AS 'thresh_percent',  " & _
+	"CAST(vw_out.out AS float) / CAST(vs_wlsl.total_items AS float) * 100 AS 'out_percent', vw_open.DateOrdered, vw_backorder.total_backorder " & _
+	"FROM vw_vendor_dashboard_wholesale_assets AS vs_wlsl  " & _
+	"LEFT OUTER JOIN vw_vendor_dashboard_open AS vw_open ON vs_wlsl.brand = vw_open.Brand  " & _
+	"LEFT OUTER JOIN vw_vendor_dashboard_waiting AS vw_waiting ON vs_wlsl.brand = vw_waiting.brand  " & _
+	"LEFT OUTER JOIN vw_vendor_dashboard_threshold AS vw_thresh ON vs_wlsl.brand = vw_thresh.brand  " & _
+	"LEFT OUTER JOIN vw_vendor_dashboard_qtyout AS vw_out ON vs_wlsl.brand = vw_out.brand  " & _
+	"LEFT OUTER JOIN vw_vendor_dashboard_backorder As vw_backorder ON vs_wlsl.brand = vw_backorder.brand  " & _
+	"ORDER BY CASE WHEN vs_wlsl.brand = 'TOTAL' THEN 1 ELSE 2 END, " &  var_sortby & " " & var_sortorder
 Set rsGetMainList = objCmd.Execute()
 %>
 <!DOCTYPE html> 
@@ -38,6 +47,11 @@ Set rsGetMainList = objCmd.Execute()
 <head>
 <meta charset="UTF-8">
 <title>Inventory management</title>
+<style>
+.table-hover tbody tr:hover, .table-hover tbody tr:hover td, .table-hover tbody tr:hover th  {
+    background-color: unset !important;
+}
+</style>
 </head>
 <body>
 <!--#include file="admin_header.asp"-->
@@ -61,6 +75,7 @@ Set rsGetMainList = objCmd.Execute()
 		<% end if %>
 		<th class="sticky-top" scope="col"><a href="?sortby=out&amp;sortorder=desc"><i class="fa fa-sort fa-lg mr-2 sort-icon"></i></a>Out of stock <i class="fa fa-information fa-lg"  data-bs-toggle="tooltip" data-bs-placement="top" title="Amount of items that are currently at 0"></i></th>
 		<th class="sticky-top" scope="col"><a href="?sortby=threshold&amp;sortorder=desc"><i class="fa fa-sort fa-lg mr-2 sort-icon"></i></a>Under threshold <i class="fa fa-information fa-lg" data-bs-toggle="tooltip" data-bs-placement="top" title="Amount of items that are equal or less than the threshold amount"></i></th>
+		<th class="sticky-top" scope="col">Backorder</th>
 		<th class="sticky-top" scope="col"><a href="?sortby=waiting&amp;sortorder=desc"><i class="fa fa-sort fa-lg mr-2 sort-icon"></i></a>Waiting list</th>
 		<th class="sticky-top" scope="col">Total items <i class="fa fa-information fa-lg" data-bs-toggle="tooltip" data-bs-placement="top" title="Amount of items that we have listed on the site"></i></th>
 		</tr>
@@ -163,6 +178,9 @@ end if
 		<% end if ' threshold > 0 
 		%>
 		</td>
+		<td>
+			<%= rsGetMainList.Fields.Item("total_backorder").Value %>
+		</td>
 		<td class="<%= apply_class %>">
 			<% if rsGetMainList.Fields.Item("waiting").Value > 0 then %> <span class="btn btn-sm btn-secondary toggle-waiting" id="<%= row_id %>" data-brand="<%= rsGetMainList.Fields.Item("brand").Value %>"><i class="fa fa-angle-down fa-lg waiting-expand<%= row_id %>"></i><i class="fa fa-angle-up fa-lg waiting-expand<%= row_id %>" style="display:none"></i></span>
 			
@@ -177,16 +195,15 @@ end if
 			
 		</td>
 	</tr>
-<tbody class="tbody-nohover">
-	<tr class="td-expand<%= row_id %>" style="display:none">
-		<td colspan="8" class="load<%= row_id %>">
-		</td>
-	</tr>
-	<tr class="tr-waiting-expand<%= row_id %>" style="display:none">
-		<td colspan="8" class="waiting-load<%= row_id %>">
-		</td>
-	</tr>
-</tbody>
+
+	<!--#include file="inventory/inc-vendor-detailed-info.inc" -->
+
+	<tbody class="tbody-nohover">
+		<tr class="tr-waiting-expand<%= row_id %>" style="display:none">
+			<td colspan="9" class="waiting-load<%= row_id %>">
+			</td>
+		</tr>
+	</tbody>
 <% 
 row_id = row_id + 1
 rsGetMainList.MoveNext()
