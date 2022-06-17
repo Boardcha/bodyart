@@ -50,7 +50,7 @@ if request.form("username") <> "" and request.form("password") <> "" then
 				objCmd.Parameters.Append(objCmd.CreateParameter("user_agent",200,1,250, Left(Request.ServerVariables("HTTP_USER_AGENT"), 300)))
 				objCmd.Execute()
 				
-				response.redirect "index.asp"
+				If Request("referrer") <> "" Then Response.Redirect Request("referrer") Else response.redirect "index.asp"
 			else
 				response.redirect "login.asp?status=failed&login=yes" ' if pass incorrect
 			end if
@@ -89,7 +89,7 @@ end if ' if form fields are not empty
 			<input class="form-control form-control-sm w-25" type="password" name="password">
 		</div>
 
-			<button class="btn btn-purple" type="submit" formmethod="post" formaction="login.asp?login=yes">Login</button>
+			<button class="btn btn-purple" type="submit" formmethod="post" formaction="login.asp?login=yes&referrer=<%= request("referrer")%>">Login</button>
 
 <% if request.querystring("status") = "failed" then %>
 	<div class="alert alert-danger">
