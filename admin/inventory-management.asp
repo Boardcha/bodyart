@@ -30,7 +30,7 @@ end if
 ' Retrieve current wholesale assets we have on hand
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT TOP 10 vs_wlsl.brand, vs_wlsl.wholesale_value, vs_wlsl.total_items, vw_out.out, vw_thresh.threshold, vw_waiting.waiting, " & _
+objCmd.CommandText = "SELECT vs_wlsl.brand, vs_wlsl.wholesale_value, vs_wlsl.total_items, vw_out.out, vw_thresh.threshold, vw_waiting.waiting, " & _
 	"CAST(vw_thresh.threshold AS float) / CAST(vs_wlsl.total_items AS float) * 100 AS 'thresh_percent',  " & _
 	"CAST(vw_out.out AS float) / CAST(vs_wlsl.total_items AS float) * 100 AS 'out_percent', vw_open.DateOrdered, vw_backorder.total_backorder " & _
 	"FROM vw_vendor_dashboard_wholesale_assets AS vs_wlsl  " & _
