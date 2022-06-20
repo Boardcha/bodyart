@@ -1,13 +1,5 @@
 <%@LANGUAGE="VBSCRIPT"%>
 <!--#include file="../Connections/bodyartforms_sql_ADMIN.asp" -->
-<%
-' set cookie to show live/sandbox mode message only for admin users
-Response.Cookies("adminuser") = "yes"
-Response.Cookies("adminuser").Path = "/"
-Response.Cookies("adminuser").Expires =  DATE + 300
-				
-%>
-
 
 <html>
 <head>
