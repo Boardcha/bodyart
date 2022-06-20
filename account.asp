@@ -616,7 +616,7 @@ Next ' ====== PAGING
 			  </button>
 			</div>
 			<form id="frm-update-address">
-			<div class="modal-body modal-scroll-long" id="update-address-body">	
+			<div class="modal-body modal-scroll-long" id="update_address_body" style="height:400px">	
 				<% var_update_order_address = "yes" %>	
 				<!--#include virtual="/accounts/inc-cim-address-form.asp" -->
 				<div id="message-address-modal"></div>
@@ -1149,6 +1149,10 @@ By clicking the start button below, you'll be taken to our product search where 
 <% end if   'rsGetUser.EOF %>
 
 <!--#include virtual="/bootstrap-template/footer.asp" -->
+<!-- Postgrid API -->
+<script src="/js/postgrid-customized-api.js" data-pg-key="live_pk_csP2zaBTuekcKtmRMRSi9U"></script>		
+<script src="/js-pages/account-address-validation.js"></script>	
+<script type="text/javascript" src="/js-pages/cim-profile-management-913_1.js"></script>
 <script type="text/javascript" src="/js-pages/order-history.min.js?v=111521"></script> 
 
 <%if Request("keywords") <> "" Then%>

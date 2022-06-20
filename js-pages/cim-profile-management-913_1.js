@@ -28,6 +28,9 @@ $('#shipping-country').on('change', function () {
 	
 });
 
+$('.btn-update-address-modal').click(function (e) {
+	$("#shipping-country").trigger('change');
+});
 
 // Load up USA by default on page load. This triggers the state/province fields to show/hide approriately
 function resetUSA() {
