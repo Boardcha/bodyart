@@ -30,6 +30,16 @@ $('#shipping-country').on('change', function () {
 
 $('.btn-update-address-modal').click(function (e) {
 	$("#shipping-country").trigger('change');
+	if(isUserFromUSAorCANADA()){
+		showShippingAddressValidation();
+		clearShippingAddressInputs();
+		$('#selected-shipping-address').hide();	
+		$("#shipping-address-container").hide();
+	}else{
+		hideShippingAddressValidation();
+		$("#shipping-address-container").show();
+	}	
+	$('#chk-shipping-manual-address-input').prop('checked', false);	
 });
 
 // Load up USA by default on page load. This triggers the state/province fields to show/hide approriately
