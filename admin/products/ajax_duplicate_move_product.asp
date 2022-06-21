@@ -72,12 +72,18 @@ if request.form("toggle_type") = "move" then
 				objCmd.CommandText = "UPDATE ProductDetails SET ProductID = " + request.form("move_to_id") + "  WHERE ProductDetailID = " + strItem
 				objCmd.Execute()
 
+				'==== RETRIEVE THE IMG_ID FOR THE PRODUCTDETAILID TO MOVE ONLY THE SINGLE IMAGE AND NOT THE ENTIRE PRODUCTS IMAGES
+				Set objCmd = Server.CreateObject ("ADODB.Command")
+				objCmd.ActiveConnection = DataConn
+				objCmd.CommandText = "SELECT img_id FROM ProductDetails WHERE ProductDetailID = " + strItem 
+				Set rsGetImageID = objCmd.Execute()
+
 				'======= RE-ASSIGN DETAIL IMAGE TO NEW PRODUCT IF AN IMAGE WAS ASSIGNED ========
 				set objCmd = Server.CreateObject("ADODB.Command")
 				objCmd.ActiveConnection = DataConn
-				objCmd.CommandText = "UPDATE tbl_images SET product_id = ? WHERE product_id = ?" 
+				objCmd.CommandText = "UPDATE tbl_images SET product_id = ? WHERE img_id = ?" 
 				objCmd.Parameters.Append(objCmd.CreateParameter("movetoId",3,1,10, request.form("move_to_id") ))
-				objCmd.Parameters.Append(objCmd.CreateParameter("moveFromId",3,1,10, request.form("orig_productid") ))
+				objCmd.Parameters.Append(objCmd.CreateParameter("img_id",3,1,10, rsGetImageID("img_id") ))
 				objCmd.Execute()
 
 			end if ' make sure a detail id is provided to write db
