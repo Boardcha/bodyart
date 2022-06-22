@@ -747,7 +747,7 @@ end if 'if var_showgifts <> "no" only display on the viewcart page
 									<% end if %>
 									<div id="pay-api-processing-message" style="display:none"></div>
 									<div id="pay-api-error-message" class="alert alert-danger" style="display:none"></div>	
-									<apple-pay-button id="btn-applepay" buttonstyle="<%= var_applepay_color %>" type="check-out" locale="en" class="mb-2"></apple-pay-button>
+									<!--<apple-pay-button id="btn-applepay" buttonstyle="<%= var_applepay_color %>" type="check-out" locale="en" class="mb-2"></apple-pay-button>-->
 									<div id="btn-googlepay" class="mb-3 checkout_button" style="width: 100%; height: 45px; display: none;"></div>
 									
 									
