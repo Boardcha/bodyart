@@ -299,7 +299,8 @@ objCmd.Execute()
  <div id="msg-location-replace"></div>
  <!--#include virtual="cart/inc_stock_display_notice.asp"-->
 <div class="row">
-<section data-pg-verify class="col-md-6 shipping-information"> 
+<%if request.querystring("type") <> "paypal" and request.querystring("type") <> "afterpay" then column_size = "col-md-6" else column_size = "col-md-12" %>
+<section data-pg-verify class="<%=column_size%> shipping-information"> 
 <div class="card mb-5" id="shipping-card">
 	<div class="card-header">
 		<h5>Shipping address</h5>
@@ -387,7 +388,7 @@ objCmd.Execute()
  <div class="form-group position-relative" id="chk-shipping-manual-address-input-container">
 	<div class="custom-control custom-checkbox">
 		<input type="checkbox" class="custom-control-input" name="chk-shipping-manual-address-input" id="chk-shipping-manual-address-input">
-		<label class="custom-control-label" for="chk-shipping-manual-address-input">You can't find the address? Enter the address manually.</label>
+		<label class="custom-control-label" for="chk-shipping-manual-address-input">Can't find your address? Check this box to manually enter your shipping address.</label>
 	</div>
 </div>
  
@@ -671,7 +672,7 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
  <div class="form-group position-relative" id="chk-billing-manual-address-input-container" <%= hide_section_addons %>>
 	<div class="custom-control custom-checkbox">
 		<input type="checkbox" class="custom-control-input" name="chk-billing-manual-address-input" id="chk-billing-manual-address-input">
-		<label class="custom-control-label" for="chk-billing-manual-address-input">You can't find the address? Enter the address manually.</label>
+		<label class="custom-control-label" for="chk-billing-manual-address-input">Can't find your address? Check this box to manually enter your billing address.</label>
 	</div>
 </div>
 
@@ -809,8 +810,8 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 </div><!-- end billing card body -->
 </div><!-- end billing main card -->
 </section><!-- end billing address section -->
-</div>
 <% end if ' if checkout type is not paypal %>
+</div>
 <!--#include virtual="cart/inc_cart_loopitems-begin.asp"-->
 <!--#include virtual="cart/inc_cart_loopitems-end.asp"-->
 

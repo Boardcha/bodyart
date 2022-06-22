@@ -249,7 +249,7 @@ if request.form("agenda") = "clear" then
  
 	set objCmd = Server.CreateObject("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "UPDATE TBL_OrderSummary SET backorder = 0 WHERE OrderDetailID = ?" 
+	objCmd.CommandText = "UPDATE TBL_OrderSummary SET backorder = 0, backorder_tracking = 0 WHERE OrderDetailID = ?" 
 	objCmd.Parameters.Append(objCmd.CreateParameter("var_item",3,1,12, var_item ))
 	objCmd.Execute()
 	
