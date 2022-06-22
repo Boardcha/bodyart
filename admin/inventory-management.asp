@@ -196,7 +196,9 @@ end if
 		</td>
 	</tr>
 
-	<!--#include file="inventory/inc-vendor-detailed-info.inc" -->
+	<%
+	'<!--#include file="inventory/inc-vendor-detailed-info.inc" --> 
+	%>
 
 	<tbody class="tbody-nohover">
 		<tr class="tr-waiting-expand<%= row_id %>" style="display:none">
