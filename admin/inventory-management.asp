@@ -179,6 +179,9 @@ end if
 		%>
 		</td>
 		<td>
+			<% if rsGetMainList("total_backorder") > 0 then %> 
+				<span class="btn btn-sm btn-secondary toggle-backorder" id="<%= row_id %>" data-brand="<%= rsGetMainList("brand") %>"><i class="fa fa-angle-down fa-lg backorder-expand<%= row_id %>"></i><i class="fa fa-angle-up fa-lg backorder-expand<%= row_id %>" style="display:none"></i></span>
+			<%End If%>
 			<%= rsGetMainList.Fields.Item("total_backorder").Value %>
 		</td>
 		<td class="<%= apply_class %>">
@@ -199,7 +202,12 @@ end if
 	<%
 	'<!--#include file="inventory/inc-vendor-detailed-info.inc" --> 
 	%>
-
+	<tbody class="tbody-nohover">
+		<tr class="tr-backorder-expand<%= row_id %>" style="display:none">
+			<td colspan="9" class="backorder-load<%= row_id %>">
+			</td>
+		</tr>
+	</tbody>
 	<tbody class="tbody-nohover">
 		<tr class="tr-waiting-expand<%= row_id %>" style="display:none">
 			<td colspan="9" class="waiting-load<%= row_id %>">
@@ -232,6 +240,15 @@ loop
 	
 		$('.waiting-load' + row_id).load('/admin/inventory/ajax-waiting-list-bybrand.asp?brand=' + encodeURI(brand));
 	});
+	
+	$(document).on("click", '.toggle-backorder', function() {
+		var brand = $(this).attr("data-brand");
+		var row_id = $(this).attr("id");
+		$('.waiting-backorder' + row_id).toggle();
+		$('.tr-backorder-expand' + row_id).fadeToggle('fast');
+	
+		$('.backorder-load' + row_id).load('/admin/inventory/ajax-backorder-bybrand.asp?brand=' + encodeURI(brand));
+	});	
 </script>
 </body>
 </html>
