@@ -5,7 +5,7 @@ var_brand = request.querystring("brand")
 
 Set objCmd = Server.CreateObject ("ADODB.Command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT JEW.title, DET.Gauge, JEW.ProductID, JEW.picture, ORS.OrderDetailID, DET.length, SNT.ID, count(*) as qty " & _
+objCmd.CommandText = "SELECT JEW.title, DET.Gauge, JEW.ProductID, JEW.picture, ORS.OrderDetailID, DET.length, SNT.ID, SUM(ORS.qty) as qty " & _
 						"FROM jewelry JEW " & _
 						"INNER JOIN ProductDetails DET ON JEW.ProductID = DET.ProductID " & _
 						"INNER JOIN TBL_OrderSummary AS ORS ON DET.ProductDetailID = ORS.DetailID " & _
