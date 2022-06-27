@@ -4,6 +4,7 @@
 	page_description = "Bodyartforms AfterPay checkout"
 	page_keywords = "body jewelry, shopping cart, basket"
 %>
+<!--#include virtual="/functions/security.inc" -->
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->
@@ -104,15 +105,16 @@ pay_method_afterpay = "yes"
 	objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15, session("invoiceid") ))
 	objCmd.Execute()
 %>
-<!--#include virtual="emails/function-send-email.asp"-->
-<!--#include virtual="emails/email_variables.asp"-->
+<!--#include virtual="/checkout/inc_items_to_email_array.asp"-->
+<!--#include virtual="/emails/function-send-email.asp"-->
+<!--#include virtual="/emails/email_variables.asp"-->
 <%	
 rs_getCart.ReQuery() ' for Google
 %>
 <!--#include virtual="/checkout/inc-set-to-pending.asp" -->	
-<!--#include virtual="checkout/inc_remove_items_from_cart.asp" -->
-<!--#include virtual="checkout/inc_google_scripts.asp"--> 
-<!--#include virtual="checkout/inc_remove_all_sessions_cookies.asp"-->
+<!--#include virtual="/checkout/inc_remove_items_from_cart.asp" -->
+<!--#include virtual="/checkout/inc_google_scripts.asp"--> 
+<!--#include virtual="/checkout/inc_remove_all_sessions_cookies.asp"-->
 	<script type="text/javascript">
 		// set cart count to 0
 		$('#cart_count_text').html("");
@@ -122,7 +124,7 @@ rs_getCart.ReQuery() ' for Google
 else ' Show decline information
 %>
 	<div class="alert alert-danger">
-		<h5>Afterpay Card Declined</h5>
+		<h5>Afterpay Declined</h5>
 	<div class="my-2">
 		Afterpay declined your credit card information. To try again <a class="alert-link" href="checkout.asp?type=afterpay">click here</a> to go back to checkout.
 	</div>
