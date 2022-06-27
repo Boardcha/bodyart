@@ -3,6 +3,19 @@
 <!--#include virtual="/Connections/authnet.asp"-->
 
 <%
+firstname = Request.Form("first")
+lastname = Request.Form("last")
+If Request.Form("shipping-address") <> "" Then address =  Request.Form("shipping-address") & "|" & Request.Form("shipping-address2") Else address =  Request.Form("address") & "|" & Request.Form("address2")
+If Request.Form("shipping-city") <> "" Then city = Request.Form("shipping-city") Else city = Request.Form("city")
+If Request.Form("shipping-state") <> "" Or Request.Form("shipping-province") <> "" Or Request.Form("shipping-province-canada") <> "" Then
+	state = Request.Form("shipping-state") & "|" & Request.Form("shipping-province") & Request.Form("shipping-province-canada") 
+Else
+	state = Request.Form("state") & "|" & Request.Form("province") & Request.Form("province-canada") 
+End If
+If Request.Form("shipping-zip") <> "" Then zip = Request.Form("shipping-zip") Else zip = Request.Form("zip")
+If Request.Form("shipping-country") <> "" Then country = Request.Form("shipping-country") Else country = Request.Form("country")
+If Request.Form("shipping-phone") <> "" Then phone = Request.Form("shipping-phone") Else phone = Request.Form("phone")
+
 ' Pull the customer information from a cookie
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
@@ -22,15 +35,15 @@ If request.form("type") = "shipping" Then
 	& MerchantAuthentication() _
 	& "  <customerProfileId>" & rsGetUser.Fields.Item("cim_custid").Value & "</customerProfileId>" _
 	& "<address>" _
-	& "  <firstName>" & Request.Form("first") & "</firstName>" _
-	& "  <lastName>" & Request.Form("last") & "</lastName>" _
-	& "  <company>" & Request.Form("company") & "</company>" _
-	& "  <address>" & Request.Form("address") & "|" & Request.Form("address2") & "</address>" _
-	& "  <city>" & Request.Form("city") & "</city>" _
-	& "  <state>" & Request.Form("state") & "|" & Request.Form("province") & Request.Form("province-canada") & "</state>" _
-	& "  <zip>" & Request.Form("zip") & "</zip>" _
-	& "  <country>" & Request.Form("country") & "</country>" _
-	& "  <phoneNumber>" & Request.Form("phone") & "</phoneNumber>" _
+	& "  <firstName>" & firstname & "</firstName>" _
+	& "  <lastName>" & lastname & "</lastName>" _
+	& "  <company></company>" _
+	& "  <address>" & address & "</address>" _
+	& "  <city>" & city & "</city>" _
+	& "  <state>" & state & "</state>" _
+	& "  <zip>" & zip & "</zip>" _
+	& "  <country>" & country & "</country>" _
+	& "  <phoneNumber>" & phone & "</phoneNumber>" _
 	& "</address>" _
 	& "</createCustomerShippingAddressRequest>"
 	
@@ -82,14 +95,14 @@ If request.form("type") = "billing" Then
 		& "  <customerProfileId>" & rsGetUser.Fields.Item("cim_custid").Value & "</customerProfileId>" _
 		& "<paymentProfile>" _
 		& "<billTo>" _
-		& "  <firstName>" & Request.Form("first") & "</firstName>" _
-		& "  <lastName>" & Request.Form("last") & "</lastName>" _
-		& "  <company>" & Request.Form("company") & "</company>" _
-		& "  <address>" & Request.Form("address") & "|" & Request.Form("address2") & "</address>" _
-		& "  <city>" & Request.Form("city") & "</city>" _
-		& "  <state>" & Request.Form("state") & "|" & Request.Form("province") & Request.Form("province-canada") & "</state>" _
-		& "  <zip>" & Request.Form("zip") & "</zip>" _
-		& "  <country>" & Request.Form("country") & "</country>" _
+		& "  <firstName>" & firstname & "</firstName>" _
+		& "  <lastName>" & lastname & "</lastName>" _
+		& "  <company></company>" _
+		& "  <address>" & address & "</address>" _
+		& "  <city>" & city & "</city>" _
+		& "  <state>" & state & "</state>" _
+		& "  <zip>" & zip & "</zip>" _
+		& "  <country>" & country & "</country>" _
 		& "</billTo>" _
 		& "<payment>" _
 		& "<creditCard>" _
