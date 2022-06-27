@@ -44,13 +44,14 @@
 
 	end if ' order details build-out
 
-	if IsArray(array_details_2) = "True" then
+	if IsArray(array_details_2) = True then
+
 		mail_order_details = ""
 		For i = 0 to (ubound(array_details_2, 2) - 1)
-	
+
 			' Do not write to email receipt if it's tax... display it in the totals area above
 			if Instr(1, array_details_2(2,i), "Tax") = 0 Then
-			
+
 				'	https://bafthumbs-400.bodyartforms.com
 				'	https://bodyartforms-products.bodyartforms.com
 
@@ -413,6 +414,20 @@
 		Call baf_sendmail()
 	end if ' ====== customer_submitted_refund_notification
 	
+	' ===== From refunds.asp  Receipt of customers refund request/success
+	if mailer_type = "customer_submitted_refund_as_store_credit_notification" then 
+		google_utmsource = "Bodyartforms refund receipt"
+		mail_to_email = rsCheckRefund.Fields.Item("email").Value
+		mail_to_name = rsCheckRefund.Fields.Item("customer_first").Value
+		mail_subject = "Bodyartforms refund receipt"
+
+		mail_body = "Your refund of $" & var_db_refund_amt & " has been successfully processed into your account as a store credit."
+				
+		mail_body = mail_body & "<br/><br/>We appreciate your business very much!<br/>If you have any questions or need assistance please reply to this e-mail to get in touch with us. We're here to help Mon - Fri from 9am - 5pm.<br/><br/>Customer service:  (877) 223-5005"
+	
+		Call baf_sendmail()
+	end if ' ====== customer_submitted_refund_as_store_credit_notification	
+	
 	'======= RE-WORDED BACKORDER EMAIL DECEMBER 2021 ==================================
 	'======= GENERAL BACKORDER EMAIL ==================================
 	if mailer_type = "backorder" then 'Backorder email
@@ -431,9 +446,14 @@
 			mail_body = mail_body & "<li>You can leave the item on backorder and we'll ship it when it comes back in stock</li>"
 		end if
 
-		mail_body = mail_body & "<li>You can get in-store credit for the item (You'll need to have an account set up on the site if you'd like to do this)</li>" &_
-		"<li>You can get a refund for the item</li>" &_
-		"<li>You can exchange the item for something else (Just reply and let us know which item you want instead)</li>" &_
+		If var_refund_total > 0 Then ' Make sure if it is not just a free item
+			If var_customer_number > 0 Then
+				mail_body = mail_body & "<li><a href='https://bodyartforms.com/refunds-backordered-items.asp?id=" & var_invoice_number & "&hash=" & encrypted_code & "'>You can get in-store credit for the item</a></li>" 
+			End If
+			mail_body = mail_body & "<li><a href='https://bodyartforms.com/refunds-backordered-items.asp?id=" & var_invoice_number & "&hash=" & encrypted_code & "'>You can get a refund for the item</a></li>"
+		End If
+		
+		mail_body = mail_body & "<li>You can exchange the item for something else (Just reply and let us know which item you want instead)</li>" &_
 		"</ul>" &_
 		"<div style='font-family:Arial;color:#ffffff;background-color:#696986;padding:20px;border-radius:10px'>We'd also like to extend you this one time coupon code for <strong>15% off any future order</strong> by way of apology.<div style='text-align:center;font-family:Arial;font-size:16px;color: #ffffff;;background-color:#41415a;padding:10px;font-weight:bold;text-decoration:none;margin:15px'>" & var_cert_code & "</div>We take customer service super seriously, and we're always working on improving. If you have any questions or feedback, we'd love to hear from you at <a style='text-decoration:none' href='mailto:help@bodyartforms.com'>help@bodyartforms.com</a></div>" &_
 		"<br><br>Thank's again for your support, and we look forward to hearing from you," &_

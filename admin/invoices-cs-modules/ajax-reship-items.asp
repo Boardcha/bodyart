@@ -254,6 +254,7 @@ var_create_neworder = ""
             Set objCrypt = Server.CreateObject("Bodyartforms.BAFCrypt")
             password = "3uBRUbrat77V"
             data = encrypted_code
+			data = Replace(data, " ", "+") 'Bug fix: IIS converts "+" signs to spaces. We need to convert it back.
             decrypted = objCrypt.Decrypt(password, data)
 
             response.write "decrypted: " & decrypted
