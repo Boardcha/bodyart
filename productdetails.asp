@@ -1087,13 +1087,13 @@ else
 end if
 	
 	%>
-	<div id="REMOVE-GO-LIVE" >
+<button class="link-add-wishlist btn btn-sm <%= var_wishlist_btn_style %>" type="button"><i class="fa fa-heart fa-lg"></i> Add to Wishlist</button>
+<% end if %>
+<div id="REMOVE-GO-LIVE" >
 	<div class="afterpay_option" style="<%= afterpay_display %>">
 		<div class="afterpay-widget"></div>
 	</div>
 </div>
-<button class="link-add-wishlist btn btn-sm <%= var_wishlist_btn_style %>" type="button"><i class="fa fa-heart fa-lg"></i> Add to Wishlist</button>
-<% end if %>
 <span class="select-currency btn btn-sm btn-outline-secondary">
 <span class="ajax-currency"><img src="/images/icons/<%= currency_img %>"> <%= currency_text %></span> <i class="fa fa-chevron-down"></i></span>
 <% if Request.Cookies("showmm") <> "yes" then %>	
