@@ -598,6 +598,8 @@ function setCurrency() {
 	
 		// Populate form if BILLING EDIT buttons is clicked
 	$('.edit-link-billing').click(function() {
+		$('.billing-input-fields').show();
+		$('#credit_card_inputs').show();
 		$('.billing-address-form input, .billing-address-form select').attr('disabled', false);
 		$('#billing-status').val("update");
 		$('#card-save-wrapper, #shipping-same-billing-container, .add-new-billing-button, #cim_billing_addresses').hide();
@@ -1056,14 +1058,13 @@ function setCurrency() {
 		}
 	});
 
-		// Registered customers pay by cash
-		$('#cim_cash_click').click(function(){
-				// Toggle required attribute
-				toggleRequiredBillingFalse();
-				$('.billing-input-fields').fadeOut(1000);
-				$('#credit_card_inputs').fadeOut(1000);
-
-			});
+	// Registered customers pay by cash
+	$('#cim_cash_click').click(function(){
+		// Toggle required attribute
+		toggleRequiredBillingFalse();
+		$('.billing-input-fields').fadeOut(1000);
+		$('#credit_card_inputs').fadeOut(1000);
+	});
 	
 $('#cardNumber').keyup(function() {	
 	//console.log(GetCardType($('#cardNumber').val()));
