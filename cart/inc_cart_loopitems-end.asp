@@ -81,12 +81,12 @@ end if
 
 if session("amount_to_collect") <> "" then	
 	if session("amount_to_collect") = 0 then
-		var_salesTax = 0
+		Session("var_salesTax") = 0
 	else
-		var_salesTax = session("amount_to_collect")
+		Session("var_salesTax") = session("amount_to_collect")
 	end if
 else
-	var_salesTax = 0
+	Session("var_salesTax") = 0
 end if
 
 
@@ -110,7 +110,7 @@ if var_other_items <> 1 then
 	shipping_cost = 0
 	session("shipping_cost") = 0
 	var_shipping_cost_friendly ="FREE"
-	var_salesTax = 0
+	Session("var_salesTax") = 0
 end if
 
 ' Reset shipping if add-on items are being added to an order that has not shipped out yet

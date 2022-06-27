@@ -75,6 +75,7 @@ function setCurrency() {
 
 	// CIM radio button selection changes to load shipping information
 	$("input[name='cim_shipping']").on('change click', function(e){
+		$('.checkout_button').hide();
 		$('#shipping-loading').show();
 		$('#ajax-shipping-options, #message-shipping').html('');
 
@@ -420,6 +421,7 @@ function setCurrency() {
 	// If cancel add SHIPPING button is pressed then clear entire form contents 
 
 	$('#cancel-shipping-add').click(function() {
+		$('.checkout_button').hide();
 		// Check radio button address
 		$('input[name="cim_shipping"]:radio:first').prop('checked', true);
 		$('input[name="cim_shipping"]:radio:first').trigger("click");
@@ -430,7 +432,7 @@ function setCurrency() {
 		$('.shipping-address-form input, .shipping-address-form select').attr('disabled', true);
 		$('.shipping-address-form').find(':input').not(':button, :submit, :reset, :hidden').val('');
 		$('.shipping-address-form').hide();
-		$('.add-new-shipping-button, .checkout_button, #cim_shipping_addresses').show();
+		$('.add-new-shipping-button, #cim_shipping_addresses').show();
 		$('#cancel-shipping-add, .shipping-same').hide();
 		$('#changing-shipping-header').html("Add a new");	
 		$(".shipping-address-form :input").removeClass("valid error")
@@ -903,7 +905,7 @@ function setCurrency() {
 	
 	// When user selects Canada or US IN THE SHIPPING ADDRESS AREA, change divs that display with states and provinces
 	$("select[name='shipping-country'], input[name='shipping-city'], select[name='shipping-state'], select[name='shipping-province-canada'], input[name='shipping-province'], input[name='shipping-zip'], input[name='shipping-address'], input[name='shipping-address2']").on('change', function(e){
-		
+		$('.checkout_button').hide();
 		var varaddress = $("input[name='shipping-address']").val() + " " + $("input[name='shipping-address2']").val();
 		var varcity = $("input[name='shipping-city']").val();
 		var varstate = $("select[name='shipping-state']").val();

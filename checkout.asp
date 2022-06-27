@@ -55,10 +55,10 @@ If categories <> "" Then categories = Mid(categories, 1, LEN(categories)-1)
 </script>
 <!-- KLAVIYO SCRIPT END -->
 <!--#include virtual="cart/inc_cart_grandtotal.asp"-->
-<%
-'response.write "<br/>subtotal " & var_subtotal
-'response.write "<br/>var_salesTax " & var_salesTax
-%>
+
+
+
+
 <!--#include virtual="cart/fraud_checks/inc-flagged-orders.asp"-->
 
 <% 
@@ -1096,8 +1096,11 @@ end if
 									   <div class="col-7"><%= est_shipping %></div><div class="col-5 cart_shipping"><%= var_shipping_cost_friendly %></div>
 									</div>
 									<div class="row">
-										<div class="col-7"><span class="cart_sales-tax-state"></span>Tax</div><div class="col-5 cart_sales-tax"><%= var_salesTax %></div>
+										<div class="col-7"><span class="cart_sales-tax-state"></span>Tax</div><div class="col-5 cart_sales-tax"><%= Session("var_salesTax") %></div>
 									</div>
+									<div class="row row_retail_delivery_fee" style="display:none">
+										<div class="col-7"><span class=""></span>Retail delivery fee</div><div class="col-5 retail_delivery_fee"><%= var_retail_delivery_fee %></div>
+									</div>								
 								</div><!-- end card body -->
 						<div class="card-footer">
 								
@@ -1114,14 +1117,14 @@ end if
 							<% end if %>
 					<% if request.querystring("type") = "card" then %>
 						<% If toggle_checkout_cards = true Then %>
-							<button class="btn btn-lg btn-primary btn-block checkout_button place_order" style="display: none" type="submit" form="checkout_form" name="place_order">PLACE ORDER</button>
+							<button id="btn-checkout-creditcard" class="btn btn-lg btn-primary btn-block checkout_button place_order" style="display: none" type="submit" form="checkout_form" name="place_order">PLACE ORDER</button>
 						<% else %>
 							<div class="alert alert-danger">We're sorry, but our <b>credit card</b> checkout is temporarily unavailable. As soon as our payment processor comes back online, we will accept orders again. Please check back later.</div>
 						<% end if %>
 					<% end if %>
 					<% if request.querystring("type") = "paypal" then %>
 						<% If toggle_checkout_paypal = true Then %>
-							<button class="btn btn-lg btn-warning btn-block checkout_button place_order checkout_paypal" style="display:none" type="submit" form="checkout_form" name="place_order">CONTINUE TO <img class="ml-1" style="height:25px" src="/images/paypal.png" /></button>
+							<button id="btn-checkout-paypal" class="btn btn-lg btn-warning btn-block checkout_button place_order checkout_paypal" style="display:none" type="submit" form="checkout_form" name="place_order">CONTINUE TO <img class="ml-1" style="height:25px" src="/images/paypal.png" /></button>
 							<input type="hidden" name="paypal" value="on">
 						<% else %>
 							<div class="alert alert-danger">We're sorry, but our <b>PayPal</b> checkout is temporarily unavailable. As soon as PayPal comes back online, we will accept orders again. Please check back later.</div>
@@ -1138,7 +1141,7 @@ end if
 					
 					<div id="REMOVE-GO-LIVE" >
 					<div class="afterpay_option" style="<%= afterpay_display %>">
-						<button class="btn btn-lg btn-primary btn-block checkout_button place_order checkout_afterpay"  type="submit" form="checkout_form" name="place_order">PAY NOW WITH <img class="img-fluid d-inline w-50" src="/images/afterpay-white-logo.png"/></button>
+						<button id="btn-checkout-afterpay" class="btn btn-lg btn-primary btn-block checkout_button place_order checkout_afterpay" style="display:none" type="submit" form="checkout_form" name="place_order">PAY NOW WITH <img class="img-fluid d-inline w-50" src="/images/afterpay-white-logo.png"/></button>
 						<span class="d-none"><span class="afterpay-widget-nonactive afterpay-widget"></span></span>
 						<% if request.querystring("type") = "afterpay" then %> 
 						<input type="hidden" name="afterpay" value="on">
@@ -1185,14 +1188,14 @@ end if
 				<div class="alert alert-danger stock-error" style="display:none"></div>
 					<% if request.querystring("type") = "card" then %>
 						<% If toggle_checkout_cards = true Then %>
-							<button class="btn btn-lg btn-primary btn-block checkout_button place_order" style="display: none" type="submit" form="checkout_form" name="place_order">PLACE ORDER</button>
+							<button id="btn-checkout-creditcard" class="btn btn-lg btn-primary btn-block checkout_button place_order" style="display: none" type="submit" form="checkout_form" name="place_order">PLACE ORDER</button>
 						<% else %>
 							<div class="alert alert-danger">We're sorry, but our <b>credit card</b> checkout is temporarily unavailable. As soon as our payment processor comes back online, we will accept orders again. Please check back later.</div>
 						<% end if %>
 					<% end if %>
 					<% if request.querystring("type") = "paypal" then %>
 						<% If toggle_checkout_paypal = true Then %>
-							<button type="submit" form="checkout_form" name="place_order" class="btn btn-lg btn-warning btn-block checkout_button place_order checkout_paypal mt-4" style="display: none">CONTINUE TO <img class="ml-1" style="height:25px" src="/images/paypal.png" /></button>
+							<button id="btn-checkout-paypal" type="submit" form="checkout_form" name="place_order" class="btn btn-lg btn-warning btn-block checkout_button place_order checkout_paypal mt-4" style="display: none">CONTINUE TO <img class="ml-1" style="height:25px" src="/images/paypal.png" /></button>
 						<% else %>
 							<div class="alert alert-danger">We're sorry, but our <b>PayPal</b> checkout is temporarily unavailable. As soon as PayPal comes back online, we will accept orders again. Please check back later.</div>
 						<% end if %>		
@@ -1200,7 +1203,7 @@ end if
 					<!--
 					<div id="REMOVE-GO-LIVE" style="display:none">
 						<div class="afterpay_option" style="<%= afterpay_display %>">
-							<button class="btn btn-lg btn-primary btn-block checkout_button place_order checkout_afterpay" style="display:none" type="submit" form="checkout_form" name="place_order">PAY NOW WITH <img class="img-fluid d-inline w-50" src="/images/afterpay-white-logo.png"/></button>
+							<button id="btn-checkout-afterpay" class="btn btn-lg btn-primary btn-block checkout_button place_order checkout_afterpay" style="display:none" type="submit" form="checkout_form" name="place_order">PAY NOW WITH <img class="img-fluid d-inline w-50" src="/images/afterpay-white-logo.png"/></button>
 						</div>
 						</div>
 					-->
@@ -1266,9 +1269,9 @@ end if
 		updateCurrency();
 </script>
 <% end if %>
-<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=102722"></script>
+<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=102724"></script>
 <script type="text/javascript" src="/js-pages/cart.min.js?v=050329" async></script>
-<script type="text/javascript" src="/js-pages/checkout.min.js?v=111122"></script>
+<script type="text/javascript" src="/js-pages/checkout.min.js?v=111123"></script>
 <!-- Start Afterpay Javascript -->
 
 <script src="<%= afterpay_javascript %>" async></script>
