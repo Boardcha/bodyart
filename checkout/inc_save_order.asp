@@ -346,11 +346,10 @@ if var_addons_active <> "yes" then
 		strCust_Comments = "<br/>CUSTOMER COMMENTS:<br/>" & Replace(var_customer_comments, vbCrLF, "<br />" + vbCrLF) & "<br/><br/>"
 	end if
 	
-
 	
-		objCmd.NamedParameters = True	
-			objCmd.Parameters.Append(objCmd.CreateParameter("@CustomerID",3,1,10,var_our_custid)) ' set on this page and on inc_create_account.asp depending on if they are logged in or create a new account
-			objCmd.Parameters.Append(objCmd.CreateParameter("@Email",200,1,70,var_email))
+	objCmd.NamedParameters = True	
+	objCmd.Parameters.Append(objCmd.CreateParameter("@CustomerID",3,1,10,var_our_custid)) ' set on this page and on inc_create_account.asp depending on if they are logged in or create a new account
+	objCmd.Parameters.Append(objCmd.CreateParameter("@Email",200,1,70,var_email))
 			
 			
 			' MOVE TO SAVE ORDER			objCmd.Parameters.Append(objCmd.CreateParameter("@cim_id", 200,1,30, session("cim_accountNumber")))
