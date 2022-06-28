@@ -31,7 +31,7 @@ end if
 
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "INSERT INTO ProductDetails (item_order, DetailCode, location, qty, stock_qty, restock_threshold, Gauge, Length, ProductDetail1, price, wlsl_price, detail_code, ProductID, active, weight, colors, detail_materials, wearable_material, DateAdded) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'" & now() & "')"
+	objCmd.CommandText = "INSERT INTO ProductDetails (item_order, DetailCode, location, qty, stock_qty, restock_threshold, Gauge, Length, ProductDetail1, price, wlsl_price, detail_code, ProductID, active, last_inactivation_date, weight, colors, detail_materials, wearable_material, DateAdded) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,'" & now() & "')"
 	objCmd.Parameters.Append(objCmd.CreateParameter("item_order",3,1,10, request.form("sort")))
 	objCmd.Parameters.Append(objCmd.CreateParameter("DetailCode",3,1,10,request.form("section")))
 	objCmd.Parameters.Append(objCmd.CreateParameter("location",3,1,10,request.form("location")))
@@ -46,6 +46,11 @@ end if
 	objCmd.Parameters.Append(objCmd.CreateParameter("detail_code",200,1,225,request.form("sku")))
 	objCmd.Parameters.Append(objCmd.CreateParameter("productid",3,1,10,request.form("productid")))
 	objCmd.Parameters.Append(objCmd.CreateParameter("active",3,1,10,active))
+	If active = 0 Then
+		objCmd.Parameters.Append(objCmd.CreateParameter("last_inactivation_date",200,1,30,Cstr(now())))
+	Else
+		objCmd.Parameters.Append(objCmd.CreateParameter("last_inactivation_date",200,1,30, NULL ))
+	End If
 	objCmd.Parameters.Append(objCmd.CreateParameter("weight",3,1,10,request.form("weight")))
 	objCmd.Parameters.Append(objCmd.CreateParameter("colors",200,1,200,var_colors))
 	objCmd.Parameters.Append(objCmd.CreateParameter("materials",200,1,200,var_materials))

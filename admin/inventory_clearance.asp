@@ -22,21 +22,21 @@ rsCheck_numRows = rsCheck_numRows + Repeat1__numRows
 ' Set all clearance and limited items to inactive if they are out
 if request.querystring("UpdateAll") = "yes" then
 
-Do While ((Repeat1__numRows <> 0) AND (NOT rsCheck.EOF))
+	Do While ((Repeat1__numRows <> 0) AND (NOT rsCheck.EOF))
 
-	set rsItemsInactive = Server.CreateObject("ADODB.Command")
-	rsItemsInactive.ActiveConnection = MM_bodyartforms_sql_STRING
-	rsItemsInactive.CommandText = "UPDATE inventory SET item_active = 0 WHERE (type = 'Clearance' OR type = 'onetime' OR type LIKE '%limited%' OR type = 'blowout' OR type = 'One time buy' OR type = 'Discontinued' OR type = 'Consignment') AND qty <= 0  AND item_active = 1 AND product_active = 1" 
-	rsItemsInactive.Execute()
-	
-Repeat1__index=Repeat1__index+1
-Repeat1__numRows=Repeat1__numRows-1
-rsCheck.MoveNext()
-Loop
+		set rsItemsInactive = Server.CreateObject("ADODB.Command")
+		rsItemsInactive.ActiveConnection = MM_bodyartforms_sql_STRING
+		rsItemsInactive.CommandText = "UPDATE inventory SET item_active = 0 WHERE (type = 'Clearance' OR type = 'onetime' OR type LIKE '%limited%' OR type = 'blowout' OR type = 'One time buy' OR type = 'Discontinued' OR type = 'Consignment') AND qty <= 0  AND item_active = 1 AND product_active = 1" 
+		rsItemsInactive.Execute()
+		
+	Repeat1__index=Repeat1__index+1
+	Repeat1__numRows=Repeat1__numRows-1
+	rsCheck.MoveNext()
+	Loop
 
 	set SetProduct = Server.CreateObject("ADODB.Command")
 	SetProduct.ActiveConnection = MM_bodyartforms_sql_STRING
-	SetProduct.CommandText = "UPDATE jewelry SET jewelry.active = 0 WHERE jewelry.active = 1 AND (jewelry.type = 'Clearance' OR jewelry.type = 'onetime' OR jewelry.type LIKE '%limited%' OR jewelry.type = 'blowout' OR jewelry.type = 'One time buy' OR jewelry.type = 'Discontinued' OR jewelry.type = 'Consignment') AND NOT EXISTS (SELECT 1 FROM ProductDetails WHERE ProductDetails.ProductID = jewelry.ProductID AND ProductDetails.active = 1)"
+	SetProduct.CommandText = "UPDATE jewelry SET jewelry.active = 0, jewelry.last_inactivation_date = GETDATE() WHERE jewelry.active = 1 AND (jewelry.type = 'Clearance' OR jewelry.type = 'onetime' OR jewelry.type LIKE '%limited%' OR jewelry.type = 'blowout' OR jewelry.type = 'One time buy' OR jewelry.type = 'Discontinued' OR jewelry.type = 'Consignment') AND NOT EXISTS (SELECT 1 FROM ProductDetails WHERE ProductDetails.ProductID = jewelry.ProductID AND ProductDetails.active = 1)"
 	SetProduct.Execute()
 
 end if 
