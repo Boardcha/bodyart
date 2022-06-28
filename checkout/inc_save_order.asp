@@ -334,7 +334,7 @@ if var_addons_active <> "yes" then
 	objCmd.ActiveConnection = DataConn
 	'objCmd.CommandType = 4
 	'objCmd.CommandText = "Proc_Checkout4_InsertOrder"
-	objCmd.CommandText = "INSERT INTO sent_items (customer_ID, email, company, customer_first, customer_last, address, address2, city, state, province, zip, country, phone, UPS_AmountPaid, UPS_Service, item_description, customer_comments, shipping_rate, shipping_type, pay_method, shipped, date_order_placed, coupon_code, IPaddress,  billing_name, billing_address, billing_zip, preorder, autoclave, total_sales_tax, taxes_state_only, taxes_county_only, taxes_city_only, taxes_special_only, combined_tax_rate, total_gift_cert, total_coupon_discount, total_preferred_discount, total_store_credit, total_free_credits, giftcert_flag, currency_type, exchange_rate, checkout_estimated_delivery_date, anodize) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+	objCmd.CommandText = "INSERT INTO sent_items (customer_ID, email, company, customer_first, customer_last, address, address2, city, state, province, zip, country, phone, UPS_AmountPaid, UPS_Service, item_description, customer_comments, shipping_rate, shipping_type, pay_method, shipped, date_order_placed, coupon_code, IPaddress,  billing_name, billing_address, billing_zip, preorder, autoclave, total_sales_tax, taxes_state_only, taxes_county_only, taxes_city_only, taxes_special_only, combined_tax_rate, total_gift_cert, total_coupon_discount, total_preferred_discount, total_store_credit, total_free_credits, giftcert_flag, currency_type, exchange_rate, checkout_estimated_delivery_date, anodize, referral_traffic_from) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 
 	var_customer_comments = replace(request.form("Comments"), ",", "")
 	var_gift_order = replace(request.form("gift"), ",", "")
@@ -346,11 +346,10 @@ if var_addons_active <> "yes" then
 		strCust_Comments = "<br/>CUSTOMER COMMENTS:<br/>" & Replace(var_customer_comments, vbCrLF, "<br />" + vbCrLF) & "<br/><br/>"
 	end if
 	
-
 	
-		objCmd.NamedParameters = True	
-			objCmd.Parameters.Append(objCmd.CreateParameter("@CustomerID",3,1,10,var_our_custid)) ' set on this page and on inc_create_account.asp depending on if they are logged in or create a new account
-			objCmd.Parameters.Append(objCmd.CreateParameter("@Email",200,1,70,var_email))
+	objCmd.NamedParameters = True	
+	objCmd.Parameters.Append(objCmd.CreateParameter("@CustomerID",3,1,10,var_our_custid)) ' set on this page and on inc_create_account.asp depending on if they are logged in or create a new account
+	objCmd.Parameters.Append(objCmd.CreateParameter("@Email",200,1,70,var_email))
 			
 			
 			' MOVE TO SAVE ORDER			objCmd.Parameters.Append(objCmd.CreateParameter("@cim_id", 200,1,30, session("cim_accountNumber")))
@@ -444,6 +443,12 @@ if var_addons_active <> "yes" then
 			else
 				objCmd.Parameters.Append(objCmd.CreateParameter("@anodize",3,1,1,0))
 			end if	
+			
+			if Session("referrer") <> "" Then
+				objCmd.Parameters.Append(objCmd.CreateParameter("@referral_traffic_from",200,1,200, Session("referrer")))
+			else	
+				objCmd.Parameters.Append(objCmd.CreateParameter("@referral_traffic_from",200,1,200, NULL ))
+			end if				
 			
 	objCmd.Execute()
 
