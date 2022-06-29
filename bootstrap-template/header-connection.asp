@@ -1,6 +1,7 @@
 <!--#include virtual="/Connections/sql_connection.asp" -->
 <!--#include virtual="/functions/sha256.asp"-->
 <!--#include virtual="/functions/salt.asp"-->
+<!--#include virtual="/functions/get-current-url.inc"-->
 <%
 
 referrer = Request.ServerVariables ("HTTP_REFERER")
@@ -11,7 +12,8 @@ If referrer <> "" _
 	And Instr(referrer, "70.114.165.125") = 0 _ 
 	And Instr(referrer, "75.109.218.58") = 0 _ 
 	And Instr(referrer, "75.109.218.250") = 0 Then
-		Session("referrer") = Left(referrer, 200)
+		Session("referral_traffic_from") = Left(referrer, 200)
+		Session("referral_traffic_to") = Left(GetCurrentUrl(), 200)
 End If	
 
 set objCmd = Server.CreateObject("ADODB.command")
