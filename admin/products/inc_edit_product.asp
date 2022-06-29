@@ -65,10 +65,17 @@ response.write "AFTER: " & column_value & "<br/>"
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "update jewelry set " & column_title & " = ? where productID = ?"
-'	objCmd.Parameters.Append(objCmd.CreateParameter("column",3,1,10,column_title))
 	objCmd.Parameters.Append(objCmd.CreateParameter("value",200,1,8000,column_value))
 	objCmd.Parameters.Append(objCmd.CreateParameter("id",3,1,10,id))
 	objCmd.Execute()
+	
+	If column_title = "active" And column_value = "0" Then
+		set objCmd = Server.CreateObject("ADODB.command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "UPDATE jewelry set last_inactivation_date = GETDATE() WHERE productID = ?"
+		objCmd.Parameters.Append(objCmd.CreateParameter("id",3,1,10,id))
+		objCmd.Execute()	
+	End If
 	
 else ' update the details
 
@@ -112,6 +119,14 @@ else ' update the details
 	objCmd.Parameters.Append(objCmd.CreateParameter("value",200,1,1000,column_value))
 	objCmd.Parameters.Append(objCmd.CreateParameter("id",3,1,10,detailid))
 	objCmd.Execute()
+	
+	If column_title = "active" And column_value = "0" Then
+		set objCmd = Server.CreateObject("ADODB.command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "UPDATE ProductDetails set last_inactivation_date = GETDATE() WHERE ProductDetailID = ?"
+		objCmd.Parameters.Append(objCmd.CreateParameter("id",3,1,10,detailid))
+		objCmd.Execute()	
+	End If	
 
 end if
 
