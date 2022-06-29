@@ -45,6 +45,9 @@ If var_access_level = "Manager" or var_access_level = "Admin" then
                         <div class="col-2 pb-2">
                             <!--#include virtual="/admin/power-bi/inc-customers.inc"-->
                         </div><!-- col -->
+                        <div class="col-2 pb-2">
+                            <!--#include virtual="/admin/power-bi/inc-website.inc"-->
+                        </div><!-- col -->
 
 
                     </div><!-- row -->

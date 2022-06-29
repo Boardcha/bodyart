@@ -48,7 +48,7 @@ new_id = request("new_product_id")
 	' Update active status and comments on old_id product
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "UPDATE jewelry SET active = 0, ProductNotes = (CAST(ProductNotes AS NVARCHAR(MAX)) + CAST('' + NCHAR(13) + ' Combined product into product #" & new_id & " on " & date() & "' AS NVARCHAR(MAX))) WHERE productID = ?"
+	objCmd.CommandText = "UPDATE jewelry SET active = 0, last_inactivation_date = GETDATE(), ProductNotes = (CAST(ProductNotes AS NVARCHAR(MAX)) + CAST('' + NCHAR(13) + ' Combined product into product #" & new_id & " on " & date() & "' AS NVARCHAR(MAX))) WHERE productID = ?"
 	objCmd.Parameters.Append(objCmd.CreateParameter("old_id",3,1,10,old_id))
 	objCmd.Execute()
 	
