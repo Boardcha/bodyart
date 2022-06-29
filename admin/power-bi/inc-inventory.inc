@@ -20,9 +20,9 @@
                                     </a>
                             </li>
                             <li>
-                                <a href="/admin/power-bi/reports.asp?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSectionbddd7e9b0e965ec3d95e&reportName=Wholesale stock on hand">
+                                <a href="/admin/power-bi/reports.asp?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSectionbddd7e9b0e965ec3d95e&reportName=Wholesale stock on hand over time">
                                     <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                    Wholesale value by vendor
+                                    Wholesale stock on hand over time
                                     </a>
                             </li>
  <h6 class="mt-3 border-bottom border-secondary text-center">VENDORS</h6>
