@@ -216,7 +216,7 @@ if session("admin_tempcustid") <> "" then %>
 		  </button>
 		</div>
 		<form class="needs-validation" id="frm-cim" data-type="" data-status="" data-url="" novalidate>
-		<div class="modal-body modal-scroll-long">
+		<div class="modal-body modal-scroll-long" id="update_address_body" style="height:400px">
 		  <!--#include virtual="/accounts/inc-cim-address-form.asp" -->
 		  <div class="message-address-modal"></div>
 		</div>
@@ -258,4 +258,8 @@ end if   'rsGetUser.EOF
 %>  
 
 <!--#include virtual="/bootstrap-template/footer.asp" -->
+<!-- Postgrid API -->
+<script src="/js/postgrid-customized-api.js" data-pg-key="live_pk_csP2zaBTuekcKtmRMRSi9U"></script>		
+<script src="/js-pages/account-address-validation.js"></script>		
+
 <script type="text/javascript" src="/js-pages/cim-profile-management-913_1.js"></script>

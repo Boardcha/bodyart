@@ -69,87 +69,105 @@
 
 		</div>
 		</div>
-		<div class="form-group">
-		<label for="company">Company&nbsp;&nbsp;</label>
-		<input class="form-control" name="company" id="company" type="text" value="<% if var_add_only = "" then %><%= session("company") %><% end if %>" autocomplete="shipping organization" />
-		</div>
-		<div class="form-group">
-		<label for="address">Address (Line 1) <span class="text-danger">*</span></label>
-		<input class="form-control" required name="address" id="address" type="text" value="<% if var_add_only = "" then %><%= session("address") %><% end if %>" autocomplete="shipping address-line1" />
-		<div class="invalid-feedback">
-				Address is required
-		</div>
-		</div>
-		<div class="form-group">
-		<label for="address2">Apt #, Dorm, Suite&nbsp;&nbsp;</label>
-		<input class="form-control" name="address2" id="address2" type="text" value="<% if var_add_only = "" then %><%= session("address2") %><% end if %>" autocomplete="shipping address-line2" />
-		</div>
-		<div class="form-group">
-		<label for="city">City <span class="text-danger">*</span></label>
-		<input class="form-control" required name="city" id="city" type="text" autocomplete="shipping address-level2" />
-		<div class="invalid-feedback">
-				City is required
-		</div>
-		</div>
 		
-		<div class="form-group">                     
-		<label for="country">Country <span class="text-danger">*</span></label>
-		<select class="form-control" required name="country" id="country" data-validation="required" autocomplete="shipping country" <% if var_update_order_address = "yes" then %>disabled<% end if %>>
-		<% 
-		if session("country") <> "" and var_add_only = "" then %>
-		<option value="<%= session("country") %>" ><%= session("country") %></option>
-		<% end if %>
-		<option value="USA">USA</option>
-		<% 
-		While NOT rsGetCountrySelect.EOF 
-		%>
-		<option value="<%=(rsGetCountrySelect.Fields.Item("Country").Value)%>"><%=(rsGetCountrySelect.Fields.Item("Country").Value)%></option>
-		<% 
-		rsGetCountrySelect.MoveNext()
-		Wend
-		rsGetCountrySelect.Requery
-		%>
-		</select>
-		<div class="invalid-feedback">
-				Country is required
-		</div>
-		</div>
-		<div class="form-row">
-		<div class="col state">
-		<label for="state">State (USA)</label>
-		<select class="form-control" required name="state" id="state" autocomplete="shipping address-level1">
+		<section data-pg-verify>
+		<div id="shipping-address-autocomplete">
+			<div class="form-group position-relative">
+				<label for="shipping-full-address">Address <span class="text-danger">*</span></label>
+				<input type="text" id="shipping-full-address" data-pg-full-address  class="form-control" placeholder="Start typing an a&#8203;ddress..."  autocomplete="off" />
+			</div>
+		 </div>
+		 <div class="form-group position-relative" id="chk-shipping-manual-address-input-container">
+			<div class="custom-control custom-checkbox">
+				<input type="checkbox" class="custom-control-input" name="chk-shipping-manual-address-input" id="chk-shipping-manual-address-input">
+				<label class="custom-control-label" for="chk-shipping-manual-address-input">Can't find your address? Check this box to manually enter your address.</label>
+			</div>
+		</div>		 
 
-		<!--#include virtual="/includes/inc_states_select.asp"-->
-		</select>
-		<div class="invalid-feedback">
-				State is required
-		</div>
-		</div>
-		<div class="col province">
-		<label for="province">Province / State</label>
-		<input class="form-control" name="province" id="province" type="text" value="<% if var_add_only = "" then %><%= session("province") %><% end if %>" autocomplete="shipping address-level2" />
-		<div class="invalid-feedback">
-				Province is required
-		</div>
-		</div>
-		<div class="col province-canada">
-		<label for="province-canada">Province <span class="text-danger">*</span></label>
-		<select class="form-control" name="province-canada" id="province-canada" autocomplete="shipping address-level2">
-		<!--#include virtual="/includes/inc_province_canada_select.asp"-->
-			  </select>
-			  <div class="invalid-feedback">
+		<div id="selected-shipping-address" class="mt-3" style="display:none"></div>
+
+		<div id="shipping-address-container" style="display:none">			
+	
+			<div class="form-group">
+			<label for="shipping-address">Address (Line 1) <span class="text-danger">*</span></label>
+			<input data-pg-address-line1 class="form-control" required name="shipping-address" id="shipping-address" type="text" value="<% if var_add_only = "" then %><%= session("address") %><% end if %>" autocomplete="shipping address-line1" />
+			<div class="invalid-feedback">
+					Address is required
+			</div>
+			</div>
+			<div class="form-group">
+			<label for="shipping-address2">Apt #, Dorm, Suite&nbsp;&nbsp;</label>
+			<input data-pg-address-line2 class="form-control" name="shipping-address2" id="shipping-address2" type="text" value="<% if var_add_only = "" then %><%= session("address2") %><% end if %>" autocomplete="shipping address-line2" />
+			</div>
+			<div class="form-group shipping-city">
+			<label for="shipping-city">City <span class="text-danger">*</span></label>
+			<input data-pg-city class="form-control" required name="shipping-city" id="shipping-city" type="text" autocomplete="shipping address-level2" />
+			<div class="invalid-feedback">
+					City is required
+			</div>
+			</div>
+			
+			<div class="form-group shipping-country">                     
+			<label for="shipping-country">Country <span class="text-danger">*</span></label>
+			<select data-pg-country class="form-control" required name="shipping-country" id="shipping-country" data-validation="required" autocomplete="shipping country" <% if var_update_order_address = "yes" then %>disabled<% end if %>>
+			<% 
+			if session("country") <> "" and var_add_only = "" then %>
+			<option value="<%= session("country") %>" ><%= session("country") %></option>
+			<% end if %>
+			<option value="USA">USA</option>
+			<% 
+			While NOT rsGetCountrySelect.EOF 
+			%>
+			<option value="<%=(rsGetCountrySelect.Fields.Item("Country").Value)%>"><%=(rsGetCountrySelect.Fields.Item("Country").Value)%></option>
+			<% 
+			rsGetCountrySelect.MoveNext()
+			Wend
+			rsGetCountrySelect.Requery
+			%>
+			</select>
+			<div class="invalid-feedback">
+					Country is required
+			</div>
+			</div>
+			<div class="form-row">
+			<div class="col state shipping-state">
+			<label for="shipping-state">State (USA)</label>
+			<select data-pg-prov class="form-control" required name="shipping-state" id="shipping-state" autocomplete="shipping address-level1">
+			<!--#include virtual="/includes/inc_states_select.asp"-->
+			</select>
+			<div class="invalid-feedback">
+					State is required
+			</div>
+			</div>
+			<div class="col province shipping-province">
+			<label for="shipping-province">Province / State</label>
+			<input data-pg-prov3 class="form-control" name="shipping-province" id="shipping-province" type="text" value="<% if var_add_only = "" then %><%= session("province") %><% end if %>" autocomplete="shipping address-level2" />
+			<div class="invalid-feedback">
 					Province is required
 			</div>
+			</div>
+			<div class="col province-canada shipping-province-canada">
+			<label for="shipping-province-canada">Province <span class="text-danger">*</span></label>
+			<select data-pg-prov2 class="form-control" name="shipping-province-canada" id="shipping-province-canada" autocomplete="shipping address-level2">
+			<!--#include virtual="/includes/inc_province_canada_select.asp"-->
+				  </select>
+				  <div class="invalid-feedback">
+						Province is required
+				</div>
+			</div>
+			<div class="col shipping-zip">
+			<label for="shipping-zip">Zip/Postal code <span class="text-danger">*</span></label>
+			<input data-pg-pc class="form-control" required name="shipping-zip" id="shipping-zip" type="text" value="<% if var_add_only = "" then %><%= session("zip") %><% end if %>" autocomplete="shipping postal-code" />
+			<div class="invalid-feedback">
+					Zip/Postal code is required
+			</div>
 		</div>
-		<div class="col">
-		<label for="zip">Zip/Postal code <span class="text-danger">*</span></label>
-		<input class="form-control" required name="zip" id="zip" type="text" value="<% if var_add_only = "" then %><%= session("zip") %><% end if %>" autocomplete="shipping postal-code" />
-		<div class="invalid-feedback">
-				Zip/Postal code is required
-		</div>
-		</div>
+		
 	</div>
-	
+	</div>
+	</section>
 	</div><!-- address fields -->
 		<input type="hidden" name="type" id="type" value="">
 		<input type="hidden" name="cim-id" id="cim-id" value="">
+				
+		
