@@ -632,6 +632,7 @@ end if ' not rsProduct.eof
 %>
 
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
+<!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <% If not rsProduct.eof then %>
 <script type="text/javascript">
 // GA4 GTM push
@@ -674,6 +675,21 @@ var _learnq = _learnq || [];
 	  "Brand": '<%= rsProduct.Fields.Item("brandname").Value %>'
 	};
 	_learnq.push(["track", "Viewed Product", item]);
+
+	// REDDIT TRACK PRODUCT VIEW
+	rdt('track', 'ViewContent');
+
+	// PINTEREST TRACK PRODUCT VIEW
+	pintrk('track', '
+		pagevisit
+		', {
+		line_items: [
+		{
+		product_name: '<%= rsProduct.Fields.Item("title").Value %>',
+		product_id: '<%= rsProduct.Fields.Item("ProductID").Value %>'
+		}
+		]
+		});
 
 
 // Regular Google UA Ecommerce data layer push for GTM - add to cart
@@ -722,15 +738,33 @@ var button_addcart = document.getElementById('btn-add-cart');
 			"AddedItemPrice": actual_price,
 			"AddedItemQuantity": qty,
 			"CheckoutURL": "https://bodyartforms.com/checkout.asp"
-		}]);	
+		}]);
+		
+		//PINTEREST ADD TO CART TRACKING
+		pintrk('track', '
+		addtocart
+		', {
+		value: actual_price * qty,
+		order_quantity: qty,
+		currency: 'USD',
+		line_items: 
+			[{
+			product_name: '<%= rsProduct.Fields.Item("title").Value %>',
+			product_id: '<%= rsProduct.Fields.Item("ProductID").Value %>',
+			product_variant_id: var_detailid,
+			product_price: actual_price
+			}]
+		});
 
-	}); // listener for click button_addcart
+		// REDDIT TRACK ADD TO CART
+		rdt('track', 'AddToCart');
+
+	}); // END listener for click button_addcart
 
 } // Run after window finishes loading
 </script>
 
 <% end if %>
-<!--#include virtual="/bootstrap-template/header-scripts-and-css.asp" -->
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->
 <!--#include virtual="/bootstrap-template/header-navigation.asp" -->
 <!--#include virtual="/bootstrap-template/filters.asp" -->
