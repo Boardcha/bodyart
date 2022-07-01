@@ -209,17 +209,17 @@ function onPaymentDataChanged(intermediatePaymentData) {
 }
 
 /**
- * Provide Google Pay API with a payment data error.
- *
- * @see {@link https://developers.google.com/pay/api/web/reference/response-objects#PaymentDataError|PaymentDataError}
- * @returns {object} payment data error, suitable for use as error property of PaymentDataRequestUpdate
- */
+ * Provide Google Pay API with a payment data error.
+ *
+ * @see {@link https://developers.google.com/pay/api/web/reference/response-objects#PaymentDataError|PaymentDataError}
+ * @returns {object} payment data error, suitable for use as error property of PaymentDataRequestUpdate
+ */
 function getGoogleUnserviceableAddressError() {
-  return {
-    reason: "SHIPPING_ADDRESS_UNSERVICEABLE",
-    message: "Cannot ship to the selected address",
-    intent: "SHIPPING_ADDRESS"
-  };
+	return {
+		reason: "SHIPPING_ADDRESS_UNSERVICEABLE",
+		message: "Cannot ship to the selected address",
+		intent: "SHIPPING_ADDRESS"
+	};
 }
 
 /**
