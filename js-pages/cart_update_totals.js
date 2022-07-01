@@ -164,32 +164,32 @@
 				if(subtotal_free_gifts < 150) {
 					free_items_count = 6;
 					amountToGetAnotherGift = 150 - subtotal_free_gifts;
-					freeGiftText = 'You've got <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift!';
+					freeGiftText = "You've got <b>$" + amountToGetAnotherGift.toFixed(2) + "</b> to go to get another free gift!";
 					clearFreeItemsCookie(7);
 				}
 				if(subtotal_free_gifts < 100) {
 					free_items_count = 5;
 					amountToGetAnotherGift = 100 - subtotal_free_gifts;
-					freeGiftText = 'You've got <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift!';
+					freeGiftText = "You've got <b>$" + amountToGetAnotherGift.toFixed(2) + "</b> to go to get another free gift!";
 					clearFreeItemsCookie(6);
 				}
 				if(subtotal_free_gifts < 75) {
 					free_items_count = 4;
 					amountToGetAnotherGift = 75 - subtotal_free_gifts;
-					freeGiftText = 'You've got <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift.';
+					freeGiftText = "You've got <b>$" + amountToGetAnotherGift.toFixed(2) + "</b> to go to get another free gift!";
 					clearFreeItemsCookie(5);
 				}
 				if(subtotal_free_gifts < 50) {
 					free_items_count = 3;
 					amountToGetAnotherGift = 50 - subtotal_free_gifts;
-					freeGiftText = 'You've got <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to get another free gift!';
+					freeGiftText = "You've got <b>$" + amountToGetAnotherGift.toFixed(2) + "</b> to go to get another free gift!";
 					clearFreeItemsCookie(4);
 				}
 
 				if(subtotal_free_gifts < 30) {
 					free_items_count = 2;				
 					amountToGetAnotherGift = 30 - subtotal_free_gifts;
-					freeGiftText = 'You've got <b>$' + amountToGetAnotherGift.toFixed(2) + '</b> to go to earn a free gift!';
+					freeGiftText = "You've got <b>$" + amountToGetAnotherGift.toFixed(2) + "</b> to go to earn a free gift!";
 					freeGiftSubText = 'Unlocked: O-rings & Stickers';
 					clearFreeItemsCookie(3);
 				}
@@ -197,7 +197,7 @@
 				if(free_items_count > 0){
 					let s = (free_items_count > 1) ? 's' : '';
 					if(free_items_count > 2)
-						freeGiftSubText = 'Unlocked: ' + (free_items_count - 2) + ' free gift' + s + '!';
+						freeGiftSubText = "Unlocked: " + (free_items_count - 2) + " free gift" + s + "!";
 					
 					var step1icon = "fa-check", step1Class = "icon-bg-blue";
 					var step2icon = "fa-lock", step2Class = "icon-bg-gray";
