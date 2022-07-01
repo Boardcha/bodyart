@@ -42,9 +42,12 @@
 			dataType : "json",
 			data: {shipping_option: shipping_option, page_name: page_name, tax_country: tax_country, tax_state: tax_state, tax_zip: tax_zip, tax_address: tax_address, state_taxed: state_taxed},
 			success: function( json ) {
-				//console.log("state taxes: " + state_taxed + " in " + tax_state);
 				
-				
+			if(json.subtotal > 0){
+				$("#cim_billing_addresses").show();
+			}else{
+				$("#cim_billing_addresses").hide();
+			}
 			subTotal = parseFloat(json.subtotal);
 			totalDiscount = parseFloat(json.total_discount);
 			salesTax = json.salestax;
