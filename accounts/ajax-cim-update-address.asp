@@ -113,7 +113,8 @@ If request.form("type") = "billing" Then
 %>
 {
 	"status":"fail",
-	"reason": "<% PrintErrors(objResponseUpdateBilling) %>"
+	"reason": "<% PrintErrorsUserFriendly(objResponseUpdateBilling) %>",
+	"reason_full": "<% PrintErrors(objResponseUpdateBilling) %>"
 }
 <%
 		End if		
