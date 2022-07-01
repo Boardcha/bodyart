@@ -57,6 +57,20 @@ while NOT rsGoogle_GetOrderDetails.eof
 
 
 <script type="text/javascript">
+	// REDDIT TRACK USER PURCHASE
+	rdt('track', 'Purchase');
+
+	// PINTEREST TRACK USER PURCHASE
+	pintrk('track', '
+		checkout
+		', {
+		value: <%= FormatNumber(google_total, -1, -2, -2, -2) %>,
+		order_quantity: 1,
+		currency: 'USD',
+		order_id: '<%= session("invoiceid") %>',
+		promo_code: '<%= rsGetOrder.Fields.Item("coupon_code").Value %>'
+		});
+
 	// Google Universal Analytics purchase tracking
 	window.dataLayer = window.dataLayer || [];
 	window.dataLayer.push({

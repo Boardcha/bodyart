@@ -65,6 +65,7 @@ response.write "AFTER: " & column_value & "<br/>"
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "update jewelry set " & column_title & " = ? where productID = ?"
+'	objCmd.Parameters.Append(objCmd.CreateParameter("column",3,1,20,column_title))
 	objCmd.Parameters.Append(objCmd.CreateParameter("value",200,1,8000,column_value))
 	objCmd.Parameters.Append(objCmd.CreateParameter("id",3,1,10,id))
 	objCmd.Execute()
@@ -135,7 +136,9 @@ end if
 		'Write ALL info to edits log table
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, product_id, detail_id, description, edit_date) VALUES (" & user_id & "," & id & "," & edits_detail_id & ",'" & edits_description & "','" & now() & "')"
+		objCmd.CommandText = "INSERT INTO tbl_edits_log (user_id, product_id, detail_id, description, edit_date) VALUES (" & user_id & "," & id & ", ?, ?,'" & now() & "')"
+		objCmd.Parameters.Append(objCmd.CreateParameter("edits_detail_id",3,1,10, edits_detail_id))
+		objCmd.Parameters.Append(objCmd.CreateParameter("edits_description",200,1,1000, edits_description ))
 		objCmd.Execute()
 	
 	end if
