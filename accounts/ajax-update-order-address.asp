@@ -17,17 +17,16 @@ if CLng(CustID_Cookie) = CLng(rsGetOrder.Fields.Item("customer_ID").Value) then
 
     set objCmd = Server.CreateObject("ADODB.command")
     objCmd.ActiveConnection = DataConn
-    objCmd.CommandText = "UPDATE sent_items SET company = ?, customer_first = ?, customer_last = ?, address = ?, address2 = ?, city = ?, state = ?, province = ?, zip = ? WHERE id = ?"
+    objCmd.CommandText = "UPDATE sent_items SET customer_first = ?, customer_last = ?, address = ?, address2 = ?, city = ?, state = ?, province = ?, zip = ? WHERE id = ?"
 
-    objCmd.Parameters.Append(objCmd.CreateParameter("@Company",200,1,50, request.form("company") ))
     objCmd.Parameters.Append(objCmd.CreateParameter("@First",200,1,30, request.form("first") ))
     objCmd.Parameters.Append(objCmd.CreateParameter("@Last",200,1,30, request.form("last") ))
-    objCmd.Parameters.Append(objCmd.CreateParameter("@Street",200,1,75, request.form("address") ))
-    objCmd.Parameters.Append(objCmd.CreateParameter("@Address2",200,1,75, request.form("address2") ))
-    objCmd.Parameters.Append(objCmd.CreateParameter("@City",200,1,50, request.form("city") ))
-    objCmd.Parameters.Append(objCmd.CreateParameter("@State",200,1,50, request.form("state") ))
-    objCmd.Parameters.Append(objCmd.CreateParameter("@Province",200,1,30, request.form("province-canada") & "" & request.form("province") ))
-    objCmd.Parameters.Append(objCmd.CreateParameter("@Zip",200,1,15, request.form("zip") ))
+    objCmd.Parameters.Append(objCmd.CreateParameter("@Street",200,1,75, request.form("shipping-address") ))
+    objCmd.Parameters.Append(objCmd.CreateParameter("@Address2",200,1,75, request.form("shipping-address2") ))
+    objCmd.Parameters.Append(objCmd.CreateParameter("@City",200,1,50, request.form("shipping-city") ))
+    objCmd.Parameters.Append(objCmd.CreateParameter("@State",200,1,50, request.form("shipping-state") ))
+    objCmd.Parameters.Append(objCmd.CreateParameter("@Province",200,1,30, request.form("shipping-province-canada") & "" & request.form("shipping-province") ))
+    objCmd.Parameters.Append(objCmd.CreateParameter("@Zip",200,1,15, request.form("shipping-zip") ))
     objCmd.Parameters.Append(objCmd.CreateParameter("InvoiceID",3,1,10, invoiceid))
     objCmd.Execute()
 
