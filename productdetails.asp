@@ -710,16 +710,16 @@ var button_addcart = document.getElementById('btn-add-cart');
 				var currency = 'USD'
 			}
 			window.dataLayer.push({
-			event: 'ua_add_to_cart',
+			event: "ua_add_to_cart",
 			ecommerce: {
-				'currencyCode': currency,
+				"currencyCode": currency,
 				add: {
 				products: [{
-					id: '<%= rsProduct.Fields.Item("ProductID").Value %>',
-					name: '<%= rsProduct.Fields.Item("title").Value %>',
-					category: '<%= trim(rsProduct.Fields.Item("jewelry").Value) %>',
+					id: "<%= rsProduct.Fields.Item("ProductID").Value %>",
+					name: "<%= rsProduct.Fields.Item("title").Value %>",
+					category: "<%= trim(rsProduct.Fields.Item("jewelry").Value) %>",
 					variant: variant,
-					brand: '<%= rsProduct.Fields.Item("brandname").Value %>',
+					brand: "<%= rsProduct.Fields.Item("brandname").Value %>",
 					quantity: qty
 					
 				}]
@@ -730,11 +730,11 @@ var button_addcart = document.getElementById('btn-add-cart');
 			//Klaviyo Add to cart push
 			_learnq.push(["track", "Added to Cart", {
 			"$value": actual_price * qty,
-			"AddedItemProductName": '<%= rsProduct.Fields.Item("title").Value %>',
-			"AddedItemProductID": '<%= rsProduct.Fields.Item("ProductID").Value %>',
+			"AddedItemProductName": "<%= rsProduct.Fields.Item("title").Value %>",
+			"AddedItemProductID": "<%= rsProduct.Fields.Item("ProductID").Value %>",
 			"AddedItemSKU": var_detailid,
-			"AddedItemImageURL": 'https://bodyartforms-products.bodyartforms.com/<%= rsProduct.Fields.Item("largepic").Value %>',
-			"AddedItemURL": 'https://bodyartforms.com/productdetails.asp?productid=<%= rsProduct.Fields.Item("ProductID").Value %>',
+			"AddedItemImageURL": "https://bodyartforms-products.bodyartforms.com/<%= rsProduct.Fields.Item("largepic").Value %>",
+			"AddedItemURL": "https://bodyartforms.com/productdetails.asp?productid=<%= rsProduct.Fields.Item("ProductID").Value %>",
 			"AddedItemPrice": actual_price,
 			"AddedItemQuantity": qty,
 			"CheckoutURL": "https://bodyartforms.com/checkout.asp"
