@@ -42,7 +42,18 @@ if (getCookie("cartCount") > 0) {
 }
 
 // Remove all empty variables in querystring on any product search using filters
-$('#form-filters').submit(function(){ $('select, input').each(function(){with($(this)) if (val()=='') remove();}) });
+$('#form-filters').submit(function()
+    { 
+        $('select, input').each(function(){with($(this)) if (val()=='') remove();}) 
+        
+        //PINTEREST TRACK SEARCH USED
+        pintrk('track', 'search', {
+            search_query: 'filtered_search'
+        });
+
+        // REDDDIT TRACK SEARCH USED
+        rdt('track', 'Search');
+    });
 
 // Check all sub boxes for a filter category
 $('#filters .cat-select').on('change',function(){
@@ -278,6 +289,15 @@ $(".btn-cart-load").click(function(){
 			if (json.duplicate == "no") {
                 $('#message-create-account').html('<div class="alert alert-success">An email has been sent to your email address containing an activation link. Please click on the link to activate your account. If you do not receive the email within a few minutes, please check your spam folder.</div>');
                 $('#btn-create-account').prop('disabled', true);
+
+                // TRACK PINTEREST USER REGISTRATION
+                pintrk('track', 'signup', {
+                    lead_type: 'User Registration'
+                });
+
+                // TRACK REDDIT USER REGISTRATION
+                rdt('track', 'SignUp');
+
 			} else {
 				$('#message-create-account').html('<div class="alert alert-danger">There is already an account registered with this e-mail, or another error occurred. If you have forgotten your password you can retrieve it <a class="alert-link" href="#" data-toggle="modal" data-target="#forgotpassword" data-dismiss="modal">at this link</a></div>');
 			}
@@ -330,6 +350,14 @@ $("#footer-newsletter-signup").on("click", function () {
                 $.ajax({
                     method: "post",
                     url: "/klaviyo/newsletter-pixel-track.asp"});
+
+                    // PINTEREST TRACK NEWSLETTER SIGNUP
+                    pintrk('track', 'lead', {
+                        lead_type: 'Newsletter'
+                    });
+
+                    // REDDIT TRACK NEWSLETTER SIGNUP
+                    rdt('track', 'Lead');
             } 
             if ($.isArray(json)) {
                 if ((json[0].id) != "") {

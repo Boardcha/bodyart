@@ -61,9 +61,7 @@ while NOT rsGoogle_GetOrderDetails.eof
 	rdt('track', 'Purchase');
 
 	// PINTEREST TRACK USER PURCHASE
-	pintrk('track', '
-		checkout
-		', {
+	pintrk('track', 'checkout', {
 		value: <%= FormatNumber(google_total, -1, -2, -2, -2) %>,
 		order_quantity: 1,
 		currency: 'USD',

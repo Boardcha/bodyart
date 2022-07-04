@@ -111,3 +111,12 @@ $('#body-column').addClass('col-lg-9 col-xl-10');
 }
 //$('#toggle-filters-pc, #toggle-filters-mobile').
 // add filters_expanded ="true" and remove the false
+
+// TRACK PINTEREST VIEW PRODUCT CATEGORY PAGE
+	pintrk('track', 'viewcategory', {
+		line_items: [
+		{
+		product_category: '<%= title_onpage %>'
+		}
+		]
+	});
