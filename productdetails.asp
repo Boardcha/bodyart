@@ -638,12 +638,12 @@ end if ' not rsProduct.eof
 // GA4 GTM push
 window.dataLayer = window.dataLayer || [];
 window.dataLayer.push({
-	'event': 'view_item',
-	'ecommerce': {
-		'items': [{
-			'item_name': '<%= rsProduct.Fields.Item("title").Value %>',
-        	'item_category': '<%= trim(rsProduct.Fields.Item("jewelry").Value) %>',
-        	'item_brand': '<%= rsProduct.Fields.Item("brandname").Value %>'
+	"event": "view_item",
+	"ecommerce": {
+		"items": [{
+			"item_name": "<%= rsProduct.Fields.Item("title").Value %>",
+        	"item_category": "<%= trim(rsProduct.Fields.Item("jewelry").Value) %>",
+        	"item_brand": "<%= rsProduct.Fields.Item("brandname").Value %>"
       }]
   }
 });
@@ -652,14 +652,14 @@ window.dataLayer.push({
 // GTM Product view
 window.dataLayer = window.dataLayer || [];
 window.dataLayer.push({
-  event: 'ua_viewproduct',
+  event: "ua_viewproduct",
   ecommerce: {
     detail: {
       products: [{
-        id: '<%= rsProduct.Fields.Item("ProductID").Value %>',
-        name: '<%= rsProduct.Fields.Item("title").Value %>',
-        category: '<%= trim(rsProduct.Fields.Item("jewelry").Value) %>',
-        brand: '<%= rsProduct.Fields.Item("brandname").Value %>'
+        id: "<%= rsProduct.Fields.Item("ProductID").Value %>",
+        name: "<%= rsProduct.Fields.Item("title").Value %>",
+        category: "<%= trim(rsProduct.Fields.Item("jewelry").Value) %>",
+        brand: "<%= rsProduct.Fields.Item("brandname").Value %>"
       }]
     }
   }
@@ -668,11 +668,11 @@ window.dataLayer.push({
 // Klaviyo view item push
 var _learnq = _learnq || [];
 	var item = {
-	  "ProductName": '<%= rsProduct.Fields.Item("title").Value %>',
-	  "ProductID": '<%= rsProduct.Fields.Item("ProductID").Value %>',
-	  "ImageURL": 'https://bodyartforms-products.bodyartforms.com/<%= rsProduct.Fields.Item("largepic").Value %>',
-	  "URL": 'https://bodyartforms.com/productdetails.asp?productid=<%= rsProduct.Fields.Item("ProductID").Value %>',
-	  "Brand": '<%= rsProduct.Fields.Item("brandname").Value %>'
+	  "ProductName": "<%= rsProduct.Fields.Item("title").Value %>",
+	  "ProductID": "<%= rsProduct.Fields.Item("ProductID").Value %>",
+	  "ImageURL": "https://bodyartforms-products.bodyartforms.com/<%= rsProduct.Fields.Item("largepic").Value %>",
+	  "URL": "https://bodyartforms.com/productdetails.asp?productid=<%= rsProduct.Fields.Item("ProductID").Value %>",
+	  "Brand": "<%= rsProduct.Fields.Item("brandname").Value %>"
 	};
 	_learnq.push(["track", "Viewed Product", item]);
 
