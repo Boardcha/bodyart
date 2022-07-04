@@ -680,12 +680,12 @@ var _learnq = _learnq || [];
 	rdt('track', 'ViewContent');
 
 	// PINTEREST TRACK PRODUCT VIEW
-	pintrk('track', 'pagevisit', 
+	pintrk("track", "pagevisit", 
 		{
 		line_items: [
 			{
-				product_name: '<%= rsProduct.Fields.Item("title").Value %>',
-				product_id: '<%= rsProduct.Fields.Item("ProductID").Value %>'
+				product_name: "<%= rsProduct.Fields.Item("title").Value %>",
+				product_id: "<%= rsProduct.Fields.Item("ProductID").Value %>"
 			}
 		]
 	});	
@@ -740,15 +740,15 @@ var button_addcart = document.getElementById('btn-add-cart');
 		}]);
 		
 		//PINTEREST ADD TO CART TRACKING
-		pintrk('track', 'addtocart', 
+		pintrk("track", "addtocart", 
 			{
 				value: actual_price * qty,
 				order_quantity: qty,
-				currency: 'USD',
+				currency: "USD",
 				line_items: 
 					[{
-					product_name: '<%= rsProduct.Fields.Item("title").Value %>',
-					product_id: '<%= rsProduct.Fields.Item("ProductID").Value %>',
+					product_name: "<%= rsProduct.Fields.Item("title").Value %>",
+					product_id: "<%= rsProduct.Fields.Item("ProductID").Value %>",
 					product_variant_id: var_detailid,
 					product_price: actual_price
 					}]
