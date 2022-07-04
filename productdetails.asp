@@ -683,13 +683,11 @@ var _learnq = _learnq || [];
 	pintrk('track', 'pagevisit', {
 		line_items: [
 		{
-		line_items: [
-			{
-				product_name: "<%= rsProduct.Fields.Item("title").Value %>",
-				product_id: "<%= rsProduct.Fields.Item("ProductID").Value %>"
-			}
+		product_name: '<%= rsProduct.Fields.Item("title").Value %>',
+		product_id: '<%= rsProduct.Fields.Item("ProductID").Value %>'
+		}
 		]
-	});	
+		});
 
 
 // Regular Google UA Ecommerce data layer push for GTM - add to cart
