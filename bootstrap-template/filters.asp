@@ -678,7 +678,6 @@ rsGetGauges.ReQuery() %>
                   <a class="btn btn-sm btn-purple text-light my-1" href="" data-toggle="modal" data-target="#modal-ear-diagram"
                   data-dismiss="modal" href="#">Click to enlarge diagram</a>
                   <div class="filters-ear-diagram">
-                   virtual="/includes/ear-diagram-image.asp"
                   </div>-->
                   <div class="form-check">
                     <input class="form-check-input"  type="checkbox" name="piercing" value="Anti-tragus" id="filter-antitragus" data-friendly="Anti-tragus">

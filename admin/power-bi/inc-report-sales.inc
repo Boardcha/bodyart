@@ -18,12 +18,6 @@
                                         Coupon Revenue
                                         </a>
                             </li>
-                            <li>
-                                <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Payment methods"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSectionc3293043a32b093a128c">
-                                    <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
-                                   Payment methods
-                                    </a>
-                            </li>
 
                                 <li>
                                     <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Anodizing revenue"  data-report-url="reportEmbed?reportId=c88f768b-44f2-4394-8802-2577a5ef3cdf&pageName=ReportSection8f49a326e363c433e68c">

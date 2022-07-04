@@ -680,7 +680,8 @@ var _learnq = _learnq || [];
 	rdt('track', 'ViewContent');
 
 	// PINTEREST TRACK PRODUCT VIEW
-	pintrk("track", "pagevisit", 
+	pintrk('track', 'pagevisit', {
+		line_items: [
 		{
 		line_items: [
 			{
@@ -740,20 +741,18 @@ var button_addcart = document.getElementById('btn-add-cart');
 		}]);
 		
 		//PINTEREST ADD TO CART TRACKING
-		pintrk("track", "addtocart", 
-			{
-				value: actual_price * qty,
-				order_quantity: qty,
-				currency: "USD",
-				line_items: 
-					[{
-					product_name: "<%= rsProduct.Fields.Item("title").Value %>",
-					product_id: "<%= rsProduct.Fields.Item("ProductID").Value %>",
-					product_variant_id: var_detailid,
-					product_price: actual_price
-					}]
-			}
-		);
+		pintrk('track', 'addtocart', {
+		value: actual_price * qty,
+		order_quantity: qty,
+		currency: 'USD',
+		line_items: 
+			[{
+			product_name: '<%= rsProduct.Fields.Item("title").Value %>',
+			product_id: '<%= rsProduct.Fields.Item("ProductID").Value %>',
+			product_variant_id: var_detailid,
+			product_price: actual_price
+			}]
+		});
 
 		// REDDIT TRACK ADD TO CART
 		rdt('track', 'AddToCart');
