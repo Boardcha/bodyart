@@ -1181,8 +1181,6 @@ function createAddressBubble(section, source) {
     $('#selected-' + section + '-address').html(content);
 	$('#selected-' + section + '-address').show();	
 	$('#' + section + '-country').change();	
-	$("input[name='shipping-address2']").val('');
-	$("input[name='billing-address2']").val('');
 	
 	if($("input[name='shipping-same-billing']").is(':checked') && section == 'shipping')
 		$("input[name='shipping-same-billing']").change();
