@@ -27,7 +27,7 @@ end if
 
 set objCmd = Server.CreateObject("ADODB.command")
 objCmd.ActiveConnection = DataConn
-objCmd.CommandText = "SELECT (SELECT ProductDetails.qty - COALESCE(SUM(cart_qty), 0) FROM tbl_carts WHERE ProductDetails.ProductDetailID = tbl_carts.cart_detailID AND cart_dateAdded > DATEADD(mi, -15, GETDATE())) as dynamic_qty," & _ 
+objCmd.CommandText = "SELECT (SELECT ProductDetails.qty - COALESCE(SUM(cart_qty), 0) FROM tbl_carts WHERE ProductDetails.ProductDetailID = tbl_carts.cart_detailID AND cart_dateAdded > DATEADD(mi, -60, GETDATE())) as dynamic_qty," & _ 
 		"L.length_mm as 'length_conversion', *, " & _
 		"ISNULL(Gauge, '') + ' ' + ISNULL(Length, '') + ' ' + ISNULL(ProductDetail1, '') as OptionTitle," & _ 
 		"ISNULL(Gauge, ''), ISNULL(Length, ''), " & _ 
