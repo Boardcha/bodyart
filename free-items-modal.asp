@@ -8,11 +8,11 @@ var_photo_url = "https://bafthumbs-400.bodyartforms.com"
 
 SQL = _
 "SELECT * FROM(" & _
-	"SELECT jewelry.ProductID, jewelry.title, ProductDetails.ProductDetailID, ProductDetails.price, ProductDetails.qty, ProductDetails.ProductDetail1, ProductDetails.Gauge, jewelry.picture, ProductDetails.detail_code, ProductDetails.Free_QTY, ProductDetails.free, " & _
+	"SELECT jewelry.ProductID, jewelry.title, ProductDetails.ProductDetailID, ProductDetails.price, ProductDetails.qty, ProductDetails.free_item_expiration_date, ProductDetails.ProductDetail1, ProductDetails.Gauge, jewelry.picture, ProductDetails.detail_code, ProductDetails.Free_QTY, ProductDetails.free, " & _
 	"ROW_NUMBER() OVER (PARTITION BY jewelry.ProductID, ProductDetails.free ORDER BY jewelry.ProductID DESC) AS [ROWNUMBER], " & _
 	"Count(jewelry.ProductID) OVER (PARTITION BY jewelry.ProductID) AS [ROWCOUNT] " & _
 	"FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID " & _
-	"WHERE (jewelry.ProductID <> 3704) AND (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1)) GROUPS " & _
+	"WHERE (jewelry.ProductID <> 3704) AND (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (free_item_expiration_date > GETDATE() OR free_item_expiration_date is Null) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1)) GROUPS " & _
 "WHERE GROUPS.[ROWNUMBER] = 1 ORDER BY GROUPS.free, GROUPS.ProductDetailID"
 	  
 set objCmd = Server.CreateObject("ADODB.command")
