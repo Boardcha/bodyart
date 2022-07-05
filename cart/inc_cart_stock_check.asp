@@ -16,10 +16,10 @@
 		end if
 		
 		' TO AVOID customers buying products out from under customers that have already added the same item to their cart 
-		' We need to calculate quantity by subtracting the items that have been added to the cart in last 15mins from the actual stock count
+		' We need to calculate quantity by subtracting the items that have been added to the cart in last 60 mins from the actual stock count
 		set objCmd = Server.CreateObject("ADODB.command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "SELECT COALESCE(SUM(cart_qty), 0) as cart_qty FROM tbl_carts WHERE cart_detailID = ? AND cart_dateAdded > DATEADD(mi, -15, GETDATE())"
+		objCmd.CommandText = "SELECT COALESCE(SUM(cart_qty), 0) as cart_qty FROM tbl_carts WHERE cart_detailID = ? AND cart_dateAdded > DATEADD(mi, -60, GETDATE())"
 		objCmd.Parameters.Append(objCmd.CreateParameter("cart_detailID",3,1,10, rs_getCart.Fields.Item("cart_detailID").Value))
 		Set rs_getTotalQtyinCart = objCmd.Execute()
 		If Not rs_getTotalQtyinCart.EOF Then
@@ -32,12 +32,7 @@
 		
 		dynamic_stock_quantity = CLng(rs_getCart("qty").Value) - item_count_in_cart
 		If dynamic_stock_quantity < 0 Then dynamic_stock_quantity = 0
-		
-		'Response.Write "SELECT COALESCE(SUM(cart_qty), 0) as cart_qty FROM tbl_carts WHERE cart_detailID = ? AND cart_dateAdded > DATEADD(mi, -15, GETDATE()) AND cart_custId !=" & var_cart_userid
-		'Response.Write "<br>
-		'Response.Write var_cart_userid & " - " & CLng(var_cart_qty) & " - " & dynamic_stock_quantity & " - " & CLng(rs_getCart("qty").Value) & " - " & item_count_in_cart
-		'Response.End
-		
+			
 		if rs_getCart.Fields.Item("cart_qty").Value <= 0 then
 			
 		' Extra safeguard to make sure people can't have negative qty's of items in their cart (even if we have the item in stock)
