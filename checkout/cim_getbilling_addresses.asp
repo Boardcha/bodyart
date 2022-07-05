@@ -1,6 +1,4 @@
 <%
-if var_grandtotal > 0 then
-
 ' FIND OUT IF CUSTOMER IS REGISTERED AND HAVE DIFFERENT CHECKOUT ----------------------
 if CustID_Cookie <> "" and CustID_Cookie <> 0 then 
 
@@ -96,6 +94,4 @@ end if %>
 </div><!-- toggle button group-->
 </div><!-- wrapper -->
 <% end if  ' if customer is logged in 
-
-end if ' if var_grandtotal > 0
 %>
