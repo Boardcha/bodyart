@@ -334,7 +334,7 @@ if var_addons_active <> "yes" then
 	objCmd.ActiveConnection = DataConn
 	'objCmd.CommandType = 4
 	'objCmd.CommandText = "Proc_Checkout4_InsertOrder"
-	objCmd.CommandText = "INSERT INTO sent_items (customer_ID, email, company, customer_first, customer_last, address, address2, city, state, province, zip, country, phone, UPS_AmountPaid, UPS_Service, item_description, customer_comments, shipping_rate, shipping_type, pay_method, shipped, date_order_placed, coupon_code, IPaddress,  billing_name, billing_address, billing_zip, preorder, autoclave, total_sales_tax, taxes_state_only, taxes_county_only, taxes_city_only, taxes_special_only, combined_tax_rate, total_gift_cert, total_coupon_discount, total_preferred_discount, total_store_credit, total_free_credits, giftcert_flag, currency_type, exchange_rate, checkout_estimated_delivery_date, anodize, referral_traffic_from, referral_traffic_to) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
+	objCmd.CommandText = "INSERT INTO sent_items (customer_ID, email, company, customer_first, customer_last, address, address2, city, state, province, zip, country, phone, UPS_AmountPaid, UPS_Service, item_description, customer_comments, shipping_rate, shipping_type, pay_method, shipped, date_order_placed, coupon_code, IPaddress,  billing_name, billing_address, billing_zip, preorder, autoclave, retail_delivery_fee, total_sales_tax, taxes_state_only, taxes_county_only, taxes_city_only, taxes_special_only, combined_tax_rate, total_gift_cert, total_coupon_discount, total_preferred_discount, total_store_credit, total_free_credits, giftcert_flag, currency_type, exchange_rate, checkout_estimated_delivery_date, anodize, referral_traffic_from, referral_traffic_to) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)"
 
 	var_customer_comments = replace(request.form("Comments"), ",", "")
 	var_gift_order = replace(request.form("gift"), ",", "")
@@ -346,6 +346,13 @@ if var_addons_active <> "yes" then
 		strCust_Comments = "<br/>CUSTOMER COMMENTS:<br/>" & Replace(var_customer_comments, vbCrLF, "<br />" + vbCrLF) & "<br/><br/>"
 	end if
 	
+
+	Select Case var_shipping_state
+		Case "CO" 'Colorado
+			retail_delivery_fee = 0.27
+		Case Else
+			retail_delivery_fee = 0
+	End Select
 	
 	objCmd.NamedParameters = True	
 	objCmd.Parameters.Append(objCmd.CreateParameter("@CustomerID",3,1,10,var_our_custid)) ' set on this page and on inc_create_account.asp depending on if they are logged in or create a new account
@@ -404,6 +411,7 @@ if var_addons_active <> "yes" then
 				objCmd.Parameters.Append(objCmd.CreateParameter("@autoclave",3,1,1,0))
 			end if	
 			
+			objCmd.Parameters.Append(objCmd.CreateParameter("@retail_delivery_fee",6,1,10,retail_delivery_fee))
 			objCmd.Parameters.Append(objCmd.CreateParameter("@total_sales_tax",6,1,10,session("amount_to_collect")))
 			objCmd.Parameters.Append(objCmd.CreateParameter("@taxes_state_only",6,1,10,session("state_tax_collectable")))
 			objCmd.Parameters.Append(objCmd.CreateParameter("@taxes_county_only",6,1,10,session("county_tax_collectable")))

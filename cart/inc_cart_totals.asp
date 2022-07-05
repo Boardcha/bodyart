@@ -9,14 +9,17 @@
 <!--#include virtual="checkout/inc_store_shipping_selection.asp"-->
 <!--#include virtual="cart/ajax-sales-taxjar-rates.asp"-->
 <!--#include virtual="cart/inc_cart_grandtotal.asp"-->
+<!--#include virtual="/functions/iif.asp"-->
 {  
 	"subtotal":"<%= FormatNumber(var_subtotal, -1, -2, -2, -2) %>",
 	"subtotal_after_discounts":"<%= FormatNumber(var_subtotal_after_discounts, -1, -2, -2, -2) %>",
 	"couponamt":"<%= FormatNumber(var_couponTotal, -1, -2, -2, -2) %>",
 	"preferred_discount":"<%= FormatCurrency(total_preferred_discount, -1, -2, -2, -2) %>",
+	"retail_delivery_fee":"<%= FormatCurrency(var_retail_delivery_fee, -1, -2, -2, -2) %>",
 	"salestax":"<%= FormatCurrency(session("amount_to_collect"), -1, -2, -2, -2) %>",
+	"salestax_without_delivery_fee":"<%= FormatCurrency(IIF(session("amount_to_collect") - var_retail_delivery_fee < 0, 0, session("amount_to_collect") - var_retail_delivery_fee), -1, -2, -2, -2) %>",
 	"salestax_state":"<%= var_salestax_state %>",
-	"salestax_forCalcs":"<%= FormatNumber(var_salesTax, -1, -2, -2, -2) %>",
+	"salestax_forCalcs":"<%= FormatNumber(Session("var_salesTax"), -1, -2, -2, -2) %>",
 	"salestax_rate":"<%= FormatNumber(var_salestax_rate, -1, -2, -2, -2) %>",
 	"taxable_amount": "<%= session("taxable_amount") %>",
 	"taxable_shipping": "<%= session("shipping_cost") %>",
@@ -37,7 +40,7 @@
 	"store_credit_amt":"<%= FormatCurrency(session("storeCredit_used"), -1, -2, -2, -2) %>",
 	"store_credit_dueback":"<%= FormatCurrency(var_credit_due_todb, -1, -2, -2, -2) %>",
 	"var_other_items":<%= var_other_items %>,
-	"total_minus_tax":"<%= FormatNumber(var_grandtotal - var_salesTax, -1, -2, -2, -2) %>",
+	"total_minus_tax":"<%= FormatNumber(var_grandtotal - Session("var_salesTax"), -1, -2, -2, -2) %>",
 	"total_without_certsOrCredits":"<%= FormatNumber(var_total_without_certsOrCredits, -1, -2, -2, -2) %>",
 	"total_without_shipping":"<%= FormatNumber(var_grandtotal - var_shipping_cost, -1, -2, -2, -2) %>",
 	"total_discount":"<%= FormatNumber(var_total_discount, -1, -2, -2, -2) %>",

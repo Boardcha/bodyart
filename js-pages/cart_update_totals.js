@@ -5,7 +5,7 @@
 	
 	function calcAllTotals(e) {
 		
-		$('.checkout_button, #paypal-button-container').hide();
+		$('.checkout_button').hide();
 		var shipping_option = $('input[name="shipping-option"]:checked').val();
 		$(".cart_grand-total").html('<i class="fa fa-spinner fa-spin"></i> Calculating');
 		
@@ -18,7 +18,7 @@
 		var tax_address = "";
 		var state_taxed = "";
 
-		if ($("input:radio[name='cim_shipping']").is(':checked')) {
+		if ($("input:radio[name='cim_shipping']").is(':checked') && $("#cim_shipping_addresses").is(':visible')) {
 			tax_country = $("input[name='cim_shipping']:checked").attr("data-country");
 			tax_state = $("input[name='cim_shipping']:checked").attr("data-state");
 			tax_zip = $("input[name='cim_shipping']:checked").attr("data-zip");
@@ -54,7 +54,13 @@
 			$(".cart_subtotal").html(json.subtotal);
 			$(".cart_grand-total").html(json.grandtotal);
 			$('.convert-total').attr('data-price',json.grandtotal);
-			$(".cart_sales-tax").html(json.salestax);
+			if(json.retail_delivery_fee != "$0.00"){
+				$(".retail_delivery_fee").html(json.retail_delivery_fee);
+				$(".row_retail_delivery_fee").show();
+			}else{
+				$(".row_retail_delivery_fee").hide();
+			}
+			$(".cart_sales-tax").html(json.salestax_without_delivery_fee);
 			$(".cart_coupon-amt").html(json.couponamt);
 			$(".cart_prefferred_discount").html(json.preferred_discount);
 			$(".shipping_amount_left").html(json.shippingneeded);
@@ -67,6 +73,8 @@
 
 			if (tax_country === 'USA') {
 				$(".cart_sales-tax-state").html(json.salestax_state + ' ');
+			}else{
+				$(".cart_sales-tax-state").html('');
 			}
 			/*
 			if (tax_country === 'Great Britain' || tax_country === 'Great Britain and Northern Ireland' || tax_country === 'United Kingdom') {
@@ -82,14 +90,10 @@
 				$('.row_convert_total').hide();
 			}
 			
-				if (typeof shipping_option != "undefined") {
-					$('.checkout_button').show();
-				} else {
-					// 
-					if($('#gift_cert_only').val() === 'yes') {
-						$('.checkout_button, #paypal-button-container').show();
-					}	
-				}
+			if (typeof shipping_option != "undefined") {
+				$('.checkout_button').show();
+			}
+				
 			if (page_name === "cart.asp" || page_name === "cart2.asp") {
 					$('.checkout_button').show();
 					// Show AfterPay if total is over $35
@@ -258,7 +262,7 @@
 				$("#stepper").html('');
 				clearFreeItemsCookie(1);
 			}
-			console.log(free_items_count);
+
 			// Disabling place order button by country or other restrictions
 			/*	
 			if (tax_country === 'Hong Kong' || tax_country === 'Slovenia') {

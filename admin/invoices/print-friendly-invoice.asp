@@ -207,7 +207,7 @@ Set rsGetOrderDetails = Nothing
 	end if
 	arrTotals(1,2) = "total_sales_tax" 
 	total_sales_tax = rsGetInvoice.Fields.Item("total_sales_tax").Value
-	arrTotals(2,2) = "&nbsp;&nbsp;"
+	arrTotals(2,2) = ""
 	arrTotals(0,3) = "Gift certificate" 
 	arrTotals(1,3) = "total_gift_cert"
 	total_gift_cert = rsGetInvoice.Fields.Item("total_gift_cert").Value 
@@ -221,6 +221,10 @@ Set rsGetOrderDetails = Nothing
 	total_store_credit = rsGetInvoice.Fields.Item("total_store_credit").Value
 	arrTotals(2,5) = "&#8722;"
 
+	'arrTotals(0,6) = "Retail delivery fee" 
+	'arrTotals(1,6) = "retail_delivery_fee"
+	'retail_delivery_fee = rsGetInvoice.Fields.Item("retail_delivery_fee").Value
+	'arrTotals(2,6) = ""
 
 	For i = 0 to UBound(arrTotals, 2) 
 
@@ -229,7 +233,12 @@ Set rsGetOrderDetails = Nothing
 	  <tr>
 		<td class="line-cost"><%= arrTotals(0,i) %></td>
 		<td class="line-total"><%= arrTotals(2,i) %>
-		<%= FormatCurrency(rsGetInvoice.Fields.Item(arrTotals(1,i)).Value, -1, -2, -0, -2) %>
+		<%'uncoment below line to display delivery fee in the invoice%>
+		<%'If (arrTotals(0,i) = "Tax" Or arrTotals(0,i) = "VAT") AND rsGetInvoice(arrTotals(1,6)) > 0 Then%>
+			<%'= FormatCurrency(rsGetInvoice(arrTotals(1,i)) - rsGetInvoice(arrTotals(1,6)), -1, -2, -0, -2) %>
+		<%'Else%>
+			<%= FormatCurrency(rsGetInvoice(arrTotals(1,i)), -1, -2, -0, -2) %>
+		<%'End If%>
 		</td>
 	  </tr>
 	<% 
