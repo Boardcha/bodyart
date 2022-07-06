@@ -1506,6 +1506,7 @@ end if
 						<th>Added</th>
 						<th>Bin</th>
 						<th>Free</th>
+						<th>Free Item Start Date</th>
 						<th>Free Item Expiration</th>
 						<th>Free Qty</th>
 						<th>Weight (Ounces)</th>
@@ -1533,6 +1534,18 @@ end if
 							<option value="150" <% if rs_getdetails("free") = "150" then %>selected<%End If%>>$150 +</option>
 						</select>
 					</td>
+					<td>
+						<%
+						'====== CONFIGURE DATE TO SHOW CORRECTLY IN Field
+						if Not IsNull(rs_getdetails("free_item_start_date")) then
+							var_free_item_start_date = rs_getdetails("free_item_start_date")
+							var_free_item_start_date = DatePart("yyyy",var_free_item_start_date) _
+							& "-" & Right("0" & DatePart("m",var_free_item_start_date), 2) _
+							& "-" & Right("0" & DatePart("d",var_free_item_start_date), 2)
+						end if		
+						%>					
+						<input <% if isNull(rs_getdetails("free")) Or rs_getdetails("free") = "0" then %>disabled<%end if%>  class="form-control form-control-sm" name="free_item_start_date_<%= rs_getdetails("ProductDetailID") %>" type="date" id="free_item_start_date_<%= rs_getdetails("ProductDetailID") %>" value="<%=var_free_item_start_date%>" data-column="free_item_start_date" data-detailid="<%= rs_getdetails("ProductDetailID") %>" style="content: '1';" data-friendly="Free Item Start Date">
+					</td>					
 					<td>
 						<%
 						'====== CONFIGURE DATE TO SHOW CORRECTLY IN Field

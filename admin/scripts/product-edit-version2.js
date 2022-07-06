@@ -469,9 +469,11 @@ $("#description").redactor({
 			if ($(this).val() == "0"){
 				$("#free-qty_" + product_detail_id).prop( "disabled", true );
 				$("#free_item_expiration_date_" + product_detail_id).prop( "disabled", true );
+				$("#free_item_start_date_" + product_detail_id).prop( "disabled", true );
 			}else{
 				$("#free-qty_" + product_detail_id).prop( "disabled", false );
 				$("#free_item_expiration_date_" + product_detail_id).prop( "disabled", false );
+				$("#free_item_start_date_" + product_detail_id).prop( "disabled", false );
 			}
 	});
 	
