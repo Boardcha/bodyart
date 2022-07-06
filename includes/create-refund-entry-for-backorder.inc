@@ -22,8 +22,7 @@ Function CreateRefundEntryForBackorderedItem(var_invoice_number, var_customer_nu
 	End If
 
 	If Not rsGetItems.EOF Then
-		
-		
+	
 		If NOT rsGetCouponDiscount.eof then
 			var_item_price = FormatNumber((rsGetItems.Fields.Item("item_price").Value - ((rsGetCouponDiscount.Fields.Item("DiscountPercent").Value / 100) * rsGetItems.Fields.Item("item_price").Value)) * rsGetItems.Fields.Item("qty").Value, -1, -2, -0, -2)                        
 		Else
@@ -38,7 +37,25 @@ Function CreateRefundEntryForBackorderedItem(var_invoice_number, var_customer_nu
 	End If
 
 	If var_refund_total > 0 then
-
+		'Add shipping price to refund amount if it is the only item in the order
+		set objCmd = Server.CreateObject("ADODB.Command")
+		objCmd.ActiveConnection = DataConn
+		objCmd.CommandText = "SELECT shipping_rate FROM sent_items WHERE ID = ? AND ( " & _
+			"SELECT TOP 1 ORS.InvoiceID FROM TBL_OrderSummary ORS " & _
+			"LEFT JOIN sent_items SNT ON SNT.ID = ORS.InvoiceID " & _
+			"INNER JOIN ProductDetails DET ON DET.ProductDetailID = ORS.DetailID " & _
+			"WHERE ORS.InvoiceID = ? AND ORS.DetailID <> ? AND ORS.backorder <> 1 AND (DET.free = 0 AND DET.ProductID not in(1464, 1483, 1649, 2991, 3086, 3587, 3611, 3803, 3926, 3928, 4287))) is null"
+		objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,12, var_invoice_number))
+		objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid2",3,1,12, var_invoice_number))
+		objCmd.Parameters.Append(objCmd.CreateParameter("ProductDetailID",3,1,15, ProductDetailID))
+		Set rsGetShippingRate = objCmd.Execute()
+		Response.Write var_refund_total & "<br>"
+		If Not rsGetShippingRate.EOF Then
+			var_refund_total = FormatNumber(Ccur(var_refund_total) + rsGetShippingRate("shipping_rate"), -1, -2, -0, -2)
+			Response.Write var_refund_total & "<br>"
+		End If
+	
+		'Encrypt data
 		Set objCrypt = Server.CreateObject("Bodyartforms.BAFCrypt")
 		password = "3uBRUbrat77V"
 		data = var_invoice_number & "|" & ProductDetailID & "|" & var_customer_number
