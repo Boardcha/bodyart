@@ -107,6 +107,9 @@ else ' update the details
 	if column_title = "free_item_expiration_date" And column_value = "" then
 		column_value = null
 	end if
+	if column_title = "free_item_start_date" And column_value = "" then
+		column_value = null
+	end if	
 	
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
