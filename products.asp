@@ -141,7 +141,7 @@ end if
 	if NOT rsSiteMap.eof then
 		title =  rsSiteMap.Fields.Item("meta_title").Value
 		title_onpage =  rsSiteMap.Fields.Item("meta_title_onpage").Value
-		description = rsSiteMap.Fields.Item("meta_description").Value
+		description = rsSiteMap.Fields.Item("meta_description").Value & " Sister owned since 2001 | Charity driven | Free shipping over $50"
 	else
 		title = "Search Results"	
 		title_onpage = "Search Results"
