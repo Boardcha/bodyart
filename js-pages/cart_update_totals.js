@@ -43,7 +43,7 @@
 			data: {shipping_option: shipping_option, page_name: page_name, tax_country: tax_country, tax_state: tax_state, tax_zip: tax_zip, tax_address: tax_address, state_taxed: state_taxed},
 			success: function( json ) {
 				
-			if(json.subtotal > 0){
+			if(json.grandtotal > 0){
 				$("#cim_billing_addresses").show();
 			}else{
 				$("#cim_billing_addresses").hide();

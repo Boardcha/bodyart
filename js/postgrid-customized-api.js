@@ -594,6 +594,7 @@ var efficientSearch = debounce(function (ev, config, pid) {
                               option
                           )
                         : parseAutoCompleteAddressToString(option);
+												
                     b = document.createElement('div');
                     b.setAttribute('data-val', val);
                     b.innerHTML += val;
@@ -659,7 +660,7 @@ function setSelectedAddress(option, section) {
 		(option.pc ? option.pc + '<br/>' : '') +
 		(option.country ? option.country + '' : '');
 	
-			
+	
 	var content = '<div class="alert alert-secondary alert-dismissible fade show" role="alert">' + 
 	'  <div id="selected-' + section + '-address-content" class="m-2"><div class="mb-2 font-weight-bold">' + ((section == 'shipping') ? '<i class="fa fa-shipping-fast fa-lg mr-2"></i> ':'') + '<span style="text-transform: uppercase;">' + section + ' ADDRESS</span></div><div style="line-height:22px;">' + address + '</div></div>' +
 	'  <button type="button"  class="close" id="btn-edit-' + section + '-address" style="right:20px;padding: 7px 11px 7px 11px;margin-right:16px">' + 
