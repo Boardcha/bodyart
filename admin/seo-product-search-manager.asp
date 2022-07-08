@@ -213,28 +213,28 @@ end if 'NOT rsGetSEO.eof
        $(document).on("keypress", '.meta_title_onpage', function() {
         id = $(this).attr('data-id');
 
-        if(this.value.length > 60){
+        if(this.value.length > 50){
             return false;
         }
-        $("#remaining_title_onpage_" + id).html("Remaining characters : " +(60 - this.value.length));
+        $("#remaining_title_onpage_" + id).html("Remaining characters : " +(50 - this.value.length));
         });
 
        $(document).on("keypress", '.meta-title', function() {
         id = $(this).attr('data-id');
 
-        if(this.value.length > 60){
+        if(this.value.length > 50){
             return false;
         }
-        $("#remaining_title_" + id).html("Remaining characters : " +(60 - this.value.length));
+        $("#remaining_title_" + id).html("Remaining characters : " +(50 - this.value.length));
         });
        
         $(document).on("keypress", '.meta-description', function() {
         id = $(this).attr('data-id');
 
-        if(this.value.length > 160){
+        if(this.value.length > 155){
             return false;
         }
-        $("#remaining_desc_" + id).html("Remaining characters : " +(160 - this.value.length));
+        $("#remaining_desc_" + id).html("Remaining characters : " +(155 - this.value.length));
         });
 
     $(document).on("change", '#filter-category', function() {
