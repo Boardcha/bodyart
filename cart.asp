@@ -9,271 +9,6 @@
 	session("amount_to_collect") = 0
 	session("var_other_items") = 0
 %>
-<style>
-.stepper-container{
-	min-height: 225px;
-    border: 1px solid #d9dadb;
-    border-radius: 4px;
-    background-color: #ffffff;
-	margin: 20px 0 20px 0;
-	color: #666;
-}
-.free-items-stepper {
-    border-width: 0;
-    border-style: solid;
-    box-sizing: border-box;
-    outline: 0;
-    font-size: 1rem;
-    line-height: 1.5;
-    font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-    display: block;
-    position: relative;
-    -webkit-touch-callout: none;
-    -webkit-tap-highlight-color: transparent;
-    color: inherit;
-    background: 0 0;
-}
-.free-items-stepper .free-items-step-list {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-    display: -ms-flexbox;
-    display: flex;
-    z-index: 1;
-}
-.free-items-step-list-horizontal {
-    -ms-flex-direction: row;
-    flex-direction: row;
-    grid-row: 1;
-}
-.free-items-stepper *, .free-items-stepper ::after, .free-items-stepper ::before {
-    box-sizing: border-box;
-}
-free-items-step-list-horizontal .free-items-step {
-    -ms-flex: 1 0 auto;
-    flex: 1 0 auto;
-    text-align: center;
-}
-.free-items-stepper *, .free-items-stepper ::after, .free-items-stepper ::before {
-    box-sizing: border-box;
-}
-.free-items-step-list-horizontal .free-items-step-link {
-    margin: auto;
-    max-width: 10em;
-    -ms-flex-direction: column;
-    flex-direction: column;
-}
-.free-items-stepper .free-items-step-link {
-    outline: 0;
-    color: inherit;
-    text-decoration: none;
-    white-space: nowrap;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-align: center;
-    align-items: center;
-    overflow: hidden;
-}
-.free-items-stepper .free-items-step-current .free-items-step-indicator {
-    color: #fff;
-}
-.free-items-stepper .free-items-step-done .free-items-step-indicator {
-    color: #fff;
-}
-.free-items-stepper .free-items-step-indicator {
-    border-color: #dee2e6;
-    color: #212529;
-    background-color: #fff;
-}
-.free-items-stepper .free-items-step-indicator {
-    border-radius: 50%;
-    margin: 3px;
-    width: 28px;
-    height: 28px;
-    border-width: 1px;
-    border-style: solid;
-    display: -ms-flexbox;
-    display: flex;
-    -ms-flex-align: center;
-    align-items: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    -ms-flex: none;
-    flex: none;
-    position: relative;
-    z-index: 1;
-    overflow: visible;
-    transition-property: color,background-color,border-color;
-    transition-duration: .4s;
-    transition-timing-function: ease-in-out;
-}
-.k-icon {
-	/*width: 14px;*/
-    height: 17px;
-    outline: 0;
-    font-size: 16px;
-    font-family: WebComponentsIcons;
-    font-style: normal;
-    font-variant: normal;
-    font-weight: 400;
-    line-height: 1;
-    speak: none;
-    text-transform: none;
-    text-decoration: none;
-    -ms-flex-negative: 0;
-    flex-shrink: 0;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
-    -ms-flex-flow: row nowrap;
-    flex-flow: row nowrap;
-    -ms-flex-align: center;
-    align-items: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    vertical-align: middle;
-    position: relative;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-}
-.free-items-step-list-horizontal .free-items-step-indicator+.free-items-step-label {
-    margin-top: 5px;
-}
-.free-items-step-list-horizontal .free-items-step-label {
-    text-align: center;
-}
-.free-items-stepper .free-items-step-label {
-    max-width: clamp(100%,10em,100%);
-    display: -ms-inline-flexbox;
-    display: inline-flex;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    -ms-flex-align: center;
-    align-items: center;
-    -ms-flex-pack: center;
-    justify-content: center;
-    z-index: 1;
-}
-.free-items-stepper .free-items-step-label .free-items-step-text {
-    max-width: calc(10em - 16px - 0.5rem);
-    -ms-flex-positive: 1;
-    flex-grow: 1;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    overflow: hidden;
-}
-.free-items-step-list-horizontal~.k-progressbar {
-    width: 100%;
-    height: 2px;
-    top: 17px;
-}
-.free-items-stepper .k-progressbar-horizontal {
-    grid-row: 1/-1;
-}
-.free-items-stepper .k-progressbar {
-    pointer-events: none;
-    z-index: 0;
-    overflow: visible;
-}
-.k-progressbar {
-    border-radius: 0.25rem;
-    --kendo-progressbar-progress: 0;
-    border-width: 0;
-    border-style: solid;
-    box-sizing: border-box;
-    outline: 0;
-    font-family: system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,"Noto Sans","Liberation Sans",sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
-    font-size: .75rem;
-    line-height: 1;
-    display: inline-grid;
-    vertical-align: middle;
-    position: relative;
-    overflow: hidden;
-    -webkit-touch-callout: none;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.k-absolute, .k-pos-absolute {
-    position: absolute!important;
-}
-.k-progressbar .k-state-selected {
-    color: #fff;
-    background-color: #007bff;
-}
-.k-progressbar>.k-progress-status-wrap, .k-progressbar>.k-state-selected {
-    -ms-grid-column: 1;
-    -ms-grid-row: 1;
-}
-.k-progressbar-horizontal>.k-state-selected {
-    width: 0;
-    width: calc(var(--kendo-progressbar-progress,0)*1%);
-    -ms-flex-direction: row;
-    flex-direction: row;
-}
-.k-progressbar>.k-state-selected {
-    border-width: 0;
-    border-style: solid;
-    display: -ms-flexbox;
-    display: flex;
-    overflow: hidden;
-    grid-column: 1/-1;
-    grid-row: 1/-1;
-}
-.free-items-stepper .free-items-step-focus .free-items-step-indicator::after, .free-items-stepper .free-items-step-link:focus .free-items-step-indicator::after {
-    display: block;
-}
-.free-items-stepper .free-items-step-indicator::after {
-    box-shadow: inset 0 0 0 2px #fff;
-}
-.free-items-stepper .free-items-step-indicator::after {
-    border-radius: 100%;
-    content: "";
-    border-width: 1px;
-    border-style: solid;
-    border-color: inherit;
-    pointer-events: none;
-    display: none;
-    position: absolute;
-    top: -4px;
-    right: -4px;
-    bottom: -4px;
-    left: -4px;
-    z-index: 2;
-}
-.free-items-step-current .k-icon.fa.fa-lock{
-	color: #f8f9fa;
-}
-.k-icon.fa.fa-lock{
-	color: #f8f9fa;
-}
-#free-items-stepper-info{
-	text-align: center!important;
-}	
-
-#free-items-stepper-title{
-	font-weight: 700!important;
-	color: #212529;
-	margin-bottom: 10px;
-	display: block;
-	padding: 0 25px;
-}
-#free-items-stepper-subtitle{
-	text-transform: Capitalize;
-	font-weight: normal;
-}
-	
-#free-items-page-modal{
-    overflow-x: hidden;
-    overflow-y: auto;
-}	
-.icon-bg-blue{
-	border-color: #007bff!important;
-    background-color: #007bff!important;
-}
-.icon-bg-gray{
-	border-color: #999!important;
-    background-color: #999!important;
-}
-</style>
 <!--#include virtual="/bootstrap-template/header-connection.asp" -->
 <script type="text/javascript">
 // GTM Remove Item from cart
@@ -368,46 +103,69 @@ Wend
 	<h4>Your item has been updated</h4><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
 </div>
 <% end if %>
-
-	<div class="display-5 mb-2">
-			Shopping Cart
+<%
+set objCmd = Server.CreateObject("ADODB.command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "SP_Get_Timer"
+Set rsTimer = objCmd.Execute()
+%>
+<%If NOT rsTimer.EOF Then%>
+	<div class="text-center">
+		<% countdown_timer = "" & _
+		"<div id=""clockdiv"">" & _
+		  "<div>" & _
+			"<span class=""hours mr-1""></span>: " & _
+		  "</div>" & _
+		  "<div class=""ml-1"">" & _
+			"<span class=""minutes mr-1""></span>: " & _
+		  "</div>" & _
+		  "<div class=""ml-1"">" & _
+			"<span class=""seconds""></span>" & _
+		  "</div>" & _
+		"</div>"
+		%>
+		<%= Replace(rsTimer("text_message"), "[Timer]", countdown_timer) %>
 	</div>
-	<% if session("continue_shopping_link") <> "" then  %>
-	<a class="btn btn-purple" href="<%= session("continue_shopping_link") %>">Continue shopping</a>
 <% end if %>
-		
-	<% ' ------------------------------ BLOCK ACCESS TO PAGE IF FLAGGED ---------------------------- 
-	IF Flagged = "yes" or session("flag") = "yes" then 
-	'if 1 <> 1 then
-	%>
-	<div class="alert alert-danger"> Access denied -- 
-	This order can not be processed online. Please contact customer service for assistance.
-	</div>
-	<% else %>     
-
-	<%
-	' Show if cart is empty
-	if cart_status = "empty" Then
-	%>
-	<div class="alert alert-primary my-4">There are no items in your shopping cart</div>
-	<!--#include virtual="cart/inc_stock_display_notice.asp"-->
-	<%
-	End If 'End Show if cart is empty
-
-	' If customer is NOT registered then clear their cart out of the temp cart DB table
-
-
-	' Show if cart is NOT empty
-	if cart_status = "not-empty" Then
+<div class="display-5 mb-2">
+		Shopping Cart
+</div>
+<% if session("continue_shopping_link") <> "" then  %>
+<a class="btn btn-purple" href="<%= session("continue_shopping_link") %>">Continue shopping</a>
+<% end if %>
 	
-	'====== TRACK THE LAST DATE USER VIEWED THE CART PAGE =================
-	set objCmd = Server.CreateObject("ADODB.command")
-	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "UPDATE tbl_carts SET cartpage_date_viewed = GETDATE() WHERE " & var_db_field & " = ?"
-	objCmd.Parameters.Append(objCmd.CreateParameter("cart_custID",3,1,10, var_cart_userid))
-	objCmd.Execute()
-	%> 
-	<section>
+<% ' ------------------------------ BLOCK ACCESS TO PAGE IF FLAGGED ---------------------------- 
+IF Flagged = "yes" or session("flag") = "yes" then 
+'if 1 <> 1 then
+%>
+<div class="alert alert-danger"> Access denied -- 
+This order can not be processed online. Please contact customer service for assistance.
+</div>
+<% else %>     
+
+<%
+' Show if cart is empty
+if cart_status = "empty" Then
+%>
+<div class="alert alert-primary my-4">There are no items in your shopping cart</div>
+<!--#include virtual="cart/inc_stock_display_notice.asp"-->
+<%
+End If 'End Show if cart is empty
+
+' If customer is NOT registered then clear their cart out of the temp cart DB table
+
+
+' Show if cart is NOT empty
+if cart_status = "not-empty" Then
+
+'====== TRACK THE LAST DATE USER VIEWED THE CART PAGE =================
+set objCmd = Server.CreateObject("ADODB.command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "UPDATE tbl_carts SET cartpage_date_viewed = GETDATE() WHERE " & var_db_field & " = ?"
+objCmd.Parameters.Append(objCmd.CreateParameter("cart_custID",3,1,10, var_cart_userid))
+objCmd.Execute()
+%> 
+<section>
 <!--#include virtual="/includes/inc-currency-images.asp" -->
 <!--#include virtual="cart/inc_stock_display_notice.asp"-->
 <div class="container-fluid mt-5">
@@ -991,6 +749,14 @@ if NOT rsGetAddOns.eof then
 		});	
 	});		
 </script>	
+<!-- Shipping Countdown Timer -->
+<%If Not rsTimer.EOF Then%>
+	<script>
+		var total_seconds = <%=rsTimer("remaining_seconds")%>;
+	</script>
+	<script src="/js/countdown-timer.js"></script>
+<%End If%>
 <%
 Set rsToggles = Nothing
+Set rsTimer = Nothing
 %>
