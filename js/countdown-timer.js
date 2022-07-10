@@ -16,8 +16,7 @@ function CheckTime(){
     secondsSpan.innerHTML = ('0' + c_seconds).slice(-2);
 
 	if(total_seconds<=0){
-		alert("oops no time left");
-		setTimeout('document.form.submit()',1);
+		document.getElementById('clockdiv').style.display = "none";
 	}else{
 		total_seconds=total_seconds-1;
 		
