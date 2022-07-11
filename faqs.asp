@@ -571,7 +571,7 @@ Wend
 			<h5 class="pt-4 pb-1">Miscellaneous</h5>
 			<div class="accordion faq-accordion" id="accordionMisc">
 					<div class="card">
-							<a class="card-header text-dark faq-header" href="/blog">Blog Archive</a>
+							<a class="card-header text-dark faq-header" href="/blog">Bodyartforms blog</a>
 						</div>
 				<div class="card">
 					<a class="card-header collapsed text-dark faq-header" href="" id="headmisc1" data-toggle="collapse" data-target="#faqmisc1" aria-expanded="false"

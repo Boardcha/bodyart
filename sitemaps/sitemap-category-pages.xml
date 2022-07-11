@@ -465,45 +465,6 @@
         <loc>https://bodyartforms.com/products.asp?gauge=3%2F4"</loc>
     </url>
     <url>
-        <loc>https://bodyartforms.com/products.asp?gauge=18g</loc>
-    </url>
-    <url>
-        <loc>https://bodyartforms.com/products.asp?gauge=16g</loc>
-    </url>
-    <url>
-        <loc>https://bodyartforms.com/products.asp?gauge=14g</loc>
-    </url>
-    <url>
-        <loc>https://bodyartforms.com/products.asp?gauge=12g</loc>
-    </url>
-    <url>
-        <loc>https://bodyartforms.com/products.asp?gauge=10g</loc>
-    </url>
-    <url>
-        <loc>https://bodyartforms.com/products.asp?gauge=8g</loc>
-    </url>
-    <url>
-        <loc>https://bodyartforms.com/products.asp?gauge=6g</loc>
-    </url>
-    <url>
-        <loc>https://bodyartforms.com/products.asp?gauge=7g</loc>
-    </url>
-    <url>
-        <loc>https://bodyartforms.com/products.asp?gauge=5g</loc>
-    </url>
-    <url>
-        <loc>https://bodyartforms.com/products.asp?gauge=4g</loc>
-    </url>
-    <url>
-        <loc>https://bodyartforms.com/products.asp?gauge=2g</loc>
-    </url>
-    <url>
-        <loc>https://bodyartforms.com/products.asp?gauge=1g</loc>
-    </url>
-    <url>
-        <loc>https://bodyartforms.com/products.asp?gauge=0g</loc>
-    </url>
-    <url>
         <loc>https://bodyartforms.com/products.asp?gauge=00g&amp;gauge=00g%2F9mm&amp;gauge=00g%2F9.5mm&amp;gauge=00g%2F10mm</loc>
     </url>
     <url>
@@ -567,7 +528,13 @@
         <loc>https://bodyartforms.com/products.asp?jewelry=nose-ring&amp;gauge=18g</loc>
     </url>
     <url>
-        <loc>https://bodyartforms.com/products.asp?keywords=retainer&piercing=septum</loc>
+        <loc>https://bodyartforms.com/products.asp?keywords=retainer&amp;piercing=septum</loc>
+    </url>
+    <url>
+        <loc>https://bodyartforms.com/products.asp?keywords=goth</loc>
+    </url>
+    <url>
+        <loc>https://bodyartforms.com/products.asp?keywords=kit&amp;jewelry=tapers</loc>
     </url>
     
 </urlset>

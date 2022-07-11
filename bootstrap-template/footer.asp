@@ -30,6 +30,9 @@
                         <li class="text-capitalize py-1 py-md-0 d-md-block">
                             <a class="text-light" href="/about.asp">About our team</a>
                         </li>
+                        <li class="text-capitalize py-1 py-md-0 d-md-block">
+                            <a class="text-light" href="/blog/">Bodyartforms blog</a>
+                        </li>
                 </ul>
                 <% if request.cookies("darkmode") <> "on" then
                     darkchecked = "" 
