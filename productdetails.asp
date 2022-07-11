@@ -212,7 +212,7 @@ if not rsProduct.eof then
 	if rsProduct.Fields.Item("seo_meta_description").Value <> "" then
 		meta_description = rsProduct.Fields.Item("seo_meta_description").Value
 	else
-		meta_description = "Gauges/sizes: " & meta_gauge_range
+		meta_description = rsProduct.Fields.Item("title").Value
 	end if
 
 	' Only show star ratings if more than 5 people have rated the item
