@@ -110,7 +110,7 @@ objCmd.CommandText = "SP_Get_Timer"
 Set rsTimer = objCmd.Execute()
 %>
 <%If NOT rsTimer.EOF Then%>
-	<div class="text-center">
+	<div class="text-center" id="countdown-timer" style="display:none">
 		<% countdown_timer = "" & _
 		"<div id=""clockdiv"">" & _
 		  "<div>" & _
