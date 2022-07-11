@@ -254,6 +254,30 @@ Wend
 %>
 <!--#include virtual="/includes/inc-currency-images.asp" -->
 <!--#include virtual="/bootstrap-template/filters.asp" -->
+<%
+set objCmd = Server.CreateObject("ADODB.command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "SP_Get_Timer"
+Set rsTimer = objCmd.Execute()
+%>
+<%If Not rsTimer.EOF Then%>
+	<div class="text-center">
+		<% countdown_timer = "" & _
+		"<div id=""clockdiv"">" & _
+		  "<div>" & _
+			"<span class=""hours mr-1""></span>: " & _
+		  "</div>" & _
+		  "<div class=""ml-1"">" & _
+			"<span class=""minutes mr-1""></span>: " & _
+		  "</div>" & _
+		  "<div class=""ml-1"">" & _
+			"<span class=""seconds""></span>" & _
+		  "</div>" & _
+		"</div>"
+		%>
+		<%= Replace(rsTimer("text_message"), "[Timer]", countdown_timer) %>
+	</div>
+<% end if %>
 <div class="display-5 mb-3">
 		Checkout
 </div>
@@ -873,6 +897,14 @@ end if
 </div><!-- end shipping options main card -->
 </section><!-- end shipping options section -->
 
+<!-- Shipping Countdown Timer -->
+<%If Not rsTimer.EOF Then%>
+	<script>
+		var total_seconds = <%=rsTimer("remaining_seconds")%>;
+	</script>
+	<script src="/js/countdown-timer.js"></script>
+<%End If%>
+
 <% if CustID_Cookie = 0 then ' show section if not registered  %>
 <section class="create-password AddressesForm" <%= hide_section_addons %>> 
 	<div class="card mb-5">
@@ -1282,6 +1314,8 @@ end if
 
 <!-- Postgrid API -->
 <script src="/js/postgrid-customized-api.js" data-pg-key="live_pk_csP2zaBTuekcKtmRMRSi9U"></script>
+
 <%
 Set rsToggles = Nothing
+Set rsTimer = Nothing
 %>
