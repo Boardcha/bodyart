@@ -27,5 +27,8 @@ function CheckTime(){
 	}
 }
 setTimeout("CheckTime()",1000);
-setTimeout(function(){document.getElementById('clockdiv').style.display = "inline-block"}, 2000);
+setTimeout(function(){
+	document.getElementById('countdown-timer').style.display = "block";
+	document.getElementById('clockdiv').style.display = "inline-block";
+}, 2000);
 
