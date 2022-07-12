@@ -60,7 +60,7 @@ Do While NOT rsGetBillingAddresses.EOF
 		var_billing_checkmark = ""
 	end if 
 %>
-<label class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-break1600-6 col-break1900-6 btn btn-light d-block btn-sm rounded-0 text-left billing <%= var_active %>" id="billing-block-<%= rsGetBillingAddresses.Fields.Item("cim_shippingid").Value %>" style="border: .75em solid #fff"  id="<%= strBilling_ID %>" data-type="billing">
+<label class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-break1600-6 col-break1900-6 btn btn-light d-block btn-sm rounded-0 text-left label_radio_billing billing <%= var_active %>" id="billing-block-<%= rsGetBillingAddresses.Fields.Item("cim_shippingid").Value %>" style="border: .75em solid #fff"  id="<%= strBilling_ID %>" data-type="billing">
 		<div class="btn-sm btn-outline-secondary border border-secondary text-center d-block my-1">Select this card<span class="btn-selected"><%= var_billing_checkmark %></span></div>
 		<div class="d-block">
 				<% if rsGetBillingAddresses.Fields.Item("nickname").Value <> "" then %>
@@ -87,7 +87,7 @@ else ' if recordset is empty set javascript to load up form
 	var_no_bill_addresses = "true"
 
 end if %>
-<label  class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-break1600-6 col-break1900-6 btn btn-light d-block btn-sm rounded-0 text-left billing <%= var_active %>" style="border: .75em solid #fff" id="cim_cash_click" data-type="billing" <%= hide_non_registered %>>
+<label  class="col-12 col-xs-12 col-sm-12 col-md-12 col-lg-12 col-xl-12 col-break1600-6 col-break1900-6 btn btn-light d-block btn-sm rounded-0 text-left label_radio_billing billing <%= var_active %>" style="border: .75em solid #fff" id="cim_cash_click" data-type="billing" <%= hide_non_registered %>>
 	<div class="btn-sm btn-outline-secondary border border-secondary text-center d-block my-1">Pay with money order or cash<span class="btn-selected"></span></div>
 	<input type="radio" name="cim_billing" id="cim_cash" value="cash">
 </label>
