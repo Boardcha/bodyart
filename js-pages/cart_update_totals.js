@@ -46,10 +46,19 @@
 			if(json.grandtotal > 0){
 				$("#cim_billing_addresses").show();
 				$("#billing-information").show();
+				if (!$("input[name='cim_billing']:checked").length) {
+					$('input[name="cim_billing"]:first').trigger("click");
+					$(".label_radio_billing .btn-selected").html('<i class="ml-2 fa fa-lg fa-check"></i>');
+				}
 			}else{
 				$("#cim_billing_addresses").hide();
 				$("#billing-information").hide();
+				$("input[name='cim_billing']").attr('checked', false);
+				$(".label_radio_billing").removeClass("active");
+				$(".label_radio_billing .btn-selected").html('');
+				$('.label_radio_billing .btn-selected').html('');				
 			}
+		
 			subTotal = parseFloat(json.subtotal);
 			totalDiscount = parseFloat(json.total_discount);
 			salesTax = json.salestax;
@@ -129,10 +138,9 @@
 				// Show/hide billing section based on total
 				if(!$("#cim_cash, #cash").is(':checked')) {
 					if (json.grandtotal <= 0) {
-						$('.billing-information').fadeOut(500);
+						//$('.billing-information').fadeOut(500);
 						$('#cash').prop('checked', false);
 						$('#paypal').prop('checked', false);
-						$('input[name="cim_billing"]:first').trigger("click");
 						toggleRequiredBillingFalse();
 					} else if ($('#paypal-checkout').val() === 'on') {
 						$('.billing-information').hide();
