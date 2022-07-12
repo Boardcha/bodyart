@@ -220,6 +220,23 @@ if request.querystring("addon") = "yes" then
 	response.cookies("OrderAddonsActive") = request.querystring("id")
 end if
 %>
+<% if request.querystring("keywords") = "Economy" then %>
+	<picture>
+		<source media="(max-width: 550px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/economy-550x350.jpg">
+		<source media="(max-width: 850px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/economy-850x350.jpg">
+		<source media="(max-width: 1024px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/economy-1024x350.jpg">
+		<source media="(max-width: 1600px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/economy-1600x350.jpg">
+		<source media="(min-width: 1920px)" sizes="100vw" srcset="https://sliders.bodyartforms.com/economy-1920x350.jpg">
+			<img class="img-fluid hero-slider" src="https://sliders.bodyartforms.com/economy-1600x350.jpg" 
+		srcset="https://sliders.bodyartforms.com/economy-1920x350.jpg 1920w,
+		https://sliders.bodyartforms.com/economy-1600x350.jpg 1600w,
+		https://sliders.bodyartforms.com/economy-1024x350.jpg 1024w,
+		https://sliders.bodyartforms.com/economy-850x350.jpg 850w,
+		https://sliders.bodyartforms.com/economy-550x350.jpg 550w"
+		sizes="100vw"
+		alt="Affordable body jewelry banner" />
+	</picture>
+<% end if %>
 <!--#include virtual="/bootstrap-template/filters.asp" -->
 
 <div class="products">

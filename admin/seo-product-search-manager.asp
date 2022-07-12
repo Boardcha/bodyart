@@ -64,6 +64,7 @@ end select
 	<option value="barbell">Barbell</option>
     <option value="brand">By Brand</option>
     <option value="gauge">By Gauge</option>
+    <option value="keyword">By Keyword</option>
 	<option value="captive">Captive</option>
 	<option value="circular">Circular Barbell</option>
 	<option value="gear">BAF gear</option>
@@ -130,6 +131,7 @@ For intRecord = 1 To rsGetSEO.PageSize
                 <option value="barbell">Barbell</option>
                 <option value="brand">By Brand</option>
                 <option value="gauge">By Gauge</option>
+                <option value="keyword">By Keyword</option>
                 <option value="captive">Captive</option>
                 <option value="circular">Circular Barbell</option>
                 <option value="gear">BAF gear</option>
