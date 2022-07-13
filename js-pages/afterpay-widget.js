@@ -16,13 +16,9 @@ function AfterpayWidget() {
 			if (afterpay_grandtotal > 1000) {
 				$('#btn-afterpay-checkout').hide();
 				$('#afterpay-displayonly').hide();	
-				console.log("buyuk");
-				console.log("afterpay_grandtotal:" + afterpay_grandtotal);
 			}else{
 				$('#btn-afterpay-checkout').show();
 				$('#afterpay-displayonly').show();			
-				console.log("buyuk degil");
-				console.log("afterpay_grandtotal:" + afterpay_grandtotal);
 			}
 	} else {
 		afterpay_amount = 0;

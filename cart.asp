@@ -416,7 +416,7 @@ Wend
 <div class="col-12 col-lg-8 col-break1600-9 col-break1900-9 pr-lg-5" style="padding-left: .75em;padding-right:0">
 <div class="container-fluid p-0" style="margin-left:-.75em;margin-right:-.75em">
 <!--#include virtual="cart/inc_cart_loopitems-begin.asp"-->
-	<div class="row detailid_<%= rs_getCart.Fields.Item("cart_id").Value %>">
+	<div class="cart_item row detailid_<%= rs_getCart.Fields.Item("cart_id").Value %>">
                  <div class="col-auto col-xl-auto mb-3">
 				  <% If Instr(rs_getCart.Fields.Item("title").Value, "Digital gift certificate") > 0 Then
 					product_link = "gift-certificate.asp"
