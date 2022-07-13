@@ -9,7 +9,7 @@ objAfterPayTerminal.open "POST", afterpay_url & "/payments/" & request.form("tra
 objAfterPayTerminal.SetRequestHeader "Authorization", "Basic " & afterpay_api_credential & ""
 objAfterPayTerminal.setRequestHeader "Accept", "application/json"
 objAfterPayTerminal.setRequestHeader "Content-Type", "application/json"
-
+objAfterPayCeckout.setRequestHeader "User-Agent", "Bodyartforms/1.0 (Custom Platform/1.0.0; ASP; Bodyartforms/" & afterpay_merchant_id & ") https://bodyartforms.com"
 
 if request.form("afterpay_payments") = "refund" then
 objAfterPayTerminal.Send("{" & _
