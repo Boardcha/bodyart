@@ -81,7 +81,7 @@ objAfterPayCeckout.Send("{" & _
         "]," & _
         """merchant"": {" & _
             """redirectConfirmUrl"":""https://" & var_domain & "/checkout-afterpay.asp?type=afterpay""," & _
-            """redirectCancelUrl"":""https://" & var_domain & "/checkout-afterpay.asp?type=afterpay""" & _
+            """redirectCancelUrl"":""https://" & var_domain & "/cart.asp""" & _
         "}," & _
         """merchantReference"": """ & session("invoiceid") & """" & _
     "}")

@@ -1,7 +1,7 @@
 function AfterpayWidget() {	
 	$('.afterpay-paragraph').hide();
-	
 	afterpay_grandtotal = $(".cart_grand-total").html();
+	afterpay_grandtotal = afterpay_grandtotal.replace(',','')
 	if (afterpay_grandtotal != null) {
 			afterpay_amount = afterpay_grandtotal.replace('.','');
 			if (afterpay_grandtotal >= 35) {
@@ -13,10 +13,21 @@ function AfterpayWidget() {
 				$('#afterpay-displayonly').show();
 				afterpay_div = '.afterpay-widget-nonactive';
 			}
-		} else {
-			afterpay_amount = 0;
-			afterpay_div = '.afterpay-widget';
-		}
+			if (afterpay_grandtotal > 1000) {
+				$('#btn-afterpay-checkout').hide();
+				$('#afterpay-displayonly').hide();	
+				console.log("buyuk");
+				console.log("afterpay_grandtotal:" + afterpay_grandtotal);
+			}else{
+				$('#btn-afterpay-checkout').show();
+				$('#afterpay-displayonly').show();			
+				console.log("buyuk degil");
+				console.log("afterpay_grandtotal:" + afterpay_grandtotal);
+			}
+	} else {
+		afterpay_amount = 0;
+		afterpay_div = '.afterpay-widget';
+	}
 	
 	/* Configure the Widget */
 	const apConfig = {
