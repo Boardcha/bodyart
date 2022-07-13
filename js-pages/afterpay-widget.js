@@ -4,6 +4,19 @@ function AfterpayWidget() {
 	afterpay_grandtotal = afterpay_grandtotal.replace(',','')
 	if (afterpay_grandtotal != null) {
 			afterpay_amount = afterpay_grandtotal.replace('.','');
+			
+			//If cart contains gift certificate, hide afterpay button
+			setTimeout(function(){
+				if($(".cart_item:visible:contains('Digital Gift Certificate')").length > 0){
+					$('#btn-afterpay-checkout').hide();
+					$('#afterpay-displayonly').hide();		
+	console.log("1");				
+				}else{
+					$('#btn-afterpay-checkout').show();
+					$('#afterpay-displayonly').show();	
+					console.log("0");
+				}
+			}, 10);
 			if (afterpay_grandtotal >= 35) {
 				$('#btn-afterpay-checkout').show();
 				$('#afterpay-displayonly').hide();

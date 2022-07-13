@@ -758,11 +758,7 @@ end if 'if var_showgifts <> "no" only display on the viewcart page
 									else
 										afterpay_display = "display:none"
 									end if
-
-									' === only show afterpay option if there is no gift cert in cart
-									if var_giftcert = "yes" then
-										afterpay_display = "display:none"
-									end if									
+							
 									%>
 									<div id="REMOVE-GO-LIVE">
 										<div class="afterpay_option" style="<%= afterpay_display %>">
