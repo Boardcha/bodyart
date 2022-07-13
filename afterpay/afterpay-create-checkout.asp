@@ -56,6 +56,7 @@ objAfterPayCeckout.open "POST", afterpay_url & "/checkouts", false
 objAfterPayCeckout.SetRequestHeader "Authorization", "Basic " & afterpay_api_credential & ""
 objAfterPayCeckout.setRequestHeader "Accept", "application/json"
 objAfterPayCeckout.setRequestHeader "Content-Type", "application/json"
+objAfterPayCeckout.setRequestHeader "User-Agent", "Bodyartforms/1.0 (Custom Platform/1.0.0; ASP; Bodyartforms/" & afterpay_merchant_id & ") https://bodyartforms.com"
 objAfterPayCeckout.Send("{" & _
         """amount"": {" & _
             """amount"":""" & FormatNumber(session("third_party_total"), -1, -2, -2, -2) & """," & _
@@ -80,7 +81,7 @@ objAfterPayCeckout.Send("{" & _
         "]," & _
         """merchant"": {" & _
             """redirectConfirmUrl"":""https://" & var_domain & "/checkout-afterpay.asp?type=afterpay""," & _
-            """redirectCancelUrl"":""https://" & var_domain & "/checkout-afterpay.asp?type=afterpay""" & _
+            """redirectCancelUrl"":""https://" & var_domain & "/cart.asp""" & _
         "}," & _
         """merchantReference"": """ & session("invoiceid") & """" & _
     "}")
