@@ -9,8 +9,7 @@ function AfterpayWidget() {
 			setTimeout(function(){
 				if($(".cart_item:visible:contains('Digital Gift Certificate')").length > 0){
 					$('#btn-afterpay-checkout').hide();
-					$('#afterpay-displayonly').hide();		
-	console.log("1");				
+					$('#afterpay-displayonly').hide();					
 				}else{
 					$('#btn-afterpay-checkout').show();
 					$('#afterpay-displayonly').show();	
