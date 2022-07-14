@@ -91,13 +91,13 @@
 			<div class="badge badge-secondary">Inventory & Anodization</div>
 		</div>
 		<div class="col-lg-3 col-6 py-4">
-			<img class="img-fluid" src="images/employees/anna-circle.png" alt="Anna" />
-			<h5  class="mb-0">Anna</h5>
+			<img class="img-fluid" src="images/employees/sarena-circle.png" alt="Sarena" />
+			<h5  class="mb-0">Sarena</h5>
 			<div class="badge badge-secondary">Customer Service</div>
 		</div>
 		<div class="col-lg-3 col-6 py-4">
-			<img class="img-fluid" src="images/employees/sarena-circle.png" alt="Sarena" />
-			<h5  class="mb-0">Sarena</h5>
+			<img class="img-fluid" src="images/employees/paty-circle.png" alt="Paty" />
+			<h5  class="mb-0">Paty</h5>
 			<div class="badge badge-secondary">Customer Service</div>
 		</div>
 		<div class="col-lg-3 col-6 py-4">
@@ -121,11 +121,6 @@
 			<div class="badge badge-secondary">Packing & Shipping</div>
 		</div>
 		<div class="col-lg-3 col-6 py-4">
-			<img class="img-fluid" src="images/employees/paty-circle.png" alt="Paty" />
-			<h5  class="mb-0">Paty</h5>
-			<div class="badge badge-secondary">Packing & Shipping</div>
-		</div>
-		<div class="col-lg-3 col-6 py-4">
 			<img class="img-fluid" src="images/employees/cain-circle.png" alt="Cain" />
 			<h5  class="mb-0">Cain</h5>
 			<div class="badge badge-secondary">Packing & Shipping</div>
@@ -133,6 +128,11 @@
 		<div class="col-lg-3 col-6 py-4">
 			<img class="img-fluid" src="images/employees/shalysha-circle.png" alt="Shalysha" />
 			<h5  class="mb-0">Shalysha</h5>
+			<div class="badge badge-secondary">Packing & Shipping</div>
+		</div>
+		<div class="col-lg-3 col-6 py-4">
+			<img class="img-fluid" src="images/employees/chloe-circle.png" alt="Chloe" />
+			<h5  class="mb-0">Chloe</h5>
 			<div class="badge badge-secondary">Packing & Shipping</div>
 		</div>
 	</div>

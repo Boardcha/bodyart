@@ -120,6 +120,17 @@ while NOT rsGoogle_GetOrderDetails.eof
 	});
 </script>	
 
+<!-- Google AdWords Event snippet for Confirmation Page conversion page -->
+<script>
+	gtag('event', 'conversion', {
+		'send_to': 'AW-1072498278/5Iw2COicqAgQ5oy0_wM',
+		'value': <%= FormatNumber(google_total, -1, -2, -2, -2) %>,
+		'currency': 'USD',
+		'transaction_id': '<%= session("invoiceid") %>'
+	});
+ </script>
+  
+
 <!-- KLAVIYO ORDER PLACED PUSH BEGIN -->
 <%
 rsGoogle_GetOrderDetails.moveFirst
