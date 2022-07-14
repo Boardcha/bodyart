@@ -104,6 +104,13 @@ else ' update the details
 			Next
 	end if
 	
+	if column_title = "free_item_expiration_date" And column_value = "" then
+		column_value = null
+	end if
+	if column_title = "free_item_start_date" And column_value = "" then
+		column_value = null
+	end if	
+	
 	set objCmd = Server.CreateObject("ADODB.command")
 	objCmd.ActiveConnection = DataConn
 	objCmd.CommandText = "select " & column_title & ", ProductDetailID from ProductDetails where ProductDetailID = ?"

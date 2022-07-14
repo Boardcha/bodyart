@@ -463,6 +463,20 @@ $("#description").redactor({
 			data: {discount: $(this).val(), product_id: product_id}
 		});
 	});
+	
+	$("select[name=free]").change(function(){
+			var product_detail_id = $(this).attr("data-detailid");
+			if ($(this).val() == "0"){
+				$("#free-qty_" + product_detail_id).prop( "disabled", true );
+				$("#free_item_expiration_date_" + product_detail_id).prop( "disabled", true );
+				$("#free_item_start_date_" + product_detail_id).prop( "disabled", true );
+			}else{
+				$("#free-qty_" + product_detail_id).prop( "disabled", false );
+				$("#free_item_expiration_date_" + product_detail_id).prop( "disabled", false );
+				$("#free_item_start_date_" + product_detail_id).prop( "disabled", false );
+			}
+	});
+	
 
 	// Change active / inactive drop down select colors
 	$("select[name=active]").change(function(){

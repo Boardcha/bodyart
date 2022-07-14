@@ -1506,6 +1506,8 @@ end if
 						<th>Added</th>
 						<th>Bin</th>
 						<th>Free</th>
+						<th>Free Item Start Date</th>
+						<th>Free Item Expiration</th>
 						<th>Free Qty</th>
 						<th>Weight (Ounces)</th>
 						<th>Wearable</th>
@@ -1523,24 +1525,41 @@ end if
 						<input class="form-control form-control-sm" style="width:50px" name="bin_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" id="bin_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" type="text" value="<%=(rs_getdetails.Fields.Item("BinNumber_Detail").Value)%>" data-column="BinNumber_Detail" data-detailid="<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" data-friendly="Bin #">
 					</td>
 					<td>
-						<select class="form-control form-control-sm" name="free" data-column="free" data-detailid="<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" data-friendly="Free threshold">
-							<option value="<% if Not isNull(rs_getdetails.Fields.Item("free").Value) then %><%=(rs_getdetails.Fields.Item("free").Value)%><% else %>0<% end if %>" selected>
-							<% if (rs_getdetails.Fields.Item("free").Value) = 0 then %>
-							Not free
-							<% else %>
-							<%=(rs_getdetails.Fields.Item("free").Value)%>
-							<% end if%>
-							</option>
-							<option value="0">Not free</option>
-							<option value="30">$30 +</option>
-							<option value="50">$50 +</option>
-							<option value="75">$75 +</option>
-							<option value="100">$100 +</option>
-							<option value="150">$150 +</option>
+						<select class="form-control form-control-sm" name="free" data-column="free" data-detailid="<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" data-friendly="Free threshold">					
+							<option value="0" <% if isNull(rs_getdetails("free")) Or rs_getdetails("free") = "0" then %>selected<%End If%>>Not free</option>
+							<option value="30" <% if rs_getdetails("free") = "30" then %>selected<%End If%>>$30 +</option>
+							<option value="50" <% if rs_getdetails("free") = "50" then %>selected<%End If%>>$50 +</option>
+							<option value="75" <% if rs_getdetails("free") = "75" then %>selected<%End If%>>$75 +</option>
+							<option value="100" <% if rs_getdetails("free") = "100" then %>selected<%End If%>>$100 +</option>
+							<option value="150" <% if rs_getdetails("free") = "150" then %>selected<%End If%>>$150 +</option>
 						</select>
 					</td>
 					<td>
-						<input class="form-control form-control-sm" style="width:50px" name="free-qty_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" id="free-qty_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" type="text" <% if rs_getdetails.fields.item("Free_QTY").value <> "" then %>value="<%=(rs_getdetails.Fields.Item("Free_QTY").Value)%>"<% else %>value=" "<% end if %> data-column="Free_QTY" data-detailid="<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" style="content: '1';" data-friendly="Free qty">  
+						<%
+						'====== CONFIGURE DATE TO SHOW CORRECTLY IN Field
+						if Not IsNull(rs_getdetails("free_item_start_date")) then
+							var_free_item_start_date = rs_getdetails("free_item_start_date")
+							var_free_item_start_date = DatePart("yyyy",var_free_item_start_date) _
+							& "-" & Right("0" & DatePart("m",var_free_item_start_date), 2) _
+							& "-" & Right("0" & DatePart("d",var_free_item_start_date), 2)
+						end if		
+						%>					
+						<input <% if isNull(rs_getdetails("free")) Or rs_getdetails("free") = "0" then %>disabled<%end if%>  class="form-control form-control-sm" name="free_item_start_date_<%= rs_getdetails("ProductDetailID") %>" type="date" id="free_item_start_date_<%= rs_getdetails("ProductDetailID") %>" value="<%=var_free_item_start_date%>" data-column="free_item_start_date" data-detailid="<%= rs_getdetails("ProductDetailID") %>" style="content: '1';" data-friendly="Free Item Start Date">
+					</td>					
+					<td>
+						<%
+						'====== CONFIGURE DATE TO SHOW CORRECTLY IN Field
+						if Not IsNull(rs_getdetails("free_item_expiration_date")) then
+							var_free_item_expiration_date = rs_getdetails("free_item_expiration_date")
+							var_free_item_expiration_date = DatePart("yyyy",var_free_item_expiration_date) _
+							& "-" & Right("0" & DatePart("m",var_free_item_expiration_date), 2) _
+							& "-" & Right("0" & DatePart("d",var_free_item_expiration_date), 2)
+						end if		
+						%>					
+						<input <% if isNull(rs_getdetails("free")) Or rs_getdetails("free") = "0" then %>disabled<%end if%>  class="form-control form-control-sm" name="free_item_expiration_date_<%= rs_getdetails("ProductDetailID") %>" type="date" id="free_item_expiration_date_<%= rs_getdetails("ProductDetailID") %>" value="<%=var_free_item_expiration_date%>" data-column="free_item_expiration_date" data-detailid="<%= rs_getdetails("ProductDetailID") %>" style="content: '1';" data-friendly="Free Item Expiration Date">
+					</td>					
+					<td>				
+						<input <% if isNull(rs_getdetails("free")) Or rs_getdetails("free") = "0" then %>disabled<%end if%> class="form-control form-control-sm" style="width:50px" name="free-qty_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" id="free-qty_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" type="text" <% if rs_getdetails.fields.item("Free_QTY").value <> "" then %>value="<%=(rs_getdetails.Fields.Item("Free_QTY").Value)%>"<% else %>value=" "<% end if %> data-column="Free_QTY" data-detailid="<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" style="content: '1';" data-friendly="Free qty">  
 					</td>
 					<td>
 						<input class="form-control form-control-sm" style="width:50px" name="weight_<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" type="text" <% if rs_getdetails.fields.item("weight").value <> "" then %>value="<%=(rs_getdetails.Fields.Item("weight").Value)%>"<% else %>value=" "<% end if %> data-column="weight" data-detailid="<%= rs_getdetails.Fields.Item("ProductDetailID").Value %>" data-friendly="Weight">
