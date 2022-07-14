@@ -542,5 +542,10 @@
     <url>
         <loc>https://bodyartforms.com/products.asp?piercing=Helix</loc>
     </url>
-    
+    <url>
+        <loc>https://bodyartforms.com/products.asp?piercing=Daith</loc>
+    </url>
+    <url>
+        <loc>https://bodyartforms.com/products.asp?piercing=Rook</loc>
+    </url>
 </urlset>
