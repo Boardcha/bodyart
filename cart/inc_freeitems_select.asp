@@ -28,25 +28,11 @@ If tier = 1 Then
 						"FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID " & _ 
 						"INNER JOIN FlatProducts ON FlatProducts.ProductID = jewelry.ProductID " & _ 
 						"INNER JOIN TBL_GaugeOrder Gauge ON ISNULL(ProductDetails.Gauge,'') = ISNULL(Gauge.GaugeShow,'') " & _ 
-						"WHERE (jewelry.ProductID = " & productid & ") AND ProductDetails.qty > 0 " & _
+						"WHERE (jewelry.ProductID = " & productid & ") AND ProductDetails.qty > 0 AND Free_QTY > 0" & _
 						"ORDER BY GaugeOrder ASC, item_order ASC, Price ASC"	
 					
 	Set rsGetFree = objCmd.Execute()
 	' ------- End getting O_RINGS items
-End If
-
-If tier = 2 Then
-	'' ------- Get STICKER items
-	'set objCmd = Server.CreateObject("ADODB.command")
-	'objCmd.ActiveConnection = DataConn
-	'objCmd.CommandText = "SELECT ProductDetails.free, ProductDetails.Free_QTY, jewelry.picture, ProductDetails.ProductDetailID, ProductDetails.ProductDetail1, FlatProducts.min_gauge, FlatProducts.max_gauge, jewelry.title, jewelry.picture,jewelry.ProductID, jewelry.picture, CASE WHEN jewelry.ProductID = 2890 THEN '1' ELSE jewelry.ProductID END, ISNULL(ProductDetails.gauge,'') + ' ' + ISNULL(ProductDetails.Length,'') + ' ' + ISNULL(ProductDetails.ProductDetail1,'') + ' ' + ISNULL(jewelry.title,'') AS 'free_title' " & _
-	'					"FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID " & _ 
-	'					"INNER JOIN FlatProducts ON FlatProducts.ProductID = jewelry.ProductID " & _ 
-	'					"INNER JOIN TBL_GaugeOrder Gauge ON ISNULL(ProductDetails.Gauge,'') = ISNULL(Gauge.GaugeShow,'') " & _ 
-	'					"WHERE (jewelry.ProductID = " & productid & ") AND (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1) " & _
-	'					"ORDER BY GaugeOrder ASC, item_order ASC, Price ASC"
-	'Set rsGetFree = objCmd.Execute()
-	'' ------- End getting STICKER items
 End If
 
 If tier >= 3 Then
@@ -57,7 +43,7 @@ If tier >= 3 Then
 						"FROM ProductDetails INNER JOIN jewelry ON ProductDetails.ProductID = jewelry.ProductID " & _ 
 						"INNER JOIN FlatProducts ON FlatProducts.ProductID = jewelry.ProductID " & _ 
 						"INNER JOIN TBL_GaugeOrder Gauge ON ISNULL(ProductDetails.Gauge,'') = ISNULL(Gauge.GaugeShow,'') " & _ 
-						"WHERE (jewelry.ProductID = " & productid & ") AND (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1) " & _
+						"WHERE (jewelry.ProductID = " & productid & ") AND ProductDetails.Free_QTY > 0 AND (ProductDetails.qty > 0) AND (ProductDetails.free <> 0) AND (ProductDetails.free IS NOT NULL) AND (ProductDetails.active = 1) " & _
 						"ORDER BY GaugeOrder ASC, item_order ASC, Price ASC"
 	Set rsGetFree = objCmd.Execute()
 	' ------- End getting free items
