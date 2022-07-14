@@ -260,22 +260,26 @@ objCmd.ActiveConnection = DataConn
 objCmd.CommandText = "SP_Get_Timer"
 Set rsTimer = objCmd.Execute()
 %>
-<%If Not rsTimer.EOF Then%>
+<%If NOT rsTimer.EOF Then%>
 	<div class="text-center" id="countdown-timer" style="display:none">
 		<% countdown_timer = "" & _
-		"<div id=""clockdiv"">" & _
-		  "<div>" & _
-			"<span class=""hours mr-1""></span>: " & _
-		  "</div>" & _
-		  "<div class=""ml-1"">" & _
-			"<span class=""minutes mr-1""></span>: " & _
-		  "</div>" & _
-		  "<div class=""ml-1"">" & _
-			"<span class=""seconds""></span>" & _
-		  "</div>" & _
-		"</div>"
+			"<div id=""clockdiv"">" & _
+			  "<div>" & _
+				"<span class=""hours"" style=""margin-left:24px;margin-right:20px""></span>:" & _
+				"<div class=""unit-label"" style=""font-size: 10px; text-align: center; left: -15px; right: -15px; color: rgb(66, 65, 90); bottom: -12px;"">Hours</div>"  & _
+			  "</div>" & _
+			  "<div>" & _
+				"<span class=""minutes"" style=""margin-left:20px;margin-right:20px""></span>" & _
+				"<div class=""unit-label"" style=""font-size: 10px; text-align: center; left: -15px; right: -15px; color: rgb(66, 65, 90); bottom: -12px;"">Minutes</div>"  & _
+			  "</div>" & _
+			"</div>" & _
 		%>
-		<%= Replace(rsTimer("text_message"), "[Timer]", countdown_timer) %>
+		<div id="clockdiv-container">
+			<% 
+			columns = Split(rsTimer("text_message"), "[Timer]")
+			%>
+			<%= "<div>" & columns(0) & "</div>" & countdown_timer & "<div>" & columns(1) & "</div>" %>
+		</div>
 	</div>
 <% end if %>
 <div class="display-5 mb-3">
