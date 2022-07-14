@@ -126,16 +126,17 @@
 	if Request.Querystring("price") <> "" then
 	If Instr(Request.Querystring("price"), ";") Then
 		arrPrice = split(request.querystring("price"), ";")	
-		if arrPrice(0) > 0 or arrPrice(1) < 100 then
+		if IsNumeric(arrPrice(0)) And IsNumeric(arrPrice(1)) then
+			if arrPrice(0) > 0 or arrPrice(1) < 100 then
 %>
-	
-		<a class="filter-delete text-danger d-lg-block d-inline-block mr-3 mr-lg-0" href="" data-filter="price" data-value="<%= request.querystring("price") %>">
-			<i class="fa fa-times"></i>
-		Between <%= FormatCurrency(arrPrice(0), 2) & " - " & FormatCurrency(arrPrice(1), 2) %>
-		<%if arrPrice(1)=100 then Response.Write "+"%>
-		</a>
-	<% 
-	end if '=== only display if price filter has been selected
+				<a class="filter-delete text-danger d-lg-block d-inline-block mr-3 mr-lg-0" href="" data-filter="price" data-value="<%= request.querystring("price") %>">
+					<i class="fa fa-times"></i>
+				Between <%= FormatCurrency(arrPrice(0), 2) & " - " & FormatCurrency(arrPrice(1), 2) %>
+				<%if arrPrice(1)=100 then Response.Write "+"%>
+				</a>
+<% 
+			end if '=== only display if price filter has been selected
+		end if 
 	end if 	'If Request.Querystring("price")
 	end if
 	
