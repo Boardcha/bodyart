@@ -1,4 +1,10 @@
 <%@LANGUAGE="VBSCRIPT"%>
+<% 
+Response.ContentType = "text/html"
+Response.AddHeader "Content-Type", "text/html;charset=UTF-8"
+Response.CodePage = 65001
+Response.CharSet = "UTF-8" 
+%>
 	<%
 	page_title = "Threadless body jewelry"
 	page_description = "Switch your body jewelry out quickly with quality threadless jewelry"
@@ -100,81 +106,18 @@ Threadless body jewelry is a great alternative to standard threaded jewelry. Thr
 		</div>
 	</div>
 </div><!-- container -->
-
-<h4>Threadless Best Sellers</h4>
-  <div class="mt-2 full-width-block">
-	<div class="baf-carousel" id="BestSellers">
-				<% 
-
-				SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%threadless%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC" 
-				Set rsGetThreadless = DataConn.Execute(SqlString)
-
-
-				i = 1
-					While NOT rsGetThreadless.EOF 
-
-					' set variables for pricing
-					if rsGetThreadless.Fields.Item("min_sale_price").Value <> "" then
-					min_price = FormatNumber(rsGetThreadless.Fields.Item("min_sale_price").Value,2)
-					else
-					min_price = ""
-					end if
-					if rsGetThreadless.Fields.Item("max_sale_price").Value <> "" then
-					max_price = FormatNumber(rsGetThreadless.Fields.Item("max_sale_price").Value,2)
-					else
-					max_price = ""
-					end if
-
-					DisplayPrice = ""
-					if rsGetThreadless.Fields.Item("SaleDiscount").Value > 0 then	
-					DisplayPrice = DisplayPrice & rsGetThreadless.Fields.Item("SaleDiscount").Value & "% OFF "
-					end if
-
-
-					if rsGetThreadless.Fields.Item("min_sale_price").Value <> "" then
-					DisplayPrice = DisplayPrice & "$" & min_price & " "
-					end if
-
-					if rsGetThreadless.Fields.Item("min_sale_price").Value <> rsGetThreadless.Fields.Item("max_sale_price").Value then
-					DisplayPrice = DisplayPrice & " - $" & max_price
-					end if
-					%>
-						<a class="slide text-dark homepage-graphic" href="/productdetails.asp?productid=<%= rsGetThreadless.Fields.Item("ProductID").Value %>" id="new-<%= replace(lcase(rsGetThreadless.Fields.Item("title").Value)," ", "-") %>-<%=(rsGetThreadless.Fields.Item("ProductID").Value)%>">
-							<% if i < 9 then %>
-							<img class="img-fluid" src="https://bafthumbs-400.bodyartforms.com/<%= rsGetThreadless.Fields.Item("picture").Value %>" alt="<%=(rsGetThreadless.Fields.Item("title").Value)%>" title="<%=(rsGetThreadless.Fields.Item("title").Value)%>">
-							<% else %><!-- lazy load in images beyond 8-->
-							<img class="img-fluid lazyload" src="/images/image-placeholder.png" data-src="https://bafthumbs-400.bodyartforms.com/<%= rsGetThreadless.Fields.Item("picture").Value %>" alt="<%=(rsGetThreadless.Fields.Item("title").Value)%>" title="<%=(rsGetThreadless.Fields.Item("title").Value)%>">
-							<% end if 
-							i = i +1 %>
-						<div class="w-100 text-center px-1">
-								<div class="small">
-										<%= rsGetThreadless.Fields.Item("title").Value %>
-								</div>
-								<div class="small font-weight-bold  d-block">
-										<%= DisplayPrice %>
-								</div>
-								<div class="small font-weight-bold  d-block">
-										<%= rsGetThreadless.Fields.Item("min_gauge").Value %>
-										<% if rsGetThreadless.Fields.Item("min_gauge").Value <> rsGetThreadless.Fields.Item("max_gauge").Value then %> 
-										- <%= rsGetThreadless.Fields.Item("max_gauge").Value %>
-										<% end if %>
-								</div>
-							
-							</div> 
-					</a>
-					<% 
-rsGetThreadless.MoveNext()
-Wend
+<%
+SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%threadless%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
 %>
-				</div>
-</div><!-- full-width-block -->
-
+<h4>Threadless Best Sellers</h4>
+<!--#include virtual="/includes/inc-embedded-products.inc" -->
+ 
 </div><!-- full page div -->
 
 <!--#include virtual="/bootstrap-template/footer.asp" -->
 <script type="text/javascript" src="/js/slick-customized.min.js"></script>
 <script type="text/javascript">
-	$('#BestSellers').slick({
+	$('.embedded-products').slick({
 	slidesToShow: 3,
   slidesToScroll: 3,
   prevArrow: '<div class="slider-arrow-prev" style="height:60%"><i class="fa fa-chevron-circle-left fa-2x text-dark pointer"></i></div>',
