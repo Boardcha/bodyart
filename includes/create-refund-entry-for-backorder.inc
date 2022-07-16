@@ -37,10 +37,10 @@ Function CreateRefundEntryForBackorderedItem(var_invoice_number, var_customer_nu
 	End If
 
 	If var_refund_total > 0 then
-		'Add shipping price to refund amount if it is the only item in the order
+		'Add shipping price to refund amount if it is the only item in the order Or when all the items are backordered in the order (free items are excluded)
 		set objCmd = Server.CreateObject("ADODB.Command")
 		objCmd.ActiveConnection = DataConn
-		objCmd.CommandText = "SELECT shipping_rate FROM sent_items WHERE ID = ? AND ( " & _
+		objCmd.CommandText = "SELECT shipping_rate, retail_delivery_fee FROM sent_items WHERE ID = ? AND ( " & _
 			"SELECT TOP 1 ORS.InvoiceID FROM TBL_OrderSummary ORS " & _
 			"LEFT JOIN sent_items SNT ON SNT.ID = ORS.InvoiceID " & _
 			"INNER JOIN ProductDetails DET ON DET.ProductDetailID = ORS.DetailID " & _
@@ -51,7 +51,7 @@ Function CreateRefundEntryForBackorderedItem(var_invoice_number, var_customer_nu
 		Set rsGetShippingRate = objCmd.Execute()
 		Response.Write var_refund_total & "<br>"
 		If Not rsGetShippingRate.EOF Then
-			var_refund_total = FormatNumber(Ccur(var_refund_total) + rsGetShippingRate("shipping_rate"), -1, -2, -0, -2)
+			var_refund_total = FormatNumber(Ccur(var_refund_total) + Ccur(rsGetShippingRate("shipping_rate")) + Ccur(rsGetShippingRate("retail_delivery_fee")), -1, -2, -0, -2)
 			Response.Write var_refund_total & "<br>"
 		End If
 	
