@@ -1,42 +1,26 @@
-function AfterpayWidget() {	
+function AfterpayWidget(afterpay_grandtotal, minPrice) {	
 	$('.afterpay-paragraph').hide();
-	afterpay_grandtotal = $(".cart_grand-total").html();
-	afterpay_grandtotal = afterpay_grandtotal.replace(',','')
-	if (afterpay_grandtotal != null) {
-			afterpay_amount = afterpay_grandtotal.replace('.','');
-			
-			//If cart contains gift certificate, hide afterpay button
-			setTimeout(function(){
-				if($(".cart_item:visible:contains('Digital Gift Certificate')").length > 0){
-					$('#btn-afterpay-checkout').hide();
-					$('#afterpay-displayonly').hide();					
-				}else{
-					$('#btn-afterpay-checkout').show();
-					$('#afterpay-displayonly').show();	
-					console.log("0");
-				}
-			}, 10);
-			if (afterpay_grandtotal >= 35) {
-				$('#btn-afterpay-checkout').show();
-				$('#afterpay-displayonly').hide();
-				afterpay_div = '.afterpay-widget';
-			} else {
-				$('#btn-afterpay-checkout').hide();
-				$('#afterpay-displayonly').show();
-				afterpay_div = '.afterpay-widget-nonactive';
-			}
-			if (afterpay_grandtotal > 1000) {
-				$('#btn-afterpay-checkout').hide();
-				$('#afterpay-displayonly').hide();	
-			}else{
-				$('#btn-afterpay-checkout').show();
-				$('#afterpay-displayonly').show();			
-			}
-	} else {
-		afterpay_amount = 0;
-		afterpay_div = '.afterpay-widget';
-	}
+	afterpay_grandtotal = afterpay_grandtotal.replace(',','');
+	afterpay_amount = afterpay_grandtotal.replace('.','');
 	
+	if (afterpay_grandtotal >= minPrice) {
+		$('#btn-afterpay-checkout').show();
+		$('#afterpay-displayonly').hide();
+		afterpay_div = '.afterpay-widget';
+	} else {
+		$('#btn-afterpay-checkout').hide();
+		$('#afterpay-displayonly').show();
+		afterpay_div = '.afterpay-widget-nonactive';
+	}
+
+	//If cart contains gift certificate, hide afterpay button
+	setTimeout(function(){
+		if($(".cart_item:visible:contains('Digital Gift Certificate')").length > 0 || afterpay_grandtotal > 1000){
+			$('#btn-afterpay-checkout').hide();
+			$('#afterpay-displayonly').hide();		
+		}
+	}, 30);
+
 	/* Configure the Widget */
 	const apConfig = {
 		priceSelector: afterpay_div,
@@ -44,7 +28,7 @@ function AfterpayWidget() {
 		locale: 'en_US',
 		currency: 'USD',
 		minMaxThreshold: {
-		min: 3500,
+		min: minPrice * 100,
 		max: 100000,
 	},
 	// variable to remove upper limit
@@ -56,4 +40,3 @@ function AfterpayWidget() {
 	new presentAfterpay(apConfig).init();
 }
 
-AfterpayWidget();

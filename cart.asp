@@ -979,6 +979,9 @@ if NOT rsGetAddOns.eof then
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
 <script type="text/javascript" src="/js-pages/cart.min.js?v=03032025"></script>
 <script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=111723"></script>
+<!-- Start Afterpay Javascript -->
+<script type = "text/javascript" src="https://static-us.afterpay.com/javascript/present-afterpay.js"></script>
+<script type="text/javascript" src="/js-pages/afterpay-widget.js?v=020420" ></script>
 <!-- ^^^^^^  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE ^^^^^^ -->
 <script type="text/javascript">
 	calcAllTotals();
@@ -992,9 +995,7 @@ if NOT rsGetAddOns.eof then
 		});	
 	});		
 </script>	
-<!-- Start Afterpay Javascript -->
-<script type = "text/javascript" src="https://static-us.afterpay.com/javascript/present-afterpay.js"></script>
-<script type="text/javascript" src="/js-pages/afterpay-widget.js?v=020420" ></script>
+
 <%
 Set rsToggles = Nothing
 %>

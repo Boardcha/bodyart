@@ -1090,8 +1090,9 @@ end if
 <button class="link-add-wishlist btn btn-sm <%= var_wishlist_btn_style %>" type="button"><i class="fa fa-heart fa-lg"></i> Add to Wishlist</button>
 <% end if %>
 <div id="REMOVE-GO-LIVE" >
-	<div class="afterpay_option" style="<%= afterpay_display %>">
-		<div class="afterpay-widget"></div>
+	<div class="afterpay_option mt-3 mb-3" style="<%= afterpay_display %>">
+		<span class="afterpay-widget"></span>
+		<div class="mt-3"  id="afterpay-displayonly"><span class="afterpay-widget-nonactive"></span></div>
 	</div>
 </div>
 <span class="select-currency btn btn-sm btn-outline-secondary">
@@ -1579,7 +1580,7 @@ end if
 <% end if %>
 <script src="/js/jquery.fancybox.min.js"></script>
 <script type="text/javascript" src="/js/slick-customized.min.js"></script>
-<script type="text/javascript" src="/js-pages/product-details.min.js?v=111722" ></script>
+<script type="text/javascript" src="/js-pages/product-details.min.js?v=111723" ></script>
 
 <!-- Start Afterpay Javascript -->
 
