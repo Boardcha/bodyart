@@ -279,5 +279,7 @@
 
 		}
 		});	
-		AfterpayWidget();
+		AfterpayWidget(
+			$(".cart_grand-total").html(), minPrice = 35
+		);
 	}

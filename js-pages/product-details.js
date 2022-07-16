@@ -191,7 +191,7 @@ function refreshMenu() {
 				});
 
 			}
-			
+
 			e.preventDefault();
 	
 		}); // end add to cart click function
@@ -230,10 +230,17 @@ function refreshMenu() {
 		//console.log('imgid:' + imgid + ' img_name:' +  img_name + ' data_index:' + data_index);
 		// Change out selected drop down text
 		$("#selected-item").html(selected_text);
-	
+		
+		var afterpay_total = parseFloat($('.add-cart:checked').attr('data-actual-price'));
+		if(parseFloat($('.add-anodization:checked').attr('data-base-price')) > 0){
+			afterpay_total = afterpay_total + parseFloat($('.add-anodization:checked').attr('data-base-price'));
+		}
+		if(afterpay_total > 0){
+			AfterpayWidget(afterpay_total.toString(), minPrice = 0);
+		}
+		
 		if (imgid != 0) {
-	//		$("#img_thumb_" + imgid).click();
-		$(".slider-main-image").slick('slickGoTo', data_index, true);
+			$(".slider-main-image").slick('slickGoTo', data_index, true);
 		}
 	});
 
@@ -241,6 +248,17 @@ function refreshMenu() {
 	{
 		var selected_text = $(this).attr("dropdown-title");
 		$("#selected-anodization").html(selected_text);
+		
+		var afterpay_total = parseFloat($('.add-cart:checked').attr('data-actual-price'));
+		console.log(afterpay_total);
+		if(parseFloat($('.add-anodization:checked').attr('data-base-price')) > 0){
+			afterpay_total = afterpay_total + parseFloat($('.add-anodization:checked').attr('data-base-price'));
+		}
+		if(afterpay_total > 0){
+			AfterpayWidget(afterpay_total.toString(), minPrice = 0);
+		}
+		
+		console.log(afterpay_total);
 	});
 
 	
