@@ -46,6 +46,15 @@ function baf_sendmail()
 	if cc1_email <> "" then
 		success = email.AddTo(cc1_name,cc1_email)
 	end if
+	if cc2_email <> "" then
+		success = email.AddTo(cc2_name,cc2_email)
+	end if
+	if cc3_email <> "" then
+		success = email.AddTo(cc3_name,cc3_email)
+	end if
+	if cc4_email <> "" then
+		success = email.AddTo(cc4_name,cc4_email)
+	end if
 	email.ReplyTo = mail_reply_email
 
 	success = mailman.SendEmail(email)
