@@ -1055,10 +1055,31 @@ Set rsNavWaitingList = objCmd.Execute()
                                         </button>
                                 </div>
                                 <div class="modal-body">
+								<style>
+								.g_id_signin iframe{margin: auto auto !important;}
+								</style>
                                         <form class="needs-validation" id="frm-signin" novalidate>
-                                                <div class="form-group">
-                                                        <div id="google_sign_in"></div>
-                                                </div>
+												 <% If request.cookies("ID") = "" then %>
+													<div class="form-group" style="max-width:466px">
+														<div id="g_id_onload"
+															 data-client_id="534605611929-1n69ud9b72jvjh21okl82g4sjttdjmj8.apps.googleusercontent.com"
+															 data-context="signin"
+															 data-ux_mode="popup"
+															 data-callback="handleCredentialResponse"
+															 data-nonce=""
+															 data-auto_select="false">
+														</div>
+														<div class="g_id_signin"
+															 data-type="standard"
+															 data-shape="rectangular"
+															 data-theme="filled_blue"
+															 data-text="signin_with"
+															 data-size="large"
+															 data-logo_alignment="left"
+															 data-width="466">
+														</div>														
+													</div>
+												<%End If%>	
                                                 <div style="width: 100%;height: 13px;border-bottom: 1px solid #c7c7c7;text-align: center;margin-bottom: 25px;">
                                                         <div style="color: #969191; font-size: 15px; background-color: #fff; margin:auto auto; width: 40px;"> OR </div>
                                                 </div>
