@@ -1056,11 +1056,13 @@ Set rsNavWaitingList = objCmd.Execute()
                                 </div>
                                 <div class="modal-body">
 								<style>
+								/*TODO: MOVE TO CSS FILES*/
 								.g_id_signin iframe{margin: auto auto !important;}
+								.nsm7Bb-HzV7m-LgbsSe.MFS4be-v3pZbf-Ia7Qfc{width:466px !important; max-width:466px !important;}
 								</style>
                                         <form class="needs-validation" id="frm-signin" novalidate>
 												 <% If request.cookies("ID") = "" then %>
-													<div class="form-group" style="max-width:466px">
+													<div class="form-group">
 														<div id="g_id_onload"
 															 data-client_id="534605611929-1n69ud9b72jvjh21okl82g4sjttdjmj8.apps.googleusercontent.com"
 															 data-context="signin"
