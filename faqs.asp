@@ -88,45 +88,7 @@
 					How threadless jewelry works
 				</a>
 			</div>
-			<div class="card">
-				<div class="card">
-					<a class="card-header text-dark faq-header" href="/blog/how-to-stretch-your-piercing.asp" data-gtm="How to stretch a piercing (blog)">
-						How to stretch a piercing (blog)
-					</a>
-				</div>
-				<div class="card">
-					<a class="card-header collapsed text-dark faq-header" href="" id="headbj3" data-toggle="collapse" data-target="#bj3" aria-expanded="false"
-					 aria-controls="bj3" data-gtm="How does threadless jewelry work?">
-						<i class="fa" aria-hidden="true"></i>
-						How does threadless jewelry work?
-					</a>
-					<div id="bj3" class="collapse" aria-labelledby="headbj3" data-parent="#accordionBodyJewelry">
-						<div class="card-body">
-							<p>
-								The removable end [dark blue] has a slightly curved pin. This pin straightens out when inserted into the shaft [light blue].
-								The resulting spring tension force holds the two pieces together securely.</p>
-								<iframe class="mw-100" width="560" height="315" src="https://www.youtube.com/embed/Dhczz7LdOCY" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
-							<h6>Step 1:</h6>
-							Insert the pin about halfway into the shaft
-							<img class="d-block pb-3" src="../images/neometal_step1.jpg">
-							<h6>Step 2:</h6>
-							Bend the pin
-							<strong>slightly</strong> by hand as shown.
-							<br>
-							<strong>Tighter fit: </strong>Bend the pin a little more.
-							<br>
-							<strong>Easier fit:</strong> Straighten out the pin a little.
-							<img class="d-block pb-3" src="../images/neometal_step2.jpg">
-							<h6>Step 3:</h6>
-							Push in the removable end to close
-							<img class="d-block pb-3" src="../images/neometal_step3.jpg">
-							<h6>Step 4:</h6>
-							Pull apart both ends to remove. If the jewelry is tight, add a slight twisting motion while you pull out the removable end.
-							<img class="d-block pb-3" src="../images/neometal_step4.jpg">
-						</div>
-					</div>
-				</div>
-			</div>
+		</div>
 			<!-- end accordion -->
 			<h5 class="pt-4 pb-1">Order Questions</h5>
 			<div class="accordion faq-accordion" id="accordionOrders">
@@ -189,7 +151,7 @@
 
 								<span class="font-weight-bold">To cancel an order:</span>
 								<br />
-								<a href="contact.asp">Contact us</a> with your invoice # and let us know you want it cancelled. Our customer service team is open Mon - Fri and happy to assist you. If you are a registered customer you can also cancel your order from your order history page.</p>
+								<a href="contact.asp">Contact us</a> with your invoice # and let us know you want it cancelled. Our customer service team is open Mon - Fri (9am - 4pm central time) and happy to assist you. If you are a registered customer you can also cancel your order from your order history page.</p>
 							</p>
 						</div>
 					</div>
@@ -206,7 +168,7 @@
 					</a>
 					<div id="faqpayment1" class="collapse" aria-labelledby="headpayment1" data-parent="#accordionPayment">
 						<div class="card-body">
-							We accept Visa, Mastercard, American Express, Discover, and PayPal.
+							We accept Visa, Mastercard, American Express, Discover, PayPal, ApplePay, and GooglePay.
 						</div>
 					</div>
 				</div>
@@ -289,7 +251,7 @@
 					<div id="faqpayment7" class="collapse" aria-labelledby="headpayment7" data-parent="#accordionPayment">
 						<div class="card-body">
 							Send your payment in USA funds only. Please make all money orders out to
-							<em>Bodyartforms</em>. If it's cash please wrap it in extra paper so that it's concealed and do not send loose change.
+							<em>Bodyartforms</em> and be sure to sign them. If it's cash please wrap it in extra paper so that it's concealed and do not send loose change.
 							Include in your envelope your invoice number, e-mail, and name. The payment can be mailed to:
 							<br/>
 							<br/> Bodyartforms
@@ -571,7 +533,7 @@ Wend
 			<h5 class="pt-4 pb-1">Miscellaneous</h5>
 			<div class="accordion faq-accordion" id="accordionMisc">
 					<div class="card">
-							<a class="card-header text-dark faq-header" href="/blog">Bodyartforms blog</a>
+							<a class="card-header text-dark faq-header" href="/blog">Bodyartforms Blog</a>
 						</div>
 				<div class="card">
 					<a class="card-header collapsed text-dark faq-header" href="" id="headmisc1" data-toggle="collapse" data-target="#faqmisc1" aria-expanded="false"

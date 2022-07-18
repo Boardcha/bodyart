@@ -6,8 +6,8 @@ Response.CodePage = 65001
 Response.CharSet = "UTF-8" 
 %>
 <%
-	page_title = "How to stretch your piercing with a taper"
-	page_description = "How to stretch your piercing with a taper"
+	page_title = "How to stretch / gauge your ear piercing with a taper"
+	page_description = "Learn how to stretch your ear piercing ... without having terrible things happen"
 	page_keywords = ""
 %>
 <!--#include virtual="/functions/security.inc" -->
@@ -21,7 +21,7 @@ Response.CharSet = "UTF-8"
 
     <div class="card  text-white bg-dark mt-3">
         <div class="card-header">
-            <h3>How to stretch your piercing with a taper</h3>
+            <h3>How to stretch / gauge your ear piercing with a taper</h3>
             <h4>(Without having terrible things happen)</h4>
         </div>
         <div class="card-body">
@@ -89,6 +89,7 @@ Response.CharSet = "UTF-8"
         <div class="card-body">
             <p>Apply some of your lube to the taper, particularly the pointy end, and go about halfway up. Don’t use so much oil that the taper is hard to hang on to. Place the pointy end of the taper into your piercing and begin to insert it. Give it a little twist before you get too far to spread the lubricant around a bit. Push the taper in until you feel resistance and check yourself.</p>
             <p>Is the taper more than halfway through? If so, you’re probably all set. Continue to slowly push until you’re at the level end of the taper. Line up your jewelry with the end of the taper (The gauge should be the exact same) and slide the rest of the way. You should now have a plug in your ear and the taper out the back.</p>
+            <a href="https://bodyartforms.com/products.asp?jewelry=lotion-oil" target="_blank">Here's a link to all our piercing friendly oils and salves</a>
 
             <%
             SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%lotionoil%' AND (title LIKE '%stretch%' OR title LIKE '%oil%') AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
