@@ -64,6 +64,12 @@
                                         Backorders
                                         </a>
                             </li>
+                                                        <li>
+                                    <a href="/admin/power-bi/reports.asp?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSection87b4dbd0a5d5cdcdd89a&reportName=Reported inventory issues">
+                                        <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
+                                        Reported inventory issues
+                                        </a>
+                            </li>
                             <li>
                                 <a href="" class="load-report" data-toggle="modal" data-target="#modal-reports" data-report-title="Items rated below 4 stars"  data-report-url="reportEmbed?reportId=b1b71c73-5ea7-41b6-98e7-0f6f18d8bd51&pageName=ReportSection0995471f3d43f1ec43b7">
                                     <img class="mr-1" src="/images/icons/power-bi.png" height="20px">
