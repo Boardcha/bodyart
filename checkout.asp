@@ -1140,7 +1140,7 @@ end if
 								</div><!-- end card body -->
 						<div class="card-footer">
 								
-									<h4>TOTAL <% if strcountryName <> "US" then %> (USD)<% end if %>$<span class="cart_grand-total"><%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %></span></h4>
+							<h4>TOTAL <% if strcountryName <> "US" then %> (USD)<% end if %>$<span class="cart_grand-total"><%= FormatNumber(var_grandtotal, -1, -2, -2, -2) %></span></h4>
 							<div class="row_convert_total" style="display:none">
 								<div class="alert alert-success p-2">
 									<div><h6><img class="mr-2" style="width:20px;height:20px" id="currency-icon" src="/images/icons/<%= currency_img %>">ESTIMATE <span class="exchange-price"><span class="currency-type"></span> <span class="convert-total convert-price" data-price=""></span></span></h6></div>
@@ -1174,10 +1174,15 @@ end if
 						afterpay_display = "display:none"
 					end if
 					%>
-					
+					<%
+					If var_grandtotal < 1135 Or var_grandtotal > 2000 Then
+						afterpay_display = "display:none"%>
+						<div style="background:#b2fce4;border-radius:5px;" class="p-2">Amount must be betwwen $35 and $2000 with afterpay.</div>
+					<%End If%>
 					<div id="REMOVE-GO-LIVE" >
 					<div class="afterpay_option" style="<%= afterpay_display %>">
-						<button id="btn-checkout-afterpay" class="btn btn-lg btn-primary btn-block checkout_button place_order checkout_afterpay" style="display:none" type="submit" form="checkout_form" name="place_order">PAY NOW WITH <img class="img-fluid d-inline w-50" src="/images/afterpay-white-logo.png"/></button>
+						<style>.checkout_afterpay:hover{background:#7ffad2 !important}</style>
+						<button id="btn-checkout-afterpay" class="btn btn-lg btn-block checkout_button place_order checkout_afterpay" style="background:#b2fce4"  type="submit" form="checkout_form" name="place_order">PAY NOW WITH <img class="img-fluid d-inline w-50" src="/images/afterpay-black-logo.png"/></button>
 						<span class="d-none"><span class="afterpay-widget-nonactive afterpay-widget"></span></span>
 						<% if request.querystring("type") = "afterpay" then %> 
 						<input type="hidden" name="afterpay" value="on">

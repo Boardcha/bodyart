@@ -1629,7 +1629,9 @@ end if
 	  fjs.parentNode.insertBefore(js, fjs);
 	}(document, 'script', 'facebook-jssdk'));
 </script>
-
+<%If var_totalitems = 1 Then%>
+	<script>$('.add-cart').change();</script>
+<%End If%>
 <%
 Set rsProduct = Nothing
 Set rsProductStats = Nothing
