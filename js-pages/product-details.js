@@ -65,6 +65,16 @@ function refreshMenu() {
 		if (var_qty <= 0) {
 			$("#add-qty").val('1');
 		}
+		//calculate afterpay
+		var afterpay_total = parseFloat($('.add-cart:checked').attr('data-actual-price')) * parseFloat($("#add-qty").val());
+		console.log(afterpay_total);
+		if(parseFloat($('.add-anodization:checked').attr('data-base-price')) > 0){
+			afterpay_total = afterpay_total + parseFloat($('.add-anodization:checked').attr('data-base-price'));
+		}
+		if(afterpay_total > 0){
+			AfterpayWidget(afterpay_total.toFixed(2), minPrice = 0);
+		}
+				
 	});
 
 	
@@ -231,12 +241,12 @@ function refreshMenu() {
 		// Change out selected drop down text
 		$("#selected-item").html(selected_text);
 		
-		var afterpay_total = parseFloat($('.add-cart:checked').attr('data-actual-price'));
+		var afterpay_total = parseFloat($('.add-cart:checked').attr('data-actual-price')) * parseFloat($("#add-qty").val());
 		if(parseFloat($('.add-anodization:checked').attr('data-base-price')) > 0){
 			afterpay_total = afterpay_total + parseFloat($('.add-anodization:checked').attr('data-base-price'));
 		}
 		if(afterpay_total > 0){
-			AfterpayWidget(afterpay_total.toString(), minPrice = 0);
+			AfterpayWidget(afterpay_total.toFixed(2), minPrice = 0);
 		}
 		
 		if (imgid != 0) {
@@ -249,16 +259,13 @@ function refreshMenu() {
 		var selected_text = $(this).attr("dropdown-title");
 		$("#selected-anodization").html(selected_text);
 		
-		var afterpay_total = parseFloat($('.add-cart:checked').attr('data-actual-price'));
-		console.log(afterpay_total);
+		var afterpay_total = parseFloat($('.add-cart:checked').attr('data-actual-price')) * parseFloat($("#add-qty").val());
 		if(parseFloat($('.add-anodization:checked').attr('data-base-price')) > 0){
 			afterpay_total = afterpay_total + parseFloat($('.add-anodization:checked').attr('data-base-price'));
 		}
 		if(afterpay_total > 0){
-			AfterpayWidget(afterpay_total.toString(), minPrice = 0);
+			AfterpayWidget(afterpay_total.toFixed(2), minPrice = 0);
 		}
-		
-		console.log(afterpay_total);
 	});
 
 	
