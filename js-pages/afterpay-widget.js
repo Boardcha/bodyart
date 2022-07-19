@@ -15,7 +15,7 @@ function AfterpayWidget(afterpay_grandtotal, minPrice) {
 
 	//If cart contains gift certificate, hide afterpay button
 	setTimeout(function(){
-		if($(".cart_item:visible:contains('Digital Gift Certificate')").length > 0 || afterpay_grandtotal > 1000){
+		if($(".cart_item:visible:contains('Digital Gift Certificate')").length > 0 || afterpay_grandtotal > 2000){
 			$('#btn-afterpay-checkout').hide();
 			$('#afterpay-displayonly').hide();		
 		}
@@ -29,7 +29,7 @@ function AfterpayWidget(afterpay_grandtotal, minPrice) {
 		currency: 'USD',
 		minMaxThreshold: {
 		min: minPrice * 100,
-		max: 100000,
+		max: 200000,
 	},
 	// variable to remove upper limit
 	showUpperLimit: false,
