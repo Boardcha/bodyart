@@ -1069,7 +1069,7 @@ Set rsNavWaitingList = objCmd.Execute()
 															 data-ux_mode="popup"
 															 data-callback="handleCredentialResponse"
 															 data-nonce=""
-															 auto_prompt="false"
+															 data-auto_prompt="false"
 															 data-auto_select="false">
 														</div>
 														<div class="g_id_signin"
