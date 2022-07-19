@@ -30,7 +30,66 @@ if var_preferred_discount <> 0 or var_coupon_discount <> 0 or var_coupon_code <>
 	else
 		var_discount = 0
 	end if
-end if			
+end if		
+
+' Calculate Refund amount for the item
+var_invoice_number = request.form("invoice")
+orderDetailID = request.form("item")
+ProductDetailID = request.form("detailid")
+
+set objCmd = Server.CreateObject("ADODB.Command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "SELECT sent_items.ID, sent_items.coupon_code, sent_items.combined_tax_rate, TBL_OrderSummary.ErrorReportDate, TBL_OrderSummary.ErrorDescription,  sent_items.ship_code, TBL_OrderSummary.qty, ProductDetails.qty AS 'qty_instock', TBL_OrderSummary.item_price, ProductDetails.ProductDetail1, ProductDetails.location, ProductDetails.Gauge, ProductDetails.Length, jewelry.title, ProductDetails.ProductDetailID, ProductDetails.BinNumber_Detail, TBL_OrderSummary.OrderDetailID, TBL_OrderSummary.ProductID, TBL_OrderSummary.item_problem, TBL_OrderSummary.ErrorQtyMissing,  (jewelry.title + ' ' + ISNULL(ProductDetails.Gauge, '') + ' ' + ISNULL(ProductDetails.Length, '') + ' ' + ISNULL(ProductDetails.ProductDetail1, '')) as description FROM sent_items INNER JOIN TBL_OrderSummary ON sent_items.ID = TBL_OrderSummary.InvoiceID INNER JOIN ProductDetails ON TBL_OrderSummary.DetailID = ProductDetails.ProductDetailID INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID WHERE TBL_OrderSummary.backorder = 1 AND ID = ? AND TBL_OrderSummary.OrderDetailID = ?"
+objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,12, var_invoice_number))
+objCmd.Parameters.Append(objCmd.CreateParameter("orderDetailID",3,1,12, orderDetailID))
+
+set rsGetItem = Server.CreateObject("ADODB.Recordset")
+rsGetItem.CursorLocation = 3 'adUseClient
+rsGetItem.Open objCmd
+
+If NOT rsGetItem.EOF Then
+	'==============  GET COUPON DISCOUNT / IF ANY ============================================
+	set objCmd = Server.CreateObject("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "SELECT DiscountPercent FROM TBLDiscounts WHERE DiscountCode = ?"
+	objCmd.Parameters.Append(objCmd.CreateParameter("coupon_code",200,1,50,rsGetItem.Fields.Item("coupon_code").Value))
+	Set rsGetCouponDiscount = objCmd.Execute()
+End If
+
+If Not rsGetItem.EOF Then
+
+	If NOT rsGetCouponDiscount.eof then
+		var_item_price = FormatNumber((rsGetItem.Fields.Item("item_price").Value - ((rsGetCouponDiscount.Fields.Item("DiscountPercent").Value / 100) * rsGetItem.Fields.Item("item_price").Value)) * rsGetItem.Fields.Item("qty").Value, -1, -2, -0, -2)                        
+	Else
+		var_item_price = FormatNumber(rsGetItem.Fields.Item("item_price").Value * rsGetItem.Fields.Item("qty").Value, -1, -2, -0, -2)
+	End if
+
+	' Add on tax to refund 
+	If rsGetItem.Fields.Item("combined_tax_rate").Value > 0 then
+		var_item_price = var_item_price + (var_item_price * rsGetItem.Fields.Item("combined_tax_rate").Value)
+	End if
+
+	var_item_refund = FormatNumber(Ccur(var_item_refund) + ccur(var_item_price), -1, -2, -0, -2)
+End If
+
+If var_item_refund > 0 then
+	'Add shipping price to refund amount if it is the only item in the order Or when all the items are backordered in the order (free items are excluded)
+	set objCmd = Server.CreateObject("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "SELECT shipping_rate, retail_delivery_fee FROM sent_items WHERE ID = ? AND ( " & _
+		"SELECT TOP 1 ORS.InvoiceID FROM TBL_OrderSummary ORS " & _
+		"LEFT JOIN sent_items SNT ON SNT.ID = ORS.InvoiceID " & _
+		"INNER JOIN ProductDetails DET ON DET.ProductDetailID = ORS.DetailID " & _
+		"WHERE ORS.InvoiceID = ? AND ORS.DetailID <> ? AND ORS.backorder <> 1 AND (DET.free = 0 AND DET.ProductID not in(1464, 1483, 1649, 2991, 3086, 3587, 3611, 3803, 3926, 3928, 4287))) is null"
+	objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,12, var_invoice_number))
+	objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid2",3,1,12, var_invoice_number))
+	objCmd.Parameters.Append(objCmd.CreateParameter("ProductDetailID",3,1,15, ProductDetailID))
+	Set rsGetShippingRate = objCmd.Execute()
+	Response.Write var_item_refund & "<br>"
+	If Not rsGetShippingRate.EOF Then
+		var_item_refund = FormatNumber(Ccur(var_item_refund) + Ccur(rsGetShippingRate("shipping_rate")) + Ccur(rsGetShippingRate("retail_delivery_fee")), -1, -2, -0, -2)
+	End If
+End If	
 
 %>
 
@@ -52,7 +111,7 @@ end if
 <% end if %>
 <button class="btn btn-sm btn-secondary my-1 btn_bo" data-agenda="clear" data-item="<%= request.form("item") %>">Clear backorder</button>
 
-<div class="h6 mt-4">Refund item only $<%= request.form("price") %></div>
+<div class="h6 mt-4">Refund item only $<%= var_item_refund %></div>
 <button class="btn btn-sm btn-secondary btn_bo" data-agenda="item-refund" data-item="<%= request.form("item") %>">Refund</button>
 
 <% if custID <> 0 then %>
