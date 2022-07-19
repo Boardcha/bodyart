@@ -2,7 +2,7 @@ function AfterpayWidget(afterpay_grandtotal, minPrice) {
 	$('.afterpay-paragraph').hide();
 	afterpay_grandtotal = afterpay_grandtotal.replace(',','');
 	afterpay_amount = afterpay_grandtotal.replace('.','');
-	
+	console.log("afterpay_amount:" + afterpay_amount);
 	if (afterpay_grandtotal >= minPrice) {
 		$('#btn-afterpay-checkout').show();
 		$('#afterpay-displayonly').hide();
