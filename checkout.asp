@@ -1175,7 +1175,7 @@ end if
 					end if
 					%>
 					<%
-					If var_grandtotal < 1135 Or var_grandtotal > 2000 Then
+					If var_grandtotal < 35 Or var_grandtotal > 2000 Then
 						afterpay_display = "display:none"%>
 						<div style="background:#b2fce4;border-radius:5px;" class="p-2">Amount must be betwwen $35 and $2000 with afterpay.</div>
 					<%End If%>
