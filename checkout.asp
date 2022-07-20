@@ -536,7 +536,7 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 
 
 
-<div class="billing-address-form AddressesForm">
+<div id="billing-address-form" class="billing-address-form AddressesForm">
 <div class="billing-input-fields">
 
 <div class="form-group position-relative" id="shipping-same-billing-container" <%= hide_section_addons %>>
@@ -1270,7 +1270,7 @@ end if
 <% end if %>
 <script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=102724"></script>
 <script type="text/javascript" src="/js-pages/cart.min.js?v=050329" async></script>
-<script type="text/javascript" src="/js-pages/checkout.min.js?v=111123"></script>
+<script type="text/javascript" src="/js-pages/checkout.js?v=111123"></script>
 <!-- Start Afterpay Javascript -->
 <!--
 <script src="https://portal.sandbox.afterpay.com/afterpay.js" async></script>-->
