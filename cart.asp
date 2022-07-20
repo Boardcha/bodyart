@@ -115,11 +115,11 @@ Set rsTimer = objCmd.Execute()
 		<% countdown_timer = "" & _
 			"<div id=""clockdiv"">" & _
 			  "<div>" & _
-				"<span class=""hours"" style=""margin-left:24px;margin-right:20px""></span>:" & _
+				"<span class=""hours""></span>:" & _
 				"<div class=""unit-label"" style=""font-size: 10px; text-align: center; left: -15px; right: -15px; color: rgb(66, 65, 90); bottom: -12px;"">Hours</div>"  & _
 			  "</div>" & _
 			  "<div>" & _
-				"<span class=""minutes"" style=""margin-left:20px;margin-right:20px""></span>" & _
+				"<span class=""minutes""></span>" & _
 				"<div class=""unit-label"" style=""font-size: 10px; text-align: center; left: -15px; right: -15px; color: rgb(66, 65, 90); bottom: -12px;"">Minutes</div>"  & _
 			  "</div>" & _
 			"</div>" & _
