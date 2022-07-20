@@ -6,8 +6,8 @@ Response.CodePage = 65001
 Response.CharSet = "UTF-8" 
 %>
 <%
-	page_title = "Ear piercing location chart diagram"
-	page_description = "A guide that will show you the names and locations of common ear piercings"
+	page_title = "Ear piercing guide and location chart diagram"
+	page_description = "A guide that will show you the names and locations of the common ear piercings"
 	page_keywords = ""
 %>
 <!--#include virtual="/functions/security.inc" -->
@@ -29,25 +29,23 @@ Response.CharSet = "UTF-8"
         </div>
       </div> 
     
-
-    <div class="card bg-light mt-3">
-        <div class="card-header">
-          <h5>EAR PIERCING CHART DIAGRAM</h5>
-        </div>
-        <div class="card-body">
-            <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
-                <img class="img-fluid" src="/images/ear-diagram.png">
-            </div>
-        </div>
-      </div>
-FIND A WAY TO ALSO PULL IN CUSTOMER PHOTOS FROM THE GALLERIES JUST LIKE THE JEWELRY INCLUDES
       <div class="card bg-light mt-3">
         <div class="card-header">
-          <h5>HELIX PIERCING</h5>
+          <h4>HELIX PIERCING</h4>
+          <a class="btn btn-sm btn-purple" href="" target="_blank">Click here for our full helix guide</a>
         </div>
         <div class="card-body">
-            xxxx
-            <a href="https://bodyartforms.com/products.asp?piercing=Helix" target="_blank">Here's a link to all our helix jewelry</a>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                    <img class="img-fluid" src="/images/blog/piercings/helix-piercing.png" />
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
+                    A helix piercing is any piercing on the upper cartilage of your ear. There are actually different types of helix piercings. Forward helix, double helix, triple helix, anti-helix (snug ... see below ... LINK LINK)
+                    <a class="btn btn-sm btn-purple" href="https://bodyartforms.com/products.asp?piercing=Helix" target="_blank">Click here to shop our helix jewelry</a>
+                </div>
+            </div>
+           
+           
 
             <%
             SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%helix%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
@@ -58,11 +56,22 @@ FIND A WAY TO ALSO PULL IN CUSTOMER PHOTOS FROM THE GALLERIES JUST LIKE THE JEWE
 
       <div class="card bg-light mt-3">
         <div class="card-header">
-          <h5>TRAGUS PIERCING</h5>
+          <h4>TRAGUS PIERCING</h4>
         </div>
         <div class="card-body">
-            xxxx
-            <a href="https://bodyartforms.com/products.asp?piercing=Tragus" target="_blank">Here's a link to all our tragus jewelry</a>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                    <img class="img-fluid"  src="/images/blog/piercings/tragus-piercing.png" />
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
+                    <p>
+                        The tragus piercing is located on the small area of cartilage right next to your ear canal. Even though the location is small, you can still wear <a href="https://bodyartforms.com/products.asp?jewelry=labret&piercing=Tragus" target="_blank">studs</a>, rings, and barbells in a tragus piercing.
+                    </p>
+                    <a class="btn btn-sm btn-purple" href="https://bodyartforms.com/products.asp?piercing=Tragus" target="_blank">Click here to shop our tragus jewelry</a>
+                </div>
+            </div>
+            
+
 
             <%
             SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%tragus%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
@@ -71,8 +80,145 @@ FIND A WAY TO ALSO PULL IN CUSTOMER PHOTOS FROM THE GALLERIES JUST LIKE THE JEWE
         </div>
       </div> 
 
+      <div class="card bg-light mt-3">
+        <div class="card-header">
+          <h4>DIATH PIERCING</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                    <img class="img-fluid" src="/images/blog/piercings/diath-piercing.png" />
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
+                    asdf
+                    <a class="btn btn-sm btn-purple" href="https://bodyartforms.com/products.asp?piercing=Daith" target="_blank">Click here to shop our daith jewelry</a>
+                </div>
+            </div>
+            <%
+            SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%daith%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
+            %>
+            <!--#include virtual="/includes/inc-embedded-products.inc" --> 
+        </div>
+      </div> 
 
+      <div class="card bg-light mt-3">
+        <div class="card-header">
+          <h4>INDUSTRIAL PIERCING</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                    <img class="img-fluid" src="/images/blog/piercings/industrial-piercing.png" />
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
+                    <p>
+                    An industrial piercing is two separate ear cartilage piercings that typically use one long bar to connect them. It's always important to discuss with your piercer whether and industrial piercing will be appropriate for your ear as everyone's anatomy is different.
+                    </p>
+                    <p>
+                    The majority of industrial jewelry is long straight barbells. There are also some neat designs where it's two separate bars attached via chains. Another option to switch your style up is to skip the bar all together and use rings or studs in your piercings.
+                    </p>
+                    <a class="btn btn-sm btn-purple" href="https://bodyartforms.com/products.asp?piercing=Industrial" target="_blank">Click here to shop our industrial jewelry</a>
+                </div>
+            </div>
+            <%
+            SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%industrial%' AND tags NOT LIKE '%save%' AND tags NOT LIKE '%aftercare%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
+            %>
+            <!--#include virtual="/includes/inc-embedded-products.inc" --> 
+        </div>
+      </div> 
 
+      <div class="card bg-light mt-3">
+        <div class="card-header">
+          <h4>CONCH PIERCING</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                    <img class="img-fluid" src="/images/blog/piercings/conch-piercing.png" />
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
+                    <p>
+                        The conch piercing is a single piercing through the center cartilage of the ear. There are two styles: inner conch and outer conch. 
+                    </p>
+                    <p>
+                        The outer conch is pierced closer to the rim of the ear and typically is adorned with ring style jewelry. But you can also wear studs in it as well!
+                    </p>
+                    <p>
+                        The inner conch is pierced closer to the rim of the ear and typically is adorned with ring style jewelry.
+                    </p>
+                    <a class="btn btn-sm btn-purple" href="https://bodyartforms.com/products.asp?piercing=Conch" target="_blank">Click here to shop our conch jewelry</a>
+                </div>
+            </div>
+            <%
+            SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%conch%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
+            %>
+            <!--#include virtual="/includes/inc-embedded-products.inc" --> 
+        </div>
+      </div> 
+
+      <div class="card bg-light mt-3">
+        <div class="card-header">
+          <h4>ROOK PIERCING</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                    <img class="img-fluid" src="/images/blog/piercings/rook-piercing.png" />
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
+                    asdf
+                    <a class="btn btn-sm btn-purple" href="https://bodyartforms.com/products.asp?piercing=Rook" target="_blank">Click here to shop our rook jewelry</a>
+                </div>
+            </div>
+            <%
+            SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%rook%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
+            %>
+            <!--#include virtual="/includes/inc-embedded-products.inc" --> 
+        </div>
+      </div> 
+
+      
+      <div class="card bg-light mt-3">
+        <div class="card-header">
+          <h4>ANTI TRAGUS PIERCING</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                    <img class="img-fluid" src="/images/blog/piercings/anti-tragus-piercing.png" />
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
+                    asdf
+                    <a class="btn btn-sm btn-purple" href="https://bodyartforms.com/products.asp?piercing=Anti Tragus" target="_blank">Click here to shop our anti tragus jewelry</a>
+                </div>
+            </div>
+            <%
+            SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%antitragus%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
+            %>
+            <!--#include virtual="/includes/inc-embedded-products.inc" --> 
+        </div>
+      </div> 
+
+      <div class="card bg-light mt-3">
+        <div class="card-header">
+          <h4>SNUG PIERCING</h4>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-4 col-xl-3">
+                    <img class="img-fluid" src="/images/blog/piercings/snug-piercing.png" />
+                </div>
+                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
+                    asdf
+                    <a class="btn btn-sm btn-purple" href="https://bodyartforms.com/products.asp?piercing=Snug" target="_blank">Click here to shop our snug jewelry</a>
+                </div>
+            </div>
+            <%
+            SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%snug%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
+            %>
+            <!--#include virtual="/includes/inc-embedded-products.inc" --> 
+        </div>
+      </div> 
 
 <!--#include virtual="/bootstrap-template/footer.asp" -->
 <script type="text/javascript" src="/js/slick-customized.min.js"></script>
