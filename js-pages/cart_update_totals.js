@@ -47,7 +47,7 @@
 				if (!$("#billing-address-form").is(":visible"))
 					$("#cim_billing_addresses").show();
 				$("#billing-information").show();
-				if (e != 'doNotTriggerAutoCardSelecton')
+				if (e != 'doNotTriggerAutoCardSelection')
 					$('input[name="cim_billing"]:first').trigger("click");
 				$(".label_radio_billing .btn-selected:first").html('<i class="ml-2 fa fa-lg fa-check"></i>');
 			}else{

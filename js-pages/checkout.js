@@ -477,7 +477,7 @@ function setCurrency() {
 	// shipping and cart total when shipping option is changed
 	// .on allows manipulation of loaded page elements after DOM is loaded
 	$(document).on('change', 'input[name="shipping-option"]:radio', function() {
-		calcAllTotals();
+		calcAllTotals('doNotTriggerAutoCardSelection');
 		verify_shipmethod_selected();
 	});
 
