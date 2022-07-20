@@ -163,48 +163,68 @@
 </script> 
 
 <!--Google Sign-in-->
-<script src="https://apis.google.com/js/platform.js?onload=init" async defer></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
+     
 <script>
-   function init() {
-        gapi.load('auth2', function() {
-            auth2 = gapi.auth2.init({
-                client_id: '534605611929-1n69ud9b72jvjh21okl82g4sjttdjmj8.apps.googleusercontent.com',
-                cookiepolicy: 'single_host_origin',
-                scope: 'profile email'
-            });
-			renderButton();
-            element = document.getElementById('google_sign_in');
-            auth2.attachClickHandler(element, {}, onSignIn, onFailure);
-        });
-    }
-    function onSignIn(googleUser) {
-		var profile = googleUser.getBasicProfile();	
-		var id_token = googleUser.getAuthResponse().id_token;
-		var xhr = new XMLHttpRequest();
-		xhr.open('POST', '/oauth/google-signin-token.asp');
-		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-		xhr.overrideMimeType("application/json");
-		xhr.onload = function() {
-		  var json = JSON.parse(xhr.responseText);
-		  if(json.status == "logged-in")
-		    googleUser.disconnect();
-			window.location.href = "/account.asp";
-		};
-		xhr.send("idtoken=" + id_token);
-		
+	function handleCredentialResponse(response) {
+		var token = response.credential;
+		if(getCookie("ID") == ""){
+			$.ajax({
+				type: "POST",
+				url: "google-sign-in/google-sign-in.asp",
+				data: {
+					credential: token
+				},
+				success: function(data) {
+				console.log(data);
+				  var json = JSON.parse(data);
+				  if(json.status == "logged-in"){
+					window.location.href = "/account.asp";				
+				  }	
+				}
+			});
+		}
 	}
-    function onFailure(error) {
-      console.log(error);
-    }
-    function renderButton() {
-		gapi.signin2.render('google_sign_in', {
-		'scope': 'profile email',
-		'width': 240,
-		'height': 50,
-		'longtitle': true,
-		'theme': 'dark'
-		});
-    }
+	
+	function parseJwt (token) {
+		var base64Url = token.split('.')[1];
+		var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+		var jsonPayload = decodeURIComponent(atob(base64).split('').map(function(c) {
+			return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+		}).join(''));
+		return JSON.parse(jsonPayload);
+	};	
+	
+	function getCookie(cname) {
+	  let name = cname + "=";
+	  let decodedCookie = decodeURIComponent(document.cookie);
+	  let ca = decodedCookie.split(';');
+	  for(let i = 0; i <ca.length; i++) {
+		let c = ca[i];
+		while (c.charAt(0) == ' ') {
+		  c = c.substring(1);
+		}
+		if (c.indexOf(name) == 0) {
+		  return c.substring(name.length, c.length);
+		}
+	  }
+	  return "";
+	}	
+	/*
+	// JS RENDERING OPTION
+	window.onload = function () {
+		google.accounts.id.initialize({
+		  client_id: '534605611929-1n69ud9b72jvjh21okl82g4sjttdjmj8.apps.googleusercontent.com',
+		  callback: handleCredentialResponse
+		});		
+		google.accounts.id.renderButton(
+			'google_sign_in', {
+				theme: "outline", size: "large"	
+			} 
+		);
+		google.accounts.id.prompt(); // also display the One Tap dialog
+	};
+	*/	
 </script><!--End Google Sign-in-->
 
 
