@@ -16315,11 +16315,22 @@ free-items-step-list-horizontal .free-items-step {
 	border-color: #999!important;
     background-color: #999!important;
 }
-#countdown-timer{width: 545px;height: 60px;margin: 0 auto;position: relative;isolation: isolate;border: 3px solid #e7e7e7;margin-bottom:10px;}	
-.hours, .minutes, .seconds{color: rgb(66, 65, 90);font-family: "Open Sans", sans-serif;font-size: 23px;font-weight: 400;}
-#clockdiv{font-family:sans-serif;color:#000;display:inline-block;font-weight:100;font-size:20px}
-#clockdiv-container div>span{display: inline-block;}
-#clockdiv-container>div{display: inline-block; vertical-align: middle;}
+@media (max-width: 599px) {
+#countdown-timer{width: 377px;height: 21px;margin: 0 auto;position: relative;isolation: isolate;margin-bottom:30px;}
+#clockdiv-container{font-family: Open Sans;font-weight: 500;font-size: 13px;color: #42415a; display: inline-block;}
+#clockdiv{font-family:sans-serif;color:#000;display:inline-block;font-weight:100;font-size:16px}
+.hours, .minutes, .seconds{color: rgb(66, 65, 90);font-family: "Open Sans", sans-serif;font-size: 15px;font-weight: 400;}
+.hours{margin-left:14px;margin-right:10px}
+.minutes{margin-left:10px;margin-right:12px}
+}
+@media (min-width: 600px) {
+#countdown-timer{width: 545px;height: 60px;margin: 0 auto;position: relative;isolation: isolate;border: 3px solid #e7e7e7;margin-bottom:10px;}
 #clockdiv-container{font-family: Open Sans;font-weight: 700;font-size: 17px;color: #42415a; display: inline-block;}
+#clockdiv{font-family:sans-serif;color:#000;display:inline-block;font-weight:100;font-size:20px}
+.hours, .minutes, .seconds{color: rgb(66, 65, 90);font-family: "Open Sans", sans-serif;font-size: 23px;font-weight: 400;}
+.hours{margin-left:24px;margin-right:20px}
+.minutes{margin-left:20px;margin-right:20px}
+}
+#clockdiv-container div>span{display: inline-block;}#clockdiv-container>div{display: inline-block; vertical-align: middle;}
 
 /*# sourceMappingURL=baf.css.map */
