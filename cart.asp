@@ -530,7 +530,7 @@ end if 'if var_showgifts <> "no" only display on the viewcart page
 										</div>
 									</div>
 						</div><!-- end card footer for totals -->
-					  </div><!-- end card for totals -->
+					  </div><!-- end card for totals -->		  
 <% 
 '===== CHECK STOCK ON PRODUCTS BEING OFFERED AS ADDONS AT CHECKOUT
 set objCmd = Server.CreateObject("ADODB.command")
@@ -696,7 +696,7 @@ if NOT rsGetAddOns.eof then
 				</div>
 			  </div>
 			<!-- end variations modal -->
-	
+			
 			
 	<%
 	End If 'End Of cart show if not empty
@@ -707,6 +707,13 @@ if NOT rsGetAddOns.eof then
 
 
 	<% end if 'block access to page if user is flagged %>
+<!-- Shipping Countdown Timer -->
+<%If Not rsTimer.EOF Then%>
+	<script>
+		var total_seconds = <%=rsTimer("remaining_seconds")%>;
+	</script>
+	<script src="/js/countdown-timer.js"></script>
+<%End If%>	
 <!--#include virtual="/bootstrap-template/footer.asp" -->
 <script type="text/javascript" src="/js-pages/toggle_required_billing.js"></script>
 <script type="text/javascript" src="/js-pages/currency-exchange.min.js?v=050619"></script>
@@ -759,13 +766,6 @@ if NOT rsGetAddOns.eof then
 	});		
 </script>	
 
-<!-- Shipping Countdown Timer -->
-<%If Not rsTimer.EOF Then%>
-	<script>
-		var total_seconds = <%=rsTimer("remaining_seconds")%>;
-	</script>
-	<script src="/js/countdown-timer.js"></script>
-<%End If%>
 <%
 Set rsToggles = Nothing
 Set rsTimer = Nothing
