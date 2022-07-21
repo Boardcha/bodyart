@@ -44,10 +44,13 @@
 			success: function( json ) {
 				
 			if(json.grandtotal > 0){
-				$("#cim_billing_addresses").show();
+				if (!$("#billing-address-form").is(":visible"))
+					$("#cim_billing_addresses").show();
 				$("#billing-information").show();
-				$('input[name="cim_billing"]:first').trigger("click");
-				$(".label_radio_billing .btn-selected:first").html('<i class="ml-2 fa fa-lg fa-check"></i>');
+				if (e != 'doNotTriggerAutoCardSelection'){
+					$('input[name="cim_billing"]:first').trigger("click");
+					$(".label_radio_billing .btn-selected:first").html('<i class="ml-2 fa fa-lg fa-check"></i>');
+				}	
 			}else{
 				$("#cim_billing_addresses").hide();
 				$("#billing-information").hide();

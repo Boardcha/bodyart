@@ -536,7 +536,7 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 
 
 
-<div class="billing-address-form AddressesForm">
+<div id="billing-address-form" class="billing-address-form AddressesForm">
 <div class="billing-input-fields">
 
 <div class="form-group position-relative" id="shipping-same-billing-container" <%= hide_section_addons %>>

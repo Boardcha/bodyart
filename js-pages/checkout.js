@@ -477,7 +477,7 @@ function setCurrency() {
 	// shipping and cart total when shipping option is changed
 	// .on allows manipulation of loaded page elements after DOM is loaded
 	$(document).on('change', 'input[name="shipping-option"]:radio', function() {
-		calcAllTotals();
+		calcAllTotals('doNotTriggerAutoCardSelection');
 		verify_shipmethod_selected();
 	});
 
@@ -930,7 +930,7 @@ function setCurrency() {
 				$.get("/checkout/ajax_display_shipping_ups.asp", {address: varaddress, country:'USA', city:varcity, state:varstate, zip:varzip, add:'yes'}, function(html, status) {	
 					page.append(html);
 					triggerShippingSelection();
-					calcAllTotals();
+					calcAllTotals('doNotTriggerAutoCardSelection');
 				});
 			});
 				
@@ -952,7 +952,7 @@ function setCurrency() {
 
 			$('#ajax-shipping-options').load("/checkout/ajax_display_shipping_usps.asp", {country:'Canada'}, function(){
 				triggerShippingSelection();
-				calcAllTotals();
+				calcAllTotals('doNotTriggerAutoCardSelection');
 			});
 
 			$('#shipping-state, #billing-state, #shipping-province, #billing-province').val('');
@@ -969,7 +969,7 @@ function setCurrency() {
 		if (varcountry != 'USA' && varcountry != 'Canada') {
 			$('#ajax-shipping-options').load("/checkout/ajax_display_shipping_usps.asp", {country:varcountry}, function(){
 				triggerShippingSelection();
-				calcAllTotals();
+				calcAllTotals('doNotTriggerAutoCardSelection');
 			});
 					
 		//	$('.ups-ajax').load("checkout/ajax_display_shipping_ups.asp", {country:varcountry, city:varcity, province:varprovince, zip:varzip, add:'yes'});
