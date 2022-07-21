@@ -1182,7 +1182,7 @@ end if
 					<div id="REMOVE-GO-LIVE" >
 					<div class="afterpay_option" style="<%= afterpay_display %>">
 						<style>.checkout_afterpay:hover{background:#7ffad2 !important}</style>
-						<button id="btn-checkout-afterpay" class="btn btn-lg btn-block checkout_button place_order checkout_afterpay" style="background:#b2fce4"  type="submit" form="checkout_form" name="place_order">PAY NOW WITH <img class="img-fluid d-inline w-50" src="/images/afterpay-black-logo.png"/></button>
+						<button class="btn btn-lg btn-block checkout_button place_order checkout_afterpay" style="background:#b2fce4"  type="submit" form="checkout_form" name="place_order">PAY NOW WITH <img class="img-fluid d-inline w-50" src="/images/afterpay-black-logo.png"/></button>
 						<span class="d-none"><span class="afterpay-widget-nonactive afterpay-widget"></span></span>
 						<% if request.querystring("type") = "afterpay" then %> 
 						<input type="hidden" name="afterpay" value="on">
