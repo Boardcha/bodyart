@@ -1,5 +1,5 @@
 <%
-if Request.ServerVariables("REMOTE_HOST") <> "::1" and Request.ServerVariables("REMOTE_HOST") <> "75.109.218.250" and Request.ServerVariables("REMOTE_HOST") <> "75.109.218.58" and Request.ServerVariables("REMOTE_HOST") <> "70.114.165.125" and Request.ServerVariables("REMOTE_HOST") <> "127.0.0.1"  then ' exclude georgetown and localhost ip address
+If Instr(Request.ServerVariables("server_name"), "dev") = 0 And Request.ServerVariables("REMOTE_HOST") <> "::1" and Request.ServerVariables("REMOTE_HOST") <> "75.109.218.250" and Request.ServerVariables("REMOTE_HOST") <> "75.109.218.58" and Request.ServerVariables("REMOTE_HOST") <> "70.114.165.125" and Request.ServerVariables("REMOTE_HOST") <> "127.0.0.1"  then ' exclude georgetown and localhost ip address
 
 ' Search ALL orders for anything matching current IP address and return 6 results as the threshold to auto flag
 set objCmd = Server.CreateObject("ADODB.command")
