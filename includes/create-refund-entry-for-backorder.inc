@@ -3,7 +3,7 @@ Function CreateRefundEntryForBackorderedItem(var_invoice_number, var_customer_nu
 	' RE-CALCULATE CORRECT PRICE FOR BACKORDERED ITEMS AFTER SALE TO REFUND FOR
 	set objCmd = Server.CreateObject("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT sent_items.ID, sent_items.coupon_code, sent_items.combined_tax_rate, TBL_OrderSummary.ErrorReportDate, TBL_OrderSummary.ErrorDescription,  sent_items.ship_code, TBL_OrderSummary.qty, ProductDetails.qty AS 'qty_instock', TBL_OrderSummary.item_price, ProductDetails.ProductDetail1, ProductDetails.location, ProductDetails.Gauge, ProductDetails.Length, jewelry.title, ProductDetails.ProductDetailID, ProductDetails.BinNumber_Detail, TBL_OrderSummary.OrderDetailID, TBL_OrderSummary.ProductID, TBL_OrderSummary.item_problem, TBL_OrderSummary.ErrorQtyMissing,  (jewelry.title + ' ' + ISNULL(ProductDetails.Gauge, '') + ' ' + ISNULL(ProductDetails.Length, '') + ' ' + ISNULL(ProductDetails.ProductDetail1, '')) as description FROM sent_items INNER JOIN TBL_OrderSummary ON sent_items.ID = TBL_OrderSummary.InvoiceID INNER JOIN ProductDetails ON TBL_OrderSummary.DetailID = ProductDetails.ProductDetailID INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID WHERE TBL_OrderSummary.backorder = 1 AND ID = ? AND TBL_OrderSummary.OrderDetailID = ?"
+	objCmd.CommandText = "SELECT sent_items.ID, sent_items.coupon_code, sent_items.combined_tax_rate, sent_items.transactionID, TBL_OrderSummary.ErrorReportDate, TBL_OrderSummary.ErrorDescription,  sent_items.ship_code, TBL_OrderSummary.qty, ProductDetails.qty AS 'qty_instock', TBL_OrderSummary.item_price, ProductDetails.ProductDetail1, ProductDetails.location, ProductDetails.Gauge, ProductDetails.Length, jewelry.title, ProductDetails.ProductDetailID, ProductDetails.BinNumber_Detail, TBL_OrderSummary.OrderDetailID, TBL_OrderSummary.ProductID, TBL_OrderSummary.item_problem, TBL_OrderSummary.ErrorQtyMissing,  (jewelry.title + ' ' + ISNULL(ProductDetails.Gauge, '') + ' ' + ISNULL(ProductDetails.Length, '') + ' ' + ISNULL(ProductDetails.ProductDetail1, '')) as description FROM sent_items INNER JOIN TBL_OrderSummary ON sent_items.ID = TBL_OrderSummary.InvoiceID INNER JOIN ProductDetails ON TBL_OrderSummary.DetailID = ProductDetails.ProductDetailID INNER JOIN jewelry ON TBL_OrderSummary.ProductID = jewelry.ProductID WHERE TBL_OrderSummary.backorder = 1 AND ID = ? AND TBL_OrderSummary.OrderDetailID = ?"
 	objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid",3,1,12, var_invoice_number))
 	objCmd.Parameters.Append(objCmd.CreateParameter("orderDetailID",3,1,12, orderDetailID))
 	
@@ -71,11 +71,12 @@ Function CreateRefundEntryForBackorderedItem(var_invoice_number, var_customer_nu
 		If rsRefundCheck.EOF Then 'Do not insert new entry for the same item from the same invoice
 			set objCmd = Server.CreateObject("ADODB.command")
 			objCmd.ActiveConnection = DataConn
-			objCmd.CommandText = "INSERT INTO TBL_Refunds_backordered_items (invoice_id, ProductDetailID, refund_total, encrypted_code, redeemed) VALUES (?,?,?,?,0)"
+			objCmd.CommandText = "INSERT INTO TBL_Refunds_backordered_items (invoice_id, ProductDetailID, refund_total, encrypted_code, redeemed, transactionID) VALUES (?,?,?,?,0,?)"
 			objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15, var_invoice_number))
 			objCmd.Parameters.Append(objCmd.CreateParameter("ProductDetailID",3,1,15, ProductDetailID))
 			objCmd.Parameters.Append(objCmd.CreateParameter("refund_total",6,1,20, var_refund_total))
 			objCmd.Parameters.Append(objCmd.CreateParameter("encrypted_code",200,1,250, encrypted_code))
+			objCmd.Parameters.Append(objCmd.CreateParameter("transactionID",200,1,250, rsGetItems("transactionID")))
 			objCmd.Execute()
 		End If
 
