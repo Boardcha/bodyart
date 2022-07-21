@@ -10,7 +10,7 @@
 <!--#include virtual="/bootstrap-template/header-json-schemas.asp" -->
 <!--#include virtual="/bootstrap-template/header-navigation.asp" -->
 <!--#include virtual="/bootstrap-template/filters.asp" -->
-
+<!--#include virtual="/Connections/authnet.asp"-->
 <%
 	' decrypt refund information
 	Set objCrypt = Server.CreateObject("Bodyartforms.BAFCrypt")
@@ -30,13 +30,42 @@
 		Set objCrypt = Nothing
 
 		objCmd.ActiveConnection = DataConn
-		'objCmd.CommandText = "SELECT * from TBL_Refunds_backordered_items REF WHERE invoice_id = ? AND encrypted_code = ? AND detailID = ?"
-		objCmd.CommandText = "SELECT REF.*, (JEW.title + ' ' + ISNULL(DET.Gauge, '') + ' ' + ISNULL(DET.Length, '') + ' ' + ISNULL(DET.ProductDetail1, '')) as description from TBL_Refunds_backordered_items REF LEFT JOIN ProductDetails DET ON REF.ProductDetailID = DET.ProductDetailID LEFT JOIN Jewelry JEW ON JEW.ProductID = DET.ProductID WHERE redeemed = 0 AND REF.invoice_id = ? AND REF.encrypted_code = ? AND REF.ProductDetailID = ?"
+		'objCmd.CommandText = "SELECT * from TBL_Refunds_backordered_items REF WHERE invoice_id = " & invoice_id_hash & " AND encrypted_code = '" & data & "' AND ProductDetailID = " & ProductDetailID
+		'Response.Write objCmd.CommandText
+		objCmd.CommandText = "SELECT REF.*, (JEW.title + ' ' + ISNULL(DET.Gauge, '') + ' ' + ISNULL(DET.Length, '') + ' ' + ISNULL(DET.ProductDetail1, '')) as description, transactionID, (SELECT DateDiff(day, date_order_placed, GETDATE()) As days FROM sent_items WHERE ID = ?) As days from TBL_Refunds_backordered_items REF LEFT JOIN ProductDetails DET ON REF.ProductDetailID = DET.ProductDetailID LEFT JOIN Jewelry JEW ON JEW.ProductID = DET.ProductID WHERE redeemed = 0 AND REF.invoice_id = ? AND REF.encrypted_code = ? AND REF.ProductDetailID = ?"
+		objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id_hash",3,1,15, invoice_id_hash))
 		objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id_hash",3,1,15, invoice_id_hash))
 		objCmd.Parameters.Append(objCmd.CreateParameter("encrypted_code",200,1,200, data))
 		objCmd.Parameters.Append(objCmd.CreateParameter("ProductDetailID",3,1,15, ProductDetailID))
 		set rsCheckRefund = objCmd.Execute()
-	
+
+		If CLng(rsCheckRefund("days")) >= 90 Then
+			is90DaysExceeded = true
+		Else 
+			is90DaysExceeded = false
+		End If
+		
+		If Not rsCheckRefund.EOF Then
+			'========== CHECK IF TRANSACTION IS SETTELED ==========================
+			strTranRec = "<?xml version=""1.0"" encoding=""utf-8""?>" & _
+			"<getTransactionDetailsRequest xmlns=""AnetApi/xml/v1/schema/AnetApiSchema.xsd"">" & _
+			MerchantAuthentication() & _
+			"<transId>" & rsCheckRefund("transactionID") & "</transId>" & _
+			"</getTransactionDetailsRequest>"
+		
+			Set objGetTransactionDetails = SendApiRequest(strTranRec)
+		
+			' If succcess retrieve transaction information
+			If IsApiResponseSuccess(objGetTransactionDetails) Then
+				If objGetTransactionDetails.selectSingleNode("/*/api:transaction/api:transactionStatus").Text = "settledSuccessfully" then
+					isSettled = true
+				Else
+					isSettled = false
+				end if 
+			Else
+				'PrintErrors(objGetTransactionDetails)
+			End If
+		End If	
 		%>
 			<div class="display-5 mb-3">
 				Submit for a refund
@@ -48,12 +77,23 @@
 					<div class="mb-1 font-weight-bold">You have a <%= FormatCurrency(rsCheckRefund.Fields.Item("refund_total").Value) %> refund available for the item below.</div>
 					<div class="mb-3">- <%= rsCheckRefund("description") %></div>
 					<div id="msg-spinner" style="display:none"><i class="fa fa-spinner fa-spin fa-lg"></i> Processing...</div>
-					<div class="refund-buttons">
-						<button class="btn btn-primary mt-2" id="btn-process-refund">Click here to process your refund</button>
-						<%If var_customer_number = CustID_Cookie AND var_customer_number > 0  Then%>
-							<button class="btn btn-secondary mt-2" id="btn-process-store-credit">Click here to issue a store credit</button>
+					<% If isSettled AND is90DaysExceeded = false Then%>
+						<div class="refund-buttons">
+							<button class="btn btn-primary mt-2" id="btn-process-refund">Click here to process your refund</button>
+							<%If var_customer_number = CustID_Cookie AND var_customer_number > 0  Then%>
+								<button class="btn btn-secondary mt-2" id="btn-process-store-credit">Click here to issue a store credit</button>
+							<%End If%>
+						</div>
+					<%Else%>
+						<% If is90DaysExceeded = true Then%>
+							<div class="alert alert-warning">Transactions exceeding 90 days can not be refunded automatically. Please contact customer service <a class="font-weight-bold" href="/contact.asp">click here</a>.</div>
+						<%Else%>
+							<% If isSettled = false Then%>
+								<div class="alert alert-warning">The transaction is not settled yet by the payment gateway. Please try again 24 hours later. If you'd like to contact customer service <a class="font-weight-bold" href="/contact.asp">click here</a>.</div>
+							<%End If%>
 						<%End If%>
-					</div>
+					<%End If%>
+					
 					<div class="mt-2"><i>- Refunds will typically take 5-7 business days to process back to your account.</i></div>
 					<div><i>- Issuing a store credit is processed into your account immediately.</i></div>
 				</div>
