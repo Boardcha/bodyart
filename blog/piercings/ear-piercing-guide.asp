@@ -18,6 +18,11 @@ Response.CharSet = "UTF-8"
 <!--#include virtual="/bootstrap-template/header-navigation.asp" -->
 <!--#include virtual="/bootstrap-template/filters.asp" -->
 <link rel="stylesheet" type="text/css" href="/CSS/slick.css"/>
+<style>
+  .slick-track {
+      margin-left:0;
+  }
+</style>
 
 
     <div class="card  text-white bg-dark mt-3">
@@ -25,14 +30,18 @@ Response.CharSet = "UTF-8"
             <h3>Bodyartforms guide to ear piercings</h3>
         </div>
         <div class="card-body">
-            Ever get confused about what the names of all the different types of ear piercings are? Look no further! We've created this easy to use guide where you'll learn about the the top ear piercings as well as what type of jewelry works best for them.
+            <p>Ever get confused about what the names of all the different types of ear piercings are? Look no further! We've created this easy to use guide where you'll learn about the the top ear piercings as well as what type of jewelry works best for them.</p>
+
+            <h5>JUMP TO:</h5>
+            <ul>
+              <li><a href="#helix">Helix</a></li>
+            </ul>
         </div>
       </div> 
     
       <div class="card bg-light mt-3">
         <div class="card-header">
-          <h4>HELIX PIERCING</h4>
-          <a class="btn btn-sm btn-purple" href="" target="_blank">Click here for our full helix guide</a>
+          <h3 id="helix">HELIX PIERCING</h3>
         </div>
         <div class="card-body">
             <div class="row">
@@ -41,22 +50,21 @@ Response.CharSet = "UTF-8"
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
                     A helix piercing is any piercing on the upper cartilage of your ear. There are actually different types of helix piercings. Forward helix, double helix, triple helix, anti-helix (snug ... see below ... LINK LINK)
-                    <a class="btn btn-sm btn-purple" href="https://bodyartforms.com/products.asp?piercing=Helix" target="_blank">Click here to shop our helix jewelry</a>
-                </div>
-            </div>
-           
-           
+                    <br>
+                    <a class="btn btn-sm btn-purple my-2" href="https://bodyartforms.com/products.asp?piercing=Helix" target="_blank">SHOP OUR HELIX JEWELRY</a>
 
-            <%
-            SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%helix%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
-            %>
-            <!--#include virtual="/includes/inc-embedded-products.inc" --> 
+                    <%
+                    SqlString = "SELECT TOP 3 * FROM FlatProducts WHERE tags LIKE '%helix%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
+                    %>
+                    <!--#include virtual="/includes/inc-embedded-products.inc" -->
+                </div>
+            </div> 
         </div>
       </div> 
 
       <div class="card bg-light mt-3">
         <div class="card-header">
-          <h4>TRAGUS PIERCING</h4>
+          <h3>TRAGUS PIERCING</h3>
         </div>
         <div class="card-body">
             <div class="row">
@@ -68,21 +76,23 @@ Response.CharSet = "UTF-8"
                         The tragus piercing is located on the small area of cartilage right next to your ear canal. Even though the location is small, you can still wear <a href="https://bodyartforms.com/products.asp?jewelry=labret&piercing=Tragus" target="_blank">studs</a>, rings, and barbells in a tragus piercing.
                     </p>
                     <a class="btn btn-sm btn-purple" href="https://bodyartforms.com/products.asp?piercing=Tragus" target="_blank">Click here to shop our tragus jewelry</a>
+
+                    <%
+                    SqlString = "SELECT TOP 3 * FROM FlatProducts WHERE tags LIKE '%tragus%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
+                    %>
+                    <!--#include virtual="/includes/inc-embedded-products.inc" --> 
                 </div>
             </div>
             
 
 
-            <%
-            SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%tragus%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
-            %>
-            <!--#include virtual="/includes/inc-embedded-products.inc" --> 
+
         </div>
       </div> 
 
       <div class="card bg-light mt-3">
         <div class="card-header">
-          <h4>DIATH PIERCING</h4>
+          <h3>DIATH PIERCING</h3>
         </div>
         <div class="card-body">
             <div class="row">
@@ -92,18 +102,19 @@ Response.CharSet = "UTF-8"
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
                     asdf
                     <a class="btn btn-sm btn-purple" href="https://bodyartforms.com/products.asp?piercing=Daith" target="_blank">Click here to shop our daith jewelry</a>
+
+                    <%
+                    SqlString = "SELECT TOP 3 * FROM FlatProducts WHERE tags LIKE '%daith%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
+                    %>
+                    <!--#include virtual="/includes/inc-embedded-products.inc" --> 
                 </div>
             </div>
-            <%
-            SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%daith%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
-            %>
-            <!--#include virtual="/includes/inc-embedded-products.inc" --> 
         </div>
       </div> 
 
       <div class="card bg-light mt-3">
         <div class="card-header">
-          <h4>INDUSTRIAL PIERCING</h4>
+          <h3>INDUSTRIAL PIERCING</h3>
         </div>
         <div class="card-body">
             <div class="row">
@@ -114,22 +125,23 @@ Response.CharSet = "UTF-8"
                     <p>
                     An industrial piercing is two separate ear cartilage piercings that typically use one long bar to connect them. It's always important to discuss with your piercer whether and industrial piercing will be appropriate for your ear as everyone's anatomy is different.
                     </p>
-                    <p>
                     The majority of industrial jewelry is long straight barbells. There are also some neat designs where it's two separate bars attached via chains. Another option to switch your style up is to skip the bar all together and use rings or studs in your piercings.
-                    </p>
-                    <a class="btn btn-sm btn-purple" href="https://bodyartforms.com/products.asp?piercing=Industrial" target="_blank">Click here to shop our industrial jewelry</a>
+                    <br>
+                    <a class="btn btn-sm btn-purple my-2" href="https://bodyartforms.com/products.asp?piercing=Industrial" target="_blank">SHOP OUR INDUSTRIAL JEWELRY</a>
+
+                    <%
+                    SqlString = "SELECT TOP 3 * FROM FlatProducts WHERE tags LIKE '%industrial%' AND tags NOT LIKE '%save%' AND tags NOT LIKE '%aftercare%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
+                    %>
+                    <!--#include virtual="/includes/inc-embedded-products.inc" --> 
                 </div>
             </div>
-            <%
-            SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%industrial%' AND tags NOT LIKE '%save%' AND tags NOT LIKE '%aftercare%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
-            %>
-            <!--#include virtual="/includes/inc-embedded-products.inc" --> 
+
         </div>
       </div> 
 
       <div class="card bg-light mt-3">
         <div class="card-header">
-          <h4>CONCH PIERCING</h4>
+          <h3>CONCH PIERCING</h3>
         </div>
         <div class="card-body">
             <div class="row">
@@ -143,22 +155,23 @@ Response.CharSet = "UTF-8"
                     <p>
                         The outer conch is pierced closer to the rim of the ear and typically is adorned with ring style jewelry. But you can also wear studs in it as well!
                     </p>
-                    <p>
                         The inner conch is pierced closer to the rim of the ear and typically is adorned with ring style jewelry.
-                    </p>
-                    <a class="btn btn-sm btn-purple" href="https://bodyartforms.com/products.asp?piercing=Conch" target="_blank">Click here to shop our conch jewelry</a>
+                    <br>
+                    <a class="btn btn-sm btn-purple my-2" href="https://bodyartforms.com/products.asp?piercing=Conch" target="_blank">SHOP OUR CONCH JEWELRY</a>
+
+                    <%
+                    SqlString = "SELECT TOP 3 * FROM FlatProducts WHERE tags LIKE '%conch%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
+                    %>
+                    <!--#include virtual="/includes/inc-embedded-products.inc" --> 
                 </div>
             </div>
-            <%
-            SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%conch%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
-            %>
-            <!--#include virtual="/includes/inc-embedded-products.inc" --> 
+
         </div>
       </div> 
 
       <div class="card bg-light mt-3">
         <div class="card-header">
-          <h4>ROOK PIERCING</h4>
+          <h3>ROOK PIERCING</h3>
         </div>
         <div class="card-body">
             <div class="row">
@@ -168,19 +181,20 @@ Response.CharSet = "UTF-8"
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
                     asdf
                     <a class="btn btn-sm btn-purple" href="https://bodyartforms.com/products.asp?piercing=Rook" target="_blank">Click here to shop our rook jewelry</a>
+
+                    <%
+                    SqlString = "SELECT TOP 3 * FROM FlatProducts WHERE tags LIKE '%rook%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
+                    %>
+                    <!--#include virtual="/includes/inc-embedded-products.inc" --> 
                 </div>
             </div>
-            <%
-            SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%rook%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
-            %>
-            <!--#include virtual="/includes/inc-embedded-products.inc" --> 
         </div>
       </div> 
 
       
       <div class="card bg-light mt-3">
         <div class="card-header">
-          <h4>ANTI TRAGUS PIERCING</h4>
+          <h3>ANTI TRAGUS PIERCING</h3>
         </div>
         <div class="card-body">
             <div class="row">
@@ -190,18 +204,20 @@ Response.CharSet = "UTF-8"
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
                     asdf
                     <a class="btn btn-sm btn-purple" href="https://bodyartforms.com/products.asp?piercing=Anti Tragus" target="_blank">Click here to shop our anti tragus jewelry</a>
+
+                    <%
+                    SqlString = "SELECT TOP 3 * FROM FlatProducts WHERE tags LIKE '%antitragus%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
+                    %>
+                    <!--#include virtual="/includes/inc-embedded-products.inc" --> 
                 </div>
             </div>
-            <%
-            SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%antitragus%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
-            %>
-            <!--#include virtual="/includes/inc-embedded-products.inc" --> 
+
         </div>
       </div> 
 
       <div class="card bg-light mt-3">
         <div class="card-header">
-          <h4>SNUG PIERCING</h4>
+          <h3>SNUG PIERCING</h3>
         </div>
         <div class="card-body">
             <div class="row">
@@ -211,12 +227,14 @@ Response.CharSet = "UTF-8"
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
                     asdf
                     <a class="btn btn-sm btn-purple" href="https://bodyartforms.com/products.asp?piercing=Snug" target="_blank">Click here to shop our snug jewelry</a>
+
+                    <%
+                    SqlString = "SELECT TOP 3 * FROM FlatProducts WHERE tags LIKE '%snug%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
+                    %>
+                    <!--#include virtual="/includes/inc-embedded-products.inc" --> 
                 </div>
             </div>
-            <%
-            SqlString = "SELECT TOP 20 * FROM FlatProducts WHERE tags LIKE '%snug%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
-            %>
-            <!--#include virtual="/includes/inc-embedded-products.inc" --> 
+
         </div>
       </div> 
 
