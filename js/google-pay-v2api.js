@@ -484,8 +484,12 @@ function getSelectedShippingCompany(label){
 		return "DHL";
 	else if (label.indexOf("UPS") > -1) 
 		return "UPS";
+	else if (label.indexOf("NO SHIPPING REQUIRED") > -1) 
+		return "GIFT CERTIFICATE";		
+	else if (label.indexOf("Paid on original order") > -1) 
+		return "Paid on original order";			
 	else
-		return "Paid on original order";		 
+		return "Undefined";		 
 }
 
 /**
