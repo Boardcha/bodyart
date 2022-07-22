@@ -43,13 +43,10 @@
 							<% end if 
 							i = i +1 %>
 						<div class="w-100 text-center px-1">
-								<div class="small">
-										<%= rsGetEmbedded.Fields.Item("title").Value %>
-								</div>
-								<div class="small font-weight-bold  d-block">
+								<div class="small d-block">
 										<%= DisplayPrice %>
 								</div>
-								<div class="small font-weight-bold  d-block">
+								<div class="small d-block">
 										<%= rsGetEmbedded.Fields.Item("min_gauge").Value %>
 										<% if rsGetEmbedded.Fields.Item("min_gauge").Value <> rsGetEmbedded.Fields.Item("max_gauge").Value then %> 
 										- <%= rsGetEmbedded.Fields.Item("max_gauge").Value %>
