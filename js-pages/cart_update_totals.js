@@ -48,8 +48,8 @@ function calcAllTotals(e) {
 				$("#cim_billing_addresses").show();
 			$("#billing-information").show();
 			if (e != 'doNotTriggerAutoCardSelection'){
-				$('input[name="cim_billing"]:first:not(#cim_cash)').trigger("click");
-				$(".label_radio_billing .btn-selected:first").html('<i class="ml-2 fa fa-lg fa-check"></i>');
+				if($('input[name="cim_billing"]:first:not(#cim_cash)').trigger("click").length > 0)
+					$(".label_radio_billing .btn-selected:first").html('<i class="ml-2 fa fa-lg fa-check"></i>');
 			}	
 		}else{
 			$("#cim_billing_addresses").hide();
