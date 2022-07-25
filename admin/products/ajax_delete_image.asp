@@ -26,13 +26,28 @@ If NOT rsImages.eof then
 	
 	http.KeepResponseBody = 1
 	
+	Set objCmd = Server.CreateObject ("ADODB.Command")
+	objCmd.ActiveConnection = DataConn
+	objCmd.CommandText = "SELECT * FROM jewelry WHERE largepic = ?" 
+	objCmd.Parameters.Append(objCmd.CreateParameter("largepic",200,1,200,db_full_filename))
+	Set rsImage = objCmd.Execute()	
+	'Check if the image does not exist in DB as a main image
+	If Not rsImage.EOF Then
+		doesImageNameExistinDB = true
+	End If
+		
 	If rsImages("is_video") = 1 Then
 		success1 = http.S3_DeleteObject("baf-videos", db_full_filename)
 	Else	
-		success1 = http.S3_DeleteObject("bodyartforms-products", db_full_filename)
+		If doesImageNameExistinDB = false Then
+			success1 = http.S3_DeleteObject("bodyartforms-products", db_full_filename)
+		End If
 	End If 
-	success2 = http.S3_DeleteObject("bodyartforms-products", db_thumb_filename)
-	success3 = http.S3_DeleteObject("baf-thumbs-400", db_thumb_filename)
+	
+	If doesImageNameExistinDB = false Then
+		success2 = http.S3_DeleteObject("bodyartforms-products", db_thumb_filename)
+		success3 = http.S3_DeleteObject("baf-thumbs-400", db_thumb_filename)
+	End If
 	
 	If (success1 <> 1 OR success2 <> 1 OR success3 <> 1) Then
 		'Response.Write "<pre>" & Server.HTMLEncode( http.LastErrorText) & "</pre>"
