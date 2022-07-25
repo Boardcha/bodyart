@@ -617,7 +617,7 @@ if request.querystring("type") <> "paypal" and request.querystring("type") <> "a
 
 <div class="form-group position-relative">
 	<label for="cvv2">Security code (3-4 digit number on back of card) <span class="text-danger">*</span></label>
-	<input class="form-control" required type="tel" name="cvv2" id="security-code">
+	<input class="form-control" required type="text" name="cvv2" id="security-code" data-friendly-error="Billing address: Security code is required">
 	<div class="invalid-feedback">
 			Security code is required
 		</div>
