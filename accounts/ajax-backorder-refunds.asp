@@ -22,7 +22,7 @@
 
 	set objCmd = Server.CreateObject("ADODB.Command")
 	objCmd.ActiveConnection = DataConn
-	objCmd.CommandText = "SELECT REF.*, sent_items.customer_id, email, customer_first, transactionID, pay_method FROM sent_items INNER JOIN TBL_Refunds_backordered_items REF ON sent_items.ID = REF.invoice_id WHERE redeemed = 0 AND REF.invoice_id = ? AND REF.ProductDetailID = ? AND REF.encrypted_code = ?"
+	objCmd.CommandText = "SELECT REF.*, sent_items.customer_id, email, customer_first, REF.transactionID, pay_method FROM sent_items INNER JOIN TBL_Refunds_backordered_items REF ON sent_items.ID = REF.invoice_id WHERE redeemed = 0 AND REF.invoice_id = ? AND REF.ProductDetailID = ? AND REF.encrypted_code = ?"
 	objCmd.Parameters.Append(objCmd.CreateParameter("invoice_id",3,1,15, invoice_id))
 	objCmd.Parameters.Append(objCmd.CreateParameter("ProductDetailID",3,1,15, ProductDetailID))
 	objCmd.Parameters.Append(objCmd.CreateParameter("encrypted_code",200,1,200, data))
