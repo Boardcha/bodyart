@@ -62,7 +62,7 @@
 
   
 <div class="pt-4 pb-1">
-		Phone lines are open Monday - Friday,  9am to 5pm central time.</div>
+		Phone lines are open Monday - Friday,  8:30am to 4:30pm central time.</div>
 	<h6><i class="fa fa-phone fa-lg"></i>Customer service: &nbsp;(877) 223-5005</h6><h6><i class="fa fa-phone fa-lg"></i>Custom orders: &nbsp;(512) 943-8654</h6>
 	<br>
 Bodyartforms<br>

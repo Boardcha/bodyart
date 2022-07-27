@@ -976,8 +976,8 @@ if NOT rsGetAddOns.eof then
 <script type="text/javascript" src="/js/slick-customized.min.js"></script>
 
 <!-- !!!!!!!!!!!!!!!!!!!!!  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE !!!!!!!!!!!!!!!!!!!!! -->
-<script type="text/javascript" src="/js-pages/cart.min.js?v=03032025"></script>
-<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=111723"></script>
+<script type="text/javascript" src="/js-pages/cart.min.js?v=072722"></script>
+<script type="text/javascript" src="/js-pages/cart_update_totals.min.js?v=072722"></script>
 <!-- ^^^^^^  BE SURE TO ALSO UPDATE THE CART JS FILE ON CHECKOUT PAGE ^^^^^^ -->
 <script type="text/javascript">
 	calcAllTotals();
