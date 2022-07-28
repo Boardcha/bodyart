@@ -253,6 +253,34 @@ Wend
 %>
 <!--#include virtual="/includes/inc-currency-images.asp" -->
 <!--#include virtual="/bootstrap-template/filters.asp" -->
+<%
+set objCmd = Server.CreateObject("ADODB.command")
+objCmd.ActiveConnection = DataConn
+objCmd.CommandText = "SP_Get_Timer"
+Set rsTimer = objCmd.Execute()
+%>
+<%If NOT rsTimer.EOF Then%>
+	<div class="text-center" id="countdown-timer" style="display:none">
+		<% countdown_timer = "" & _
+			"<div id=""clockdiv"">" & _
+			  "<div>" & _
+				"<span class=""hours""></span>:" & _
+				"<div class=""unit-label"" style=""font-size: 10px; text-align: center; left: -15px; right: -15px; color: rgb(66, 65, 90); bottom: -12px;"">Hours</div>"  & _
+			  "</div>" & _
+			  "<div>" & _
+				"<span class=""minutes""></span>" & _
+				"<div class=""unit-label"" style=""font-size: 10px; text-align: center; left: -15px; right: -15px; color: rgb(66, 65, 90); bottom: -12px;"">Minutes</div>"  & _
+			  "</div>" & _
+			"</div>" & _
+		%>
+		<div id="clockdiv-container">
+			<% 
+			columns = Split(rsTimer("text_message"), "[Timer]")
+			%>
+			<%= "<div>" & columns(0) & "</div>" & countdown_timer & "<div>" & columns(1) & "</div>" %>
+		</div>
+	</div>
+<% end if %>
 <div class="display-5 mb-3">
 		Checkout
 </div>
@@ -872,6 +900,14 @@ end if
 </div><!-- end shipping options main card -->
 </section><!-- end shipping options section -->
 
+<!-- Shipping Countdown Timer -->
+<%If Not rsTimer.EOF Then%>
+	<script>
+		var total_seconds = <%=rsTimer("remaining_seconds")%>;
+	</script>
+	<script src="/js/countdown-timer.js"></script>
+<%End If%>
+
 <% if CustID_Cookie = 0 then ' show section if not registered  %>
 <section class="create-password AddressesForm" <%= hide_section_addons %>> 
 	<div class="card mb-5">
@@ -1280,6 +1316,8 @@ end if
 <script type="text/javascript" src="/js-pages/afterpay-widget.js?v=020420" ></script>-->
 <!-- Postgrid API -->
 <script src="/js/postgrid-customized-api.js" data-pg-key="live_pk_csP2zaBTuekcKtmRMRSi9U"></script>
+
 <%
 Set rsToggles = Nothing
+Set rsTimer = Nothing
 %>
