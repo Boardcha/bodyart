@@ -1079,7 +1079,7 @@ Set rsNavWaitingList = objCmd.Execute()
 															 data-text="signin_with"
 															 data-size="large"
 															 data-logo_alignment="left"
-															 data-width="466">
+															 data-width="300">
 														</div>														
 													</div>
 												<%End If%>	
