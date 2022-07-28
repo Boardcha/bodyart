@@ -66,10 +66,13 @@ If Not rsGetItem.EOF Then
 
 	' Add on tax to refund 
 	If rsGetItem.Fields.Item("combined_tax_rate").Value > 0 then
+		'Response.Write var_item_price & "<br>"
 		var_item_price = var_item_price + (var_item_price * rsGetItem.Fields.Item("combined_tax_rate").Value)
+		'Response.Write var_item_price & "<br>"
+		'Response.Write rsGetItem.Fields.Item("combined_tax_rate").Value & "<br>"
 	End if
 
-	var_item_refund = FormatNumber(Ccur(var_item_refund) + ccur(var_item_price), -1, -2, -0, -2)
+	var_item_refund = FormatNumber(ccur(var_item_price), -1, -2, -0, -2)
 End If
 
 If var_item_refund > 0 then
@@ -85,10 +88,12 @@ If var_item_refund > 0 then
 	objCmd.Parameters.Append(objCmd.CreateParameter("invoiceid2",3,1,12, var_invoice_number))
 	objCmd.Parameters.Append(objCmd.CreateParameter("ProductDetailID",3,1,15, ProductDetailID))
 	Set rsGetShippingRate = objCmd.Execute()
-	Response.Write var_item_refund & "<br>"
+
 	If Not rsGetShippingRate.EOF Then
-		var_item_refund = FormatNumber(Ccur(var_item_refund) + Ccur(rsGetShippingRate("shipping_rate")) + Ccur(rsGetShippingRate("retail_delivery_fee")), -1, -2, -0, -2)
+		var_item_refund = request.form("total")
+		entire_order = true
 	End If
+	
 End If	
 
 %>
@@ -97,7 +102,7 @@ End If
 
 <input type="hidden" id="qty_<%= request.form("item") %>" value="<%= request.form("qty") %>">
 <input type="hidden" id="detailid_<%= request.form("item") %>" value="<%= request.form("detailid") %>">
-<input type="hidden" id="price_<%= request.form("item") %>" value="<%= request.form("price") %>">
+<input type="hidden" id="price_<%= request.form("item") %>" value="<%= var_item_refund %>">
 <input type="hidden" id="origprice_<%= request.form("item") %>" value="<%= request.form("origprice") %>">
 
 <div class="container backorders">
@@ -111,7 +116,7 @@ End If
 <% end if %>
 <button class="btn btn-sm btn-secondary my-1 btn_bo" data-agenda="clear" data-item="<%= request.form("item") %>">Clear backorder</button>
 
-<div class="h6 mt-4">Refund item only $<%= var_item_refund %></div>
+<div class="h6 mt-4">Refund item only $<%= var_item_refund %><%If entire_order Then Response.Write "(Entire order will be refunded)"%></div>
 <button class="btn btn-sm btn-secondary btn_bo" data-agenda="item-refund" data-item="<%= request.form("item") %>">Refund</button>
 
 <% if custID <> 0 then %>
