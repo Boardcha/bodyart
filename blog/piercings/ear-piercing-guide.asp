@@ -6,7 +6,7 @@ Response.CodePage = 65001
 Response.CharSet = "UTF-8" 
 %>
 <%
-	page_title = "Ear piercing guide and location chart diagram"
+	page_title = "Guide to ear piercing locations"
 	page_description = "A guide that will show you the names and locations of the common ear piercings"
 	page_keywords = ""
 %>
@@ -30,7 +30,7 @@ Response.CharSet = "UTF-8"
             <h3>Bodyartforms guide to ear piercings</h3>
         </div>
         <div class="card-body">
-            <p>Ever get confused about what the names of all the different types of ear piercings are? Look no further! We've created this easy-to-use guide where you'll learn about the top ear piercings as well as what type of jewelry works best for them.</p>
+            <p>Ever get confused about what the names of all the different types of ear piercings are? Look no further! We've created this easy-to-use guide where you'll learn about popular ear piercings as well as what type of jewelry works best for them.</p>
 
             <h5>JUMP TO:</h5>
             <ul>
@@ -56,8 +56,12 @@ Response.CharSet = "UTF-8"
                     <img class="img-fluid" src="/images/blog/piercings/helix-piercing.png" />
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
+                    <p>
                     A helix piercing is any piercing on the upper cartilage of your ear. There are actually different types of helix piercings: standard single helix (one piercing), double helix (two piercings), triple helix (three piercings), forward helix, and the <a href="#snug">anti-helix (or snug)</a>.
-                    <br>
+                    </p>
+                    <p>
+                     The most popular jewelry worn in the helix piercing are <a href="/products.asp?jewelry=captive&piercing=Helix" target="_blank">rings</a> and you can also wear <a href="/products.asp?jewelry=labret&piercing=Helix" target="_blank">studs</a>.
+                    </p>
                     <a class="btn btn-sm btn-purple my-2" href="/products.asp?piercing=Helix" target="_blank">SHOP OUR HELIX JEWELRY</a>
 
                     <%
@@ -133,7 +137,7 @@ Response.CharSet = "UTF-8"
                     <p>
                     An industrial piercing is two separate ear cartilage piercings that typically use one long bar to connect them. It's always important to discuss with your piercer whether an industrial piercing will be appropriate for your ear as everyone's anatomy is different.
                     </p>
-                    The majority of industrial jewelry is long straight barbells. There are also some neat designs where it's two separate bars attached via chains. Another option to switch your style up is to skip the bar all together and use rings or studs in your piercings.
+                    The majority of industrial jewelry is <a href="/products.asp?piercing=Industrial" target="_blank">long straight barbells</a>. There are also some neat designs where it's <a href="/products.asp?keywords=floating&piercing=Industrial" target="_blank">two separate bars attached via chains</a>. Another option to switch your style up is to skip the bar all together and use rings or studs in your piercings.
                     <br>
                     <a class="btn btn-sm btn-purple my-2" href="/products.asp?piercing=Industrial" target="_blank">SHOP OUR INDUSTRIAL JEWELRY</a>
 
@@ -185,7 +189,7 @@ Response.CharSet = "UTF-8"
                     <img class="img-fluid" src="/images/blog/piercings/rook-piercing.png" />
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
-                    <p>The rook piercing is a cartilage piercing in the upper cartilage of your ear, located above the tragus.
+                    <p>The rook piercing is a cartilage piercing in the upper cartilage of your ear, located above the tragus. The best jewelry to wear in this piercing are <a href="/products.asp?jewelry=captive&piercing=Rook" target="_blank">rings</a>.
                     </p>
                     <a class="btn btn-sm btn-purple" href="/products.asp?piercing=Rook" target="_blank">SHOP OUR ROOK JEWELRY</a>
 
@@ -209,12 +213,12 @@ Response.CharSet = "UTF-8"
                     <img class="img-fluid" src="/images/blog/piercings/anti-tragus-piercing.png" />
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
-                    <p>The anti tragus piercing is located directly across from the tragus piercing on the rim of cartilage above your earlobe.
+                    <p>The anti tragus piercing is located directly across from the tragus piercing on the rim of cartilage above your earlobe. Most people prefer to wear <a href="/products.asp?jewelry=captive&piercing=Anti-tragus" target="_blank">rings</a> in this piercing, but you can also wear <a href="/products.asp?jewelry=curved&piercing=Anti-tragus" target="_blank">curved jewelry</a>.
                     </p>
-                    <a class="btn btn-sm btn-purple" href="/products.asp?piercing=Anti Tragus" target="_blank">SHOP OUR ANTI TRAGUS JEWELRY</a>
+                    <a class="btn btn-sm btn-purple" href="/products.asp?piercing=Anti-Tragus" target="_blank">SHOP OUR ANTI TRAGUS JEWELRY</a>
 
                     <%
-                    SqlString = "SELECT TOP 3 * FROM FlatProducts WHERE tags LIKE '%antitragus%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
+                    SqlString = "SELECT TOP 3 * FROM FlatProducts WHERE tags LIKE '%anti-tragus%' AND tags NOT LIKE '%save%' AND picture <> 'nopic.gif' AND active = 1 AND customorder <> 'yes' ORDER BY qty_sold_last_7_days DESC, ProductID DESC"
                     %>
                     <!--#include virtual="/includes/inc-embedded-products.inc" --> 
                 </div>
@@ -233,7 +237,7 @@ Response.CharSet = "UTF-8"
                     <img class="img-fluid" src="/images/blog/piercings/snug-piercing.png" />
                 </div>
                 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-8 col-xl-9">
-                    <P>The snug is nicknamed the "anti-helix" piercing. It's located in between the rim of your ear and your inner cartilage, and above the anti-tragus. 
+                    <P>The snug is nicknamed the "anti-helix" piercing. It's located in between the rim of your ear and your inner cartilage, and above the anti-tragus. The best jewelry to wear in this piercing are <a href="/products.asp?jewelry=captive&piercing=Snug" target="_blank">rings</a>.
                     </P>
                     <a class="btn btn-sm btn-purple" href="/products.asp?piercing=Snug" target="_blank">SHOP OUR SNUG JEWELRY</a>
 

@@ -1,7 +1,7 @@
 <%@LANGUAGE="VBSCRIPT"%>
 <%
-	page_title = "Bodyartforms Blog Archive"
-	page_description = "Bodyartforms Blog Archive"
+	page_title = "Bodyartforms Blog"
+	page_description = "Bodyartforms Blog"
 	page_keywords = ""
 %>
 <!--#include virtual="/functions/security.inc" -->
@@ -38,6 +38,7 @@
       <div class="card-body">
         <ul>
           <li><a href="/help_MeasurementGuide.asp">How to measure body jewelry</a></li>
+          <li><a href="/blog/piercings/ear-piercing-guide.asp">Guide to ear piercing locations</a></li>
           <li><a href="/landing/threadless-jewelry.asp">How does threadless jewelry work?</a></li>
           <li><a href="/blog/piercings-and-the-mri.asp">Piercings and the MRI</a></li>
           <li><a href="/blog/tsa-and-your-private-parts.asp">The TSA and Your Private Parts</a></li>
