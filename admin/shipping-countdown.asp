@@ -440,7 +440,7 @@ rsEditTimer_numRows = 0
 					<label class="custom-control-label" for="saturday">Saturday</label>
 			</div>	
 	  		<div class="custom-control custom-checkbox d-inline-block">
-					<input name="sunday" id="sunday" class="custom-control-input" type="checkbox" value="1" <% if rsEditTimer("sunday") = 1 then %>checked<% end if %>">
+					<input name="sunday" id="sunday" class="custom-control-input" type="checkbox" value="1" <% if rsEditTimer("sunday") then %>checked<% end if %>>
 					<label class="custom-control-label" for="sunday">Sunday</label>
 			</div>			
 	  </td>
